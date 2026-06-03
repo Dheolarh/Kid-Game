@@ -28,8 +28,6 @@ namespace KidGame.Mechanics.Counting
         [SerializeField, Range(1, 12)] private int minCount = 1;
         [SerializeField, Range(1, 12)] private int maxCount = 12;
 
-        // ── Built-in palette (6 high-contrast, non-white colors) ─────────────
-
         private static readonly Color[] Palette =
         {
             new Color(0.91f, 0.30f, 0.24f),   // red
