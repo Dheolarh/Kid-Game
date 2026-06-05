@@ -1501,7 +1501,7 @@ GameObject:
   - component: {fileID: 936492008126277912}
   - component: {fileID: 3494195746450720883}
   - component: {fileID: 5070819622758127982}
-  - component: {fileID: 4734044037959506029}
+  - component: {fileID: 8691579895082767063}
   m_Layer: 5
   m_Name: Addition Game
   m_TagString: Untagged
@@ -1608,7 +1608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.OrientationLayoutAdapter
   portraitView: {fileID: 5628758768058397058}
   landscapeView: {fileID: 6770255143140147351}
---- !u!114 &4734044037959506029
+--- !u!114 &8691579895082767063
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1617,23 +1617,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 5210000093185702887}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1b3f390806d03c47b3c86a6d959ab7e, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a79f3ffd0b02db48885783ef022aee0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingGameManager
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Addition.AdditionGameManager
   objectCategoryPrefabs:
   - {fileID: 9052675801392088744, guid: 1c25a7a34c192f94e96c4d79b2ce499d, type: 3}
-  - {fileID: 944671835624779107, guid: b4122adfd969c9146b946fc07b17a9c0, type: 3}
   - {fileID: 3663694854287574558, guid: 6176d6a68f9d26346844f12d95182ea9, type: 3}
-  slotPrefab: {fileID: 1059160391153392395, guid: 02148c601de0d044a89b10bff65ee302, type: 3}
+  - {fileID: 944671835624779107, guid: b4122adfd969c9146b946fc07b17a9c0, type: 3}
+  slotPrefab: {fileID: 5982347052818890851, guid: f548949405dc9b54e88047be6c6dda35, type: 3}
   answerCardPrefab: {fileID: 7026504693343592554, guid: 0182651f93afea3489412a78a9040cd4, type: 3}
   portraitSlotsContainer: {fileID: 6897161979398453360}
   portraitAnswersContainer: {fileID: 9142491995807705485}
   landscapeSlotsContainer: {fileID: 2328002498336975045}
   landscapeAnswersContainer: {fileID: 2026767754884776061}
-  nextButton: {fileID: 5959779723878536065}
+  nextButton: {fileID: 7949950844327917453}
   slotCount: 5
-  minCount: 7
-  maxCount: 12
+  minPerGrid: 1
+  maxPerGrid: 12
 --- !u!1 &5409662387608698326
 GameObject:
   m_ObjectHideFlags: 0
@@ -2727,7 +2727,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00024414062}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2872471980858730619
@@ -2766,7 +2766,7 @@ MonoBehaviour:
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0

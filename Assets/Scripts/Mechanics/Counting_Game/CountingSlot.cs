@@ -21,12 +21,12 @@ namespace KidGame.Mechanics.Counting
             {
                 var obj = Instantiate(objectPrefab, objectGrid);
 
-                // Ensure every spawned icon responds to taps with a bounce animation
                 if (obj.GetComponent<CountingObject>() == null)
                     obj.AddComponent<CountingObject>();
             }
 
-            dropZone.Setup(count, this, manager);
+            // Pass a lambda so AnswerDropZone doesn't need to reference CountingSlot/Manager directly
+            dropZone.Setup(count, () => manager.OnSlotAnswered(this));
         }
     }
 }

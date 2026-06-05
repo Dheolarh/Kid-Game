@@ -50,7 +50,7 @@ namespace KidGame.Mechanics.Counting
         private readonly List<AnswerCard>   _cards = new List<AnswerCard>();
         private int _answeredCount;
 
-        // ── Orientation helpers ───────────────────────────────────────────────
+        // ── Orientation ─────────────────────────────────────────────────────
 
         private bool IsLandscape => Screen.width > Screen.height;
 
@@ -60,21 +60,57 @@ namespace KidGame.Mechanics.Counting
         private Transform ActiveAnswersContainer
             => IsLandscape ? landscapeAnswersContainer : portraitAnswersContainer;
 
+        private bool _wasLandscape;
+
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
         private void Start()
         {
-            // Prevent Unity's default Button behaviour of fading to 50% alpha
-            // when interactable = false. Keep the same color but slightly dimmed.
             var colors          = nextButton.colors;
             var disabled        = colors.normalColor;
-            disabled.a          = 0.6f;          // slight dim to signal "locked", but no transparency
+            disabled.a          = 0.6f;
             colors.disabledColor = disabled;
             nextButton.colors   = colors;
 
+            _wasLandscape = IsLandscape;
             nextButton.interactable = false;
             nextButton.onClick.AddListener(GenerateRound);
             GenerateRound();
+        }
+
+        private void Update()
+        {
+            bool landscape = IsLandscape;
+            if (landscape != _wasLandscape && _slots.Count > 0)
+            {
+                _wasLandscape = landscape;
+                MoveToActiveContainers();
+            }
+        }
+
+        private void MoveToActiveContainers()
+        {
+            var newSlots   = ActiveSlotsContainer;
+            var newAnswers = ActiveAnswersContainer;
+
+            foreach (var slot in _slots)
+                if (slot) slot.transform.SetParent(newSlots, worldPositionStays: false);
+
+            foreach (var card in _cards)
+            {
+                if (card && !card.IsAccepted)
+                {
+                    card.transform.SetParent(newAnswers, worldPositionStays: false);
+                    card.UpdateHomeParent(newAnswers);
+                }
+            }
+
+            var rtSlots   = newSlots.GetComponent<RectTransform>();
+            var rtAnswers = newAnswers.GetComponent<RectTransform>();
+            if (rtSlots)   UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtSlots);
+            if (rtAnswers) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
+
+            Debug.Log($"[CountingGame] Orientation changed → moved {_slots.Count} slots, {_cards.Count} cards.");
         }
 
         // ── Public API ────────────────────────────────────────────────────────

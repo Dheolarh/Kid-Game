@@ -27,6 +27,17 @@ namespace KidGame.Mechanics.Tracing
         [Tooltip("Color of the square dot that marks where each stroke ends.")]
         [SerializeField] private Color endDotColor   = Color.red;
 
+        [Header("Tutorial Info")]
+        [Tooltip("Shown in the big Example TMP  e.g.  0")]
+        [SerializeField] internal string exampleText              = "";
+        [Tooltip("The {word} part of the description  e.g.  zero")]
+        [SerializeField] internal string descriptionWord          = "";
+        [Tooltip("The {number} part of the description  e.g.  0")]
+        [SerializeField] internal string descriptionNumber        = "";
+        [Tooltip("If set, replaces the auto-built sentence entirely. Leave blank to use: " +
+                 "\"Let's practice writing {word} \"{number}\"\"")]
+        [SerializeField] internal string customDescriptionSentence = "";
+
         [Header("Events")]
         [Tooltip("Fires when every path in the shape has been traced.")]
         [SerializeField] private UnityEvent onCompleted;

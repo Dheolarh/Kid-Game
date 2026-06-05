@@ -11,8 +11,7 @@ namespace KidGame.Mechanics.Counting
         private int                 _expectedCount;
         private bool                _isAnswered;
         private Image               _background;
-        private CountingSlot        _ownerSlot;
-        private CountingGameManager _manager;
+        private System.Action       _onCorrect;
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
@@ -23,11 +22,11 @@ namespace KidGame.Mechanics.Counting
 
         // ── Setup ─────────────────────────────────────────────────────────────
 
-        public void Setup(int expectedCount, CountingSlot slot, CountingGameManager manager)
+        /// <param name="onCorrect">Invoked once when the correct card is dropped.</param>
+        public void Setup(int expectedCount, System.Action onCorrect)
         {
             _expectedCount = expectedCount;
-            _ownerSlot     = slot;
-            _manager       = manager;
+            _onCorrect     = onCorrect;
             _isAnswered    = false;
         }
 
@@ -65,9 +64,9 @@ namespace KidGame.Mechanics.Counting
         private void AcceptCard(AnswerCard card)
         {
             _isAnswered       = true;
-            _background.color = card.CardColor;   // zone takes the card's color
+            _background.color = card.CardColor;
             card.AcceptedByZone(transform);
-            _manager.OnSlotAnswered(_ownerSlot);
+            _onCorrect?.Invoke();
         }
     }
 }

@@ -25,8 +25,18 @@ namespace KidGame.Mechanics.Counting
 
         // ── Public state ──────────────────────────────────────────────────────
 
-        public int   Value     { get; private set; }
-        public Color CardColor { get; private set; }
+        public int   Value      { get; private set; }
+        public Color CardColor  { get; private set; }
+        /// <summary>True once accepted by a drop zone. Accepted cards stay in the zone, not the tray.</summary>
+        public bool  IsAccepted => _isAccepted;
+
+        /// <summary>Called by the manager on orientation change — updates home so return-home works correctly.</summary>
+        public void UpdateHomeParent(Transform newParent)
+        {
+            if (_isAccepted) return;
+            _homeParent        = newParent;
+            _homeWorldPosition = transform.position;
+        }
 
         // ── Private state ─────────────────────────────────────────────────────
 
