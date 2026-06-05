@@ -33,12 +33,13 @@ namespace KidGame.Mechanics.Counting
 
         // ── IDropHandler ──────────────────────────────────────────────────────
 
-        public void OnDrop(PointerEventData eventData)
+        /// <summary>
+        /// Called directly by AnswerCard when it detects this zone under the card center.
+        /// Also called by IDropHandler.OnDrop as a fallback.
+        /// </summary>
+        public void TryAccept(AnswerCard card)
         {
             if (_isAnswered) return;
-
-            var card = eventData.pointerDrag?.GetComponent<AnswerCard>();
-            if (card == null) return;
 
             if (card.Value == _expectedCount)
             {
@@ -48,8 +49,15 @@ namespace KidGame.Mechanics.Counting
             else
             {
                 Debug.Log($"[CountingGame] ✗ Wrong!   Slot expected {_expectedCount}, dropped {card.Value}. Card returns to tray.");
-                // Card returns home automatically via AnswerCard.ReturnHomeIfNotAccepted().
             }
+        }
+
+        public void OnDrop(PointerEventData eventData)
+        {
+            // Fallback: fired by Unity's event system when blocksRaycasts = false.
+            // The primary path is TryAccept() called from AnswerCard.OnEndDrag via card-center raycast.
+            var card = eventData.pointerDrag?.GetComponent<AnswerCard>();
+            if (card != null) TryAccept(card);
         }
 
         // ── Private ───────────────────────────────────────────────────────────

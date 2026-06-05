@@ -17,10 +17,16 @@ namespace KidGame.Mechanics.Counting
         [Tooltip("The AnswerCard draggable prefab.")]
         [SerializeField] private GameObject answerCardPrefab;
 
-        [Header("Scene References")]
-        [SerializeField] private Transform slotsContainer;
-        [SerializeField] private Transform answersContainer;
-        [SerializeField] private Button    nextButton;
+        [Header("Portrait Containers")]
+        [SerializeField] private Transform portraitSlotsContainer;
+        [SerializeField] private Transform portraitAnswersContainer;
+
+        [Header("Landscape Containers")]
+        [SerializeField] private Transform landscapeSlotsContainer;
+        [SerializeField] private Transform landscapeAnswersContainer;
+
+        [Header("Shared")]
+        [SerializeField] private Button nextButton;
 
         [Header("Config")]
         [Tooltip("Number of slot rows per round (always 5 per design).")]
@@ -43,6 +49,16 @@ namespace KidGame.Mechanics.Counting
         private readonly List<CountingSlot> _slots = new List<CountingSlot>();
         private readonly List<AnswerCard>   _cards = new List<AnswerCard>();
         private int _answeredCount;
+
+        // ── Orientation helpers ───────────────────────────────────────────────
+
+        private bool IsLandscape => Screen.width > Screen.height;
+
+        private Transform ActiveSlotsContainer
+            => IsLandscape ? landscapeSlotsContainer   : portraitSlotsContainer;
+
+        private Transform ActiveAnswersContainer
+            => IsLandscape ? landscapeAnswersContainer : portraitAnswersContainer;
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
@@ -95,19 +111,20 @@ namespace KidGame.Mechanics.Counting
             Shuffle(answerValues);
 
             // 5. Spawn slots — each gets a DIFFERENT object category
+            // Uses the currently active orientation's container
             for (int i = 0; i < slotCount; i++)
             {
-                var go   = Instantiate(slotPrefab, slotsContainer);
+                var go   = Instantiate(slotPrefab, ActiveSlotsContainer);
                 var slot = go.GetComponent<CountingSlot>();
                 var cat  = objectCategoryPrefabs[catOrder[i % catOrder.Count]];
                 slot.Setup(cat, counts[i], this);
                 _slots.Add(slot);
             }
 
-            // 6. Spawn answer cards
+            // 6. Spawn answer cards into the active orientation's answer grid
             for (int i = 0; i < answerValues.Count; i++)
             {
-                var go   = Instantiate(answerCardPrefab, answersContainer);
+                var go   = Instantiate(answerCardPrefab, ActiveAnswersContainer);
                 var card = go.GetComponent<AnswerCard>();
                 card.Setup(answerValues[i], colors[i]);
                 _cards.Add(card);

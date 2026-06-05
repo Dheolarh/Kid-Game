@@ -2,16 +2,6 @@ using UnityEngine;
 
 namespace KidGame.Mechanics.Counting
 {
-    /// <summary>
-    /// One row in the counting game.
-    ///
-    /// Expected prefab structure:
-    /// <code>
-    /// CountingSlot (root — this script)
-    /// ├── ObjectGrid   (Transform with GridLayoutGroup — objects spawn here)
-    /// └── AnswerZone   (GameObject with AnswerDropZone component)
-    /// </code>
-    /// </summary>
     public class CountingSlot : MonoBehaviour
     {
         [Tooltip("Parent for the spawned object icons (should have a GridLayoutGroup).")]
@@ -23,16 +13,18 @@ namespace KidGame.Mechanics.Counting
         /// <summary>The object count this slot was set up with.</summary>
         public int CorrectCount { get; private set; }
 
-        /// <summary>
-        /// Spawns <paramref name="count"/> copies of <paramref name="objectPrefab"/>
-        /// into the object grid and configures the answer drop zone.
-        /// </summary>
         public void Setup(GameObject objectPrefab, int count, CountingGameManager manager)
         {
             CorrectCount = count;
 
             for (int i = 0; i < count; i++)
-                Instantiate(objectPrefab, objectGrid);
+            {
+                var obj = Instantiate(objectPrefab, objectGrid);
+
+                // Ensure every spawned icon responds to taps with a bounce animation
+                if (obj.GetComponent<CountingObject>() == null)
+                    obj.AddComponent<CountingObject>();
+            }
 
             dropZone.Setup(count, this, manager);
         }
