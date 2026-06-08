@@ -49,7 +49,10 @@ namespace KidGame.Mechanics.Addition
         [Tooltip("Finger prefabs for values 1 to 5 (index 0 = 1 finger, ..., index 4 = 5 fingers).")]
         [SerializeField] private GameObject[] fingerPrefabs;
 
-        // ── Built-in palette (same 6 high-contrast colors as counting game) ──
+        [Header("Object Category Themes")]
+        [Tooltip("Define themed collections of object prefabs (e.g., Ocean, Animals). Enable one to restrict spawning to that collection.")]
+        [SerializeField] private List<ObjectCategoryTheme> themes;
+
 
         private static readonly Color[] Palette =
         {
@@ -152,6 +155,12 @@ namespace KidGame.Mechanics.Addition
 
         public void GenerateRound()
         {
+            var activePrefabs = GetActiveThemePrefabs();
+            if (activePrefabs == null || activePrefabs.Length == 0)
+            {
+                activePrefabs = objectCategoryPrefabs;
+            }
+
             // ── Validate required Inspector references ────────────────────────
             if (diceMode)
             {
@@ -187,9 +196,9 @@ namespace KidGame.Mechanics.Addition
             }
             else
             {
-                if (objectCategoryPrefabs == null || objectCategoryPrefabs.Length < 2)
+                if (activePrefabs == null || activePrefabs.Length == 0)
                 {
-                    Debug.LogError("[AdditionGame] Assign at least 2 Object Category Prefabs in the Inspector.");
+                    Debug.LogError("[AdditionGame] No object prefabs available. Assign default category prefabs or enable an object category theme.");
                     return;
                 }
             }
@@ -276,11 +285,11 @@ namespace KidGame.Mechanics.Addition
                     var go   = Instantiate(slotPrefab, ActiveSlotsContainer);
                     var slot = go.GetComponent<AdditionSlot>();
 
-                    // Pick two different categories specifically for this slot row
-                    var catOrder = Enumerable.Range(0, objectCategoryPrefabs.Length).ToList();
+                    // Pick two different categories specifically for this slot row from active prefabs
+                    var catOrder = Enumerable.Range(0, activePrefabs.Length).ToList();
                     Shuffle(catOrder);
-                    var leftPrefab  = objectCategoryPrefabs[catOrder[0]];
-                    var rightPrefab = objectCategoryPrefabs[catOrder.Count > 1 ? catOrder[1] : catOrder[0]];
+                    var leftPrefab  = activePrefabs[catOrder[0]];
+                    var rightPrefab = activePrefabs[catOrder.Count > 1 ? catOrder[1] : catOrder[0]];
 
                     slot.Setup(leftPrefab,  normalPairs[i].left,
                                rightPrefab, normalPairs[i].right,
@@ -384,6 +393,19 @@ namespace KidGame.Mechanics.Addition
                                  "Consider widening minPerGrid/maxPerGrid.");
 
             return pairs;
+        }
+
+        private GameObject[] GetActiveThemePrefabs()
+        {
+            if (themes == null) return null;
+            foreach (var theme in themes)
+            {
+                if (theme != null && theme.isEnabled && theme.prefabs != null && theme.prefabs.Length > 0)
+                {
+                    return theme.prefabs;
+                }
+            }
+            return null;
         }
 
         private static void Shuffle<T>(List<T> list)

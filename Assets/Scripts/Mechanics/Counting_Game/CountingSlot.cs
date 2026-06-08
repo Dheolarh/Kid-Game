@@ -28,5 +28,20 @@ namespace KidGame.Mechanics.Counting
             // Pass a lambda so AnswerDropZone doesn't need to reference CountingSlot/Manager directly
             dropZone.Setup(count, () => manager.OnSlotAnswered(this));
         }
+
+        public void Setup(System.Collections.Generic.List<GameObject> itemPrefabs, int totalSum, CountingGameManager manager)
+        {
+            CorrectCount = totalSum;
+
+            foreach (var prefab in itemPrefabs)
+            {
+                var obj = Instantiate(prefab, objectGrid);
+
+                if (obj.GetComponent<CountingObject>() == null)
+                    obj.AddComponent<CountingObject>();
+            }
+
+            dropZone.Setup(totalSum, () => manager.OnSlotAnswered(this));
+        }
     }
 }

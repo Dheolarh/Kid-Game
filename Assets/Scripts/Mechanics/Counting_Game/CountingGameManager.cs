@@ -34,6 +34,22 @@ namespace KidGame.Mechanics.Counting
         [SerializeField, Range(1, 12)] private int minCount = 1;
         [SerializeField, Range(1, 12)] private int maxCount = 12;
 
+        [Header("Dice Mode")]
+        [Tooltip("If true, spawns dice prefabs for counting instead of regular prefabs.")]
+        [SerializeField] private bool diceMode;
+        [Tooltip("Dice prefabs for face values 1 to 6 (index 0 = face 1, index 1 = face 2, ..., index 5 = face 6).")]
+        [SerializeField] private GameObject[] dicePrefabs;
+
+        [Header("Fingers Mode")]
+        [Tooltip("If true, spawns finger prefabs for counting.")]
+        [SerializeField] private bool fingerMode;
+        [Tooltip("Finger prefabs for values 1 to 5 (index 0 = 1 finger, ..., index 4 = 5 fingers).")]
+        [SerializeField] private GameObject[] fingerPrefabs;
+
+        [Header("Object Category Themes")]
+        [Tooltip("Define themed collections of object prefabs (e.g., Ocean, Animals). Enable one to restrict spawning to that collection.")]
+        [SerializeField] private List<ObjectCategoryTheme> themes;
+
         private static readonly Color[] Palette =
         {
             new Color(0.91f, 0.30f, 0.24f),   // red
@@ -133,16 +149,170 @@ namespace KidGame.Mechanics.Counting
 
         public void GenerateRound()
         {
+            // ── Validate required Inspector references ────────────────────────
+            if (diceMode)
+            {
+                if (dicePrefabs == null || dicePrefabs.Length != 6)
+                {
+                    Debug.LogError("[CountingGame] Dice Mode is enabled, but Dice Prefabs array does not have exactly 6 elements.");
+                    return;
+                }
+                for (int i = 0; i < 6; i++)
+                {
+                    if (dicePrefabs[i] == null)
+                    {
+                        Debug.LogError($"[CountingGame] Dice Prefab at index {i} is not assigned.");
+                        return;
+                    }
+                }
+            }
+            else if (fingerMode)
+            {
+                if (fingerPrefabs == null || fingerPrefabs.Length != 5)
+                {
+                    Debug.LogError("[CountingGame] Finger Mode is enabled, but Finger Prefabs array does not have exactly 5 elements.");
+                    return;
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    if (fingerPrefabs[i] == null)
+                    {
+                        Debug.LogError($"[CountingGame] Finger Prefab at index {i} is not assigned.");
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                if (objectCategoryPrefabs == null || objectCategoryPrefabs.Length == 0)
+                {
+                    Debug.LogError("[CountingGame] Object Category Prefabs array is empty.");
+                    return;
+                }
+            }
+            if (slotPrefab == null)
+            {
+                Debug.LogError("[CountingGame] Slot Prefab is not assigned in the Inspector.");
+                return;
+            }
+            if (answerCardPrefab == null)
+            {
+                Debug.LogError("[CountingGame] Answer Card Prefab is not assigned in the Inspector.");
+                return;
+            }
+            if (ActiveSlotsContainer == null)
+            {
+                Debug.LogError("[CountingGame] Slots Container for the current orientation is not assigned.");
+                return;
+            }
+            if (ActiveAnswersContainer == null)
+            {
+                Debug.LogError("[CountingGame] Answers Container for the current orientation is not assigned.");
+                return;
+            }
+            // ─────────────────────────────────────────────────────────────────
+
             ClearPrevious();
             _answeredCount = 0;
             nextButton.interactable = false;
 
-            // 1. Five unique random counts
-            var counts = UniqueRandomList(slotCount, minCount, maxCount);
+            List<int> counts;
+            List<(List<GameObject> prefabs, int totalSum)> slotData = null;
+            List<int> normalCounts = null;
+            List<int> catOrder = null;
 
-            // 2. Shuffle category order (different category per slot)
-            var catOrder = Enumerable.Range(0, objectCategoryPrefabs.Length).ToList();
-            Shuffle(catOrder);
+            var activePrefabs = GetActiveThemePrefabs();
+            if (activePrefabs == null || activePrefabs.Length == 0)
+            {
+                activePrefabs = objectCategoryPrefabs;
+            }
+
+            if (diceMode)
+            {
+                if (dicePrefabs == null || dicePrefabs.Length != 6)
+                {
+                    Debug.LogError("[CountingGame] Dice Mode is enabled, but Dice Prefabs array does not have exactly 6 elements.");
+                    return;
+                }
+                for (int i = 0; i < 6; i++)
+                {
+                    if (dicePrefabs[i] == null)
+                    {
+                        Debug.LogError($"[CountingGame] Dice Prefab at index {i} is not assigned.");
+                        return;
+                    }
+                }
+            }
+            else if (fingerMode)
+            {
+                if (fingerPrefabs == null || fingerPrefabs.Length != 5)
+                {
+                    Debug.LogError("[CountingGame] Finger Mode is enabled, but Finger Prefabs array does not have exactly 5 elements.");
+                    return;
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    if (fingerPrefabs[i] == null)
+                    {
+                        Debug.LogError($"[CountingGame] Finger Prefab at index {i} is not assigned.");
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                if (activePrefabs == null || activePrefabs.Length == 0)
+                {
+                    Debug.LogError("[CountingGame] No object prefabs available. Assign default category prefabs or enable an object category theme.");
+                    return;
+                }
+            }
+            if (slotPrefab == null)
+            {
+                Debug.LogError("[CountingGame] Slot Prefab is not assigned in the Inspector.");
+                return;
+            }
+            if (answerCardPrefab == null)
+            {
+                Debug.LogError("[CountingGame] Answer Card Prefab is not assigned in the Inspector.");
+                return;
+            }
+            if (ActiveSlotsContainer == null)
+            {
+                Debug.LogError("[CountingGame] Slots Container for the current orientation is not assigned.");
+                return;
+            }
+            if (ActiveAnswersContainer == null)
+            {
+                Debug.LogError("[CountingGame] Answers Container for the current orientation is not assigned.");
+                return;
+            }
+            // ─────────────────────────────────────────────────────────────────
+
+            if (diceMode || fingerMode)
+            {
+                int maxVal = diceMode ? 6 : 5;
+                var rawData = GenerateCountingDiceOrFingerData(slotCount, minCount, maxCount, maxVal);
+                counts = rawData.Select(d => d.totalSum).ToList();
+
+                slotData = new List<(List<GameObject>, int)>();
+                foreach (var data in rawData)
+                {
+                    var prefabs = new List<GameObject>();
+                    foreach (var val in data.itemValues)
+                        prefabs.Add(diceMode ? dicePrefabs[val - 1] : fingerPrefabs[val - 1]);
+
+                    slotData.Add((prefabs, data.totalSum));
+                }
+            }
+            else
+            {
+                normalCounts = UniqueRandomList(slotCount, minCount, maxCount);
+                counts = normalCounts;
+
+                catOrder = Enumerable.Range(0, activePrefabs.Length).ToList();
+                Shuffle(catOrder);
+            }
 
             // 3. Shuffle color palette (one color per card)
             var colors = Palette.Take(slotCount).ToList();
@@ -152,14 +322,21 @@ namespace KidGame.Mechanics.Counting
             var answerValues = new List<int>(counts);
             Shuffle(answerValues);
 
-            // 5. Spawn slots — each gets a DIFFERENT object category
-            // Uses the currently active orientation's container
+            // 5. Spawn slots
             for (int i = 0; i < slotCount; i++)
             {
                 var go   = Instantiate(slotPrefab, ActiveSlotsContainer);
                 var slot = go.GetComponent<CountingSlot>();
-                var cat  = objectCategoryPrefabs[catOrder[i % catOrder.Count]];
-                slot.Setup(cat, counts[i], this);
+
+                if (diceMode || fingerMode)
+                {
+                    slot.Setup(slotData[i].prefabs, slotData[i].totalSum, this);
+                }
+                else
+                {
+                    var cat  = activePrefabs[catOrder[i % catOrder.Count]];
+                    slot.Setup(cat, normalCounts[i], this);
+                }
                 _slots.Add(slot);
             }
 
@@ -182,6 +359,52 @@ namespace KidGame.Mechanics.Counting
         }
 
         // ── Generation Helpers ────────────────────────────────────────────────
+
+        private List<(List<int> itemValues, int totalSum)> GenerateCountingDiceOrFingerData(int count, int minItems, int maxItems, int maxValPerItem)
+        {
+            var results = new List<(List<int>, int)>();
+            var usedSums = new HashSet<int>();
+            int maxTries = 1000;
+
+            while (results.Count < count && maxTries-- > 0)
+            {
+                int itemCount = Random.Range(minItems, maxItems + 1);
+                List<int> itemValues = new List<int>();
+                int totalSum = 0;
+                for (int d = 0; d < itemCount; d++)
+                {
+                    int val = Random.Range(1, maxValPerItem + 1);
+                    itemValues.Add(val);
+                    totalSum += val;
+                }
+
+                if (!usedSums.Contains(totalSum))
+                {
+                    results.Add((itemValues, totalSum));
+                    usedSums.Add(totalSum);
+                }
+            }
+
+            if (results.Count < count)
+            {
+                Debug.LogWarning($"[CountingGame] Could only generate {results.Count}/{count} unique sums. Consider widening minCount/maxCount.");
+            }
+
+            return results;
+        }
+
+        private GameObject[] GetActiveThemePrefabs()
+        {
+            if (themes == null) return null;
+            foreach (var theme in themes)
+            {
+                if (theme != null && theme.isEnabled && theme.prefabs != null && theme.prefabs.Length > 0)
+                {
+                    return theme.prefabs;
+                }
+            }
+            return null;
+        }
 
         private List<int> UniqueRandomList(int count, int min, int max)
         {
