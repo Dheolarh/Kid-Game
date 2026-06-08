@@ -1,29 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 namespace KidGame.Mechanics.Tracing
 {
-    /// <summary>
-    /// Handles portrait ↔ landscape switching for the tracing game.
-    ///
-    /// Setup in Inspector:
-    /// 1. Assign <see cref="portraitPanel"/> and <see cref="landscapePanel"/> (the top-level
-    ///    GameObjects that contain each layout's SlotTracers).
-    /// 2. Populate <see cref="tracerPairs"/> — one entry per letter/shape slot.
-    ///    Each entry links the portrait SlotTracer to its landscape counterpart.
-    ///
-    /// How it works:
-    /// - Both panels are activated for 3 frames at Start so every SlotTracer
-    ///   can spawn and size its shape.
-    /// - After that, the inactive-orientation panel is disabled (disabling its
-    ///   Physics2D colliders so they don't interfere with raycasts).
-    /// - On rotation, completion state is copied path-by-path before the switch
-    ///   so the child resumes exactly where they left off.
-    /// </summary>
+    [ExecuteAlways]
     public class TracingOrientationAdapter : MonoBehaviour
     {
-        // ── Data ──────────────────────────────────────────────────────────────
-
         [System.Serializable]
         public struct TracerPair
         {
@@ -53,60 +37,107 @@ namespace KidGame.Mechanics.Tracing
 
         private IEnumerator Start()
         {
-            // Activate BOTH panels so every SlotTracer runs its Start() coroutine
-            // and spawns + sizes its shape correctly for its own rect dimensions.
             portraitPanel.SetActive(true);
             landscapePanel.SetActive(true);
 
-            // SlotTracer.Start() does: yield null → SpawnShape → yield null → ColorizeStartDots
-            // We wait 3 frames to be safe.
-            yield return null;
-            yield return null;
-            yield return null;
+            if (Application.isPlaying)
+            {
+                for (int i = 0; i < 5; i++) yield return null;
 
-            // Now hide the panel that doesn't match the current orientation
-            _wasLandscape = IsLandscape;
-            (IsLandscape ? portraitPanel : landscapePanel).SetActive(false);
+                _wasLandscape = IsLandscape;
+                (IsLandscape ? portraitPanel : landscapePanel).SetActive(false);
 
-            Debug.Log($"[TracingOrientation] Initialized in {(IsLandscape ? "landscape" : "portrait")} mode.");
+                Debug.Log($"[TracingOrientation] Initialized in {(IsLandscape ? "landscape" : "portrait")} mode.");
+            }
+            else
+            {
+                _wasLandscape = IsLandscape;
+                (IsLandscape ? portraitPanel : landscapePanel).SetActive(false);
+                yield break;
+            }
         }
 
         private void Update()
         {
+            if (this == null) return;
+            if (portraitPanel == null || landscapePanel == null) return;
+
             bool landscape = IsLandscape;
             if (landscape != _wasLandscape)
             {
                 _wasLandscape = landscape;
-                SwitchOrientation(landscape);
+                if (Application.isPlaying)
+                {
+                    StartCoroutine(SwitchOrientationRoutine(landscape));
+                }
+                else
+                {
+                    portraitPanel.SetActive(!landscape);
+                    landscapePanel.SetActive(landscape);
+                }
             }
         }
 
         // ── Orientation Switch ────────────────────────────────────────────────
 
-        private void SwitchOrientation(bool toLandscape)
+        private IEnumerator SwitchOrientationRoutine(bool toLandscape)
         {
-            // 1. Sync progress from active → incoming panel
-            foreach (var pair in tracerPairs)
-            {
-                var from = toLandscape ? pair.portrait  : pair.landscape;
-                var to   = toLandscape ? pair.landscape : pair.portrait;
-                SyncTracerState(from, to);
-            }
+            if (this == null || portraitPanel == null || landscapePanel == null) yield break;
 
-            // 2. Swap panels
+            // Enable incoming panel, disable outgoing
             portraitPanel .SetActive(!toLandscape);
             landscapePanel.SetActive( toLandscape);
 
-            Debug.Log($"[TracingOrientation] Switched to {(toLandscape ? "landscape" : "portrait")}.");
+            // Wait for Animators to initialize from their entry state
+            yield return null;
+            if (this == null || portraitPanel == null || landscapePanel == null) yield break;
+            yield return null;
+            if (this == null || portraitPanel == null || landscapePanel == null) yield break;
+            yield return null;
+            if (this == null || portraitPanel == null || landscapePanel == null) yield break;
+
+            // Source panel is now inactive; destination is active
+            var fromPanel = toLandscape ? portraitPanel  : landscapePanel;
+            var toPanel   = toLandscape ? landscapePanel : portraitPanel;
+
+            // 1. Sync inspector-assigned pairs (if any)
+            if (tracerPairs != null)
+            {
+                foreach (var pair in tracerPairs)
+                {
+                    if (this == null) yield break;
+                    var from = toLandscape ? pair.portrait  : pair.landscape;
+                    var to   = toLandscape ? pair.landscape : pair.portrait;
+                    SyncTracerState(from, to);
+                }
+            }
+
+            if (this == null || fromPanel == null || toPanel == null) yield break;
+
+            var fromTracers = fromPanel.GetComponentsInChildren<SlotTracer>(includeInactive: true);
+            var toTracers   = toPanel  .GetComponentsInChildren<SlotTracer>(includeInactive: true);
+
+            int count = Mathf.Min(fromTracers.Length, toTracers.Length);
+            for (int i = 0; i < count; i++)
+            {
+                if (this == null) yield break;
+                SyncTracerState(fromTracers[i], toTracers[i]);
+            }
+
+            Debug.Log($"[TracingOrientation] Switched to {(toLandscape ? "landscape" : "portrait")}. Synced {count} tracer(s).");
         }
 
-        /// <summary>
-        /// Copies path completion state from <paramref name="from"/> to <paramref name="to"/>
-        /// so the incoming panel reflects the player's current progress.
-        /// </summary>
+
         private static void SyncTracerState(SlotTracer from, SlotTracer to)
         {
-            if (from == null || to == null)   return;
+            if (from == null || to == null) return;
+
+            from.EnsureShapeSpawned();
+            to.EnsureShapeSpawned();
+
+            from.RescaleShape();
+            to.RescaleShape();
+
             if (from.shape == null || to.shape == null) return;
 
             var fromPaths = from.shape.GetComponentsInChildren<Path>(includeInactive: true);
@@ -116,13 +147,22 @@ namespace KidGame.Mechanics.Tracing
 
             for (int i = 0; i < count; i++)
             {
+                if (fromPaths[i] == null || toPaths[i] == null) continue;
                 if (!fromPaths[i].completed || toPaths[i].completed) continue;
+
+                // Apply the tracer's stroke color to the fill image BEFORE auto-filling,
+                // otherwise it stays white (BeginPath was never called on this panel's path).
+                var fillImg = TracingUtil.FindChildByTag(toPaths[i].transform, "Fill")
+                                         ?.GetComponent<Image>();
+                if (fillImg != null)
+                    fillImg.color = to.TraceColor;
 
                 // Mark path as done and fill it visually
                 toPaths[i].completed = true;
                 toPaths[i].AutoFill();
                 toPaths[i].SetNumbersVisibility(false);
             }
+
 
             // Sync overall shape completion
             if (from.shape.completed && !to.shape.completed)

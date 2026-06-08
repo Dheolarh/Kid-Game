@@ -37,6 +37,18 @@ namespace KidGame.Mechanics.Addition
         [Tooltip("Maximum number of objects per grid side.")]
         [SerializeField, Range(1, 12)] private int maxPerGrid = 12;
 
+        [Header("Dice Mode")]
+        [Tooltip("If true, spawns dice prefabs for counting instead of regular prefabs.")]
+        [SerializeField] private bool diceMode;
+        [Tooltip("Dice prefabs for face values 1 to 6 (index 0 = face 1, index 1 = face 2, ..., index 5 = face 6).")]
+        [SerializeField] private GameObject[] dicePrefabs;
+
+        [Header("Fingers Mode")]
+        [Tooltip("If true, spawns finger prefabs for counting.")]
+        [SerializeField] private bool fingerMode;
+        [Tooltip("Finger prefabs for values 1 to 5 (index 0 = 1 finger, ..., index 4 = 5 fingers).")]
+        [SerializeField] private GameObject[] fingerPrefabs;
+
         // ── Built-in palette (same 6 high-contrast colors as counting game) ──
 
         private static readonly Color[] Palette =
@@ -86,6 +98,10 @@ namespace KidGame.Mechanics.Addition
 
         private void Update()
         {
+            if (this == null) return;
+            if (portraitSlotsContainer == null || landscapeSlotsContainer == null ||
+                portraitAnswersContainer == null || landscapeAnswersContainer == null) return;
+
             // Detect orientation flip and migrate live slots/cards to the new containers
             bool landscape = IsLandscape;
             if (landscape != _wasLandscape && _slots.Count > 0)
@@ -97,8 +113,10 @@ namespace KidGame.Mechanics.Addition
 
         private void MoveToActiveContainers()
         {
+            if (this == null) return;
             var newSlots   = ActiveSlotsContainer;
             var newAnswers = ActiveAnswersContainer;
+            if (newSlots == null || newAnswers == null) return;
 
             foreach (var slot in _slots)
                 if (slot) slot.transform.SetParent(newSlots, worldPositionStays: false);
@@ -135,10 +153,45 @@ namespace KidGame.Mechanics.Addition
         public void GenerateRound()
         {
             // ── Validate required Inspector references ────────────────────────
-            if (objectCategoryPrefabs == null || objectCategoryPrefabs.Length < 2)
+            if (diceMode)
             {
-                Debug.LogError("[AdditionGame] Assign at least 2 Object Category Prefabs in the Inspector.");
-                return;
+                if (dicePrefabs == null || dicePrefabs.Length != 6)
+                {
+                    Debug.LogError("[AdditionGame] Dice Mode is enabled, but Dice Prefabs array does not have exactly 6 elements.");
+                    return;
+                }
+                for (int i = 0; i < 6; i++)
+                {
+                    if (dicePrefabs[i] == null)
+                    {
+                        Debug.LogError($"[AdditionGame] Dice Prefab at index {i} is not assigned.");
+                        return;
+                    }
+                }
+            }
+            else if (fingerMode)
+            {
+                if (fingerPrefabs == null || fingerPrefabs.Length != 5)
+                {
+                    Debug.LogError("[AdditionGame] Finger Mode is enabled, but Finger Prefabs array does not have exactly 5 elements.");
+                    return;
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    if (fingerPrefabs[i] == null)
+                    {
+                        Debug.LogError($"[AdditionGame] Finger Prefab at index {i} is not assigned.");
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                if (objectCategoryPrefabs == null || objectCategoryPrefabs.Length < 2)
+                {
+                    Debug.LogError("[AdditionGame] Assign at least 2 Object Category Prefabs in the Inspector.");
+                    return;
+                }
             }
             if (slotPrefab == null)
             {
@@ -166,11 +219,34 @@ namespace KidGame.Mechanics.Addition
             _answeredCount = 0;
             nextButton.interactable = false;
 
-            // 1. Generate pairs with UNIQUE sums (e.g. 3+5=8, 6+4=10, not two slots summing to 8)
-            var pairs = GenerateUniqueSumPairs(slotCount, minPerGrid, maxPerGrid);
+            List<int> sums;
+            var slotData = new List<(List<GameObject> leftPrefabs, List<GameObject> rightPrefabs, int leftSum, int rightSum)>();
+            List<(int left, int right)> normalPairs = null;
 
-            // 2. Collect the sums for answer cards
-            var sums = pairs.Select(p => p.left + p.right).ToList();
+            if (diceMode || fingerMode)
+            {
+                int maxVal = diceMode ? 6 : 5;
+                var rawPairs = GenerateDiceOrFingerPairs(slotCount, minPerGrid, maxPerGrid, maxVal);
+                sums = rawPairs.Select(p => p.leftSum + p.rightSum).ToList();
+
+                foreach (var pair in rawPairs)
+                {
+                    var leftPrefabs = new List<GameObject>();
+                    foreach (var val in pair.leftValues)
+                        leftPrefabs.Add(diceMode ? dicePrefabs[val - 1] : fingerPrefabs[val - 1]);
+
+                    var rightPrefabs = new List<GameObject>();
+                    foreach (var val in pair.rightValues)
+                        rightPrefabs.Add(diceMode ? dicePrefabs[val - 1] : fingerPrefabs[val - 1]);
+
+                    slotData.Add((leftPrefabs, rightPrefabs, pair.leftSum, pair.rightSum));
+                }
+            }
+            else
+            {
+                normalPairs = GenerateUniqueSumPairs(slotCount, minPerGrid, maxPerGrid);
+                sums = normalPairs.Select(p => p.left + p.right).ToList();
+            }
 
             // 3. Shuffle color palette
             var colors = Palette.Take(slotCount).ToList();
@@ -180,34 +256,45 @@ namespace KidGame.Mechanics.Addition
             var answerValues = new List<int>(sums);
             Shuffle(answerValues);
 
-            // 5. Pick ONE category for all left grids and ONE (different) for all right grids
-            var catOrder    = Enumerable.Range(0, objectCategoryPrefabs.Length).ToList();
-            Shuffle(catOrder);
-            var leftPrefab  = objectCategoryPrefabs[catOrder[0]];
-            var rightPrefab = objectCategoryPrefabs[catOrder.Count > 1 ? catOrder[1] : catOrder[0]];
-
-            // Debug: shows what was actually picked — remove once confirmed working
-            Debug.Log($"[AdditionGame] Round categories → Left: {leftPrefab?.name}, Right: {rightPrefab?.name}" +
-                      $" (pool size: {objectCategoryPrefabs.Length})");
-
-            // 6. Spawn addition slots — all use the same left/right category pair
-            for (int i = 0; i < slotCount; i++)
+            // 5. Spawn addition slots
+            if (diceMode || fingerMode)
             {
-                var go   = Instantiate(slotPrefab, ActiveSlotsContainer);
-                var slot = go.GetComponent<AdditionSlot>();
+                for (int i = 0; i < slotCount; i++)
+                {
+                    var go   = Instantiate(slotPrefab, ActiveSlotsContainer);
+                    var slot = go.GetComponent<AdditionSlot>();
 
-                slot.Setup(leftPrefab,  pairs[i].left,
-                           rightPrefab, pairs[i].right,
-                           this);
+                    var data = slotData[i];
+                    slot.Setup(data.leftPrefabs, data.rightPrefabs, data.leftSum, data.rightSum, this);
+                    _slots.Add(slot);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < slotCount; i++)
+                {
+                    var go   = Instantiate(slotPrefab, ActiveSlotsContainer);
+                    var slot = go.GetComponent<AdditionSlot>();
 
-                _slots.Add(slot);
+                    // Pick two different categories specifically for this slot row
+                    var catOrder = Enumerable.Range(0, objectCategoryPrefabs.Length).ToList();
+                    Shuffle(catOrder);
+                    var leftPrefab  = objectCategoryPrefabs[catOrder[0]];
+                    var rightPrefab = objectCategoryPrefabs[catOrder.Count > 1 ? catOrder[1] : catOrder[0]];
+
+                    slot.Setup(leftPrefab,  normalPairs[i].left,
+                               rightPrefab, normalPairs[i].right,
+                               this);
+
+                    _slots.Add(slot);
+                }
             }
 
             // Force layout to recalculate immediately after spawning all slots
             var rt = ActiveSlotsContainer.GetComponent<RectTransform>();
             if (rt != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
 
-            // 7. Spawn answer cards into the active orientation's answer grid
+            // 6. Spawn answer cards into the active orientation's answer grid
             for (int i = 0; i < answerValues.Count; i++)
             {
                 var go   = Instantiate(answerCardPrefab, ActiveAnswersContainer);
@@ -223,6 +310,47 @@ namespace KidGame.Mechanics.Addition
             foreach (var c in _cards) { if (c) Destroy(c.gameObject); }
             _slots.Clear();
             _cards.Clear();
+        }
+
+        private List<(List<int> leftValues, List<int> rightValues, int leftSum, int rightSum)> GenerateDiceOrFingerPairs(int count, int minItems, int maxItems, int maxValPerItem)
+        {
+            var results = new List<(List<int>, List<int>, int, int)>();
+            var usedSums = new HashSet<int>();
+            int maxTries = 1000;
+
+            while (results.Count < count && maxTries-- > 0)
+            {
+                int leftCount = Random.Range(minItems, maxItems + 1);
+                int rightCount = Random.Range(minItems, maxItems + 1);
+
+                List<int> leftFaces = new List<int>();
+                int leftSum = 0;
+                for (int d = 0; d < leftCount; d++)
+                {
+                    int face = Random.Range(1, maxValPerItem + 1);
+                    leftFaces.Add(face);
+                    leftSum += face;
+                }
+
+                List<int> rightFaces = new List<int>();
+                int rightSum = 0;
+                for (int d = 0; d < rightCount; d++)
+                {
+                    int face = Random.Range(1, maxValPerItem + 1);
+                    rightFaces.Add(face);
+                    rightSum += face;
+                }
+
+                int totalSum = leftSum + rightSum;
+
+                if (!usedSums.Contains(totalSum))
+                {
+                    results.Add((leftFaces, rightFaces, leftSum, rightSum));
+                    usedSums.Add(totalSum);
+                }
+            }
+
+            return results;
         }
 
         // ── Generation Helpers ────────────────────────────────────────────────

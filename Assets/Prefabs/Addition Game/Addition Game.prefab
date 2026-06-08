@@ -107,10 +107,10 @@ RectTransform:
   - {fileID: 8285601760031267833}
   m_Father: {fileID: 784779391317442990}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 604.27496, y: -552.98505}
-  m_SizeDelta: {x: 1208.5499, y: 705.9701}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &903083480692653654
 GameObject:
@@ -271,7 +271,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -436.61908}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &5474832092399538392
 MonoBehaviour:
@@ -345,10 +345,10 @@ RectTransform:
   - {fileID: 1700924589923107300}
   m_Father: {fileID: 2595534665764370267}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 538.4859, y: -818.3318}
+  m_SizeDelta: {x: 1076.9718, y: 1236.6636}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2132020618349885740
 GameObject:
@@ -876,7 +876,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 697.54004, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 555.08, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4877415895027234089
@@ -996,7 +996,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 220, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 240, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8816175190246104649
@@ -1621,9 +1621,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Addition.AdditionGameManager
   objectCategoryPrefabs:
+  - {fileID: 279233004548221328, guid: e33d2cabaad7e754295dc2c428770680, type: 3}
   - {fileID: 9052675801392088744, guid: 1c25a7a34c192f94e96c4d79b2ce499d, type: 3}
-  - {fileID: 3663694854287574558, guid: 6176d6a68f9d26346844f12d95182ea9, type: 3}
+  - {fileID: 551436448653747148, guid: 1a4d049e7c7d14c4580d6af4ed3b7ff6, type: 3}
   - {fileID: 944671835624779107, guid: b4122adfd969c9146b946fc07b17a9c0, type: 3}
+  - {fileID: 3663694854287574558, guid: 6176d6a68f9d26346844f12d95182ea9, type: 3}
+  - {fileID: 7989547991596683270, guid: 7089b063b26cb2347820c176b63c9fc9, type: 3}
+  - {fileID: 8910757150115945586, guid: 75993a8a2264fc14f840ad758782108a, type: 3}
   slotPrefab: {fileID: 5982347052818890851, guid: f548949405dc9b54e88047be6c6dda35, type: 3}
   answerCardPrefab: {fileID: 7026504693343592554, guid: 0182651f93afea3489412a78a9040cd4, type: 3}
   portraitSlotsContainer: {fileID: 6897161979398453360}
@@ -1632,8 +1636,23 @@ MonoBehaviour:
   landscapeAnswersContainer: {fileID: 2026767754884776061}
   nextButton: {fileID: 7949950844327917453}
   slotCount: 5
-  minPerGrid: 1
+  minPerGrid: 8
   maxPerGrid: 12
+  diceMode: 0
+  dicePrefabs:
+  - {fileID: 8808816603790564008, guid: 6786cb17a9f92be4eb123a20c736e188, type: 3}
+  - {fileID: 7563703363003997850, guid: 28dd085f9eb81b44d878333061a1ce2d, type: 3}
+  - {fileID: 6753418447376339796, guid: 4474fb346253ed1418cbf31ea75b3565, type: 3}
+  - {fileID: 3691182412284094170, guid: 85e91f0c957b6ef4b892e4044ba0733f, type: 3}
+  - {fileID: 1368593724142903760, guid: c2d0f84bfcf22b4499ad25995b1ac618, type: 3}
+  - {fileID: 3367613641970480418, guid: 6354bfdf010dc3948bb58b2794ed7b24, type: 3}
+  fingerMode: 1
+  fingerPrefabs:
+  - {fileID: 1754457653367136570, guid: 0a06f852da41a6844bb83fac206594df, type: 3}
+  - {fileID: 7676941270255337821, guid: ebcc882d6f589844d8c446fc9d5eff7d, type: 3}
+  - {fileID: 1469587185825181246, guid: d72d08edab5ab50458fbb9d2a3d98924, type: 3}
+  - {fileID: 5649623561697560360, guid: fa0cddad888e1e245bc5b37029dabc25, type: 3}
+  - {fileID: 2576838590016289760, guid: f422caa5dc3a3c549b29090ce2619604, type: 3}
 --- !u!1 &5409662387608698326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1671,7 +1690,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 84.287415, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 130.0499, y: 548.9403}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3750257116105000480
@@ -1784,7 +1803,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2595534665764370267
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1952,7 +1971,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 84.287415, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 130.04993, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1354804504918365112
@@ -2249,7 +2268,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &784779391317442990
 RectTransform:
   m_ObjectHideFlags: 0

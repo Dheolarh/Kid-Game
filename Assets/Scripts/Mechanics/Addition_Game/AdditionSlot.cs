@@ -1,5 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
-using KidGame.Mechanics.Counting;   // re-uses CountingObject for tap animation
+using KidGame.Mechanics.Counting;  
 
 namespace KidGame.Mechanics.Addition
 {
@@ -34,16 +35,37 @@ namespace KidGame.Mechanics.Addition
             dropZone.Setup(CorrectSum, () => manager.OnSlotAnswered());
         }
 
+        public void Setup(List<GameObject> leftDicePrefabs,
+                          List<GameObject> rightDicePrefabs,
+                          int leftSum, int rightSum,
+                          AdditionGameManager manager)
+        {
+            CorrectSum = leftSum + rightSum;
+
+            foreach (var prefab in leftDicePrefabs)
+                SpawnObject(prefab, leftGrid);
+
+            foreach (var prefab in rightDicePrefabs)
+                SpawnObject(prefab, rightGrid);
+
+            dropZone.Setup(CorrectSum, () => manager.OnSlotAnswered());
+        }
+
         private static void SpawnObjects(GameObject prefab, int count, Transform parent)
         {
             for (int i = 0; i < count; i++)
             {
-                var obj = Object.Instantiate(prefab, parent);
-
-                // Tap animation — added automatically, no prefab changes needed
-                if (obj.GetComponent<CountingObject>() == null)
-                    obj.AddComponent<CountingObject>();
+                SpawnObject(prefab, parent);
             }
+        }
+
+        private static void SpawnObject(GameObject prefab, Transform parent)
+        {
+            var obj = Object.Instantiate(prefab, parent);
+
+            // Tap animation — added automatically, no prefab changes needed
+            if (obj.GetComponent<CountingObject>() == null)
+                obj.AddComponent<CountingObject>();
         }
     }
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace KidGame.Interface
 {
+    [ExecuteAlways]
     public class OrientationLayoutAdapter : MonoBehaviour
     {
         [Header("Layouts")]
@@ -21,6 +22,9 @@ namespace KidGame.Interface
 
         private void Update()
         {
+            if (this == null) return;
+            if (portraitView == null || landscapeView == null) return;
+
             bool landscape = IsLandscape();
             if (landscape == _lastLandscape) return;
 
@@ -30,10 +34,13 @@ namespace KidGame.Interface
 
         private void Apply()
         {
+            if (this == null) return;
+            if (portraitView == null || landscapeView == null) return;
+
             bool landscape = IsLandscape();
 
-            if (portraitView  != null) portraitView.SetActive(!landscape);
-            if (landscapeView != null) landscapeView.SetActive(landscape);
+            portraitView.SetActive(!landscape);
+            landscapeView.SetActive(landscape);
         }
 
         private static bool IsLandscape() => Screen.width > Screen.height;

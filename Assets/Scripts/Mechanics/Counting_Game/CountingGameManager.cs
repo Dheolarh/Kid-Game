@@ -80,6 +80,10 @@ namespace KidGame.Mechanics.Counting
 
         private void Update()
         {
+            if (this == null) return;
+            if (portraitSlotsContainer == null || landscapeSlotsContainer == null ||
+                portraitAnswersContainer == null || landscapeAnswersContainer == null) return;
+
             bool landscape = IsLandscape;
             if (landscape != _wasLandscape && _slots.Count > 0)
             {
@@ -90,8 +94,10 @@ namespace KidGame.Mechanics.Counting
 
         private void MoveToActiveContainers()
         {
+            if (this == null) return;
             var newSlots   = ActiveSlotsContainer;
             var newAnswers = ActiveAnswersContainer;
+            if (newSlots == null || newAnswers == null) return;
 
             foreach (var slot in _slots)
                 if (slot) slot.transform.SetParent(newSlots, worldPositionStays: false);

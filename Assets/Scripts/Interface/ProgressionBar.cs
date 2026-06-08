@@ -121,6 +121,9 @@ namespace KidGame.Interface
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) return;
+            if (UnityEditor.EditorApplication.isCompiling) return;
+
             // Live-preview in the Editor while not playing
             ApplyFill();
         }

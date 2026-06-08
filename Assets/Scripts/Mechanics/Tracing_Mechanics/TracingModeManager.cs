@@ -115,6 +115,19 @@ namespace KidGame.Mechanics.Tracing
 
         private void RefreshObjective()
         {
+            // If in edit mode and fields are not initialized, read from prefab
+            if (!Application.isPlaying && string.IsNullOrEmpty(_descriptionWord) && slotPrefab != null)
+            {
+                var prefabTracer = slotPrefab.GetComponent<SlotTracer>();
+                if (prefabTracer != null)
+                {
+                    _exampleText       = prefabTracer.exampleText;
+                    _descriptionWord   = prefabTracer.descriptionWord;
+                    _descriptionNumber = prefabTracer.descriptionNumber;
+                    _customSentence    = prefabTracer.customDescriptionSentence;
+                }
+            }
+
             // Build description: use custom sentence if provided, otherwise auto-build
             string desc = !string.IsNullOrWhiteSpace(_customSentence)
                 ? _customSentence
@@ -144,8 +157,10 @@ namespace KidGame.Mechanics.Tracing
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (Application.isPlaying)
-                ApplyMode(tutorialModeActive);
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) return;
+            if (UnityEditor.EditorApplication.isCompiling) return;
+
+            ApplyMode(tutorialModeActive);
         }
 
         [ContextMenu("Switch to Tutorial Mode")]

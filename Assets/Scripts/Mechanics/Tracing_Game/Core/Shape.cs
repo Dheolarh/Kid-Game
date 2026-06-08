@@ -16,10 +16,27 @@ namespace KidGame.Mechanics.Tracing
         [HideInInspector] public bool completed;
         [HideInInspector] public bool enablePriorityOrder = true;
 
+        private bool _initialized;
+
         // ── Lifecycle ─────────────────────────────────────────────
         private void Start()
         {
+            if (_initialized) return;
+            _initialized = true;
+
             // Standalone slot mode — always initialise immediately
+            if (paths.Count != 0)
+            {
+                Invoke(nameof(EnableTracingHand), 0.2f);
+                ShowPathNumbers(0);
+            }
+        }
+
+        public void InitializeShape()
+        {
+            if (_initialized) return;
+            _initialized = true;
+
             if (paths.Count != 0)
             {
                 Invoke(nameof(EnableTracingHand), 0.2f);

@@ -64,12 +64,24 @@ namespace KidGame.Mechanics.Tracing
 
             // Frame 1: wait for Canvas layout rects to be computed
             yield return null;
-            SpawnShape();
+            EnsureShapeSpawned();
 
             // Frame 2: wait for Shape.Start() to call ShowPathNumbers() which
             //          resets Image colors — then we override with our own colors
             yield return null;
             ColorizeStartDots();
+        }
+
+        public void EnsureShapeSpawned()
+        {
+            if (shape == null)
+            {
+                SpawnShape();
+                if (shape != null)
+                {
+                    shape.InitializeShape();
+                }
+            }
         }
 
         // ──────────────────────────────────────────────────
@@ -81,36 +93,39 @@ namespace KidGame.Mechanics.Tracing
             var go = Instantiate(shapePrefab);
             go.transform.SetParent(transform, false);
             go.transform.localPosition = Vector3.zero;
+            go.name = shapePrefab.name;
+            shape   = go.GetComponent<Shape>();
 
-            // Fit the shape inside the slot, preserving aspect ratio
+            RescaleShape();
+
+            // Tint the start-point indicator dots
+            ColorizeStartDots();
+        }
+
+        public void RescaleShape()
+        {
+            if (shape == null) return;
+
             var slotRT  = GetComponent<RectTransform>();
-            var shapeRT = go.GetComponent<RectTransform>();
+            var shapeRT = shape.GetComponent<RectTransform>();
 
             if (slotRT != null && shapeRT != null)
             {
                 Vector2 slotSize  = slotRT.rect.size;
                 Vector2 shapeSize = shapeRT.rect.size;
 
-                // Guard against zero dimensions (should not happen after yield null, but be safe)
                 if (slotSize.sqrMagnitude > 0f && shapeSize.sqrMagnitude > 0f)
                 {
                     float scale = Mathf.Min(slotSize.x / shapeSize.x,
                                             slotSize.y / shapeSize.y)
                                   * (1f - sizePadding);
-                    go.transform.localScale = Vector3.one * scale;
+                    shape.transform.localScale = Vector3.one * scale;
                 }
                 else
                 {
-                    // Fallback: keep prefab's original scale
-                    go.transform.localScale = shapePrefab.transform.localScale;
+                    shape.transform.localScale = shapePrefab.transform.localScale;
                 }
             }
-
-            go.name = shapePrefab.name;
-            shape   = go.GetComponent<Shape>();
-
-            // Tint the start-point indicator dots
-            ColorizeStartDots();
         }
 
         internal void ColorizeStartDots()

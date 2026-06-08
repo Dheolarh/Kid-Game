@@ -30,8 +30,42 @@ namespace KidGame.Mechanics.Tracing
 
         private void Awake()
         {
+            // Resolve the camera once
             if (tracingCamera == null)
-                tracingCamera = Camera.main;
+            {
+#if UNITY_2023_1_OR_NEWER
+                tracingCamera = Camera.main ?? FindFirstObjectByType<Camera>();
+#else
+                tracingCamera = Camera.main ?? FindObjectOfType<Camera>();
+#endif
+            }
+
+            // Also push it to the Canvas so Screen Space – Camera renders correctly
+            var canvas = GetComponent<Canvas>();
+            if (canvas != null
+                && canvas.renderMode == RenderMode.ScreenSpaceCamera
+                && canvas.worldCamera == null
+                && tracingCamera != null)
+            {
+                canvas.worldCamera = tracingCamera;
+            }
+        }
+
+        private Vector3 GetWorldPos()
+        {
+            Vector2 screenPos = Vector2.zero;
+
+            if (Touchscreen.current != null && Touchscreen.current.touches.Count > 0)
+                screenPos = Touchscreen.current.touches[0].position.ReadValue();
+            else if (Mouse.current != null)
+                screenPos = Mouse.current.position.ReadValue();
+
+            if (tracingCamera == null) return Vector3.zero;
+
+            var pos = tracingCamera.ScreenToWorldPoint(
+                          new Vector3(screenPos.x, screenPos.y, tracingCamera.nearClipPlane));
+            pos.z = 0f;
+            return pos;
         }
 
         private void Update()
@@ -262,22 +296,7 @@ namespace KidGame.Mechanics.Tracing
         }
 
         // ──────────────────────────────────────────────────
-        // Helpers
+        // Helpers  (GetWorldPos is defined earlier, near Awake)
         // ──────────────────────────────────────────────────
-
-        private Vector3 GetWorldPos()
-        {
-            Vector2 screenPos = Vector2.zero;
-
-            if (Touchscreen.current != null && Touchscreen.current.touches.Count > 0)
-                screenPos = Touchscreen.current.touches[0].position.ReadValue();
-            else if (Mouse.current != null)
-                screenPos = Mouse.current.position.ReadValue();
-
-            var pos = tracingCamera.ScreenToWorldPoint(
-                          new Vector3(screenPos.x, screenPos.y, 0f));
-            pos.z = 0f;
-            return pos;
-        }
     }
 }
