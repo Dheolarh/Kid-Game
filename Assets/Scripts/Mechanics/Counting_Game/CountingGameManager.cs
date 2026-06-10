@@ -141,7 +141,7 @@ namespace KidGame.Mechanics.Counting
         public void OnSlotAnswered(CountingSlot slot)
         {
             _answeredCount++;
-            if (_answeredCount >= slotCount)
+            if (_answeredCount >= _slots.Count)
                 nextButton.interactable = true;
         }
 
@@ -314,16 +314,21 @@ namespace KidGame.Mechanics.Counting
                 Shuffle(catOrder);
             }
 
-            // 3. Shuffle color palette (one color per card)
-            var colors = Palette.Take(slotCount).ToList();
-            Shuffle(colors);
-
-            // 4. Shuffle answer values — exactly 5, one per slot
+            // 4. Shuffle answer values — exactly one per slot
             var answerValues = new List<int>(counts);
             Shuffle(answerValues);
 
+            // 3. Shuffle color palette (exactly matching the number of answers)
+            var colors = new List<Color>();
+            for (int i = 0; i < answerValues.Count; i++)
+            {
+                colors.Add(Palette[i % Palette.Length]);
+            }
+            Shuffle(colors);
+
             // 5. Spawn slots
-            for (int i = 0; i < slotCount; i++)
+            int actualSlotCount = (diceMode || fingerMode) ? slotData.Count : normalCounts.Count;
+            for (int i = 0; i < actualSlotCount; i++)
             {
                 var go   = Instantiate(slotPrefab, ActiveSlotsContainer);
                 var slot = go.GetComponent<CountingSlot>();
@@ -339,6 +344,10 @@ namespace KidGame.Mechanics.Counting
                 }
                 _slots.Add(slot);
             }
+
+            // Force layout to recalculate immediately after spawning all slots
+            var rt = ActiveSlotsContainer.GetComponent<RectTransform>();
+            if (rt != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
 
             // 6. Spawn answer cards into the active orientation's answer grid
             for (int i = 0; i < answerValues.Count; i++)

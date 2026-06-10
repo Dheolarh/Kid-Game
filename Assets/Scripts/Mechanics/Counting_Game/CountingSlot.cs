@@ -27,6 +27,7 @@ namespace KidGame.Mechanics.Counting
 
             // Pass a lambda so AnswerDropZone doesn't need to reference CountingSlot/Manager directly
             dropZone.Setup(count, () => manager.OnSlotAnswered(this));
+            AdjustHeights(count);
         }
 
         public void Setup(System.Collections.Generic.List<GameObject> itemPrefabs, int totalSum, CountingGameManager manager)
@@ -42,6 +43,109 @@ namespace KidGame.Mechanics.Counting
             }
 
             dropZone.Setup(totalSum, () => manager.OnSlotAnswered(this));
+            AdjustHeights(itemPrefabs.Count);
+        }
+
+        private float _initialSlotHeight = -1f;
+        private float _initialGridHeight = -1f;
+
+        private void CacheInitialHeights()
+        {
+            if (_initialSlotHeight < 0f)
+            {
+                var slotRt = transform as RectTransform;
+                float rectHeight = slotRt != null ? slotRt.rect.height : 0f;
+
+                var le = GetComponent<UnityEngine.UI.LayoutElement>();
+                float leHeight = le != null ? le.preferredHeight : 0f;
+
+                if (rectHeight > 0f) _initialSlotHeight = rectHeight;
+                else if (leHeight > 0f) _initialSlotHeight = leHeight;
+                else _initialSlotHeight = 370f; // fallback design height
+
+                var gridRt = objectGrid as RectTransform;
+                float gridHeight = gridRt != null ? gridRt.rect.height : 0f;
+
+                var leGrid = gridRt != null ? gridRt.GetComponent<UnityEngine.UI.LayoutElement>() : null;
+                float leGridHeight = leGrid != null ? leGrid.preferredHeight : 0f;
+
+                if (gridHeight > 0f) _initialGridHeight = gridHeight;
+                else if (leGridHeight > 0f) _initialGridHeight = leGridHeight;
+                else _initialGridHeight = 369.83f; // fallback design height
+            }
+        }
+
+        private void AdjustHeights(int itemCount)
+        {
+            CacheInitialHeights();
+
+            float gridHeight = GetGridCalculatedHeight(objectGrid, itemCount);
+
+            var rt = objectGrid as RectTransform;
+            if (rt != null)
+            {
+                rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridHeight);
+            }
+
+            var leGrid = objectGrid.GetComponent<UnityEngine.UI.LayoutElement>();
+            if (leGrid == null)
+            {
+                leGrid = objectGrid.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+            }
+            leGrid.preferredHeight = gridHeight;
+
+            var leSlot = GetComponent<UnityEngine.UI.LayoutElement>();
+            if (leSlot == null)
+            {
+                leSlot = gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+            }
+
+            float delta = gridHeight - _initialGridHeight;
+            float newSlotHeight = _initialSlotHeight + Mathf.Max(0f, delta);
+
+            leSlot.preferredHeight = newSlotHeight;
+
+            var slotRt = transform as RectTransform;
+            if (slotRt != null)
+            {
+                slotRt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newSlotHeight);
+            }
+        }
+
+        private float GetGridCalculatedHeight(Transform gridTransform, int itemCount)
+        {
+            if (gridTransform == null) return 0f;
+            var grid = gridTransform.GetComponent<UnityEngine.UI.GridLayoutGroup>();
+            if (grid == null) return 0f;
+
+            int columns = 1;
+            if (grid.constraint == UnityEngine.UI.GridLayoutGroup.Constraint.FixedColumnCount)
+            {
+                columns = grid.constraintCount;
+            }
+            else
+            {
+                var rectTransform = gridTransform as RectTransform;
+                if (rectTransform != null)
+                {
+                    float width = rectTransform.rect.width;
+                    if (width <= 0)
+                    {
+                        width = UnityEngine.UI.LayoutUtility.GetPreferredWidth(rectTransform);
+                        if (width <= 0) width = UnityEngine.UI.LayoutUtility.GetMinWidth(rectTransform);
+                    }
+                    if (width > 0)
+                    {
+                        columns = Mathf.FloorToInt((width - grid.padding.horizontal + grid.spacing.x) / (grid.cellSize.x + grid.spacing.x));
+                    }
+                }
+            }
+            if (columns < 1) columns = 1;
+
+            int rows = Mathf.CeilToInt((float)itemCount / columns);
+            if (rows < 1) rows = 1;
+
+            return grid.padding.vertical + (rows * grid.cellSize.y) + ((rows - 1) * grid.spacing.y);
         }
     }
 }
