@@ -17,6 +17,8 @@ namespace KidGame.Mechanics.Addition
         [SerializeField] private GameObject slotPrefab;
         [Tooltip("The AdditionSlot row prefab (count-add mode).")]
         [SerializeField] private GameObject countAddSlotPrefab;
+        [Tooltip("The AdditionSlot row prefab (numbers-only mode).")]
+        [SerializeField] private GameObject numbersOnlySlotPrefab;
         [Tooltip("The AnswerCard draggable prefab (same as counting game).")]
         [SerializeField] private GameObject answerCardPrefab;
 
@@ -57,6 +59,23 @@ namespace KidGame.Mechanics.Addition
 
         public bool CountAddMode => countAddMode;
 
+        [Header("Numbers Only Mode")]
+        [SerializeField] private bool numbersOnlyMode;
+        [Tooltip("Minimum number of operands in the addition equation.")]
+        [SerializeField, Range(2, 5)] private int minOperandCount = 2;
+        [Tooltip("Maximum number of operands in the addition equation.")]
+        [SerializeField, Range(2, 5)] private int maxOperandCount = 3;
+        [Tooltip("Minimum value of generated numbers in the addition equation.")]
+        [SerializeField] private int minNumberValue = 1;
+        [Tooltip("Maximum value of generated numbers in the addition equation.")]
+        [SerializeField] private int maxNumberValue = 50;
+        [SerializeField] private GameObject numberBoxPrefab;
+        [SerializeField] private GameObject plusSymbolPrefab;
+        [SerializeField] private GameObject equalsSymbolPrefab;
+
+        public bool NumbersOnlyMode => numbersOnlyMode;
+        public Color GetColorForIndex(int idx) => Palette[idx % Palette.Length];
+
         [Header("Object Category Themes")]
         [Tooltip("Define themed collections of object prefabs (e.g., Ocean, Animals). Enable one to restrict spawning to that collection.")]
         [SerializeField] private List<ObjectCategoryTheme> themes;
@@ -74,7 +93,7 @@ namespace KidGame.Mechanics.Addition
 
         // ── Runtime state ─────────────────────────────────────────────────────
 
-        private readonly List<AdditionSlot> _slots = new List<AdditionSlot>();
+        private readonly List<MonoBehaviour> _slots = new List<MonoBehaviour>();
         private readonly List<AnswerCard>   _cards = new List<AnswerCard>();
         private int _answeredCount;
 
@@ -210,12 +229,12 @@ namespace KidGame.Mechanics.Addition
                     return;
                 }
             }
-            var prefabToSpawn = countAddMode ? countAddSlotPrefab : slotPrefab;
+            var prefabToSpawn = (countAddMode && !numbersOnlyMode) ? countAddSlotPrefab : (numbersOnlyMode ? numbersOnlySlotPrefab : slotPrefab);
             if (prefabToSpawn == null) prefabToSpawn = slotPrefab;
 
             if (prefabToSpawn == null)
             {
-                Debug.LogError($"[AdditionGame] {(countAddMode ? "Count-Add" : "Normal")} Slot Prefab is not assigned in the Inspector.");
+                Debug.LogError($"[AdditionGame] {(numbersOnlyMode ? "Numbers-Only" : (countAddMode ? "Count-Add" : "Normal"))} Slot Prefab is not assigned in the Inspector.");
                 return;
             }
             if (answerCardPrefab == null)
@@ -239,11 +258,31 @@ namespace KidGame.Mechanics.Addition
             _answeredCount = 0;
             nextButton.interactable = false;
 
-            List<int> sums;
+            List<int> sums = new List<int>();
             var slotData = new List<(List<GameObject> leftPrefabs, List<GameObject> rightPrefabs, int leftSum, int rightSum)>();
             List<(int left, int right)> normalPairs = null;
+            var equations = new List<List<int>>();
 
-            if (diceMode || fingerMode)
+            if (numbersOnlyMode)
+            {
+                int minOp = Mathf.Max(2, minOperandCount);
+                int maxOp = Mathf.Max(minOp, maxOperandCount);
+                for (int s = 0; s < slotCount; s++)
+                {
+                    int opCount = Random.Range(minOp, maxOp + 1);
+                    var eq = new List<int>();
+                    int sum = 0;
+                    for (int o = 0; o < opCount; o++)
+                    {
+                        int val = Random.Range(minNumberValue, maxNumberValue + 1);
+                        eq.Add(val);
+                        sum += val;
+                    }
+                    equations.Add(eq);
+                    sums.Add(sum);
+                }
+            }
+            else if (diceMode || fingerMode)
             {
                 int maxVal = diceMode ? 6 : 5;
                 var rawPairs = GenerateDiceOrFingerPairs(slotCount, minPerGrid, maxPerGrid, maxVal);
@@ -270,7 +309,7 @@ namespace KidGame.Mechanics.Addition
 
             // 4. Collect and shuffle answer values
             var answerValues = new List<int>();
-            if (countAddMode)
+            if (countAddMode && !numbersOnlyMode)
             {
                 if (diceMode || fingerMode)
                 {
@@ -306,30 +345,39 @@ namespace KidGame.Mechanics.Addition
             Shuffle(colors);
 
             // 5. Spawn addition slots
-            int actualSlotCount = (diceMode || fingerMode) ? slotData.Count : normalPairs.Count;
+            int actualSlotCount = numbersOnlyMode ? equations.Count : ((diceMode || fingerMode) ? slotData.Count : normalPairs.Count);
             for (int i = 0; i < actualSlotCount; i++)
             {
-                var go   = Instantiate(prefabToSpawn, ActiveSlotsContainer);
-                var slot = go.GetComponent<AdditionSlot>();
+                var go = Instantiate(prefabToSpawn, ActiveSlotsContainer);
 
-                if (diceMode || fingerMode)
+                if (numbersOnlyMode)
                 {
-                    var data = slotData[i];
-                    slot.Setup(data.leftPrefabs, data.rightPrefabs, data.leftSum, data.rightSum, this);
+                    var slot = go.GetComponent<NumbersOnlyAdditionSlot>();
+                    slot.Setup(equations[i], this, numberBoxPrefab, plusSymbolPrefab, equalsSymbolPrefab);
+                    _slots.Add(slot);
                 }
                 else
                 {
-                    // Pick two different categories specifically for this slot row from active prefabs
-                    var catOrder = Enumerable.Range(0, activePrefabs.Length).ToList();
-                    Shuffle(catOrder);
-                    var leftPrefab  = activePrefabs[catOrder[0]];
-                    var rightPrefab = activePrefabs[catOrder.Count > 1 ? catOrder[1] : catOrder[0]];
+                    var slot = go.GetComponent<AdditionSlot>();
+                    if (diceMode || fingerMode)
+                    {
+                        var data = slotData[i];
+                        slot.Setup(data.leftPrefabs, data.rightPrefabs, data.leftSum, data.rightSum, this);
+                    }
+                    else
+                    {
+                        // Pick two different categories specifically for this slot row from active prefabs
+                        var catOrder = Enumerable.Range(0, activePrefabs.Length).ToList();
+                        Shuffle(catOrder);
+                        var leftPrefab  = activePrefabs[catOrder[0]];
+                        var rightPrefab = activePrefabs[catOrder.Count > 1 ? catOrder[1] : catOrder[0]];
 
-                    slot.Setup(leftPrefab,  normalPairs[i].left,
-                               rightPrefab, normalPairs[i].right,
-                               this);
+                        slot.Setup(leftPrefab,  normalPairs[i].left,
+                                   rightPrefab, normalPairs[i].right,
+                                   this);
+                    }
+                    _slots.Add(slot);
                 }
-                _slots.Add(slot);
             }
 
             // Force layout to recalculate immediately after spawning all slots
@@ -399,10 +447,6 @@ namespace KidGame.Mechanics.Addition
 
         // ── Generation Helpers ────────────────────────────────────────────────
 
-        /// <summary>
-        /// Generates <paramref name="count"/> (left, right) pairs whose sums are all unique.
-        /// left and right are each in [min, max].
-        /// </summary>
         private List<(int left, int right)> GenerateUniqueSumPairs(int count, int min, int max)
         {
             var pairs    = new List<(int, int)>();

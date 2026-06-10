@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using KidGame.Mechanics.Counting;  
 
 namespace KidGame.Mechanics.Addition
@@ -262,6 +263,23 @@ namespace KidGame.Mechanics.Addition
                 if (rectTransform != null)
                 {
                     float width = rectTransform.rect.width;
+                    if (width <= 0)
+                    {
+                        var current = rectTransform.parent as RectTransform;
+                        while (current != null && current.rect.width <= 0)
+                        {
+                            current = current.parent as RectTransform;
+                        }
+                        if (current != null)
+                        {
+                            width = current.rect.width;
+                            var parentLayout = rectTransform.parent.GetComponent<LayoutGroup>();
+                            if (parentLayout != null)
+                            {
+                                width -= (parentLayout.padding.left + parentLayout.padding.right);
+                            }
+                        }
+                    }
                     if (width <= 0)
                     {
                         width = UnityEngine.UI.LayoutUtility.GetPreferredWidth(rectTransform);
