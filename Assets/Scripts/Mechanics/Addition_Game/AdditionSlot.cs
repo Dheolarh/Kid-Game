@@ -15,7 +15,16 @@ namespace KidGame.Mechanics.Addition
         [Tooltip("The answer drop target for this slot.")]
         [SerializeField] private AnswerDropZone dropZone;
 
+        [Tooltip("The left sub-answer drop target (optional).")]
+        [SerializeField] private AnswerDropZone leftDropZone;
+
+        [Tooltip("The right sub-answer drop target (optional).")]
+        [SerializeField] private AnswerDropZone rightDropZone;
+
         public int CorrectSum { get; private set; }
+
+        private Transform ActualLeftGrid => (leftGrid != null && leftGrid.Find("Objects") != null) ? leftGrid.Find("Objects") : leftGrid;
+        private Transform ActualRightGrid => (rightGrid != null && rightGrid.Find("Objects") != null) ? rightGrid.Find("Objects") : rightGrid;
 
         /// <param name="leftPrefab">Object icon for the left grid.</param>
         /// <param name="leftCount">How many left objects to spawn (1–12).</param>
@@ -28,12 +37,29 @@ namespace KidGame.Mechanics.Addition
         {
             CorrectSum = leftCount + rightCount;
 
-            SpawnObjects(leftPrefab,  leftCount,  leftGrid);
-            SpawnObjects(rightPrefab, rightCount, rightGrid);
+            SpawnObjects(leftPrefab,  leftCount,  ActualLeftGrid);
+            SpawnObjects(rightPrefab, rightCount, ActualRightGrid);
 
-            // Lambda keeps AnswerDropZone decoupled from Addition-specific types
-            dropZone.Setup(CorrectSum, () => manager.OnSlotAnswered());
-            AdjustHeights(leftCount, rightCount);
+            bool countAddMode = manager.CountAddMode && leftDropZone != null && rightDropZone != null;
+            if (countAddMode)
+            {
+                leftDropZone.gameObject.SetActive(true);
+                rightDropZone.gameObject.SetActive(true);
+                leftDropZone.Setup(leftCount, () => CheckAllAnswers(manager));
+                rightDropZone.Setup(rightCount, () => CheckAllAnswers(manager));
+            }
+            else
+            {
+                if (leftDropZone != null) leftDropZone.gameObject.SetActive(false);
+                if (rightDropZone != null) rightDropZone.gameObject.SetActive(false);
+            }
+
+            dropZone.Setup(CorrectSum, () => CheckAllAnswers(manager), () => {
+                bool leftOk = leftDropZone == null || !leftDropZone.gameObject.activeSelf || leftDropZone.IsAnswered;
+                bool rightOk = rightDropZone == null || !rightDropZone.gameObject.activeSelf || rightDropZone.IsAnswered;
+                return leftOk && rightOk;
+            });
+            AdjustHeights(leftCount, rightCount, countAddMode);
         }
 
         public void Setup(List<GameObject> leftDicePrefabs,
@@ -44,13 +70,43 @@ namespace KidGame.Mechanics.Addition
             CorrectSum = leftSum + rightSum;
 
             foreach (var prefab in leftDicePrefabs)
-                SpawnObject(prefab, leftGrid);
+                SpawnObject(prefab, ActualLeftGrid);
 
             foreach (var prefab in rightDicePrefabs)
-                SpawnObject(prefab, rightGrid);
+                SpawnObject(prefab, ActualRightGrid);
 
-            dropZone.Setup(CorrectSum, () => manager.OnSlotAnswered());
-            AdjustHeights(leftDicePrefabs.Count, rightDicePrefabs.Count);
+            bool countAddMode = manager.CountAddMode && leftDropZone != null && rightDropZone != null;
+            if (countAddMode)
+            {
+                leftDropZone.gameObject.SetActive(true);
+                rightDropZone.gameObject.SetActive(true);
+                leftDropZone.Setup(leftSum, () => CheckAllAnswers(manager));
+                rightDropZone.Setup(rightSum, () => CheckAllAnswers(manager));
+            }
+            else
+            {
+                if (leftDropZone != null) leftDropZone.gameObject.SetActive(false);
+                if (rightDropZone != null) rightDropZone.gameObject.SetActive(false);
+            }
+
+            dropZone.Setup(CorrectSum, () => CheckAllAnswers(manager), () => {
+                bool leftOk = leftDropZone == null || !leftDropZone.gameObject.activeSelf || leftDropZone.IsAnswered;
+                bool rightOk = rightDropZone == null || !rightDropZone.gameObject.activeSelf || rightDropZone.IsAnswered;
+                return leftOk && rightOk;
+            });
+            AdjustHeights(leftDicePrefabs.Count, rightDicePrefabs.Count, countAddMode);
+        }
+
+        private void CheckAllAnswers(AdditionGameManager manager)
+        {
+            bool leftOk = leftDropZone == null || !leftDropZone.gameObject.activeSelf || leftDropZone.IsAnswered;
+            bool rightOk = rightDropZone == null || !rightDropZone.gameObject.activeSelf || rightDropZone.IsAnswered;
+            bool finalOk = dropZone.IsAnswered;
+
+            if (leftOk && rightOk && finalOk)
+            {
+                manager.OnSlotAnswered();
+            }
         }
 
         private float _initialSlotHeight = -1f;
@@ -76,41 +132,88 @@ namespace KidGame.Mechanics.Addition
             }
         }
 
-        private void AdjustHeights(int leftCount, int rightCount)
+        private float GetColumnHeight(float maxGridHeight, bool countAddMode, AnswerDropZone dropZone)
+        {
+            if (countAddMode && dropZone != null && dropZone.gameObject.activeSelf)
+            {
+                var colLayout = dropZone.transform.parent.GetComponent<UnityEngine.UI.VerticalLayoutGroup>();
+                float spacing = colLayout != null ? colLayout.spacing : 0f;
+                float padding = colLayout != null ? (colLayout.padding.top + colLayout.padding.bottom) : 0f;
+                
+                var dropRt = dropZone.transform as RectTransform;
+                float dropHeight = dropRt != null ? dropRt.rect.height : 70f;
+                if (dropHeight <= 0f) dropHeight = 70f;
+                
+                return maxGridHeight + spacing + padding + dropHeight;
+            }
+            return maxGridHeight;
+        }
+
+        private void AdjustHeights(int leftCount, int rightCount, bool countAddMode)
         {
             CacheInitialHeights();
 
-            float leftHeight = GetGridCalculatedHeight(leftGrid, leftCount);
-            float rightHeight = GetGridCalculatedHeight(rightGrid, rightCount);
-            float maxGridHeight = Mathf.Max(leftHeight, rightHeight);
+            var aLeft = ActualLeftGrid;
+            var aRight = ActualRightGrid;
 
-            // Resize Object box (the parent of left and right grids) FIRST
-            var rtObjectBox = leftGrid.parent as RectTransform;
+            bool hasColumns = aLeft.parent != aRight.parent;
+
+            // Force layout rebuild on parent container FIRST to resolve current widths immediately
+            var rtObjectBox = (hasColumns ? aLeft.parent.parent : aLeft.parent) as RectTransform;
             if (rtObjectBox != null)
             {
-                rtObjectBox.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxGridHeight);
-                var leObjectBox = rtObjectBox.GetComponent<UnityEngine.UI.LayoutElement>();
-                if (leObjectBox == null) leObjectBox = rtObjectBox.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
-                leObjectBox.preferredHeight = maxGridHeight;
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtObjectBox);
             }
 
-            // Resize Left Grid SECOND
-            var rtLeft = leftGrid as RectTransform;
-            Debug.LogWarning($"[AdditionDebug] Slot: leftCount={leftCount}, rightCount={rightCount}, leftGridWidth={rtLeft.rect.width}, leftHeight={leftHeight}, ObjectBoxHeight={_initialObjectBoxHeight}");
-            if (rtLeft != null) rtLeft.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, leftHeight);
-            var leLeft = leftGrid.GetComponent<UnityEngine.UI.LayoutElement>();
-            if (leLeft == null) leLeft = leftGrid.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
-            leLeft.preferredHeight = leftHeight;
+            float leftGridHeight = GetGridCalculatedHeight(aLeft, leftCount);
+            float rightGridHeight = GetGridCalculatedHeight(aRight, rightCount);
+            float maxGridHeight = Mathf.Max(leftGridHeight, rightGridHeight);
 
-            // Resize Right Grid THIRD
-            var rtRight = rightGrid as RectTransform;
-            if (rtRight != null) rtRight.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rightHeight);
-            var leRight = rightGrid.GetComponent<UnityEngine.UI.LayoutElement>();
-            if (leRight == null) leRight = rightGrid.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
-            leRight.preferredHeight = rightHeight;
+            float leftColHeight = hasColumns ? GetColumnHeight(maxGridHeight, countAddMode, leftDropZone) : maxGridHeight;
+            float rightColHeight = hasColumns ? GetColumnHeight(maxGridHeight, countAddMode, rightDropZone) : maxGridHeight;
+            float maxColHeight = Mathf.Max(leftColHeight, rightColHeight);
 
-            // Center and scale Plus symbol vertically
-            var plusTransform = leftGrid.parent.Find("Plus") as RectTransform;
+            // 1. Resize Object box (the parent container) FIRST
+            if (rtObjectBox != null)
+            {
+                rtObjectBox.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxColHeight);
+                var leObjectBox = rtObjectBox.GetComponent<UnityEngine.UI.LayoutElement>();
+                if (leObjectBox == null) leObjectBox = rtObjectBox.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                leObjectBox.preferredHeight = maxColHeight;
+            }
+
+            // 2. Resize Grid Child Elements to the SAME maxGridHeight (aligns sub-answer drop zones)
+            var rtLeft = aLeft as RectTransform;
+            if (rtLeft != null) rtLeft.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxGridHeight);
+            var leLeft = aLeft.GetComponent<UnityEngine.UI.LayoutElement>();
+            if (leLeft == null) leLeft = aLeft.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+            leLeft.preferredHeight = maxGridHeight;
+
+            var rtRight = aRight as RectTransform;
+            if (rtRight != null) rtRight.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxGridHeight);
+            var leRight = aRight.GetComponent<UnityEngine.UI.LayoutElement>();
+            if (leRight == null) leRight = aRight.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+            leRight.preferredHeight = maxGridHeight;
+
+            // 3. Resize Columns (if they exist)
+            if (hasColumns)
+            {
+                var rtLeftCol = aLeft.parent as RectTransform;
+                if (rtLeftCol != null) rtLeftCol.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, leftColHeight);
+                var leLeftCol = aLeft.parent.GetComponent<UnityEngine.UI.LayoutElement>();
+                if (leLeftCol == null) leLeftCol = aLeft.parent.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                leLeftCol.preferredHeight = leftColHeight;
+
+                var rtRightCol = aRight.parent as RectTransform;
+                if (rtRightCol != null) rtRightCol.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rightColHeight);
+                var leRightCol = aRight.parent.GetComponent<UnityEngine.UI.LayoutElement>();
+                if (leRightCol == null) leRightCol = aRight.parent.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                leRightCol.preferredHeight = rightColHeight;
+            }
+
+            // 4. Center and scale Plus symbol vertically
+            Transform parentOfPlus = hasColumns ? aLeft.parent.parent : aLeft.parent;
+            var plusTransform = parentOfPlus.Find("Plus") as RectTransform;
             if (plusTransform != null)
             {
                 var min = plusTransform.anchorMin;
@@ -124,12 +227,14 @@ namespace KidGame.Mechanics.Addition
                 plusTransform.anchoredPosition = new Vector2(plusTransform.anchoredPosition.x, 0f);
             }
 
-            // Resize Slot Row
+            // 5. Resize Slot Row
             var leSlot = GetComponent<UnityEngine.UI.LayoutElement>();
             if (leSlot == null) leSlot = gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
 
-            float delta = maxGridHeight - _initialObjectBoxHeight;
-            float newSlotHeight = _initialSlotHeight + Mathf.Max(0f, delta);
+            var layoutGroup = GetComponent<UnityEngine.UI.HorizontalLayoutGroup>();
+            float verticalPadding = layoutGroup != null ? (layoutGroup.padding.top + layoutGroup.padding.bottom) : 0f;
+
+            float newSlotHeight = Mathf.Max(190f + verticalPadding, maxColHeight + verticalPadding);
 
             leSlot.preferredHeight = newSlotHeight;
 
@@ -161,6 +266,7 @@ namespace KidGame.Mechanics.Addition
                     {
                         width = UnityEngine.UI.LayoutUtility.GetPreferredWidth(rectTransform);
                         if (width <= 0) width = UnityEngine.UI.LayoutUtility.GetMinWidth(rectTransform);
+                        if (width <= 0) width = 310f; // safe design fallback for new prefab variant
                     }
                     if (width > 0)
                     {

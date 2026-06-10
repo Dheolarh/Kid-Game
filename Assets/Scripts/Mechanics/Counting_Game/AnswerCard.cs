@@ -46,6 +46,8 @@ namespace KidGame.Mechanics.Counting
         private int         _homeSiblingIndex;
         private Vector3     _homeWorldPosition;
         private bool        _isAccepted;
+        private bool        _isScrolling;
+        private ScrollRect  _activeScrollRect;
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
@@ -79,6 +81,37 @@ namespace KidGame.Mechanics.Counting
         {
             if (_isAccepted) return;
 
+            // Check if we should forward drag events to parent ScrollRect for scrolling
+            var scrollRect = GetComponentInParent<ScrollRect>();
+            _isScrolling = false;
+            _activeScrollRect = null;
+
+            if (scrollRect != null)
+            {
+                Vector2 totalDelta = eventData.position - eventData.pressPosition;
+                if (scrollRect.vertical && !scrollRect.horizontal)
+                {
+                    if (Mathf.Abs(totalDelta.y) > Mathf.Abs(totalDelta.x))
+                    {
+                        _isScrolling = true;
+                    }
+                }
+                else if (scrollRect.horizontal && !scrollRect.vertical)
+                {
+                    if (Mathf.Abs(totalDelta.x) > Mathf.Abs(totalDelta.y))
+                    {
+                        _isScrolling = true;
+                    }
+                }
+                
+                if (_isScrolling)
+                {
+                    _activeScrollRect = scrollRect;
+                    _activeScrollRect.OnBeginDrag(eventData);
+                    return;
+                }
+            }
+
             DOTween.Kill(transform);
 
             // Cache home state before reparenting
@@ -103,6 +136,12 @@ namespace KidGame.Mechanics.Counting
         {
             if (_isAccepted) return;
 
+            if (_isScrolling && _activeScrollRect != null)
+            {
+                _activeScrollRect.OnDrag(eventData);
+                return;
+            }
+
             // Offset the card above the thumb — child can always see the number
             transform.position = new Vector3(
                 eventData.position.x,
@@ -112,6 +151,14 @@ namespace KidGame.Mechanics.Counting
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (_isScrolling && _activeScrollRect != null)
+            {
+                _activeScrollRect.OnEndDrag(eventData);
+                _isScrolling = false;
+                _activeScrollRect = null;
+                return;
+            }
+
             transform.DOScale(Vector3.one, 0.12f).SetEase(Ease.OutSine);
 
             if (!_isAccepted)

@@ -12,6 +12,7 @@ namespace KidGame.Mechanics.Counting
         private bool                _isAnswered;
         private Image               _background;
         private System.Action       _onCorrect;
+        private System.Func<bool>   _canAccept;
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
@@ -23,10 +24,11 @@ namespace KidGame.Mechanics.Counting
         // ── Setup ─────────────────────────────────────────────────────────────
 
         /// <param name="onCorrect">Invoked once when the correct card is dropped.</param>
-        public void Setup(int expectedCount, System.Action onCorrect)
+        public void Setup(int expectedCount, System.Action onCorrect, System.Func<bool> canAccept = null)
         {
             _expectedCount = expectedCount;
             _onCorrect     = onCorrect;
+            _canAccept     = canAccept;
             _isAnswered    = false;
         }
 
@@ -39,6 +41,12 @@ namespace KidGame.Mechanics.Counting
         public void TryAccept(AnswerCard card)
         {
             if (_isAnswered) return;
+
+            if (_canAccept != null && !_canAccept())
+            {
+                Debug.Log($"[CountingGame] ✗ Drop rejected: requirements not met.");
+                return;
+            }
 
             if (card.Value == _expectedCount)
             {
@@ -60,6 +68,8 @@ namespace KidGame.Mechanics.Counting
         }
 
         // ── Private ───────────────────────────────────────────────────────────
+
+        public bool IsAnswered => _isAnswered;
 
         private void AcceptCard(AnswerCard card)
         {

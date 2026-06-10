@@ -100,8 +100,11 @@ namespace KidGame.Mechanics.Counting
                 leSlot = gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
             }
 
-            float delta = gridHeight - _initialGridHeight;
-            float newSlotHeight = _initialSlotHeight + Mathf.Max(0f, delta);
+            var layoutGroup = GetComponent<UnityEngine.UI.HorizontalLayoutGroup>();
+            float verticalPadding = layoutGroup != null ? (layoutGroup.padding.top + layoutGroup.padding.bottom) : 0f;
+
+            float minSlotHeight = 120f + verticalPadding;
+            float newSlotHeight = Mathf.Max(minSlotHeight, gridHeight + verticalPadding);
 
             leSlot.preferredHeight = newSlotHeight;
 

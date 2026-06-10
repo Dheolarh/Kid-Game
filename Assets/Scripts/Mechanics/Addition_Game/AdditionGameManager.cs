@@ -13,8 +13,10 @@ namespace KidGame.Mechanics.Addition
         [Header("Prefabs")]
         [Tooltip("Object icon prefabs — need at least 2 (left/right use different ones per slot).")]
         [SerializeField] private GameObject[] objectCategoryPrefabs;
-        [Tooltip("The AdditionSlot row prefab.")]
+        [Tooltip("The AdditionSlot row prefab (normal mode).")]
         [SerializeField] private GameObject slotPrefab;
+        [Tooltip("The AdditionSlot row prefab (count-add mode).")]
+        [SerializeField] private GameObject countAddSlotPrefab;
         [Tooltip("The AnswerCard draggable prefab (same as counting game).")]
         [SerializeField] private GameObject answerCardPrefab;
 
@@ -48,6 +50,12 @@ namespace KidGame.Mechanics.Addition
         [SerializeField] private bool fingerMode;
         [Tooltip("Finger prefabs for values 1 to 5 (index 0 = 1 finger, ..., index 4 = 5 fingers).")]
         [SerializeField] private GameObject[] fingerPrefabs;
+
+        [Header("Mode Configuration")]
+        [Tooltip("If true, requires counting the left/right groups as sub-answers before adding them.")]
+        [SerializeField] private bool countAddMode;
+
+        public bool CountAddMode => countAddMode;
 
         [Header("Object Category Themes")]
         [Tooltip("Define themed collections of object prefabs (e.g., Ocean, Animals). Enable one to restrict spawning to that collection.")]
@@ -202,9 +210,12 @@ namespace KidGame.Mechanics.Addition
                     return;
                 }
             }
-            if (slotPrefab == null)
+            var prefabToSpawn = countAddMode ? countAddSlotPrefab : slotPrefab;
+            if (prefabToSpawn == null) prefabToSpawn = slotPrefab;
+
+            if (prefabToSpawn == null)
             {
-                Debug.LogError("[AdditionGame] Slot Prefab is not assigned in the Inspector.");
+                Debug.LogError($"[AdditionGame] {(countAddMode ? "Count-Add" : "Normal")} Slot Prefab is not assigned in the Inspector.");
                 return;
             }
             if (answerCardPrefab == null)
@@ -257,23 +268,48 @@ namespace KidGame.Mechanics.Addition
                 sums = normalPairs.Select(p => p.left + p.right).ToList();
             }
 
+            // 4. Collect and shuffle answer values
+            var answerValues = new List<int>();
+            if (countAddMode)
+            {
+                if (diceMode || fingerMode)
+                {
+                    foreach (var data in slotData)
+                    {
+                        answerValues.Add(data.leftSum);
+                        answerValues.Add(data.rightSum);
+                        answerValues.Add(data.leftSum + data.rightSum);
+                    }
+                }
+                else
+                {
+                    foreach (var pair in normalPairs)
+                    {
+                        answerValues.Add(pair.left);
+                        answerValues.Add(pair.right);
+                        answerValues.Add(pair.left + pair.right);
+                    }
+                }
+            }
+            else
+            {
+                answerValues.AddRange(sums);
+            }
+            Shuffle(answerValues);
+
             // 3. Shuffle color palette (exactly matching the number of answers)
             var colors = new List<Color>();
-            for (int i = 0; i < sums.Count; i++)
+            for (int i = 0; i < answerValues.Count; i++)
             {
                 colors.Add(Palette[i % Palette.Length]);
             }
             Shuffle(colors);
 
-            // 4. Shuffle answer values
-            var answerValues = new List<int>(sums);
-            Shuffle(answerValues);
-
             // 5. Spawn addition slots
             int actualSlotCount = (diceMode || fingerMode) ? slotData.Count : normalPairs.Count;
             for (int i = 0; i < actualSlotCount; i++)
             {
-                var go   = Instantiate(slotPrefab, ActiveSlotsContainer);
+                var go   = Instantiate(prefabToSpawn, ActiveSlotsContainer);
                 var slot = go.GetComponent<AdditionSlot>();
 
                 if (diceMode || fingerMode)
@@ -300,26 +336,7 @@ namespace KidGame.Mechanics.Addition
             var rt = ActiveSlotsContainer.GetComponent<RectTransform>();
             if (rt != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
 
-            // Print debug info
-            if (_slots.Count > 0)
-            {
-                var firstSlot = _slots[0];
-                var slotRt = firstSlot.transform as RectTransform;
-                var objBoxRt = firstSlot.transform.Find("Object box") as RectTransform;
-                var leftGridRt = objBoxRt != null ? objBoxRt.Find("left") as RectTransform : null;
-                
-                Debug.LogWarning($"[AdditionDebug] Slot Height: {slotRt.rect.height}, ObjectBox Height: {objBoxRt?.rect.height}");
-                if (leftGridRt != null)
-                {
-                    var grid = leftGridRt.GetComponent<UnityEngine.UI.GridLayoutGroup>();
-                    Debug.LogWarning($"[AdditionDebug] Left Grid Rect: {leftGridRt.rect}, Grid CellSize: {grid.cellSize}, Child Count: {leftGridRt.childCount}");
-                    if (leftGridRt.childCount > 0)
-                    {
-                        var childRt = leftGridRt.GetChild(0) as RectTransform;
-                        Debug.LogWarning($"[AdditionDebug] First Left Child Rect: {childRt.rect}, Scale: {childRt.localScale}");
-                    }
-                }
-            }
+
 
             // 6. Spawn answer cards into the active orientation's answer grid
             for (int i = 0; i < answerValues.Count; i++)

@@ -131,9 +131,11 @@ namespace KidGame.Mechanics.Tracing
 
         private void OnPointerUp()
         {
-            if (_activeTracer == null) return;
-            _activeTracer.ReleasePath();
-            _activeTracer = null;
+            if (_activeTracer != null)
+            {
+                _activeTracer.ReleasePath();
+                _activeTracer = null;
+            }
 
             // Restore scroll
             if (_scrollRect != null)
