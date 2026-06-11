@@ -40,6 +40,8 @@ namespace KidGame.Mechanics.NumberRecall
         [SerializeField] private int maxStartValue = 20;
         [Tooltip("The step difference between consecutive numbers in the sequence.")]
         [SerializeField] private int step = 1;
+        [Tooltip("If true, sequences count backwards instead of forwards.")]
+        [SerializeField] private bool countBackwards;
 
         [Header("Interval Config")]
         [Tooltip("Minimum consecutive revealed numbers.")]
@@ -191,7 +193,18 @@ namespace KidGame.Mechanics.NumberRecall
                 int sequenceLength = Random.Range(minSequenceLength, maxSequenceLength + 1);
 
                 // 1. Choose a random starting number for this sequence
-                int startValue = Random.Range(minStartValue, maxStartValue + 1);
+                int startValue;
+                int actualStep = countBackwards ? -step : step;
+                if (countBackwards)
+                {
+                    int minStartVal = minStartValue + (sequenceLength - 1) * step;
+                    int maxStartVal = Mathf.Max(minStartVal, maxStartValue);
+                    startValue = Random.Range(minStartVal, maxStartVal + 1);
+                }
+                else
+                {
+                    startValue = Random.Range(minStartValue, maxStartValue + 1);
+                }
 
                 // 2. Determine which indices to hide based on interval config
                 var hiddenIndices = new List<int>();
@@ -227,7 +240,7 @@ namespace KidGame.Mechanics.NumberRecall
                 var slot = slotGo.GetComponent<NumberRecallSlot>();
                 if (slot == null) slot = slotGo.AddComponent<NumberRecallSlot>();
 
-                slot.Setup(startValue, sequenceLength, step, hiddenIndices, Palette, OnSequenceCompleted);
+                slot.Setup(startValue, sequenceLength, actualStep, hiddenIndices, Palette, OnSequenceCompleted);
                 _slots.Add(slot);
 
                 // Collect missing values for answer tray
@@ -235,7 +248,7 @@ namespace KidGame.Mechanics.NumberRecall
                 {
                     if (hiddenIndices.Contains(i))
                     {
-                        trayValues.Add(startValue + i * step);
+                        trayValues.Add(startValue + i * actualStep);
                     }
                 }
             }
