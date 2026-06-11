@@ -11,6 +11,13 @@ namespace KidGame.Mechanics.Matching
         private float _progress = 0f;
         private Coroutine _animateCoroutine;
 
+        private Vector2 _startPos;
+        private Vector2 _endPos;
+
+        public Vector2 StartPos => _startPos;
+        public Vector2 EndPos => _endPos;
+        public float Progress => _progress;
+
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
@@ -25,6 +32,12 @@ namespace KidGame.Mechanics.Matching
         public void SetColor(Color color)
         {
             if (_image != null) _image.color = color;
+        }
+
+        public void SetProgress(float progress)
+        {
+            if (_animateCoroutine != null) StopCoroutine(_animateCoroutine);
+            _progress = Mathf.Clamp01(progress);
         }
 
         public void StartAnimate()
@@ -53,6 +66,9 @@ namespace KidGame.Mechanics.Matching
         /// </summary>
         public void SetPoints(Vector2 startPos, Vector2 endPos, float thickness)
         {
+            _startPos = startPos;
+            _endPos = endPos;
+
             if (_rectTransform == null) _rectTransform = GetComponent<RectTransform>();
 
             Vector2 dir = endPos - startPos;

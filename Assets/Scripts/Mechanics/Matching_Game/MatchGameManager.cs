@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace KidGame.Mechanics.Matching
@@ -85,6 +86,10 @@ namespace KidGame.Mechanics.Matching
 
         private readonly List<Connection> _connections = new List<Connection>();
         private MatchGameCard _selectedCard;
+        private MatchGameLine _dragLine;
+        private MatchGameCard _dragStartCard;
+        private readonly Dictionary<int, Color> _leftColors = new Dictionary<int, Color>();
+        private readonly Dictionary<int, Color> _rightColors = new Dictionary<int, Color>();
 
         // ── Orientation ───────────────────────────────────────────────────────
 
@@ -237,6 +242,23 @@ namespace KidGame.Mechanics.Matching
                 matchIds.Add(pool[i]);
             }
 
+            // Assign unique colors to each value for this round, ensuring left and right columns
+            // do not share the same color for matching pairs.
+            _leftColors.Clear();
+            _rightColors.Clear();
+            List<Color> baseColors = new List<Color>(Palette);
+            Shuffle(baseColors);
+            
+            // Shift offset between 1 and Palette.Length - 1 guarantees different colors
+            int shift = Random.Range(1, baseColors.Count);
+            
+            for (int i = 0; i < matchIds.Count; i++)
+            {
+                int val = matchIds[i];
+                _leftColors[val] = baseColors[i % baseColors.Count];
+                _rightColors[val] = baseColors[(i + shift) % baseColors.Count];
+            }
+
             // Shuffle left and right values separately
             List<int> leftValues = new List<int>(matchIds);
             if (shuffleLeftColumn)
@@ -273,7 +295,7 @@ namespace KidGame.Mechanics.Matching
 
                 // Spawn Left Item
                 int leftVal = leftValues[i];
-                GameObject leftItem = SpawnItem(leftAnchor, leftVariant, leftVal);
+                GameObject leftItem = SpawnItem(leftAnchor, leftVariant, leftVal, isLeft: true);
                 if (leftItem != null)
                 {
                     var card = leftItem.GetComponent<MatchGameCard>();
@@ -284,7 +306,7 @@ namespace KidGame.Mechanics.Matching
 
                 // Spawn Right Item
                 int rightVal = rightValues[i];
-                GameObject rightItem = SpawnItem(rightAnchor, rightVariant, rightVal);
+                GameObject rightItem = SpawnItem(rightAnchor, rightVariant, rightVal, isLeft: false);
                 if (rightItem != null)
                 {
                     var card = rightItem.GetComponent<MatchGameCard>();
@@ -301,7 +323,7 @@ namespace KidGame.Mechanics.Matching
             if (rt) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
         }
 
-        private GameObject SpawnItem(Transform parent, MatchVariant variant, int value)
+        private GameObject SpawnItem(Transform parent, MatchVariant variant, int value, bool isLeft)
         {
             GameObject instantiated = null;
             switch (variant)
@@ -316,7 +338,7 @@ namespace KidGame.Mechanics.Matching
                         var img = instantiated.GetComponent<Image>();
                         if (img != null)
                         {
-                            img.color = Palette[Random.Range(0, Palette.Length)];
+                            img.color = isLeft ? GetLeftColorForValue(value) : GetRightColorForValue(value);
                         }
                     }
                     break;
@@ -337,7 +359,7 @@ namespace KidGame.Mechanics.Matching
                         var img = instantiated.GetComponent<Image>();
                         if (img != null)
                         {
-                            img.color = Palette[Random.Range(0, Palette.Length)];
+                            img.color = isLeft ? GetLeftColorForValue(value) : GetRightColorForValue(value);
                         }
                     }
                     break;
@@ -354,7 +376,40 @@ namespace KidGame.Mechanics.Matching
                     int fingerIdx = Mathf.Clamp(value - 1, 0, fingerPrefabs.Length - 1);
                     if (fingerPrefabs[fingerIdx] != null)
                     {
-                        instantiated = Instantiate(fingerPrefabs[fingerIdx], parent);
+                        // Wrap the finger hand drawing inside the baseNumberPrefab card container to provide
+                        // a solid card background. This ensures visual consistency and prevents the Outline
+                        // component from duplicate-rendering the thin hand stroke lines (eliminating the double-stroke effect).
+                        if (baseNumberPrefab != null)
+                        {
+                            instantiated = Instantiate(baseNumberPrefab, parent);
+                            
+                            var textComp = instantiated.GetComponentInChildren<TMPro.TMP_Text>();
+                            if (textComp != null) textComp.gameObject.SetActive(false);
+
+                            var img = instantiated.GetComponent<Image>();
+                            if (img != null) img.color = Color.white;
+
+                            GameObject handGo = Instantiate(fingerPrefabs[fingerIdx], instantiated.transform);
+                            var handImg = handGo.GetComponent<Image>();
+                            if (handImg != null) handImg.raycastTarget = false;
+
+                            var handRt = handGo.GetComponent<RectTransform>();
+                            if (handRt != null)
+                            {
+                                handRt.anchoredPosition = Vector2.zero;
+                                handRt.localPosition = Vector3.zero;
+                                handRt.localScale = Vector3.one;
+                                // Center and stretch with padding inside the card background
+                                handRt.anchorMin = new Vector2(0.15f, 0.15f);
+                                handRt.anchorMax = new Vector2(0.85f, 0.85f);
+                                handRt.offsetMin = Vector2.zero;
+                                handRt.offsetMax = Vector2.zero;
+                            }
+                        }
+                        else
+                        {
+                            instantiated = Instantiate(fingerPrefabs[fingerIdx], parent);
+                        }
                     }
                     break;
             }
@@ -380,6 +435,8 @@ namespace KidGame.Mechanics.Matching
             _connections.Clear();
             _allCards.Clear();
             _selectedCard = null;
+            _leftColors.Clear();
+            _rightColors.Clear();
 
             // Clear any editor design-time static slots from the content containers
             if (portraitContent != null)
@@ -473,7 +530,10 @@ namespace KidGame.Mechanics.Matching
 
             var line = lineGo.GetComponent<MatchGameLine>();
             if (line == null) line = lineGo.AddComponent<MatchGameLine>();
-            line.SetColor(connectionLineColor);
+            
+            // Set dynamic color based on the left card's assigned color!
+            Color lineCol = GetLeftColorForValue(cardA.MatchId);
+            line.SetColor(lineCol);
             line.StartAnimate();
 
             var conn = new Connection
@@ -490,6 +550,170 @@ namespace KidGame.Mechanics.Matching
             {
                 SetNextButtonsInteractable(true);
             }
+        }
+
+        // ── Drag & Drop Interaction Callbacks (called by MatchGameCard) ──────
+
+        public void OnCardBeginDrag(MatchGameCard card, PointerEventData eventData)
+        {
+            if (card.IsMatched || _dragLine != null) return;
+
+            // Clear any active tap-selection before starting drag
+            if (_selectedCard != null)
+            {
+                _selectedCard.SetSelected(false);
+                _selectedCard = null;
+            }
+
+            _dragStartCard = card;
+            _dragStartCard.SetSelected(true);
+
+            // Instantiate a temporary line
+            var lineGo = Instantiate(linePrefab, ActiveContent);
+            lineGo.name = $"drag_line_{card.MatchId}";
+            
+            var layoutElement = lineGo.GetComponent<LayoutElement>();
+            if (layoutElement == null) layoutElement = lineGo.AddComponent<LayoutElement>();
+            layoutElement.ignoreLayout = true;
+            
+            lineGo.transform.SetAsFirstSibling();
+
+            _dragLine = lineGo.GetComponent<MatchGameLine>();
+            if (_dragLine == null) _dragLine = lineGo.AddComponent<MatchGameLine>();
+            
+            // Set dynamic color based on the left card's assigned color!
+            Color lineCol = GetLeftColorForValue(card.MatchId);
+            _dragLine.SetColor(lineCol);
+            
+            // Force progress to 1 so it immediately follows the drag cursor
+            _dragLine.SetProgress(1f);
+
+            UpdateDragLinePosition(eventData);
+        }
+
+        public void OnCardDrag(MatchGameCard card, PointerEventData eventData)
+        {
+            if (card != _dragStartCard || _dragLine == null) return;
+            UpdateDragLinePosition(eventData);
+        }
+
+        public void OnCardEndDrag(MatchGameCard card, PointerEventData eventData)
+        {
+            if (card != _dragStartCard || _dragLine == null) return;
+
+            MatchGameCard targetCard = null;
+            var hitGo = eventData.pointerCurrentRaycast.gameObject;
+            if (hitGo != null)
+            {
+                // Can be on the card component itself or its children
+                targetCard = hitGo.GetComponentInParent<MatchGameCard>();
+            }
+
+            if (targetCard != null && targetCard.IsLeftCard != _dragStartCard.IsLeftCard && !targetCard.IsMatched)
+            {
+                if (targetCard.MatchId == _dragStartCard.MatchId)
+                {
+                    // Correct match: Snap and save connection!
+                    _dragStartCard.SetSelected(false);
+                    targetCard.SetSelected(false);
+
+                    FinalizeDragConnection(_dragStartCard, targetCard, _dragLine);
+                    _dragLine = null;
+                }
+                else
+                {
+                    // Wrong match: Shake and reverse the line back
+                    _dragStartCard.SetSelected(false);
+                    targetCard.ShowMismatch();
+                    _dragStartCard.ShowMismatch();
+
+                    AnimateLineReverseAndDestroy(_dragLine);
+                    _dragLine = null;
+                }
+            }
+            else
+            {
+                // Dragged onto empty space or invalid target
+                _dragStartCard.SetSelected(false);
+                AnimateLineReverseAndDestroy(_dragLine);
+                _dragLine = null;
+            }
+
+            _dragStartCard = null;
+        }
+
+        private void UpdateDragLinePosition(PointerEventData eventData)
+        {
+            if (_dragStartCard == null || _dragLine == null) return;
+
+            Vector2 start = GetLocalPositionInContent(_dragStartCard.RectTransform);
+            Vector2 end = ScreenPointToLocalPoint(eventData.position, eventData);
+            
+            _dragLine.SetPoints(start, end, lineThickness);
+        }
+
+        private void FinalizeDragConnection(MatchGameCard cardA, MatchGameCard cardB, MatchGameLine line)
+        {
+            cardA.SetMatched(matchedOutlineColor);
+            cardB.SetMatched(matchedOutlineColor);
+
+            var conn = new Connection
+            {
+                leftCard = cardA.IsLeftCard ? cardA : cardB,
+                rightCard = cardA.IsLeftCard ? cardB : cardA,
+                line = line
+            };
+            _connections.Add(conn);
+
+            UpdateLinePositions();
+
+            if (_connections.Count >= _slots.Count)
+            {
+                SetNextButtonsInteractable(true);
+            }
+        }
+
+        private void AnimateLineReverseAndDestroy(MatchGameLine line)
+        {
+            if (line == null) return;
+            StartCoroutine(LineReverseCoroutine(line));
+        }
+
+        private System.Collections.IEnumerator LineReverseCoroutine(MatchGameLine line)
+        {
+            float startProgress = line.Progress;
+            float duration = 0.2f; // Time to shrink back
+            float elapsed = 0f;
+
+            Vector2 start = line.StartPos;
+            Vector2 end = line.EndPos;
+
+            while (elapsed < duration && line != null)
+            {
+                elapsed += Time.deltaTime;
+                float progress = Mathf.Lerp(startProgress, 0f, elapsed / duration);
+                
+                Vector2 currentEnd = start + (end - start) * progress;
+                line.SetPoints(start, currentEnd, lineThickness);
+                
+                yield return null;
+            }
+
+            if (line != null)
+            {
+                Destroy(line.gameObject);
+            }
+        }
+
+        private Vector2 ScreenPointToLocalPoint(Vector2 screenPoint, PointerEventData eventData)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                ActiveContent,
+                screenPoint,
+                eventData.pressEventCamera,
+                out Vector2 localPoint
+            );
+            return localPoint;
         }
 
         private void UpdateLinePositions()
@@ -509,6 +733,24 @@ namespace KidGame.Mechanics.Matching
         {
             if (target == null || ActiveContent == null) return Vector2.zero;
             return ActiveContent.InverseTransformPoint(target.position);
+        }
+
+        private Color GetLeftColorForValue(int value)
+        {
+            if (_leftColors.TryGetValue(value, out Color col))
+            {
+                return col;
+            }
+            return Color.white;
+        }
+
+        private Color GetRightColorForValue(int value)
+        {
+            if (_rightColors.TryGetValue(value, out Color col))
+            {
+                return col;
+            }
+            return Color.white;
         }
 
         private void Shuffle<T>(IList<T> list)

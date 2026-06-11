@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace KidGame.Mechanics.Matching
 {
-    public class MatchGameCard : MonoBehaviour, IPointerDownHandler
+    public class MatchGameCard : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private int _matchId;
         private bool _isLeftCard;
@@ -169,6 +169,24 @@ namespace KidGame.Mechanics.Matching
         {
             if (IsMatched || _isShaking || _manager == null) return;
             _manager.OnCardSelected(this);
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (IsMatched || _isShaking || _manager == null) return;
+            _manager.OnCardBeginDrag(this, eventData);
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (IsMatched || _isShaking || _manager == null) return;
+            _manager.OnCardDrag(this, eventData);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (IsMatched || _isShaking || _manager == null) return;
+            _manager.OnCardEndDrag(this, eventData);
         }
     }
 }
