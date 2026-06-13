@@ -26,7 +26,8 @@ namespace KidGame.Mechanics.Counting
         [SerializeField] private Transform landscapeAnswersContainer;
 
         [Header("Shared")]
-        [SerializeField] private Button nextButton;
+        [SerializeField] private Button portraitNextButton;
+        [SerializeField] private Button landscapeNextButton;
 
         [Header("Config")]
         [Tooltip("Number of slot rows per round (always 5 per design).")]
@@ -82,16 +83,32 @@ namespace KidGame.Mechanics.Counting
 
         private void Start()
         {
-            var colors          = nextButton.colors;
-            var disabled        = colors.normalColor;
-            disabled.a          = 0.6f;
-            colors.disabledColor = disabled;
-            nextButton.colors   = colors;
+            ConfigureNextButton(portraitNextButton);
+            ConfigureNextButton(landscapeNextButton);
 
             _wasLandscape = IsLandscape;
-            nextButton.interactable = false;
-            nextButton.onClick.AddListener(GenerateRound);
+            SetNextButtonsInteractable(false);
+
+            if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
+            if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+
             GenerateRound();
+        }
+
+        private void ConfigureNextButton(Button btn)
+        {
+            if (btn == null) return;
+            var colors = btn.colors;
+            var disabled = colors.normalColor;
+            disabled.a = 0.6f;
+            colors.disabledColor = disabled;
+            btn.colors = colors;
+        }
+
+        private void SetNextButtonsInteractable(bool interactable)
+        {
+            if (portraitNextButton != null) portraitNextButton.interactable = interactable;
+            if (landscapeNextButton != null) landscapeNextButton.interactable = interactable;
         }
 
         private void Update()
@@ -142,7 +159,7 @@ namespace KidGame.Mechanics.Counting
         {
             _answeredCount++;
             if (_answeredCount >= _slots.Count)
-                nextButton.interactable = true;
+                SetNextButtonsInteractable(true);
         }
 
         // ── Round Management ──────────────────────────────────────────────────
@@ -214,7 +231,7 @@ namespace KidGame.Mechanics.Counting
 
             ClearPrevious();
             _answeredCount = 0;
-            nextButton.interactable = false;
+            SetNextButtonsInteractable(false);
 
             List<int> counts;
             List<(List<GameObject> prefabs, int totalSum)> slotData = null;
