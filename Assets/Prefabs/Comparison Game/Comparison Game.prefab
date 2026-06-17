@@ -854,7 +854,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9edbfe46713fec7459af183336faab05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Comparison.ComparisonGameManager
-  slotPrefab: {fileID: 6415907417871704558, guid: 0c4e75b544b12c04cb1f37af341de6a4, type: 3}
+  slotPrefab: {fileID: 1063525171277066206, guid: 098a9e652f8cf2a44932cc21d4e4fcef, type: 3}
+  numbersOnlySlotPrefab: {fileID: 6415907417871704558, guid: 0c4e75b544b12c04cb1f37af341de6a4, type: 3}
   numberBoxPrefab: {fileID: 3191725747777409569, guid: fc8bd52f12f30994798a930e8379eb23, type: 3}
   plusSymbolPrefab: {fileID: 6795115600264422940, guid: daeacc01835b3a843af0b7b72814f78c, type: 3}
   comparisonDropZonePrefab: {fileID: 4419697180656248584, guid: 047b985e91e28d64c9300e180bd2ed59, type: 3}
@@ -869,6 +870,16 @@ MonoBehaviour:
   minVal: 1
   maxVal: 10
   mixAdditionEquations: 1
+  numbersOnlyMode: 0
+  objectCategoryPrefabs:
+  - {fileID: 279233004548221328, guid: e33d2cabaad7e754295dc2c428770680, type: 3}
+  - {fileID: 9052675801392088744, guid: 1c25a7a34c192f94e96c4d79b2ce499d, type: 3}
+  - {fileID: 551436448653747148, guid: 1a4d049e7c7d14c4580d6af4ed3b7ff6, type: 3}
+  - {fileID: 944671835624779107, guid: b4122adfd969c9146b946fc07b17a9c0, type: 3}
+  - {fileID: 3663694854287574558, guid: 6176d6a68f9d26346844f12d95182ea9, type: 3}
+  - {fileID: 7989547991596683270, guid: 7089b063b26cb2347820c176b63c9fc9, type: 3}
+  - {fileID: 8910757150115945586, guid: 75993a8a2264fc14f840ad758782108a, type: 3}
+  themes: []
   lessThanColor: {r: 0.8679245, g: 0.045033824, b: 0.22084568, a: 1}
   equalToColor: {r: 0.8679245, g: 0.8133007, b: 0.036845837, a: 1}
   greaterThanColor: {r: 0.13793145, g: 0.8113208, b: 0.057404764, a: 1}
@@ -3156,10 +3167,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
   m_Padding:
     m_Left: 40
-    m_Right: 0
+    m_Right: 40
     m_Top: 10
     m_Bottom: 30
-  m_ChildAlignment: 3
+  m_ChildAlignment: 4
   m_Spacing: 40
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0

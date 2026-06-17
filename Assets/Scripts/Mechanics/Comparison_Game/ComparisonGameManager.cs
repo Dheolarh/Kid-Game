@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using KidGame.Mechanics.Counting;
 
 namespace KidGame.Mechanics.Comparison
 {
@@ -8,6 +9,7 @@ namespace KidGame.Mechanics.Comparison
     {
         [Header("Prefabs")]
         [SerializeField] private GameObject slotPrefab;
+        [SerializeField] private GameObject numbersOnlySlotPrefab;
         [SerializeField] private GameObject numberBoxPrefab;
         [SerializeField] private GameObject plusSymbolPrefab;
         [SerializeField] private GameObject comparisonDropZonePrefab;
@@ -30,6 +32,11 @@ namespace KidGame.Mechanics.Comparison
         [SerializeField] private int minVal = 1;
         [SerializeField] private int maxVal = 10;
         [SerializeField] private bool mixAdditionEquations = true;
+
+        [Header("Object Mode Config")]
+        [SerializeField] private bool numbersOnlyMode = false;
+        [SerializeField] private GameObject[] objectCategoryPrefabs;
+        [SerializeField] private List<ObjectCategoryTheme> themes;
 
         [Header("Tray Colors")]
         [SerializeField] private Color lessThanColor = new Color(0.20f, 0.60f, 0.86f);   // blue
@@ -58,6 +65,10 @@ namespace KidGame.Mechanics.Comparison
         private int _answeredCount;
         private bool _wasLandscape;
 
+        public bool NumbersOnlyMode => numbersOnlyMode;
+        public GameObject LeftObjectPrefab { get; private set; }
+        public GameObject RightObjectPrefab { get; private set; }
+
         private bool IsLandscape => Screen.width > Screen.height;
 
         private Transform ActiveSlotsContainer
@@ -71,6 +82,9 @@ namespace KidGame.Mechanics.Comparison
             ConfigureNextButton(portraitNextButton);
             ConfigureNextButton(landscapeNextButton);
 
+            ConfigureSlotsContainer(portraitSlotsContainer);
+            ConfigureSlotsContainer(landscapeSlotsContainer);
+
             _wasLandscape = IsLandscape;
             SetNextButtonsInteractable(false);
 
@@ -78,6 +92,21 @@ namespace KidGame.Mechanics.Comparison
             if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
 
             GenerateRound();
+        }
+
+        private void ConfigureSlotsContainer(Transform container)
+        {
+            if (container == null) return;
+            var vlg = container.GetComponent<VerticalLayoutGroup>();
+            if (vlg != null)
+            {
+                vlg.spacing = 25f;
+                vlg.childAlignment = TextAnchor.UpperCenter;
+                vlg.childControlWidth = true;
+                vlg.childControlHeight = true;
+                vlg.childForceExpandWidth = false;
+                vlg.childForceExpandHeight = false;
+            }
         }
 
         private void ConfigureNextButton(Button btn)
@@ -170,10 +199,12 @@ namespace KidGame.Mechanics.Comparison
         public void GenerateRound()
         {
             // Validate required fields
-            if (slotPrefab == null || numberBoxPrefab == null || plusSymbolPrefab == null ||
+            if ((numbersOnlyMode && numbersOnlySlotPrefab == null) ||
+                (!numbersOnlyMode && slotPrefab == null) ||
+                numberBoxPrefab == null || plusSymbolPrefab == null ||
                 comparisonDropZonePrefab == null || answerCardPrefab == null)
             {
-                Debug.LogError("[ComparisonGame] One or more prefabs are not assigned in the Inspector.");
+                Debug.LogError("[ComparisonGame] One or more required prefabs are not assigned in the Inspector.");
                 return;
             }
 
@@ -182,6 +213,32 @@ namespace KidGame.Mechanics.Comparison
                 Debug.LogError("[ComparisonGame] Active slot or active answers container is not assigned.");
                 return;
             }
+
+            // Select active theme prefabs for object mode
+            var activePrefabs = GetActiveThemePrefabs();
+            if (activePrefabs == null || activePrefabs.Length == 0)
+            {
+                activePrefabs = objectCategoryPrefabs;
+            }
+
+            if (!numbersOnlyMode && (activePrefabs == null || activePrefabs.Length == 0))
+            {
+                Debug.LogError("[ComparisonGame] No object prefabs assigned for Object Mode.");
+                return;
+            }
+
+            // Prepare unique prefabs for each slot from the pool
+            List<GameObject> prefabPool = new List<GameObject>();
+            if (!numbersOnlyMode && activePrefabs != null && activePrefabs.Length > 0)
+            {
+                prefabPool.AddRange(activePrefabs);
+                Shuffle(prefabPool);
+
+                // Set default properties for fallback/compatibility
+                LeftObjectPrefab = prefabPool[0];
+                RightObjectPrefab = prefabPool[prefabPool.Count > 1 ? 1 : 0];
+            }
+            int poolIndex = 0;
 
             ClearPrevious();
             _answeredCount = 0;
@@ -211,11 +268,41 @@ namespace KidGame.Mechanics.Comparison
 
                 generatedKeys.Add(key);
 
-                var slotGo = Instantiate(slotPrefab, ActiveSlotsContainer);
+                GameObject leftObjPrefab = null;
+                GameObject rightObjPrefab = null;
+
+                if (!numbersOnlyMode && prefabPool.Count > 0)
+                {
+                    if (prefabPool.Count == 1)
+                    {
+                        leftObjPrefab = prefabPool[0];
+                        rightObjPrefab = prefabPool[0];
+                    }
+                    else
+                    {
+                        if (poolIndex >= prefabPool.Count - 1)
+                        {
+                            Shuffle(prefabPool);
+                            poolIndex = 0;
+                        }
+
+                        leftObjPrefab = prefabPool[poolIndex++];
+                        rightObjPrefab = prefabPool[poolIndex++];
+
+                        if (leftObjPrefab == rightObjPrefab)
+                        {
+                            int nextIdx = poolIndex % prefabPool.Count;
+                            rightObjPrefab = prefabPool[nextIdx];
+                        }
+                    }
+                }
+
+                var slotPrefabToUse = numbersOnlyMode ? numbersOnlySlotPrefab : slotPrefab;
+                var slotGo = Instantiate(slotPrefabToUse, ActiveSlotsContainer);
                 var slot = slotGo.GetComponent<ComparisonSlot>();
                 if (slot == null) slot = slotGo.AddComponent<ComparisonSlot>();
 
-                slot.Setup(left, right, this, numberBoxPrefab, plusSymbolPrefab, comparisonDropZonePrefab);
+                slot.Setup(left, right, this, numberBoxPrefab, plusSymbolPrefab, comparisonDropZonePrefab, leftObjPrefab, rightObjPrefab);
                 _slots.Add(slot);
             }
 
@@ -250,7 +337,7 @@ namespace KidGame.Mechanics.Comparison
             bool useAdditionLeft = false;
             bool useAdditionRight = false;
 
-            if (mixAdditionEquations)
+            if (mixAdditionEquations && numbersOnlyMode)
             {
                 int mode = Random.Range(0, 4);
                 if (mode == 0) useAdditionLeft = true;
@@ -379,6 +466,19 @@ namespace KidGame.Mechanics.Comparison
             {
                 Destroy(child.gameObject);
             }
+        }
+
+        private GameObject[] GetActiveThemePrefabs()
+        {
+            if (themes == null) return null;
+            foreach (var theme in themes)
+            {
+                if (theme != null && theme.isEnabled && theme.prefabs != null && theme.prefabs.Length > 0)
+                {
+                    return theme.prefabs;
+                }
+            }
+            return null;
         }
 
         private static void Shuffle<T>(List<T> list)

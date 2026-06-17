@@ -157,3 +157,6 @@ Assets/Plugins/Editor/Backtrace/
 
 # ----- Perforce (if mixed VCS environment) ------------------
 *.p4ignore
+
+# ----- Level Creation Progression Plans ---------------------
+*.md
