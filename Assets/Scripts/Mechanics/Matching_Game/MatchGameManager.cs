@@ -178,6 +178,7 @@ namespace KidGame.Mechanics.Matching
             if (rt) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
 
             UpdateLinePositions();
+            UpdateScrollLocking();
         }
 
         // ── Round Management ──────────────────────────────────────────────────
@@ -321,6 +322,8 @@ namespace KidGame.Mechanics.Matching
             // Rebuild active layout
             var rt = ActiveContent.GetComponent<RectTransform>();
             if (rt) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+
+            UpdateScrollLocking();
         }
 
         private GameObject SpawnItem(Transform parent, MatchVariant variant, int value, bool isLeft)
@@ -751,6 +754,61 @@ namespace KidGame.Mechanics.Matching
                 return col;
             }
             return Color.white;
+        }
+
+        private void UpdateScrollLocking()
+        {
+            UpdateScrollLockForContainer(portraitContent);
+            UpdateScrollLockForContainer(landscapeContent);
+        }
+
+        private void UpdateScrollLockForContainer(RectTransform contentRt)
+        {
+            if (contentRt == null) return;
+
+            var scrollRect = contentRt.GetComponentInParent<ScrollRect>();
+            if (scrollRect == null) return;
+
+            var viewportRt = scrollRect.viewport;
+            if (viewportRt == null)
+            {
+                viewportRt = scrollRect.GetComponent<RectTransform>();
+            }
+
+            if (viewportRt != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(viewportRt);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
+
+                bool isLandscape = false;
+                Transform curr = contentRt;
+                while (curr != null)
+                {
+                    string nameLower = curr.name.ToLower();
+                    if (nameLower.Contains("landscape") || nameLower.Contains("lanscape"))
+                    {
+                        isLandscape = true;
+                        break;
+                    }
+                    if (nameLower.Contains("portrait") || nameLower.Contains("potrait"))
+                    {
+                        isLandscape = false;
+                        break;
+                    }
+                    curr = curr.parent;
+                }
+
+                if (isLandscape)
+                {
+                    scrollRect.horizontal = (contentRt.rect.width > viewportRt.rect.width);
+                    scrollRect.vertical = false;
+                }
+                else
+                {
+                    scrollRect.vertical = (contentRt.rect.height > viewportRt.rect.height);
+                    scrollRect.horizontal = false;
+                }
+            }
         }
 
         private void Shuffle<T>(IList<T> list)

@@ -94,9 +94,9 @@ MonoBehaviour:
   sizePadding: 0.3
   startDotColor: {r: 0, g: 1, b: 0, a: 1}
   endDotColor: {r: 1, g: 0, b: 0, a: 1}
-  exampleText: 1
-  descriptionWord: one
-  descriptionNumber: 1
+  exampleText: 210
+  descriptionWord: TWO HUNDRED TEN
+  descriptionNumber: 210
   customDescriptionSentence: 
   onCompleted:
     m_PersistentCalls:

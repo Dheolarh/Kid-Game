@@ -15,6 +15,8 @@ namespace KidGame.Mechanics.Tracing
         [SerializeField] private GameObject slotPrefab;
         [Tooltip("How many slot instances to spawn in each content container.")]
         [SerializeField, Range(1, 12)] private int slotCount = 6;
+        [Tooltip("Ratio of cell height to use as top padding inside each slot row.")]
+        [SerializeField, Range(0f, 0.3f)] private float slotTopPaddingRatio = 0.08f;
 
         [Header("Dynamic Slots")]
         [Tooltip("Optional list of numbers (e.g. '123') or word phrases (e.g. 'one hundred forty eight') to trace dynamically. If empty, defaults to spawning the editor prefab's shape slotCount times.")]
@@ -95,6 +97,7 @@ namespace KidGame.Mechanics.Tracing
 
             // Wait 1 frame so Canvas layout dimensions are calculated
             yield return null;
+            Canvas.ForceUpdateCanvases();
 
             // Spawn into all four containers
             SpawnInto(portraitTutorialContent, _portraitRowTracers);
@@ -236,39 +239,113 @@ namespace KidGame.Mechanics.Tracing
                 if (w > 100f) return w;
             }
 
+            // Fallback: Check parent's (Viewport's) width if container is uninitialized
+            if (container.parent != null)
+            {
+                var parentRt = container.parent.GetComponent<RectTransform>();
+                if (parentRt != null)
+                {
+                    float pw = parentRt.rect.width;
+                    if (pw > 100f) return pw;
+                }
+            }
+
             return isLandscape ? 1200f : 800f;
         }
 
-        private int GetMaxWordLengthInSpawnList()
+        private float GetMaxWidthFactor()
         {
-            int maxLen = 0;
+            float maxFactor = 0f;
             if (valuesToTrace == null || valuesToTrace.Count == 0) return slotCount;
 
             foreach (var val in valuesToTrace)
             {
-                if (string.IsNullOrWhiteSpace(val)) continue;
+                float factor = GetRowWidthFactor(val);
+                if (factor > maxFactor)
+                {
+                    maxFactor = factor;
+                }
+            }
+            return maxFactor > 0f ? maxFactor : slotCount;
+        }
+
+        private float GetRowWidthFactor(string val)
+        {
+            if (string.IsNullOrWhiteSpace(val)) return 0f;
+
+            if (IsNumericExpression(val))
+            {
+                bool hasCommas = val.Contains(",");
+                string cleanNum = val.Replace(",", "");
+                if (cleanNum.Length == 0) return 0f;
+
+                float cellFactorSum = 0f;
+                foreach (char c in cleanNum)
+                {
+                    if (c == ' ')
+                    {
+                        cellFactorSum += 0.5f;
+                    }
+                    else if (c == '1' || c == 'I' || c == 'l' || c == 'i')
+                    {
+                        cellFactorSum += 0.80f;
+                    }
+                    else
+                    {
+                        cellFactorSum += 1.0f;
+                    }
+                }
+
+                float spacingFactor = hasCommas ? 0f : -0.30f;
+                float totalFactor = cellFactorSum + (cleanNum.Length - 1) * spacingFactor;
+                return Mathf.Max(0.5f, totalFactor);
+            }
+            else
+            {
                 string[] words = val.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+                float maxWordFactor = 0f;
+
                 foreach (var w in words)
                 {
                     string clean = FilterWord(w);
                     if (string.IsNullOrEmpty(clean)) continue;
                     if (clean.Equals("and", System.StringComparison.OrdinalIgnoreCase)) continue;
-                    if (clean.Length > maxLen)
+
+                    float cellFactorSum = 0f;
+                    foreach (char c in clean)
                     {
-                        maxLen = clean.Length;
+                        if (c == '1' || c == 'I' || c == 'l' || c == 'i')
+                        {
+                            cellFactorSum += 0.80f;
+                        }
+                        else
+                        {
+                            cellFactorSum += 1.0f;
+                        }
+                    }
+
+                    bool isWordNumber = IsDigitsOnly(clean);
+                    float spacingFactor = -0.15f;
+                    if (isWordNumber && clean.Length > 1)
+                    {
+                        spacingFactor = -0.30f;
+                    }
+
+                    float wordFactor = cellFactorSum + (clean.Length - 1) * spacingFactor;
+                    if (wordFactor > maxWordFactor)
+                    {
+                        maxWordFactor = wordFactor;
                     }
                 }
+                return Mathf.Max(0.5f, maxWordFactor);
             }
-            return maxLen > 0 ? maxLen : slotCount;
         }
 
-        private float GetCalculatedCellSize(float containerWidth, int maxWordLen)
+        private float GetCalculatedCellSize(float containerWidth, float maxWidthFactor)
         {
-            if (maxWordLen <= 0) return 250f;
+            if (maxWidthFactor <= 0f) return 250f;
             float maxSlotWidth = containerWidth - 80f;
-            // C * L + (L - 1) * (-10f) = maxSlotWidth
-            // C = (maxSlotWidth + (maxWordLen - 1) * 10f) / maxWordLen
-            float C = (maxSlotWidth + (maxWordLen - 1) * 10f) / maxWordLen;
+            float C = maxSlotWidth / maxWidthFactor;
             if (C < 30f) C = 30f;
             if (C > 250f) C = 250f; // Cap cell size at 250 to avoid overly large single digits
             return C;
@@ -317,8 +394,8 @@ namespace KidGame.Mechanics.Tracing
             AdjustContainerLayout(container);
 
             float availableContainerWidth = GetContainerWidth(container);
-            int maxWordLen = GetMaxWordLengthInSpawnList();
-            float C = GetCalculatedCellSize(availableContainerWidth, maxWordLen);
+            float maxFactor = GetMaxWidthFactor();
+            float C = GetCalculatedCellSize(availableContainerWidth, maxFactor);
             float maxSlotWidth = availableContainerWidth - 80f;
 
             foreach (var val in valuesToTrace)
@@ -357,11 +434,20 @@ namespace KidGame.Mechanics.Tracing
                 var groupLe = entryGroupGo.AddComponent<LayoutElement>();
                 var groupRt = entryGroupGo.GetComponent<RectTransform>();
 
-                bool isNumber = IsDigitsOnly(val.Trim());
+                bool isNumeric = IsNumericExpression(val);
 
-                if (isNumber)
+                if (isNumeric)
                 {
-                    SpawnNumberSlot(entryGroupGo.transform, val.Trim(), rowTracersList, maxSlotWidth, C);
+                    bool hasCommas = val.Contains(",");
+                    string cleanNum = val.Replace(",", "");
+                    if (hasCommas)
+                    {
+                        SpawnWordSlot(entryGroupGo.transform, cleanNum, maxSlotWidth, C, rowTracersList, true);
+                    }
+                    else
+                    {
+                        SpawnNumberSlot(entryGroupGo.transform, cleanNum, rowTracersList, maxSlotWidth, C);
+                    }
 
                     if (isVertical)
                     {
@@ -395,7 +481,8 @@ namespace KidGame.Mechanics.Tracing
 
                     foreach (var word in filteredWords)
                     {
-                        SpawnWordSlot(entryGroupGo.transform, word, maxSlotWidth, C, rowTracersList);
+                        bool hasCommas = val.Contains(",");
+                        SpawnWordSlot(entryGroupGo.transform, word, maxSlotWidth, C, rowTracersList, hasCommas);
                     }
 
                     int numSlots = filteredWords.Count;
@@ -444,10 +531,17 @@ namespace KidGame.Mechanics.Tracing
             PopulateSlotRowCharacters(rowGo, number, true, cellSize, rowTracersList);
         }
 
-        private void SpawnWordSlot(Transform container, string word, float maxSlotWidth, float cellSize, List<List<SlotTracer>> rowTracersList)
+        private void SpawnWordSlot(Transform container, string word, float maxSlotWidth, float cellSize, List<List<SlotTracer>> rowTracersList, bool hasCommas)
         {
             GameObject rowGo = Instantiate(slotPrefab, container);
-            rowGo.name = $"Slot_Word_{word}";
+            if (hasCommas)
+            {
+                rowGo.name = $"Slot_CommaList_{word}";
+            }
+            else
+            {
+                rowGo.name = $"Slot_Word_{word}";
+            }
 
             // Since this slotPrefab instance serves as the parent container for the character cells,
             // we remove the SlotTracer component from it (the character cells themselves will have SlotTracers).
@@ -473,8 +567,22 @@ namespace KidGame.Mechanics.Tracing
 
         private void PopulateSlotRowCharacters(GameObject rowGo, string characters, bool isDigit, float cellSize, List<List<SlotTracer>> rowTracersList)
         {
-            // Set spacing to -20f if the entry is a multi-digit number, otherwise 0f
-            float spacing = (isDigit && characters.Length > 1) ? -20f : 0f;
+            // Set spacing dynamically: -30% of cellSize for multi-digit numbers, -15% of cellSize for letters/words, 0 for comma lists
+            bool isNumber = IsNumericExpression(characters);
+            bool isCommaList = rowGo.name.StartsWith("Slot_CommaList_");
+            float spacing = 0f;
+            if (isCommaList)
+            {
+                spacing = 0f;
+            }
+            else if (isNumber && characters.Length > 1)
+            {
+                spacing = -0.30f * cellSize;
+            }
+            else if (!isNumber)
+            {
+                spacing = -0.15f * cellSize;
+            }
 
             // Locate target parent (TracerContainer if it exists in the slotPrefab hierarchy, otherwise fallback to rowGo itself)
             Transform targetParent = rowGo.transform.Find("TracerContainer");
@@ -528,6 +636,7 @@ namespace KidGame.Mechanics.Tracing
             hlg.childForceExpandWidth = false;
             hlg.childForceExpandHeight = false;
             hlg.spacing = spacing;
+            hlg.padding = new RectOffset(0, 0, Mathf.RoundToInt(cellSize * slotTopPaddingRatio), 0);
 
             // Remove/Disable Masks from rowGo and targetParent to avoid clipping paths or hand guides
             var rowMask = rowGo.GetComponent<Mask>();
@@ -549,6 +658,25 @@ namespace KidGame.Mechanics.Tracing
 
             foreach (char c in characters)
             {
+                if (c == ' ')
+                {
+                    GameObject spaceCellGo = new GameObject("Cell_Space", typeof(RectTransform));
+                    spaceCellGo.transform.SetParent(targetParent, false);
+
+                    float spaceWidth = cellSize * 0.5f;
+
+                    RectTransform spaceCellRt = spaceCellGo.GetComponent<RectTransform>();
+                    if (spaceCellRt != null)
+                    {
+                        spaceCellRt.sizeDelta = new Vector2(spaceWidth, cellSize);
+                    }
+
+                    var spaceCellLe = spaceCellGo.AddComponent<LayoutElement>();
+                    spaceCellLe.preferredWidth = spaceWidth;
+                    spaceCellLe.preferredHeight = cellSize;
+                    continue;
+                }
+
                 var shapePrefab = GetPrefabForCharacter(c);
                 if (shapePrefab == null)
                 {
@@ -560,15 +688,19 @@ namespace KidGame.Mechanics.Tracing
                 GameObject cellGo = new GameObject($"Cell_{shapePrefab.name}", typeof(RectTransform));
                 cellGo.transform.SetParent(targetParent, false);
 
-                // Set cell container size statically to cellSize x cellSize
+                // Check if the character is narrow (e.g. '1', 'I', 'l', 'i')
+                bool isNarrow = (c == '1' || c == 'I' || c == 'l' || c == 'i');
+                float cellWidth = isNarrow ? cellSize * 0.80f : cellSize;
+
+                // Set cell container size statically to cellWidth x cellSize
                 RectTransform cellRt = cellGo.GetComponent<RectTransform>();
                 if (cellRt != null)
                 {
-                    cellRt.sizeDelta = new Vector2(cellSize, cellSize);
+                    cellRt.sizeDelta = new Vector2(cellWidth, cellSize);
                 }
 
                 var cellLe = cellGo.AddComponent<LayoutElement>();
-                cellLe.preferredWidth = cellSize;
+                cellLe.preferredWidth = cellWidth;
                 cellLe.preferredHeight = cellSize;
 
                 // Add SlotTracer component to the cell container
@@ -756,6 +888,17 @@ namespace KidGame.Mechanics.Tracing
             return true;
         }
 
+        private bool IsNumericExpression(string str)
+        {
+            if (string.IsNullOrWhiteSpace(str)) return false;
+            foreach (char c in str)
+            {
+                if (c != ' ' && c != ',' && (c < '0' || c > '9'))
+                    return false;
+            }
+            return true;
+        }
+
         private string FilterWord(string word)
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -796,9 +939,27 @@ namespace KidGame.Mechanics.Tracing
 
                             if (slotSize.sqrMagnitude > 0f && shapeSize.sqrMagnitude > 0f)
                             {
-                                float scale = Mathf.Min(slotSize.x / shapeSize.x,
-                                                        slotSize.y / shapeSize.y)
-                                              * (1f - tracer.SizePadding);
+                                float effHeight = slotSize.y * (1f - slotTopPaddingRatio);
+                                bool isNarrow = false;
+                                if (tracer.ShapePrefab != null)
+                                {
+                                    string name = tracer.ShapePrefab.name;
+                                    isNarrow = name.StartsWith("1-") || name.StartsWith("I-") || name.StartsWith("l-") || name.StartsWith("i-");
+                                }
+
+                                float scale;
+                                if (isNarrow)
+                                {
+                                    // For narrow characters, only restrict by height so they don't force all other shapes to shrink
+                                    scale = (effHeight / shapeSize.y) * (1f - tracer.SizePadding);
+                                }
+                                else
+                                {
+                                    scale = Mathf.Min(slotSize.x / shapeSize.x,
+                                                        effHeight / shapeSize.y)
+                                                   * (1f - tracer.SizePadding);
+                                }
+
                                 if (scale > 0f)
                                 {
                                     Debug.Log($"[FindMinScale] tracer: {tracer.name}, slotSize: {slotSize}, shapeSize: {shapeSize}, calculated scale: {scale}, sizePadding: {tracer.SizePadding}");
@@ -828,8 +989,8 @@ namespace KidGame.Mechanics.Tracing
                 if (container != null)
                 {
                     float containerWidth = GetContainerWidth(container);
-                    int maxWordLen = GetMaxWordLengthInSpawnList();
-                    C = GetCalculatedCellSize(containerWidth, maxWordLen);
+                    float maxFactor = GetMaxWidthFactor();
+                    C = GetCalculatedCellSize(containerWidth, maxFactor);
                 }
             }
 
@@ -851,12 +1012,20 @@ namespace KidGame.Mechanics.Tracing
                         var cellRt = tracer.GetComponent<RectTransform>();
                         if (cellRt != null)
                         {
-                            cellRt.sizeDelta = new Vector2(scaledSize, scaledSize);
+                            bool isNarrow = false;
+                            if (tracer.ShapePrefab != null)
+                            {
+                                string name = tracer.ShapePrefab.name;
+                                isNarrow = name.StartsWith("1-") || name.StartsWith("I-") || name.StartsWith("l-") || name.StartsWith("i-");
+                            }
+
+                            float cellWidth = isNarrow ? scaledSize * 0.80f : scaledSize;
+                            cellRt.sizeDelta = new Vector2(cellWidth, scaledSize);
 
                             var cellLe = cellRt.GetComponent<LayoutElement>();
                             if (cellLe != null)
                             {
-                                cellLe.preferredWidth = scaledSize;
+                                cellLe.preferredWidth = cellWidth;
                                 cellLe.preferredHeight = scaledSize;
                             }
 
@@ -898,24 +1067,64 @@ namespace KidGame.Mechanics.Tracing
                 if (rowRt != null)
                 {
                     // Find the dynamic spacing for this specific row based on its name (multi-digit check)
-                    float rowSpacing = 0f;
+                    float scaledSpacing = 0f;
                     if (rowRt.name.StartsWith("Slot_Number_"))
                     {
                         string numPart = rowRt.name.Substring("Slot_Number_".Length);
                         if (numPart.Length > 1)
                         {
-                            rowSpacing = -20f;
+                            scaledSpacing = -0.30f * scaledSize;
                         }
                     }
-                    float scaledSpacing = rowSpacing * scale;
+                    else if (rowRt.name.StartsWith("Slot_CommaList_"))
+                    {
+                        scaledSpacing = 0f;
+                    }
+                    else if (rowRt.name.StartsWith("Slot_Word_"))
+                    {
+                        string wordPart = rowRt.name.Substring("Slot_Word_".Length);
+                        if (IsDigitsOnly(wordPart) && wordPart.Length > 1)
+                        {
+                            scaledSpacing = -0.30f * scaledSize;
+                        }
+                        else
+                        {
+                            scaledSpacing = -0.15f * scaledSize;
+                        }
+                    }
 
                     if (hlg != null)
                     {
                         hlg.spacing = scaledSpacing;
+                        hlg.padding = new RectOffset(0, 0, Mathf.RoundToInt(scaledSize * slotTopPaddingRatio), 0);
                     }
 
-                    int cellCount = row.Count;
-                    float totalWidth = cellCount * scaledSize + Mathf.Max(0, cellCount - 1) * scaledSpacing;
+                    float totalWidth = 0f;
+                    foreach (Transform child in containerRt)
+                    {
+                        var childRt = child as RectTransform;
+                        if (childRt != null)
+                        {
+                            if (child.name == "Cell_Space")
+                            {
+                                float spaceWidth = scaledSize * 0.5f;
+                                childRt.sizeDelta = new Vector2(spaceWidth, scaledSize);
+
+                                var cellLe = childRt.GetComponent<LayoutElement>();
+                                if (cellLe != null)
+                                {
+                                    cellLe.preferredWidth = spaceWidth;
+                                    cellLe.preferredHeight = scaledSize;
+                                }
+                                totalWidth += spaceWidth;
+                            }
+                            else
+                            {
+                                totalWidth += childRt.sizeDelta.x;
+                            }
+                        }
+                    }
+                    totalWidth += Mathf.Max(0, containerRt.childCount - 1) * scaledSpacing;
 
                     rowRt.sizeDelta = new Vector2(totalWidth, scaledSize);
 
@@ -1032,6 +1241,66 @@ namespace KidGame.Mechanics.Tracing
         {
             ApplyUniformScale(_portraitRowTracers, _portraitMinScale);
             ApplyUniformScale(_landscapeRowTracers, _landscapeMinScale);
+            UpdateScrollLocking();
+        }
+
+        private void UpdateScrollLocking()
+        {
+            UpdateScrollLockForContainer(portraitTutorialContent);
+            UpdateScrollLockForContainer(portraitGameContent);
+            UpdateScrollLockForContainer(landscapeTutorialContent);
+            UpdateScrollLockForContainer(landscapeGameContent);
+        }
+
+        private void UpdateScrollLockForContainer(Transform container)
+        {
+            if (container == null) return;
+
+            var scrollRect = container.GetComponentInParent<ScrollRect>();
+            if (scrollRect == null) return;
+
+            var contentRt = container as RectTransform;
+            var viewportRt = scrollRect.viewport;
+            if (viewportRt == null)
+            {
+                viewportRt = scrollRect.GetComponent<RectTransform>();
+            }
+
+            if (contentRt != null && viewportRt != null)
+            {
+                // Force layout rebuild on both to get exact current dimensions
+                LayoutRebuilder.ForceRebuildLayoutImmediate(viewportRt);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
+
+                bool isLandscape = false;
+                Transform curr = container;
+                while (curr != null)
+                {
+                    string nameLower = curr.name.ToLower();
+                    if (nameLower.Contains("landscape") || nameLower.Contains("lanscape"))
+                    {
+                        isLandscape = true;
+                        break;
+                    }
+                    if (nameLower.Contains("portrait") || nameLower.Contains("potrait"))
+                    {
+                        isLandscape = false;
+                        break;
+                    }
+                    curr = curr.parent;
+                }
+
+                if (isLandscape)
+                {
+                    scrollRect.horizontal = (contentRt.rect.width > viewportRt.rect.width);
+                    scrollRect.vertical = false;
+                }
+                else
+                {
+                    scrollRect.vertical = (contentRt.rect.height > viewportRt.rect.height);
+                    scrollRect.horizontal = false;
+                }
+            }
         }
 
         private void SafeDestroy(UnityEngine.Object obj)

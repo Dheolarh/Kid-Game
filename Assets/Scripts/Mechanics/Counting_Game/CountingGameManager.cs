@@ -148,9 +148,11 @@ namespace KidGame.Mechanics.Counting
             var rtAnswers = newAnswers.GetComponent<RectTransform>();
             if (rtSlots)   UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtSlots);
             if (rtAnswers) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
-
+ 
             Debug.Log($"[CountingGame] Orientation changed → moved {_slots.Count} slots, {_cards.Count} cards.");
+            UpdateScrollLocking();
         }
+
 
         // ── Public API ────────────────────────────────────────────────────────
 
@@ -374,6 +376,7 @@ namespace KidGame.Mechanics.Counting
                 card.Setup(answerValues[i], colors[i]);
                 _cards.Add(card);
             }
+            UpdateScrollLocking();
         }
 
         private void ClearPrevious()
@@ -437,6 +440,64 @@ namespace KidGame.Mechanics.Counting
             var pool = Enumerable.Range(min, max - min + 1).ToList();
             Shuffle(pool);
             return pool.Take(count).ToList();
+        }
+
+        private void UpdateScrollLocking()
+        {
+            UpdateScrollLockForContainer(portraitSlotsContainer);
+            UpdateScrollLockForContainer(portraitAnswersContainer);
+            UpdateScrollLockForContainer(landscapeSlotsContainer);
+            UpdateScrollLockForContainer(landscapeAnswersContainer);
+        }
+
+        private void UpdateScrollLockForContainer(Transform container)
+        {
+            if (container == null) return;
+
+            var scrollRect = container.GetComponentInParent<ScrollRect>();
+            if (scrollRect == null) return;
+
+            var contentRt = container as RectTransform;
+            var viewportRt = scrollRect.viewport;
+            if (viewportRt == null)
+            {
+                viewportRt = scrollRect.GetComponent<RectTransform>();
+            }
+
+            if (contentRt != null && viewportRt != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(viewportRt);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
+
+                bool isLandscape = false;
+                Transform curr = container;
+                while (curr != null)
+                {
+                    string nameLower = curr.name.ToLower();
+                    if (nameLower.Contains("landscape") || nameLower.Contains("lanscape"))
+                    {
+                        isLandscape = true;
+                        break;
+                    }
+                    if (nameLower.Contains("portrait") || nameLower.Contains("potrait"))
+                    {
+                        isLandscape = false;
+                        break;
+                    }
+                    curr = curr.parent;
+                }
+
+                if (isLandscape)
+                {
+                    scrollRect.horizontal = (contentRt.rect.width > viewportRt.rect.width);
+                    scrollRect.vertical = false;
+                }
+                else
+                {
+                    scrollRect.vertical = (contentRt.rect.height > viewportRt.rect.height);
+                    scrollRect.horizontal = false;
+                }
+            }
         }
 
         private static void Shuffle<T>(List<T> list)

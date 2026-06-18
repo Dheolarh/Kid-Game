@@ -176,6 +176,7 @@ namespace KidGame.Mechanics.Comparison
             if (rtAnswers) LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
 
             Debug.Log($"[ComparisonGame] Orientation changed → moved {_slots.Count} slots.");
+            UpdateScrollLocking();
         }
 
         public void OnSlotAnswered()
@@ -317,6 +318,8 @@ namespace KidGame.Mechanics.Comparison
 
             var rtAnswers = ActiveAnswersContainer.GetComponent<RectTransform>();
             if (rtAnswers != null) LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
+
+            UpdateScrollLocking();
         }
 
         private void SpawnAnswerCard(ComparisonSign sign, Color color)
@@ -479,6 +482,64 @@ namespace KidGame.Mechanics.Comparison
                 }
             }
             return null;
+        }
+
+        private void UpdateScrollLocking()
+        {
+            UpdateScrollLockForContainer(portraitSlotsContainer);
+            UpdateScrollLockForContainer(portraitAnswersContainer);
+            UpdateScrollLockForContainer(landscapeSlotsContainer);
+            UpdateScrollLockForContainer(landscapeAnswersContainer);
+        }
+
+        private void UpdateScrollLockForContainer(Transform container)
+        {
+            if (container == null) return;
+
+            var scrollRect = container.GetComponentInParent<ScrollRect>();
+            if (scrollRect == null) return;
+
+            var contentRt = container as RectTransform;
+            var viewportRt = scrollRect.viewport;
+            if (viewportRt == null)
+            {
+                viewportRt = scrollRect.GetComponent<RectTransform>();
+            }
+
+            if (contentRt != null && viewportRt != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(viewportRt);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
+
+                bool isLandscape = false;
+                Transform curr = container;
+                while (curr != null)
+                {
+                    string nameLower = curr.name.ToLower();
+                    if (nameLower.Contains("landscape") || nameLower.Contains("lanscape"))
+                    {
+                        isLandscape = true;
+                        break;
+                    }
+                    if (nameLower.Contains("portrait") || nameLower.Contains("potrait"))
+                    {
+                        isLandscape = false;
+                        break;
+                    }
+                    curr = curr.parent;
+                }
+
+                if (isLandscape)
+                {
+                    scrollRect.horizontal = (contentRt.rect.width > viewportRt.rect.width);
+                    scrollRect.vertical = false;
+                }
+                else
+                {
+                    scrollRect.vertical = (contentRt.rect.height > viewportRt.rect.height);
+                    scrollRect.horizontal = false;
+                }
+            }
         }
 
         private static void Shuffle<T>(List<T> list)
