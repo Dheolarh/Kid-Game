@@ -1338,7 +1338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5479342249402848881
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1870,13 +1870,15 @@ MonoBehaviour:
   portraitAnswersContainer: {fileID: 468590264840055490}
   landscapeSlotsContainer: {fileID: 3369106276622606670}
   landscapeAnswersContainer: {fileID: 6422524477127055487}
-  nextButton: {fileID: 6815038823787206291}
+  portraitNextButton: {fileID: 2329610729995373818}
+  landscapeNextButton: {fileID: 6815038823787206291}
   slotCount: 10
   minSequenceLength: 5
   maxSequenceLength: 20
   minStartValue: 1
   maxStartValue: 20
   step: 2
+  countBackwards: 1
   minConsecutiveRevealed: 1
   maxConsecutiveRevealed: 2
   minConsecutiveHidden: 1
@@ -2770,7 +2772,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8777331904800961519
 RectTransform:
   m_ObjectHideFlags: 0

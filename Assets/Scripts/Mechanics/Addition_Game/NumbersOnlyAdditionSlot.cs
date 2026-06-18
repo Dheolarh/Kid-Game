@@ -62,12 +62,6 @@ namespace KidGame.Mechanics.Addition
                         if (plusText != null) plusText.text = "+";
                     }
                 }
-
-                // Spawn equals sign
-                var equalsGo = Instantiate(equalsPrefab, objectBox);
-                equalsGo.name = "equals";
-                var equalsText = equalsGo.GetComponentInChildren<TMPro.TMP_Text>();
-                if (equalsText != null) equalsText.text = "=";
             }
 
             // Setup the built-in answer drop zone
@@ -111,8 +105,8 @@ namespace KidGame.Mechanics.Addition
             }
 
             // Total grid items count in the objectBox container is:
-            // itemCount numbers + (itemCount - 1) pluses + 1 equals sign
-            int totalItemsInGrid = _lastOperandCount + (_lastOperandCount - 1) + 1;
+            // itemCount numbers + (itemCount - 1) pluses
+            int totalItemsInGrid = _lastOperandCount + (_lastOperandCount - 1);
 
             float gridHeight = GetGridCalculatedHeight(objectBox, totalItemsInGrid);
 

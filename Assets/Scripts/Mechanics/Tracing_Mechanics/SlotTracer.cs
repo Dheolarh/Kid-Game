@@ -15,11 +15,23 @@ namespace KidGame.Mechanics.Tracing
         [Tooltip("Drag a prefab from Art/Tracing/Prefabs/Numbers (or Letters).")]
         [SerializeField] private GameObject shapePrefab;
 
+        public GameObject ShapePrefab
+        {
+            get => shapePrefab;
+            set => shapePrefab = value;
+        }
+
         [Tooltip("Color the child draws the stroke in.")]
         [SerializeField] private Color traceColor = new Color(0.2f, 0.55f, 1f, 1f);
 
         [Tooltip("How much smaller than the slot the shape should be (0 = fill slot, 0.3 = 30% smaller).")]
         [SerializeField, Range(0f, 0.5f)] private float sizePadding = 0.3f;
+
+        public float SizePadding
+        {
+            get => sizePadding;
+            set => sizePadding = value;
+        }
 
         [Tooltip("Color of the square dot that marks where to start each stroke.")]
         [SerializeField] private Color startDotColor = Color.green;
@@ -40,7 +52,49 @@ namespace KidGame.Mechanics.Tracing
 
         [Header("Events")]
         [Tooltip("Fires when every path in the shape has been traced.")]
-        [SerializeField] private UnityEvent onCompleted;
+        [SerializeField] private UnityEvent onCompleted = new UnityEvent();
+
+        public UnityEvent OnCompletedEvent
+        {
+            get
+            {
+                if (onCompleted == null)
+                {
+                    onCompleted = new UnityEvent();
+                }
+                else
+                {
+                    try
+                    {
+                        onCompleted.GetPersistentEventCount();
+                    }
+                    catch (System.NullReferenceException)
+                    {
+                        onCompleted = new UnityEvent();
+                    }
+                }
+                return onCompleted;
+            }
+        }
+
+        private void Awake()
+        {
+            if (onCompleted == null)
+            {
+                onCompleted = new UnityEvent();
+            }
+            else
+            {
+                try
+                {
+                    onCompleted.GetPersistentEventCount();
+                }
+                catch (System.NullReferenceException)
+                {
+                    onCompleted = new UnityEvent();
+                }
+            }
+        }
 
         // ──────────────────────────────────────────────────
         // Internal State (read by SlotTracingManager)
@@ -106,8 +160,19 @@ namespace KidGame.Mechanics.Tracing
         {
             if (shape == null) return;
 
+            // If we are playing and TracingModeManager is present, let it handle the scale!
+            if (Application.isPlaying)
+            {
+                var manager = FindObjectOfType<TracingModeManager>();
+                if (manager != null)
+                {
+                    return;
+                }
+            }
+
             var slotRT  = GetComponent<RectTransform>();
             var shapeRT = shape.GetComponent<RectTransform>();
+
 
             if (slotRT != null && shapeRT != null)
             {
