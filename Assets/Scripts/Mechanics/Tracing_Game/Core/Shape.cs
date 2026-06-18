@@ -45,11 +45,13 @@ namespace KidGame.Mechanics.Tracing
         }
 
         // ── Public API ────────────────────────────────────────────
-        /// <summary>Show the step numbers for the path at <paramref name="index"/>.</summary>
         public void ShowPathNumbers(int index)
         {
             for (int i = 0; i < paths.Count; i++)
+            {
                 paths[i].SetNumbersStatus(i == index);
+                paths[i].SetNumbersVisibility(i == index);
+            }
         }
 
         /// <summary>Index of the first incomplete path, or -1 if all done.</summary>
