@@ -25,6 +25,10 @@ namespace KidGame.Interface
         [Tooltip("Reference to the ProfileScreenController component.")]
         [SerializeField] private ProfileScreenController profileScreenController;
 
+        [Header("Home Screen Controller")]
+        [Tooltip("Reference to the HomeScreenIntroController component.")]
+        [SerializeField] private HomeScreenIntroController homeScreenIntroController;
+
         [Header("Splash Flow Settings")]
         [Tooltip("If true, the game automatically transitions to Age Select after a delay.")]
         [SerializeField] private bool autoTransition = true;
@@ -36,6 +40,7 @@ namespace KidGame.Interface
         [SerializeField] private bool tapToSkip = true;
 
         private bool _isTransitioning = false;
+        private static bool _hasCompletedIntro = false;
 
         private void Start()
         {
@@ -77,7 +82,16 @@ namespace KidGame.Interface
         {
             _isTransitioning = false;
 
-            // Ensure Splash screen is active and others are inactive at start
+            // Skip Splash and Profile screens if intro was already completed
+            if (_hasCompletedIntro)
+            {
+                if (splashScreen != null) splashScreen.SetActive(false);
+                if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
+                if (homeScreen != null) homeScreen.SetActive(true);
+                return;
+            }
+
+            // Ensure Splash screen is active and others are inactive at start (first run)
             if (splashScreen != null) splashScreen.SetActive(true);
             if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
             if (homeScreen != null) homeScreen.SetActive(false);
@@ -150,11 +164,16 @@ namespace KidGame.Interface
         /// </summary>
         public void TriggerAgeSelectToHomeTransition()
         {
+            _hasCompletedIntro = true; // Mark intro completed to skip it on future loads of this scene
+
             if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
             if (homeScreen != null) homeScreen.SetActive(true);
-            
-            // Note: If you want to use curtain transition here as well, you can close the curtains,
-            // change screens, and then open them. Feel free to extend this when needed!
+
+            // Trigger the intro animations on the home screen
+            if (homeScreenIntroController != null)
+            {
+                homeScreenIntroController.PlayIntro();
+            }
         }
     }
 }

@@ -105,9 +105,9 @@ namespace KidGame.Interface
                 nameInputField.onEndEdit.AddListener(OnNameInputEndEdit);
             }
 
-            // Hook up age button listeners
-            if (ageUpButton != null) ageUpButton.onClick.AddListener(IncrementAge);
-            if (ageDownButton != null) ageDownButton.onClick.AddListener(DecrementAge);
+            // Hook up age button listeners (flipped: up button decreases age, down button increases age)
+            if (ageUpButton != null) ageUpButton.onClick.AddListener(DecrementAge);
+            if (ageDownButton != null) ageDownButton.onClick.AddListener(IncrementAge);
 
             // Hook up tutor button listeners
             foreach (var tutor in tutors)
