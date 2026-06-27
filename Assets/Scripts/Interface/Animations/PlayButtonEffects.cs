@@ -90,6 +90,14 @@ namespace KidGame.Interface.Animations
                 StopCoroutine(_idleCoroutine);
             }
 
+            // Play pop animation on click
+            transform.DOKill();
+            transform.DOScale(_originalScale * 0.85f, 0.08f).SetEase(Ease.OutQuad)
+                .OnComplete(() =>
+                {
+                    transform.DOScale(_originalScale, 0.12f).SetEase(Ease.OutBack);
+                });
+
             // Trigger transition scene load
             if (SceneTransitionManager.Instance != null)
             {

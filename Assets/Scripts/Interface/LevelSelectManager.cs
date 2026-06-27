@@ -134,7 +134,8 @@ namespace KidGame.Interface
 
                             if (Application.isPlaying)
                             {
-                                btn.onClick.AddListener(() => OnLevelSelected(data));
+                                int currentLevelIndex = spawnedLevels;
+                                btn.onClick.AddListener(() => OnLevelSelected(data, currentLevelIndex));
                             }
                         }
                     }
@@ -341,9 +342,21 @@ namespace KidGame.Interface
             }
         }
 
-        private void OnLevelSelected(LevelData data)
+        private void OnLevelSelected(LevelData data, int levelIndex)
         {
-            Debug.Log($"[LevelSelectManager] Loading scene: {data.sceneToLoad} for Level: {data.levelName}");
+            Debug.Log($"[LevelSelectManager] Loading scene: {data.sceneToLoad} for Level: {data.levelName} (Lesson {levelIndex})");
+            if (SceneTransitionManager.Instance != null)
+            {
+                SceneTransitionManager.Instance.LoadLevelWithTransition(
+                    data.sceneToLoad,
+                    "LESSON " + levelIndex,
+                    data.levelName
+                );
+            }
+            else
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(data.sceneToLoad);
+            }
         }
     }
 }
