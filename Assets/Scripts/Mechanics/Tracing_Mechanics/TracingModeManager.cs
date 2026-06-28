@@ -1246,6 +1246,22 @@ namespace KidGame.Mechanics.Tracing
 
         private void UpdateScrollLocking()
         {
+            UpdateScrollLockingInternal();
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(UpdateScrollLockingRoutine());
+            }
+        }
+
+        private System.Collections.IEnumerator UpdateScrollLockingRoutine()
+        {
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            UpdateScrollLockingInternal();
+        }
+
+        private void UpdateScrollLockingInternal()
+        {
             UpdateScrollLockForContainer(portraitTutorialContent);
             UpdateScrollLockForContainer(portraitGameContent);
             UpdateScrollLockForContainer(landscapeTutorialContent);
@@ -1268,6 +1284,10 @@ namespace KidGame.Mechanics.Tracing
 
             if (contentRt != null && viewportRt != null)
             {
+                // Force-rebuild all nested child layouts recursively first, ensuring ContentSizeFitter / LayoutGroup
+                // components have fully computed their actual size before the parent contentRt layout is rebuilt.
+                RebuildLayoutsRecursive(contentRt);
+
                 // Force layout rebuild on both to get exact current dimensions
                 LayoutRebuilder.ForceRebuildLayoutImmediate(viewportRt);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
@@ -1299,6 +1319,24 @@ namespace KidGame.Mechanics.Tracing
                 {
                     scrollRect.vertical = (contentRt.rect.height > viewportRt.rect.height);
                     scrollRect.horizontal = false;
+                }
+            }
+        }
+
+        private void RebuildLayoutsRecursive(Transform t)
+        {
+            if (t == null) return;
+            for (int i = 0; i < t.childCount; i++)
+            {
+                var child = t.GetChild(i);
+                if (child != null)
+                {
+                    RebuildLayoutsRecursive(child);
+                    var childRt = child as RectTransform;
+                    if (childRt != null)
+                    {
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(childRt);
+                    }
                 }
             }
         }

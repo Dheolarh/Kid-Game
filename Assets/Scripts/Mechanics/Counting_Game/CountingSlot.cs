@@ -27,6 +27,8 @@ namespace KidGame.Mechanics.Counting
 
             // Pass a lambda so AnswerDropZone doesn't need to reference CountingSlot/Manager directly
             dropZone.Setup(count, () => manager.OnSlotAnswered(this));
+            _itemCount = count;
+            _isSetup = true;
             AdjustHeights(count);
         }
 
@@ -43,6 +45,8 @@ namespace KidGame.Mechanics.Counting
             }
 
             dropZone.Setup(totalSum, () => manager.OnSlotAnswered(this));
+            _itemCount = itemPrefabs.Count;
+            _isSetup = true;
             AdjustHeights(itemPrefabs.Count);
         }
 
@@ -75,8 +79,34 @@ namespace KidGame.Mechanics.Counting
             }
         }
 
+        private int _itemCount = -1;
+        private bool _isSetup = false;
+        private float _lastParentWidth = -1f;
+
+        private void Update()
+        {
+            if (!_isSetup || _itemCount <= 0) return;
+
+            var parentRt = transform.parent as RectTransform;
+            if (parentRt != null)
+            {
+                float parentWidth = parentRt.rect.width;
+                if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
+                {
+                    _lastParentWidth = parentWidth;
+                    AdjustHeights(_itemCount);
+                }
+            }
+        }
+
         private void AdjustHeights(int itemCount)
         {
+            var parentRt = transform.parent as RectTransform;
+            if (parentRt != null)
+            {
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(parentRt);
+            }
+
             CacheInitialHeights();
 
             float gridHeight = GetGridCalculatedHeight(objectGrid, itemCount);

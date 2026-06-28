@@ -60,6 +60,11 @@ namespace KidGame.Mechanics.Addition
                 bool rightOk = rightDropZone == null || !rightDropZone.gameObject.activeSelf || rightDropZone.IsAnswered;
                 return leftOk && rightOk;
             });
+            _leftCount = leftCount;
+            _rightCount = rightCount;
+            _countAddMode = countAddMode;
+            _isSetup = true;
+
             AdjustHeights(leftCount, rightCount, countAddMode);
         }
 
@@ -95,6 +100,11 @@ namespace KidGame.Mechanics.Addition
                 bool rightOk = rightDropZone == null || !rightDropZone.gameObject.activeSelf || rightDropZone.IsAnswered;
                 return leftOk && rightOk;
             });
+            _leftCount = leftDicePrefabs.Count;
+            _rightCount = rightDicePrefabs.Count;
+            _countAddMode = countAddMode;
+            _isSetup = true;
+
             AdjustHeights(leftDicePrefabs.Count, rightDicePrefabs.Count, countAddMode);
         }
 
@@ -110,8 +120,30 @@ namespace KidGame.Mechanics.Addition
             }
         }
 
+        private int _leftCount = -1;
+        private int _rightCount = -1;
+        private bool _countAddMode;
+        private bool _isSetup = false;
+        private float _lastParentWidth = -1f;
+
         private float _initialSlotHeight = -1f;
         private float _initialObjectBoxHeight = -1f;
+
+        private void Update()
+        {
+            if (!_isSetup || _leftCount < 0 || _rightCount < 0) return;
+
+            var parentRt = transform.parent as RectTransform;
+            if (parentRt != null)
+            {
+                float parentWidth = parentRt.rect.width;
+                if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
+                {
+                    _lastParentWidth = parentWidth;
+                    AdjustHeights(_leftCount, _rightCount, _countAddMode);
+                }
+            }
+        }
 
         private void CacheInitialHeights()
         {
@@ -152,6 +184,12 @@ namespace KidGame.Mechanics.Addition
 
         private void AdjustHeights(int leftCount, int rightCount, bool countAddMode)
         {
+            var parentRt = transform.parent as RectTransform;
+            if (parentRt != null)
+            {
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(parentRt);
+            }
+
             CacheInitialHeights();
 
             var aLeft = ActualLeftGrid;

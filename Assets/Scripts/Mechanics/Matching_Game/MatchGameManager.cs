@@ -758,6 +758,22 @@ namespace KidGame.Mechanics.Matching
 
         private void UpdateScrollLocking()
         {
+            UpdateScrollLockingInternal();
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(UpdateScrollLockingRoutine());
+            }
+        }
+
+        private System.Collections.IEnumerator UpdateScrollLockingRoutine()
+        {
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            UpdateScrollLockingInternal();
+        }
+
+        private void UpdateScrollLockingInternal()
+        {
             UpdateScrollLockForContainer(portraitContent);
             UpdateScrollLockForContainer(landscapeContent);
         }
@@ -777,36 +793,34 @@ namespace KidGame.Mechanics.Matching
 
             if (viewportRt != null)
             {
+                // Force-rebuild all nested child layouts recursively first, ensuring ContentSizeFitter / LayoutGroup
+                // components have fully computed their actual size before the parent contentRt layout is rebuilt.
+                RebuildLayoutsRecursive(contentRt);
+
                 LayoutRebuilder.ForceRebuildLayoutImmediate(viewportRt);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
 
-                bool isLandscape = false;
-                Transform curr = contentRt;
-                while (curr != null)
-                {
-                    string nameLower = curr.name.ToLower();
-                    if (nameLower.Contains("landscape") || nameLower.Contains("lanscape"))
-                    {
-                        isLandscape = true;
-                        break;
-                    }
-                    if (nameLower.Contains("portrait") || nameLower.Contains("potrait"))
-                    {
-                        isLandscape = false;
-                        break;
-                    }
-                    curr = curr.parent;
-                }
+                // Matching game is always a vertical list of rows in both orientations
+                float contentHeight = Mathf.Max(contentRt.rect.height, UnityEngine.UI.LayoutUtility.GetPreferredHeight(contentRt));
+                scrollRect.vertical = (contentHeight > viewportRt.rect.height);
+                scrollRect.horizontal = false;
+            }
+        }
 
-                if (isLandscape)
+        private void RebuildLayoutsRecursive(Transform t)
+        {
+            if (t == null) return;
+            for (int i = 0; i < t.childCount; i++)
+            {
+                var child = t.GetChild(i);
+                if (child != null)
                 {
-                    scrollRect.horizontal = (contentRt.rect.width > viewportRt.rect.width);
-                    scrollRect.vertical = false;
-                }
-                else
-                {
-                    scrollRect.vertical = (contentRt.rect.height > viewportRt.rect.height);
-                    scrollRect.horizontal = false;
+                    RebuildLayoutsRecursive(child);
+                    var childRt = child as RectTransform;
+                    if (childRt != null)
+                    {
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(childRt);
+                    }
                 }
             }
         }

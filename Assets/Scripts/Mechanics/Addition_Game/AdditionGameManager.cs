@@ -507,6 +507,22 @@ namespace KidGame.Mechanics.Addition
 
         private void UpdateScrollLocking()
         {
+            UpdateScrollLockingInternal();
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(UpdateScrollLockingRoutine());
+            }
+        }
+
+        private System.Collections.IEnumerator UpdateScrollLockingRoutine()
+        {
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            UpdateScrollLockingInternal();
+        }
+
+        private void UpdateScrollLockingInternal()
+        {
             UpdateScrollLockForContainer(portraitSlotsContainer);
             UpdateScrollLockForContainer(portraitAnswersContainer);
             UpdateScrollLockForContainer(landscapeSlotsContainer);
@@ -529,36 +545,45 @@ namespace KidGame.Mechanics.Addition
 
             if (contentRt != null && viewportRt != null)
             {
+                // Force-rebuild all nested child layouts recursively first, ensuring ContentSizeFitter / LayoutGroup
+                // components have fully computed their actual size before the parent contentRt layout is rebuilt.
+                RebuildLayoutsRecursive(contentRt);
+
                 LayoutRebuilder.ForceRebuildLayoutImmediate(viewportRt);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
 
-                bool isLandscape = false;
-                Transform curr = container;
-                while (curr != null)
-                {
-                    string nameLower = curr.name.ToLower();
-                    if (nameLower.Contains("landscape") || nameLower.Contains("lanscape"))
-                    {
-                        isLandscape = true;
-                        break;
-                    }
-                    if (nameLower.Contains("portrait") || nameLower.Contains("potrait"))
-                    {
-                        isLandscape = false;
-                        break;
-                    }
-                    curr = curr.parent;
-                }
+                // Portrait answers scroll horizontally, all other lists (slots and landscape answers) scroll vertically
+                bool scrollVertical = (container != portraitAnswersContainer);
 
-                if (isLandscape)
+                if (scrollVertical)
                 {
-                    scrollRect.horizontal = (contentRt.rect.width > viewportRt.rect.width);
-                    scrollRect.vertical = false;
+                    float contentHeight = Mathf.Max(contentRt.rect.height, UnityEngine.UI.LayoutUtility.GetPreferredHeight(contentRt));
+                    scrollRect.vertical = (contentHeight > viewportRt.rect.height);
+                    scrollRect.horizontal = false;
                 }
                 else
                 {
-                    scrollRect.vertical = (contentRt.rect.height > viewportRt.rect.height);
-                    scrollRect.horizontal = false;
+                    float contentWidth = Mathf.Max(contentRt.rect.width, UnityEngine.UI.LayoutUtility.GetPreferredWidth(contentRt));
+                    scrollRect.horizontal = (contentWidth > viewportRt.rect.width);
+                    scrollRect.vertical = false;
+                }
+            }
+        }
+
+        private void RebuildLayoutsRecursive(Transform t)
+        {
+            if (t == null) return;
+            for (int i = 0; i < t.childCount; i++)
+            {
+                var child = t.GetChild(i);
+                if (child != null)
+                {
+                    RebuildLayoutsRecursive(child);
+                    var childRt = child as RectTransform;
+                    if (childRt != null)
+                    {
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(childRt);
+                    }
                 }
             }
         }

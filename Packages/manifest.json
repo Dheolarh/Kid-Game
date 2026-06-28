@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.gilzoide.lottie-player": "https://github.com/gilzoide/unity-lottie-player.git#1.1.1",
+    "com.gindemit.rlottie": "https://github.com/gindemit/unity-rlottie.git?path=/unity/RLottieUnity/Assets/LottiePlugin/#0.4.5",
     "com.nobi.roundedcorners": "https://github.com/kirevdokimov/Unity-UI-Rounded-Corners.git",
     "com.unity.2d.animation": "14.0.4",
     "com.unity.2d.aseprite": "4.0.2",
