@@ -152,8 +152,21 @@ namespace KidGame.Mechanics.Tracing
             // Initialize orientation
             _lastIsLandscape = Screen.width > Screen.height;
 
+            // Lock continue buttons at start until tracing/spelling tasks are completed
+            if (portraitContinueButton != null) portraitContinueButton.interactable = false;
+            if (landscapeContinueButton != null) landscapeContinueButton.interactable = false;
+
             // Perform initial sequencing update
             UpdateAllSequencing();
+
+            if (spellModeActive)
+            {
+                StartCoroutine(ForceSpellModeCompletionRoutine());
+            }
+            else
+            {
+                CheckNormalModeComplete();
+            }
         }
 
         private void Update()
@@ -403,17 +416,17 @@ namespace KidGame.Mechanics.Tracing
                 SafeDestroy(container.GetChild(i).gameObject);
             }
 
+            // Determine which continue button belongs to this container and lock it
+            bool isLandscapeContainer = IsLandscapeContainer(container);
+            Button activeContinueButton = isLandscapeContainer ? landscapeContinueButton : portraitContinueButton;
+            if (activeContinueButton != null)
+            {
+                activeContinueButton.interactable = false;
+            }
+
             if (spellModeActive)
             {
                 disableScrollingLayout = true;
-
-                // Determine which continue button belongs to this container and lock it
-                bool isLandscapeContainer = IsLandscapeContainer(container);
-                Button activeContinueButton = isLandscapeContainer ? landscapeContinueButton : portraitContinueButton;
-                if (activeContinueButton != null)
-                {
-                    activeContinueButton.interactable = false;
-                }
             }
 
             if (disableScrollingLayout)
@@ -458,37 +471,12 @@ namespace KidGame.Mechanics.Tracing
                 }
 
                 List<string> entriesToSpawn = new List<string>();
-                if (valuesToTrace.Count > 1)
+                for (int i = 0; i < Mathf.Min(valuesToTrace.Count, customSpawnCount); i++)
                 {
-                    for (int i = 0; i < Mathf.Min(valuesToTrace.Count, customSpawnCount); i++)
+                    string raw = valuesToTrace[i].Trim();
+                    if (!string.IsNullOrEmpty(raw))
                     {
-                        entriesToSpawn.Add(valuesToTrace[i].Trim());
-                    }
-                }
-                else if (valuesToTrace.Count == 1)
-                {
-                    string raw = valuesToTrace[0];
-                    if (raw.Contains(","))
-                    {
-                        string[] parts = raw.Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
-                        for (int i = 0; i < Mathf.Min(parts.Length, customSpawnCount); i++)
-                        {
-                            entriesToSpawn.Add(parts[i].Trim());
-                        }
-                    }
-                    else
-                    {
-                        if (raw.Length >= customSpawnCount)
-                        {
-                            for (int i = 0; i < customSpawnCount; i++)
-                            {
-                                entriesToSpawn.Add(raw[i].ToString());
-                            }
-                        }
-                        else
-                        {
-                            entriesToSpawn.Add(raw);
-                        }
+                        entriesToSpawn.Add(raw);
                     }
                 }
 
@@ -594,7 +582,7 @@ namespace KidGame.Mechanics.Tracing
                     List<string> spellingParts = new List<string>();
                     foreach (string entry in entriesToSpawn)
                     {
-                        spellingParts.Add(IsNumericExpression(entry) ? NumberToWords(int.Parse(entry)).ToLower() : entry.ToLower());
+                        spellingParts.Add(IsNumericExpression(entry) ? NumberToWords(int.Parse(entry)).ToUpper() : entry.ToUpper());
                     }
                     string targetSpelling = string.Join(" ", spellingParts);
 
@@ -620,10 +608,11 @@ namespace KidGame.Mechanics.Tracing
                             {
                                 GameObject zoneGo = Instantiate(spellDropZonePrefab, slotsGridGo.transform);
                                 var zone = zoneGo.GetComponent<AnswerDropZone>();
-                                if (zone != null)
+                                if (zone == null)
                                 {
-                                    zone.Setup((int)c, () => CheckSpellingComplete());
+                                    zone = zoneGo.AddComponent<AnswerDropZone>();
                                 }
+                                zone.Setup((int)c, () => CheckSpellingComplete());
                             }
                         }
                     }
@@ -637,7 +626,7 @@ namespace KidGame.Mechanics.Tracing
                     }
 
                     // Add distractors
-                    string alphabet = "abcdefghijklmnopqrstuvwxyz";
+                    string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     for (int i = 0; i < 4; i++)
                     {
                         trayLetters.Add(alphabet[UnityEngine.Random.Range(0, alphabet.Length)]);
@@ -1045,6 +1034,7 @@ namespace KidGame.Mechanics.Tracing
             {
                 childTracer.OnCompletedEvent.AddListener(() => {
                     UpdateSequencingState(subTracers);
+                    CheckNormalModeComplete();
                 });
             }
         }
@@ -1384,6 +1374,7 @@ namespace KidGame.Mechanics.Tracing
                     if (fillImg != null)
                     {
                         fillImg.fillAmount = 1f;
+                        fillImg.color = tracer.TraceColor;
                     }
                 }
             }
@@ -1451,6 +1442,78 @@ namespace KidGame.Mechanics.Tracing
                 if (trigger != null)
                 {
                     btn.onClick.Invoke();
+                }
+            }
+        }
+
+        private bool IsAllTracingComplete()
+        {
+            bool portraitActive = portraitGameMode != null && portraitGameMode.activeInHierarchy;
+            var activeList = portraitActive ? _portraitRowTracers : _landscapeRowTracers;
+
+            if (activeList.Count == 0) return false;
+
+            foreach (var row in activeList)
+            {
+                foreach (var tracer in row)
+                {
+                    if (tracer == null) continue;
+                    if (!tracer.IsCompleted)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private void CheckNormalModeComplete()
+        {
+            if (spellModeActive) return;
+
+            if (IsAllTracingComplete())
+            {
+                Debug.Log("[TracingModeManager] All shapes traced successfully!");
+                StartCoroutine(NormalModeSuccessRoutine());
+            }
+        }
+
+        private IEnumerator NormalModeSuccessRoutine()
+        {
+            yield return new WaitForSeconds(1.2f);
+
+            var btn = GetActiveContinueButton();
+            if (btn != null)
+            {
+                btn.interactable = true;
+                var trigger = btn.GetComponent<SceneTransitionTrigger>();
+                if (trigger != null)
+                {
+                    btn.onClick.Invoke();
+                }
+            }
+        }
+
+        private IEnumerator ForceSpellModeCompletionRoutine()
+        {
+            // Wait 3 frames to ensure all SlotTracer and Shape Start() methods have fully run and initialized
+            yield return null;
+            yield return null;
+            yield return null;
+
+            foreach (var list in _portraitRowTracers)
+            {
+                foreach (var tracer in list)
+                {
+                    MakeShapeFullyTraced(tracer);
+                }
+            }
+
+            foreach (var list in _landscapeRowTracers)
+            {
+                foreach (var tracer in list)
+                {
+                    MakeShapeFullyTraced(tracer);
                 }
             }
         }
@@ -1977,6 +2040,8 @@ namespace KidGame.Mechanics.Tracing
             UpdateScrollLockForContainer(portraitGameContent);
             UpdateScrollLockForContainer(landscapeTutorialContent);
             UpdateScrollLockForContainer(landscapeGameContent);
+            UpdateScrollLockForContainer(portraitAnswerCardsContainer);
+            UpdateScrollLockForContainer(landscapeAnswerCardsContainer);
         }
 
         private void UpdateScrollLockForContainer(Transform container)
@@ -2021,15 +2086,33 @@ namespace KidGame.Mechanics.Tracing
                     curr = curr.parent;
                 }
 
-                if (isLandscape)
+                // Determine scrolling direction:
+                // - portraitAnswerCardsContainer scrolls HORIZONTALLY.
+                // - landscapeAnswerCardsContainer scrolls VERTICALLY.
+                // - For other containers, portrait is VERTICAL and landscape is HORIZONTAL.
+                bool scrollVertical;
+                if (container == portraitAnswerCardsContainer)
                 {
-                    scrollRect.horizontal = (contentRt.rect.width > viewportRt.rect.width);
-                    scrollRect.vertical = false;
+                    scrollVertical = false;
+                }
+                else if (container == landscapeAnswerCardsContainer)
+                {
+                    scrollVertical = true;
                 }
                 else
                 {
+                    scrollVertical = !isLandscape;
+                }
+
+                if (scrollVertical)
+                {
                     scrollRect.vertical = (contentRt.rect.height > viewportRt.rect.height);
                     scrollRect.horizontal = false;
+                }
+                else
+                {
+                    scrollRect.horizontal = (contentRt.rect.width > viewportRt.rect.width);
+                    scrollRect.vertical = false;
                 }
             }
         }

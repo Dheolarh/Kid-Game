@@ -151,11 +151,25 @@ namespace KidGame.Mechanics.Counting
                 return;
             }
 
-            // Offset the card above the thumb — child can always see the number
-            transform.position = new Vector3(
-                eventData.position.x,
-                eventData.position.y + dragOffsetY,
-                transform.position.z);
+            if (_cachedCanvas == null)
+            {
+                _cachedCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
+            }
+
+            Camera cam = (_cachedCanvas != null && _cachedCanvas.renderMode == RenderMode.ScreenSpaceCamera)
+                ? _cachedCanvas.worldCamera : null;
+
+            Vector3 worldPos;
+            Vector2 screenPoint = new Vector2(eventData.position.x, eventData.position.y + dragOffsetY);
+
+            if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
+                transform.parent as RectTransform,
+                screenPoint,
+                cam,
+                out worldPos))
+            {
+                transform.position = new Vector3(worldPos.x, worldPos.y, transform.position.z);
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
