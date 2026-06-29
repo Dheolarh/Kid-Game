@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using KidGame.Mechanics.Counting;
+using KidGame.Interface;
 
 namespace KidGame.Mechanics.Tracing
 {
@@ -23,6 +25,26 @@ namespace KidGame.Mechanics.Tracing
         [SerializeField] private bool disableScrollingLayout = false;
         [Tooltip("The number of characters/objects to spawn (1, 2, or 4) when scrolling is disabled.")]
         [SerializeField, Range(1, 4)] private int customSpawnCount = 1;
+
+        [Header("Spell Mode Settings")]
+        [Tooltip("If true, Spell Mode is active: the numerals appear fully traced, and kids must spell out the number names.")]
+        [SerializeField] private bool spellModeActive = false;
+        [Tooltip("Draggable AnswerCard prefab used to represent letter cards (shared for both orientations).")]
+        [SerializeField] private GameObject spellAnswerCardPrefab;
+        [Tooltip("AnswerDropZone prefab used to represent letter drop slots (shared for both orientations).")]
+        [SerializeField] private GameObject spellDropZonePrefab;
+
+        [Header("Spell Mode – Next Buttons")]
+        [Tooltip("Continue / Next button in the PORTRAIT layout. Locked until spelling is complete.")]
+        [SerializeField] private Button portraitContinueButton;
+        [Tooltip("Continue / Next button in the LANDSCAPE layout. Locked until spelling is complete.")]
+        [SerializeField] private Button landscapeContinueButton;
+
+        [Header("Spell Mode – Answer Card Tray Containers")]
+        [Tooltip("The container Transform in the PORTRAIT layout where answer cards spawn so the player can drag from.")]
+        [SerializeField] private Transform portraitAnswerCardsContainer;
+        [Tooltip("The container Transform in the LANDSCAPE layout where answer cards spawn so the player can drag from.")]
+        [SerializeField] private Transform landscapeAnswerCardsContainer;
 
         [Header("Dynamic Slots")]
         [Tooltip("Optional list of numbers (e.g. '123') or word phrases (e.g. 'one hundred forty eight') to trace dynamically. If empty, defaults to spawning the editor prefab's shape slotCount times.")]
@@ -381,6 +403,19 @@ namespace KidGame.Mechanics.Tracing
                 SafeDestroy(container.GetChild(i).gameObject);
             }
 
+            if (spellModeActive)
+            {
+                disableScrollingLayout = true;
+
+                // Determine which continue button belongs to this container and lock it
+                bool isLandscapeContainer = IsLandscapeContainer(container);
+                Button activeContinueButton = isLandscapeContainer ? landscapeContinueButton : portraitContinueButton;
+                if (activeContinueButton != null)
+                {
+                    activeContinueButton.interactable = false;
+                }
+            }
+
             if (disableScrollingLayout)
             {
                 var containerVlg = container.GetComponent<VerticalLayoutGroup>();
@@ -457,6 +492,17 @@ namespace KidGame.Mechanics.Tracing
                     }
                 }
 
+                // Color palette for letter cards
+                Color[] cardColors = new Color[]
+                {
+                    new Color(0.98f, 0.48f, 0.48f), // Soft Red
+                    new Color(0.48f, 0.72f, 0.98f), // Soft Blue
+                    new Color(0.48f, 0.98f, 0.72f), // Soft Green
+                    new Color(0.98f, 0.85f, 0.48f), // Soft Yellow
+                    new Color(0.85f, 0.48f, 0.98f), // Soft Purple
+                    new Color(0.98f, 0.65f, 0.48f)  // Soft Orange
+                };
+
                 foreach (string entryVal in entriesToSpawn)
                 {
                     if (string.IsNullOrWhiteSpace(entryVal)) continue;
@@ -487,7 +533,148 @@ namespace KidGame.Mechanics.Tracing
                     var le = slotRowGo.GetComponent<LayoutElement>();
                     if (le == null) le = slotRowGo.AddComponent<LayoutElement>();
 
-                    PopulateSlotRowCharacters(slotRowGo, entryVal, isNumeric, 250f, rowTracersList);
+                    List<List<SlotTracer>> currentTracers = new List<List<SlotTracer>>();
+                    PopulateSlotRowCharacters(slotRowGo, entryVal, isNumeric, 250f, currentTracers);
+
+                    if (spellModeActive)
+                    {
+                        foreach (var list in currentTracers)
+                        {
+                            foreach (var tracer in list)
+                            {
+                                MakeShapeFullyTraced(tracer);
+                            }
+                        }
+                    }
+
+                    foreach (var list in currentTracers)
+                    {
+                        rowTracersList.Add(list);
+                    }
+                }
+
+                if (spellModeActive)
+                {
+                    // Spawn spelling UI parent
+                    GameObject spellingUiGo = new GameObject("SpellingUI", typeof(RectTransform));
+                    spellingUiGo.transform.SetParent(container, false);
+
+                    var spellingRt = spellingUiGo.GetComponent<RectTransform>();
+                    if (spellingRt != null)
+                    {
+                        spellingRt.anchorMin = new Vector2(0f, 0f);
+                        spellingRt.anchorMax = new Vector2(1f, 0.6f);
+                        spellingRt.offsetMin = Vector2.zero;
+                        spellingRt.offsetMax = Vector2.zero;
+                    }
+
+                    // Spawn slots-only container inside SpellingUI (drop zones for answer letters)
+                    GameObject slotsGridGo = new GameObject("AnswerSlotsGrid", typeof(RectTransform));
+                    slotsGridGo.transform.SetParent(spellingUiGo.transform, false);
+                    var slotsGridRt = slotsGridGo.GetComponent<RectTransform>();
+                    if (slotsGridRt != null)
+                    {
+                        // Fill entire SpellingUI (cards come from external tray container, not here)
+                        slotsGridRt.anchorMin = new Vector2(0f, 0f);
+                        slotsGridRt.anchorMax = new Vector2(1f, 1f);
+                        slotsGridRt.offsetMin = Vector2.zero;
+                        slotsGridRt.offsetMax = Vector2.zero;
+                    }
+                    var slotsGridGroup = slotsGridGo.AddComponent<GridLayoutGroup>();
+                    slotsGridGroup.childAlignment = TextAnchor.MiddleCenter;
+
+                    // Calculate layout metrics
+                    float availableWidth = GetContainerWidth(container);
+                    float slotCellSize = Mathf.Max(45f, Mathf.Min(80f, availableWidth / 14f));
+
+                    slotsGridGroup.cellSize = new Vector2(slotCellSize, slotCellSize);
+                    slotsGridGroup.spacing = new Vector2(10f, 10f);
+
+                    // Combine all entries to form spelling target
+                    List<string> spellingParts = new List<string>();
+                    foreach (string entry in entriesToSpawn)
+                    {
+                        spellingParts.Add(IsNumericExpression(entry) ? NumberToWords(int.Parse(entry)).ToLower() : entry.ToLower());
+                    }
+                    string targetSpelling = string.Join(" ", spellingParts);
+
+                    // Spawn slots
+                    foreach (char c in targetSpelling)
+                    {
+                        if (c == ' ')
+                        {
+                            GameObject spacer = new GameObject("SpaceSpacer", typeof(RectTransform));
+                            spacer.transform.SetParent(slotsGridGo.transform, false);
+                            var spacerRt = spacer.GetComponent<RectTransform>();
+                            if (spacerRt != null)
+                            {
+                                spacerRt.sizeDelta = new Vector2(slotCellSize, slotCellSize);
+                            }
+                            var spacerLe = spacer.AddComponent<LayoutElement>();
+                            spacerLe.preferredWidth = slotCellSize;
+                            spacerLe.preferredHeight = slotCellSize;
+                        }
+                        else
+                        {
+                            if (spellDropZonePrefab != null)
+                            {
+                                GameObject zoneGo = Instantiate(spellDropZonePrefab, slotsGridGo.transform);
+                                var zone = zoneGo.GetComponent<AnswerDropZone>();
+                                if (zone != null)
+                                {
+                                    zone.Setup((int)c, () => CheckSpellingComplete());
+                                }
+                            }
+                        }
+                    }
+
+                    // Spawn tray cards
+                    string cleanSpelling = targetSpelling.Replace(" ", "");
+                    List<char> trayLetters = new List<char>();
+                    foreach (char c in cleanSpelling)
+                    {
+                        trayLetters.Add(c);
+                    }
+
+                    // Add distractors
+                    string alphabet = "abcdefghijklmnopqrstuvwxyz";
+                    for (int i = 0; i < 4; i++)
+                    {
+                        trayLetters.Add(alphabet[UnityEngine.Random.Range(0, alphabet.Length)]);
+                    }
+
+                    // Shuffle
+                    for (int i = 0; i < trayLetters.Count; i++)
+                    {
+                        char temp = trayLetters[i];
+                        int rIdx = UnityEngine.Random.Range(i, trayLetters.Count);
+                        trayLetters[i] = trayLetters[rIdx];
+                        trayLetters[rIdx] = temp;
+                    }
+
+                    // Spawn answer cards into the pre-assigned portrait or landscape container
+                    bool isLandscapeTray = IsLandscapeContainer(container);
+                    Transform cardTrayContainer = isLandscapeTray ? landscapeAnswerCardsContainer : portraitAnswerCardsContainer;
+
+                    if (cardTrayContainer != null && spellAnswerCardPrefab != null)
+                    {
+                        // Clear any pre-existing children in the tray container
+                        for (int i = cardTrayContainer.childCount - 1; i >= 0; i--)
+                        {
+                            SafeDestroy(cardTrayContainer.GetChild(i).gameObject);
+                        }
+
+                        foreach (char letter in trayLetters)
+                        {
+                            GameObject cardGo = Instantiate(spellAnswerCardPrefab, cardTrayContainer);
+                            var card = cardGo.GetComponent<AnswerCard>();
+                            if (card != null)
+                            {
+                                Color cardColor = cardColors[UnityEngine.Random.Range(0, cardColors.Length)];
+                                card.Setup((int)letter, cardColor);
+                            }
+                        }
+                    }
                 }
                 return;
             }
@@ -1029,6 +1216,55 @@ namespace KidGame.Mechanics.Tracing
             return true;
         }
 
+        private string NumberToWords(int number)
+        {
+            if (number == 0)
+                return "zero";
+
+            if (number < 0)
+                return "minus " + NumberToWords(Mathf.Abs(number));
+
+            string words = "";
+
+            if ((number / 1000000) > 0)
+            {
+                words += NumberToWords(number / 1000000) + " million ";
+                number %= 1000000;
+            }
+
+            if ((number / 1000) > 0)
+            {
+                words += NumberToWords(number / 1000) + " thousand ";
+                number %= 1000;
+            }
+
+            if ((number / 100) > 0)
+            {
+                words += NumberToWords(number / 100) + " hundred ";
+                number %= 100;
+            }
+
+            if (number > 0)
+            {
+                if (words != "")
+                    words += "and ";
+
+                var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+                var tensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+
+                if (number < 20)
+                    words += unitsMap[number];
+                else
+                {
+                    words += tensMap[number / 10];
+                    if ((number % 10) > 0)
+                        words += " " + unitsMap[number % 10];
+                }
+            }
+
+            return System.Text.RegularExpressions.Regex.Replace(words.Trim(), @"\s+", " ");
+        }
+
         private string FilterWord(string word)
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -1116,6 +1352,107 @@ namespace KidGame.Mechanics.Tracing
                 curr = curr.parent;
             }
             return Screen.width > Screen.height;
+        }
+
+        private void MakeShapeFullyTraced(SlotTracer tracer)
+        {
+            if (tracer == null) return;
+            tracer.EnsureShapeSpawned();
+
+            if (tracer.shape != null)
+            {
+                tracer.shape.completed = true;
+                tracer.shape.DisableTracingHand();
+
+                foreach (var path in tracer.shape.paths)
+                {
+                    if (path == null) continue;
+                    path.completed = true;
+                    path.DisableStartCollider();
+                    path.SetNumbersVisibility(false);
+
+                    Image fillImg = null;
+                    for (int i = 0; i < path.transform.childCount; i++)
+                    {
+                        var child = path.transform.GetChild(i);
+                        if (child.name == "Fill" || child.CompareTag("Fill"))
+                        {
+                            fillImg = child.GetComponent<Image>();
+                            break;
+                        }
+                    }
+                    if (fillImg != null)
+                    {
+                        fillImg.fillAmount = 1f;
+                    }
+                }
+            }
+        }
+
+        private List<AnswerDropZone> GetActiveSpellingZones()
+        {
+            List<AnswerDropZone> activeZones = new List<AnswerDropZone>();
+
+            // Determine which game content is currently visible
+            bool portraitActive = portraitGameMode != null && portraitGameMode.activeInHierarchy;
+            Transform activeContent = portraitActive ? portraitGameContent : landscapeGameContent;
+
+            if (activeContent != null)
+            {
+                // Search directly for AnswerDropZone children under any SpellingUI in this content
+                var spellingUi = activeContent.Find("SpellingUI");
+                if (spellingUi != null)
+                {
+                    var zones = spellingUi.GetComponentsInChildren<AnswerDropZone>(true);
+                    activeZones.AddRange(zones);
+                }
+            }
+            return activeZones;
+        }
+
+        private Button GetActiveContinueButton()
+        {
+            bool portraitActive = portraitGameMode != null && portraitGameMode.activeInHierarchy;
+            return portraitActive ? portraitContinueButton : landscapeContinueButton;
+        }
+
+        private void CheckSpellingComplete()
+        {
+            var activeZones = GetActiveSpellingZones();
+            if (activeZones.Count == 0) return;
+
+            bool allCorrect = true;
+            foreach (var zone in activeZones)
+            {
+                if (zone == null || !zone.IsAnswered)
+                {
+                    allCorrect = false;
+                    break;
+                }
+            }
+
+            if (allCorrect)
+            {
+                Debug.Log("[TracingModeManager] spelling completed successfully!");
+                StartCoroutine(SpellingSuccessRoutine());
+            }
+        }
+
+        private IEnumerator SpellingSuccessRoutine()
+        {
+            yield return new WaitForSeconds(1.2f);
+
+            // Unlock the continue button for whichever orientation is active
+            var btn = GetActiveContinueButton();
+            if (btn != null)
+            {
+                btn.interactable = true;
+                var trigger = btn.GetComponent<SceneTransitionTrigger>();
+                if (trigger != null)
+                {
+                    btn.onClick.Invoke();
+                }
+            }
         }
 
         private void RescaleShapeForCell(SlotTracer tracer, float cellSize)
@@ -1215,18 +1552,22 @@ namespace KidGame.Mechanics.Tracing
                 float rowWidth = w;
                 float rowHeight = h;
 
+                float effectiveH = spellModeActive ? h * 0.4f : h;
+                float yOffset = spellModeActive ? h * 0.6f : 0f;
+
                 // Position the slot row (rowRt) based on totalRows and index
                 if (totalRows == 1)
                 {
                     float leftPad = w * 0.15f;
                     float rightPad = w * 0.15f;
-                    float topPad = h * 0.15f;
-                    float bottomPad = h * 0.08f;
+                    float topPad = effectiveH * 0.15f;
+                    float bottomPad = effectiveH * 0.08f;
                     rowWidth = w - (leftPad + rightPad);
-                    rowHeight = h - (topPad + bottomPad);
+                    rowHeight = effectiveH - (topPad + bottomPad);
 
-                    rowRt.anchorMin = new Vector2(0.5f, 0.5f);
-                    rowRt.anchorMax = new Vector2(0.5f, 0.5f);
+                    float anchorY = (yOffset + effectiveH * 0.5f) / h;
+                    rowRt.anchorMin = new Vector2(0.5f, anchorY);
+                    rowRt.anchorMax = new Vector2(0.5f, anchorY);
                     rowRt.pivot = new Vector2(0.5f, 0.5f);
                     rowRt.anchoredPosition = new Vector2(0f, -(topPad - bottomPad) / 2f);
                     rowRt.sizeDelta = new Vector2(rowWidth, rowHeight);
@@ -1238,11 +1579,12 @@ namespace KidGame.Mechanics.Tracing
                         // Align horizontally (side-by-side)
                         float colW = w / 2f;
                         rowWidth = colW * 0.85f;
-                        rowHeight = h * 0.85f;
+                        rowHeight = effectiveH * 0.85f;
 
                         float anchorX = (rowIndex == 0) ? 0.25f : 0.75f;
-                        rowRt.anchorMin = new Vector2(anchorX, 0.5f);
-                        rowRt.anchorMax = new Vector2(anchorX, 0.5f);
+                        float anchorY = (yOffset + effectiveH * 0.5f) / h;
+                        rowRt.anchorMin = new Vector2(anchorX, anchorY);
+                        rowRt.anchorMax = new Vector2(anchorX, anchorY);
                         rowRt.pivot = new Vector2(0.5f, 0.5f);
                         rowRt.anchoredPosition = Vector2.zero;
                         rowRt.sizeDelta = new Vector2(rowWidth, rowHeight);
@@ -1250,11 +1592,11 @@ namespace KidGame.Mechanics.Tracing
                     else
                     {
                         // Align vertically (stacked)
-                        float rowH = h / 2f;
+                        float rowH = effectiveH / 2f;
                         rowWidth = w * 0.85f;
                         rowHeight = rowH * 0.85f;
 
-                        float anchorY = (rowIndex == 0) ? 0.75f : 0.25f;
+                        float anchorY = (yOffset + effectiveH * (rowIndex == 0 ? 0.75f : 0.25f)) / h;
                         rowRt.anchorMin = new Vector2(0.5f, anchorY);
                         rowRt.anchorMax = new Vector2(0.5f, anchorY);
                         rowRt.pivot = new Vector2(0.5f, 0.5f);
@@ -1265,12 +1607,12 @@ namespace KidGame.Mechanics.Tracing
                 else // 4 rows (2 x 2 grid)
                 {
                     float colW = w / 2f;
-                    float rowH = h / 2f;
+                    float rowH = effectiveH / 2f;
                     rowWidth = colW * 0.85f;
                     rowHeight = rowH * 0.85f;
 
                     float anchorX = (rowIndex % 2 == 0) ? 0.25f : 0.75f;
-                    float anchorY = (rowIndex / 2 == 0) ? 0.75f : 0.25f;
+                    float anchorY = (yOffset + effectiveH * (rowIndex / 2 == 0 ? 0.75f : 0.25f)) / h;
 
                     rowRt.anchorMin = new Vector2(anchorX, anchorY);
                     rowRt.anchorMax = new Vector2(anchorX, anchorY);
@@ -1308,6 +1650,32 @@ namespace KidGame.Mechanics.Tracing
                         }
                     }
                     RescaleShapeForCell(tracer, cellSize);
+                }
+            }
+
+            if (spellModeActive)
+            {
+                RectTransform spellingUiRt = containerRt.Find("SpellingUI") as RectTransform;
+                if (spellingUiRt != null)
+                {
+                    spellingUiRt.anchorMin = new Vector2(0f, 0f);
+                    spellingUiRt.anchorMax = new Vector2(1f, 0.6f);
+                    spellingUiRt.offsetMin = Vector2.zero;
+                    spellingUiRt.offsetMax = Vector2.zero;
+
+                    // Resize the drop-zone slots grid — tray cards live in the user-assigned container
+                    var slotsGrid = spellingUiRt.Find("AnswerSlotsGrid")?.GetComponent<GridLayoutGroup>();
+                    if (slotsGrid != null)
+                    {
+                        float spellingH = h * 0.6f;
+                        float slotCellSize = Mathf.Max(45f, Mathf.Min(80f, w / 14f));
+                        // Clamp so cells fit inside the SpellingUI height
+                        if (spellingH * 0.75f < slotCellSize)
+                            slotCellSize = spellingH * 0.75f;
+
+                        slotsGrid.cellSize = new Vector2(slotCellSize, slotCellSize);
+                        slotsGrid.spacing  = new Vector2(10f, 10f);
+                    }
                 }
             }
         }

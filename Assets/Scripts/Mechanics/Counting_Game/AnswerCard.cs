@@ -67,7 +67,16 @@ namespace KidGame.Mechanics.Counting
         {
             Value            = value;
             CardColor        = color;
-            label.text       = value.ToString();
+            
+            if (value == 32 || (value >= 65 && value <= 90) || (value >= 97 && value <= 122))
+            {
+                label.text = ((char)value).ToString();
+            }
+            else
+            {
+                label.text = value.ToString();
+            }
+            
             background.color = color;
 
             // Pop-in on spawn
