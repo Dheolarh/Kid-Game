@@ -43,6 +43,12 @@ namespace KidGame.Mechanics.Addition
                     var numGo = Instantiate(numberPrefab, objectBox);
                     numGo.name = $"number_{numbers[i]}";
 
+                    var card = numGo.GetComponent<AnswerCard>();
+                    if (card != null)
+                    {
+                        Destroy(card);
+                    }
+
                     var textComp = numGo.GetComponentInChildren<TMPro.TMP_Text>();
                     if (textComp != null) textComp.text = numbers[i].ToString();
 

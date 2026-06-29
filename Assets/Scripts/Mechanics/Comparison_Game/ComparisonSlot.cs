@@ -231,6 +231,12 @@ namespace KidGame.Mechanics.Comparison
 
         private void ConfigureNumberBox(GameObject go, int val, Color color)
         {
+            var card = go.GetComponent<AnswerCard>();
+            if (card != null)
+            {
+                Destroy(card);
+            }
+
             var textComp = go.GetComponentInChildren<TMPro.TMP_Text>();
             if (textComp != null) textComp.text = val.ToString();
 

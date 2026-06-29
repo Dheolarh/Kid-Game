@@ -11,6 +11,8 @@ namespace KidGame.Interface
     /// </summary>
     public class PauseMenuController : MonoBehaviour
     {
+        public static PauseMenuController Instance { get; private set; }
+
         [Header("Menu References")]
         [Tooltip("The main container GameObject of the pause menu (typically the Canvas GameObject).")]
         [SerializeField] private GameObject pauseMenuObject;
@@ -38,6 +40,11 @@ namespace KidGame.Interface
         private Vector3 _openBtnOriginalScale;
         private Vector3 _closeBtnOriginalScale;
         private bool _isTransitioning = false;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void Start()
         {
@@ -165,6 +172,10 @@ namespace KidGame.Interface
 
         private void OnDestroy()
         {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
             if (contentPanel != null) contentPanel.DOKill();
             if (openButton != null) openButton.transform.DOKill();
             if (closeButton != null) closeButton.transform.DOKill();

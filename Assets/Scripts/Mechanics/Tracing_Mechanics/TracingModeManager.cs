@@ -18,6 +18,12 @@ namespace KidGame.Mechanics.Tracing
         [Tooltip("Ratio of cell height to use as top padding inside each slot row.")]
         [SerializeField, Range(0f, 0.3f)] private float slotTopPaddingRatio = 0.08f;
 
+        [Header("Scroll Disabled Layout Settings")]
+        [Tooltip("If true, scrolling is disabled and a custom layout is applied to fit elements in the viewport.")]
+        [SerializeField] private bool disableScrollingLayout = false;
+        [Tooltip("The number of characters/objects to spawn (1, 2, or 4) when scrolling is disabled.")]
+        [SerializeField, Range(1, 4)] private int customSpawnCount = 1;
+
         [Header("Dynamic Slots")]
         [Tooltip("Optional list of numbers (e.g. '123') or word phrases (e.g. 'one hundred forty eight') to trace dynamically. If empty, defaults to spawning the editor prefab's shape slotCount times.")]
         [SerializeField] private List<string> valuesToTrace = new List<string>();
@@ -375,6 +381,117 @@ namespace KidGame.Mechanics.Tracing
                 SafeDestroy(container.GetChild(i).gameObject);
             }
 
+            if (disableScrollingLayout)
+            {
+                var containerVlg = container.GetComponent<VerticalLayoutGroup>();
+                if (containerVlg != null) SafeDestroy(containerVlg);
+
+                var containerHlg = container.GetComponent<HorizontalLayoutGroup>();
+                if (containerHlg != null) SafeDestroy(containerHlg);
+
+                var containerFitter = container.GetComponent<ContentSizeFitter>();
+                if (containerFitter != null) SafeDestroy(containerFitter);
+
+                var containerRt = container.GetComponent<RectTransform>();
+                if (containerRt != null)
+                {
+                    containerRt.anchorMin = Vector2.zero;
+                    containerRt.anchorMax = Vector2.one;
+                    containerRt.offsetMin = Vector2.zero;
+                    containerRt.offsetMax = Vector2.zero;
+                }
+
+                string rawVal = (valuesToTrace != null && valuesToTrace.Count > 0) ? valuesToTrace[0] : "";
+                if (string.IsNullOrWhiteSpace(rawVal))
+                {
+                    GameObject rowGo = Instantiate(slotPrefab, container);
+                    rowGo.name = "Slot_Default";
+                    var rt = rowGo.GetComponent<RectTransform>();
+                    if (rt != null)
+                    {
+                        rt.anchorMin = Vector2.zero;
+                        rt.anchorMax = Vector2.one;
+                        rt.offsetMin = Vector2.zero;
+                        rt.offsetMax = Vector2.zero;
+                    }
+                    var tracer = rowGo.GetComponent<SlotTracer>();
+                    if (tracer != null)
+                    {
+                        rowTracersList.Add(new List<SlotTracer> { tracer });
+                    }
+                    return;
+                }
+
+                List<string> entriesToSpawn = new List<string>();
+                if (valuesToTrace.Count > 1)
+                {
+                    for (int i = 0; i < Mathf.Min(valuesToTrace.Count, customSpawnCount); i++)
+                    {
+                        entriesToSpawn.Add(valuesToTrace[i].Trim());
+                    }
+                }
+                else if (valuesToTrace.Count == 1)
+                {
+                    string raw = valuesToTrace[0];
+                    if (raw.Contains(","))
+                    {
+                        string[] parts = raw.Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+                        for (int i = 0; i < Mathf.Min(parts.Length, customSpawnCount); i++)
+                        {
+                            entriesToSpawn.Add(parts[i].Trim());
+                        }
+                    }
+                    else
+                    {
+                        if (raw.Length >= customSpawnCount)
+                        {
+                            for (int i = 0; i < customSpawnCount; i++)
+                            {
+                                entriesToSpawn.Add(raw[i].ToString());
+                            }
+                        }
+                        else
+                        {
+                            entriesToSpawn.Add(raw);
+                        }
+                    }
+                }
+
+                foreach (string entryVal in entriesToSpawn)
+                {
+                    if (string.IsNullOrWhiteSpace(entryVal)) continue;
+
+                    bool isNumeric = IsNumericExpression(entryVal);
+                    GameObject slotRowGo = Instantiate(slotPrefab, container);
+                    if (isNumeric)
+                    {
+                        slotRowGo.name = $"Slot_Number_{entryVal}";
+                    }
+                    else
+                    {
+                        slotRowGo.name = $"Slot_Word_{entryVal}";
+                    }
+
+                    var rowTracer = slotRowGo.GetComponent<SlotTracer>();
+                    if (rowTracer != null) SafeDestroy(rowTracer);
+
+                    RectTransform rowRt = slotRowGo.GetComponent<RectTransform>();
+                    if (rowRt != null)
+                    {
+                        rowRt.anchorMin = Vector2.zero;
+                        rowRt.anchorMax = Vector2.one;
+                        rowRt.offsetMin = Vector2.zero;
+                        rowRt.offsetMax = Vector2.zero;
+                    }
+
+                    var le = slotRowGo.GetComponent<LayoutElement>();
+                    if (le == null) le = slotRowGo.AddComponent<LayoutElement>();
+
+                    PopulateSlotRowCharacters(slotRowGo, entryVal, isNumeric, 250f, rowTracersList);
+                }
+                return;
+            }
+
             // Fallback: If no values to trace are provided, use standard slotPrefab instantiation
             if (valuesToTrace == null || valuesToTrace.Count == 0)
             {
@@ -630,13 +747,26 @@ namespace KidGame.Mechanics.Tracing
 
             HorizontalLayoutGroup hlg = targetParent.GetComponent<HorizontalLayoutGroup>();
             if (hlg == null) hlg = targetParent.gameObject.AddComponent<HorizontalLayoutGroup>();
-            hlg.childAlignment = TextAnchor.MiddleLeft;
-            hlg.childControlWidth = true;
-            hlg.childControlHeight = true;
-            hlg.childForceExpandWidth = false;
-            hlg.childForceExpandHeight = false;
-            hlg.spacing = spacing;
-            hlg.padding = new RectOffset(0, 0, Mathf.RoundToInt(cellSize * slotTopPaddingRatio), 0);
+            if (disableScrollingLayout)
+            {
+                hlg.childAlignment = TextAnchor.MiddleCenter;
+                hlg.childControlWidth = true;
+                hlg.childControlHeight = true;
+                hlg.childForceExpandWidth = false;
+                hlg.childForceExpandHeight = false;
+                hlg.spacing = 10f;
+                hlg.padding = new RectOffset(0, 0, 0, 0);
+            }
+            else
+            {
+                hlg.childAlignment = TextAnchor.MiddleLeft;
+                hlg.childControlWidth = true;
+                hlg.childControlHeight = true;
+                hlg.childForceExpandWidth = false;
+                hlg.childForceExpandHeight = false;
+                hlg.spacing = spacing;
+                hlg.padding = new RectOffset(0, 0, Mathf.RoundToInt(cellSize * slotTopPaddingRatio), 0);
+            }
 
             // Remove/Disable Masks from rowGo and targetParent to avoid clipping paths or hand guides
             var rowMask = rowGo.GetComponent<Mask>();
@@ -975,8 +1105,221 @@ namespace KidGame.Mechanics.Tracing
             return foundAny ? minScale : 1f;
         }
 
+        private bool IsLandscapeContainer(Transform container)
+        {
+            Transform curr = container;
+            while (curr != null)
+            {
+                string nameLower = curr.name.ToLower();
+                if (nameLower.Contains("landscape") || nameLower.Contains("lanscape")) return true;
+                if (nameLower.Contains("portrait") || nameLower.Contains("potrait")) return false;
+                curr = curr.parent;
+            }
+            return Screen.width > Screen.height;
+        }
+
+        private void RescaleShapeForCell(SlotTracer tracer, float cellSize)
+        {
+            if (tracer == null || tracer.shape == null) return;
+            var shapeRt = tracer.shape.GetComponent<RectTransform>();
+            if (shapeRt != null)
+            {
+                float shapeSizeY = shapeRt.rect.height;
+                if (shapeSizeY <= 0f) shapeSizeY = 350f; // fallback design height
+                float scale = (cellSize / shapeSizeY) * (1f - tracer.SizePadding);
+                tracer.shape.transform.localScale = Vector3.one * scale;
+            }
+        }
+
+        private void ApplyScrollDisabledScale(List<List<SlotTracer>> rowList)
+        {
+            if (rowList.Count == 0 || rowList[0].Count == 0 || rowList[0][0] == null) return;
+
+            var firstTracer = rowList[0][0];
+            var container = FindContainer(firstTracer.transform);
+            if (container == null) return;
+
+            var containerRt = container.GetComponent<RectTransform>();
+            if (containerRt == null) return;
+
+            var parentRt = container.parent as RectTransform;
+            if (parentRt != null)
+            {
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(parentRt);
+            }
+            UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(containerRt);
+
+            bool isLandscape = IsLandscapeContainer(container);
+            float w = containerRt.rect.width;
+            float h = containerRt.rect.height;
+
+            if (w <= 0f) w = isLandscape ? Mathf.Max(Screen.width, Screen.height) : Mathf.Min(Screen.width, Screen.height);
+            if (h <= 0f) h = isLandscape ? Mathf.Min(Screen.width, Screen.height) : Mathf.Max(Screen.width, Screen.height);
+
+            int totalRows = rowList.Count;
+
+            // Check if all rows are numbers
+            bool isAllNumeric = true;
+            for (int i = 0; i < totalRows; i++)
+            {
+                var row = rowList[i];
+                if (row.Count > 0 && row[0] != null)
+                {
+                    RectTransform rowRt = null;
+                    Transform curr = row[0].transform.parent;
+                    while (curr != null)
+                    {
+                        if (curr.name.StartsWith("Slot_"))
+                        {
+                            rowRt = curr as RectTransform;
+                            break;
+                        }
+                        curr = curr.parent;
+                    }
+                    if (rowRt != null && !rowRt.name.StartsWith("Slot_Number_"))
+                    {
+                        isAllNumeric = false;
+                    }
+                }
+            }
+
+            for (int rowIndex = 0; rowIndex < totalRows; rowIndex++)
+            {
+                var row = rowList[rowIndex];
+                if (row.Count == 0 || row[0] == null) continue;
+
+                var tracer0 = row[0];
+                RectTransform rowRt = null;
+                Transform curr = tracer0.transform.parent;
+                while (curr != null)
+                {
+                    if (curr.name.StartsWith("Slot_"))
+                    {
+                        rowRt = curr as RectTransform;
+                        break;
+                    }
+                    curr = curr.parent;
+                }
+
+                if (rowRt == null) continue;
+
+                var tracerContainerRt = tracer0.transform.parent as RectTransform;
+                if (tracerContainerRt != null)
+                {
+                    tracerContainerRt.anchorMin = Vector2.zero;
+                    tracerContainerRt.anchorMax = Vector2.one;
+                    tracerContainerRt.offsetMin = Vector2.zero;
+                    tracerContainerRt.offsetMax = Vector2.zero;
+                }
+
+                float rowWidth = w;
+                float rowHeight = h;
+
+                // Position the slot row (rowRt) based on totalRows and index
+                if (totalRows == 1)
+                {
+                    float leftPad = w * 0.15f;
+                    float rightPad = w * 0.15f;
+                    float topPad = h * 0.15f;
+                    float bottomPad = h * 0.08f;
+                    rowWidth = w - (leftPad + rightPad);
+                    rowHeight = h - (topPad + bottomPad);
+
+                    rowRt.anchorMin = new Vector2(0.5f, 0.5f);
+                    rowRt.anchorMax = new Vector2(0.5f, 0.5f);
+                    rowRt.pivot = new Vector2(0.5f, 0.5f);
+                    rowRt.anchoredPosition = new Vector2(0f, -(topPad - bottomPad) / 2f);
+                    rowRt.sizeDelta = new Vector2(rowWidth, rowHeight);
+                }
+                else if (totalRows == 2)
+                {
+                    if (isLandscape && isAllNumeric)
+                    {
+                        // Align horizontally (side-by-side)
+                        float colW = w / 2f;
+                        rowWidth = colW * 0.85f;
+                        rowHeight = h * 0.85f;
+
+                        float anchorX = (rowIndex == 0) ? 0.25f : 0.75f;
+                        rowRt.anchorMin = new Vector2(anchorX, 0.5f);
+                        rowRt.anchorMax = new Vector2(anchorX, 0.5f);
+                        rowRt.pivot = new Vector2(0.5f, 0.5f);
+                        rowRt.anchoredPosition = Vector2.zero;
+                        rowRt.sizeDelta = new Vector2(rowWidth, rowHeight);
+                    }
+                    else
+                    {
+                        // Align vertically (stacked)
+                        float rowH = h / 2f;
+                        rowWidth = w * 0.85f;
+                        rowHeight = rowH * 0.85f;
+
+                        float anchorY = (rowIndex == 0) ? 0.75f : 0.25f;
+                        rowRt.anchorMin = new Vector2(0.5f, anchorY);
+                        rowRt.anchorMax = new Vector2(0.5f, anchorY);
+                        rowRt.pivot = new Vector2(0.5f, 0.5f);
+                        rowRt.anchoredPosition = Vector2.zero;
+                        rowRt.sizeDelta = new Vector2(rowWidth, rowHeight);
+                    }
+                }
+                else // 4 rows (2 x 2 grid)
+                {
+                    float colW = w / 2f;
+                    float rowH = h / 2f;
+                    rowWidth = colW * 0.85f;
+                    rowHeight = rowH * 0.85f;
+
+                    float anchorX = (rowIndex % 2 == 0) ? 0.25f : 0.75f;
+                    float anchorY = (rowIndex / 2 == 0) ? 0.75f : 0.25f;
+
+                    rowRt.anchorMin = new Vector2(anchorX, anchorY);
+                    rowRt.anchorMax = new Vector2(anchorX, anchorY);
+                    rowRt.pivot = new Vector2(0.5f, 0.5f);
+                    rowRt.anchoredPosition = Vector2.zero;
+                    rowRt.sizeDelta = new Vector2(rowWidth, rowHeight);
+                }
+
+                var rowLe = rowRt.GetComponent<LayoutElement>();
+                if (rowLe != null)
+                {
+                    rowLe.preferredWidth = rowWidth;
+                    rowLe.preferredHeight = rowHeight;
+                }
+
+                // Size and scale the character cells inside this row
+                int charCount = row.Count;
+                float spacing = 10f;
+                float availableRowWidth = rowWidth - Mathf.Max(0, charCount - 1) * spacing;
+                float cellW = availableRowWidth / charCount;
+                float cellSize = Mathf.Min(cellW, rowHeight);
+
+                foreach (var tracer in row)
+                {
+                    if (tracer == null) continue;
+                    var cellRt = tracer.GetComponent<RectTransform>();
+                    if (cellRt != null)
+                    {
+                        cellRt.sizeDelta = new Vector2(cellSize, cellSize);
+                        var cellLe = cellRt.GetComponent<LayoutElement>();
+                        if (cellLe != null)
+                        {
+                            cellLe.preferredWidth = cellSize;
+                            cellLe.preferredHeight = cellSize;
+                        }
+                    }
+                    RescaleShapeForCell(tracer, cellSize);
+                }
+            }
+        }
+
         private void ApplyUniformScale(List<List<SlotTracer>> rowList, float scale)
         {
+            if (disableScrollingLayout)
+            {
+                ApplyScrollDisabledScale(rowList);
+                return;
+            }
+
             if (scale <= 0f || scale == float.MaxValue) return;
             HashSet<RectTransform> parentsToRebuild = new HashSet<RectTransform>();
 

@@ -63,6 +63,12 @@ namespace KidGame.Mechanics.NumberRecall
                     var numberGo = Instantiate(numberPrefab, transform);
                     numberGo.name = $"number_{val}";
 
+                    var card = numberGo.GetComponent<AnswerCard>();
+                    if (card != null)
+                    {
+                        Destroy(card);
+                    }
+
                     var label = numberGo.GetComponentInChildren<TMPro.TMP_Text>();
                     if (label != null) label.text = val.ToString();
 

@@ -2,16 +2,21 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
-  tags: []
+  serializedVersion: 3
+  tags:
+  - Path
+  - Collider
+  - Number
+  - Start
+  - Fill
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Game
   - Water
   - UI
-  - 
+  - Tutor
   - 
   - 
   - 
@@ -41,3 +46,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BG
+    uniqueID: 1839616413
+    locked: 0
+  - name: Game
+    uniqueID: 106146905
+    locked: 0
+  - name: Dialogue
+    uniqueID: 669133579
+    locked: 0
+  - name: UI
+    uniqueID: 3266904709
+    locked: 0
+  - name: Game End
+    uniqueID: 2857114149
+    locked: 0
+  m_RenderingLayers:
+  - Default
+  m_MigratedRenderPipelines: []

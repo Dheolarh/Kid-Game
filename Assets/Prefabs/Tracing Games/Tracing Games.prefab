@@ -510,7 +510,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &931208073681555123
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1002,7 +1002,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.00024414062}
-  m_SizeDelta: {x: 0, y: -927.9972}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &6816222227300932907
 MonoBehaviour:
@@ -1316,7 +1316,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9037103102884272146
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1440,7 +1440,7 @@ Canvas:
   m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 106146905
   m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &7945595931361233106
@@ -1526,6 +1526,8 @@ MonoBehaviour:
   slotPrefab: {fileID: 4066124633222920652, guid: 90c65e03df78e284facf01365d5441ab, type: 3}
   slotCount: 6
   slotTopPaddingRatio: 0.08
+  disableScrollingLayout: 0
+  customSpawnCount: 1
   valuesToTrace:
   - 10  10
   - 10  10

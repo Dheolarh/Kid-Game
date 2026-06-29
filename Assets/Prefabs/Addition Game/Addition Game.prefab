@@ -109,7 +109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.0007843598}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &5384677016191343304
@@ -130,7 +130,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 80
   m_ChildAlignment: 4
-  m_Spacing: 200
+  m_Spacing: 40
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -442,10 +442,10 @@ RectTransform:
   - {fileID: 9221621591448007914}
   m_Father: {fileID: 8285601760031267833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 493.32495, y: -407.68652}
+  m_SizeDelta: {x: 946.64996, y: 775.37305}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6933757655383684651
 CanvasRenderer:
@@ -971,8 +971,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -100}
+  m_AnchoredPosition: {x: 0, y: -5}
+  m_SizeDelta: {x: 0, y: -90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3464669767752924001
 CanvasRenderer:
@@ -1097,7 +1097,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 80
   m_ChildAlignment: 4
-  m_Spacing: 200
+  m_Spacing: 40
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -1209,6 +1209,7 @@ GameObject:
   - component: {fileID: 3494195746450720883}
   - component: {fileID: 5070819622758127982}
   - component: {fileID: 8691579895082767063}
+  - component: {fileID: 7063102546891878916}
   m_Layer: 5
   m_Name: Addition Game
   m_TagString: Untagged
@@ -1246,10 +1247,10 @@ Canvas:
   m_GameObject: {fileID: 5210000093185702887}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -1258,7 +1259,7 @@ Canvas:
   m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 106146905
   m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &936492008126277912
@@ -1348,7 +1349,7 @@ MonoBehaviour:
   slotCount: 10
   minPerGrid: 2
   maxPerGrid: 4
-  diceMode: 1
+  diceMode: 0
   dicePrefabs:
   - {fileID: 8808816603790564008, guid: 6786cb17a9f92be4eb123a20c736e188, type: 3}
   - {fileID: 7563703363003997850, guid: 28dd085f9eb81b44d878333061a1ce2d, type: 3}
@@ -1364,7 +1365,7 @@ MonoBehaviour:
   - {fileID: 5649623561697560360, guid: fa0cddad888e1e245bc5b37029dabc25, type: 3}
   - {fileID: 2576838590016289760, guid: f422caa5dc3a3c549b29090ce2619604, type: 3}
   countAddMode: 0
-  numbersOnlyMode: 0
+  numbersOnlyMode: 1
   minOperandCount: 2
   maxOperandCount: 5
   minNumberValue: 1
@@ -1385,7 +1386,7 @@ MonoBehaviour:
     - {fileID: 8910757150115945586, guid: 79375c6d0fc5f1849b83f3bbfcbdc182, type: 3}
     - {fileID: 8910757150115945586, guid: 7c18bb56556814f4d863c1e575860993, type: 3}
   - themeName: Vehicles
-    isEnabled: 1
+    isEnabled: 0
     prefabs:
     - {fileID: 8910757150115945586, guid: a6e9bd0bf4b34c64984c6e8d0da8ed0a, type: 3}
     - {fileID: 8910757150115945586, guid: d549244daf15d3c489be6254261f5933, type: 3}
@@ -1417,6 +1418,18 @@ MonoBehaviour:
     - {fileID: 8910757150115945586, guid: 1067140403bb9d8419a07bb729f5a3a9, type: 3}
     - {fileID: 8910757150115945586, guid: 02899011fe0d97e479ffea73b0e7047e, type: 3}
     - {fileID: 8910757150115945586, guid: 33d7341c696be6a4d8942b6e33ce155a, type: 3}
+--- !u!114 &7063102546891878916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5210000093185702887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f72a925ced698429bca4fc1196919b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.CanvasAutoCamera
 --- !u!1 &5409662387608698326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,7 +1666,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2595534665764370267
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1746,7 +1759,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.0006713867, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &778565748414500272
@@ -2110,7 +2123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &784779391317442990
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2647,10 +2660,10 @@ RectTransform:
   - {fileID: 6011707351923391622}
   m_Father: {fileID: 8285601760031267833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1087.6, y: -795.37305}
+  m_SizeDelta: {x: 241.89993, y: 775.37305}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &2119286343533327694
 CanvasRenderer:
