@@ -110,6 +110,35 @@ namespace KidGame.Mechanics.Addition
 
         private bool _wasLandscape;
 
+        public Button PortraitNextButton => portraitNextButton;
+        public Button LandscapeNextButton => landscapeNextButton;
+
+        public void Configure(int slotCount, int minPerGrid, int maxPerGrid, bool diceMode, bool fingerMode, bool countAddMode, bool numbersOnlyMode, int minOperandCount, int maxOperandCount, int minNumberValue, int maxNumberValue, string activeThemeName)
+        {
+            this.slotCount = slotCount;
+            this.minPerGrid = minPerGrid;
+            this.maxPerGrid = maxPerGrid;
+            this.diceMode = diceMode;
+            this.fingerMode = fingerMode;
+            this.countAddMode = countAddMode;
+            this.numbersOnlyMode = numbersOnlyMode;
+            this.minOperandCount = minOperandCount;
+            this.maxOperandCount = maxOperandCount;
+            this.minNumberValue = minNumberValue;
+            this.maxNumberValue = maxNumberValue;
+
+            if (themes != null)
+            {
+                foreach (var theme in themes)
+                {
+                    if (theme != null)
+                    {
+                        theme.isEnabled = (theme.themeName == activeThemeName);
+                    }
+                }
+            }
+        }
+
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
         private void Start()
@@ -120,8 +149,11 @@ namespace KidGame.Mechanics.Addition
             _wasLandscape = IsLandscape;
             SetNextButtonsInteractable(false);
 
-            if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-            if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            if (KidGame.Interface.GameFlowManager.Instance == null)
+            {
+                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
+                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            }
 
             GenerateRound();
         }

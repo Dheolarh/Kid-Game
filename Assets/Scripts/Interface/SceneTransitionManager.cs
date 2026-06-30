@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using System.Collections;
@@ -30,6 +31,9 @@ namespace KidGame.Interface
 
         [Tooltip("The TextMeshPro text component displaying the lesson title.")]
         [SerializeField] private TMP_Text lessonTitleText;
+
+        [Tooltip("The TextMeshPro text component displaying the lesson subtitle.")]
+        [SerializeField] private TMP_Text lessonSubtitleText;
 
         [Header("Animation Settings")]
         [SerializeField] private float transitionDuration = 0.8f;
@@ -74,6 +78,23 @@ namespace KidGame.Interface
                 // Force closed state first so it opens cleanly
                 ForceClosedState();
                 OpenCurtains();
+            }
+        }
+
+        /// <summary>
+        /// Dynamically styles the transition curtains with the level theme color.
+        /// </summary>
+        public void SetCurtainColor(Color color)
+        {
+            if (leftCurtain != null)
+            {
+                var img = leftCurtain.GetComponent<Image>();
+                if (img != null) img.color = color;
+            }
+            if (rightCurtain != null)
+            {
+                var img = rightCurtain.GetComponent<Image>();
+                if (img != null) img.color = color;
             }
         }
 
@@ -222,19 +243,20 @@ namespace KidGame.Interface
         /// Starts transition by closing curtains, fading in the loader and level text,
         /// loading the gameplay level, fading the loader out, and opening curtains.
         /// </summary>
-        public void LoadLevelWithTransition(string sceneName, string lessonNumber, string lessonTitle)
+        public void LoadLevelWithTransition(string sceneName, string lessonNumber, string lessonTitle, string lessonSubtitle)
         {
             if (_isTransitioning) return;
-            StartCoroutine(LoadLevelCoroutine(sceneName, lessonNumber, lessonTitle));
+            StartCoroutine(LoadLevelCoroutine(sceneName, lessonNumber, lessonTitle, lessonSubtitle));
         }
 
-        private IEnumerator LoadLevelCoroutine(string sceneName, string lessonNumber, string lessonTitle)
+        private IEnumerator LoadLevelCoroutine(string sceneName, string lessonNumber, string lessonTitle, string lessonSubtitle)
         {
             _isTransitioning = true;
 
             // 0. Update text values and ensure loading content starts hidden
             if (lessonNumberText != null) lessonNumberText.text = lessonNumber;
             if (lessonTitleText != null) lessonTitleText.text = lessonTitle;
+            if (lessonSubtitleText != null) lessonSubtitleText.text = lessonSubtitle;
             if (loadingContentGroup != null)
             {
                 loadingContentGroup.alpha = 0f;

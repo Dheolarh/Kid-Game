@@ -350,6 +350,12 @@ namespace KidGame.Interface
 
         private void TransitionToHomeScreen()
         {
+            if (nameInputField != null && !string.IsNullOrEmpty(nameInputField.text.Trim()))
+            {
+                PlayerPrefs.SetString("PlayerName", nameInputField.text.Trim());
+                PlayerPrefs.Save();
+            }
+
             if (profilePanel == null)
             {
                 if (menuScreenManager != null)

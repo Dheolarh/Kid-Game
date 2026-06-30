@@ -124,8 +124,35 @@ namespace KidGame.Interface
                             label.text = spawnedLevels.ToString();
                         }
 
-                        // 2. Setup progression state (unlocked state check)
-                        bool isUnlocked = PlayerPrefs.GetInt($"Level_Unlocked_{data.sceneToLoad}", data.isUnlockedByDefault ? 1 : 0) == 1;
+                        // 2. Setup progression state (unlocked state check using level number)
+                        bool isUnlocked = PlayerPrefs.GetInt($"Level_Unlocked_{data.levelNumber}", (data.isUnlockedByDefault || spawnedLevels == 1) ? 1 : 0) == 1;
+
+                        // 3. Style level button and stars
+                        var levelUI = btnGo.GetComponent<LevelButtonUI>();
+                        int starsCount = PlayerPrefs.GetInt($"Level_Stars_{data.levelNumber}", 0);
+                        if (levelUI != null)
+                        {
+                            if (levelUI.buttonBackground != null)
+                            {
+                                Color normalColor = data.levelThemeColor;
+                                // Create a faded/desaturated version of the theme color for locked buttons
+                                Color fadedColor = new Color(
+                                    Mathf.Lerp(normalColor.r, 0.5f, 0.5f),
+                                    Mathf.Lerp(normalColor.g, 0.5f, 0.5f),
+                                    Mathf.Lerp(normalColor.b, 0.5f, 0.5f),
+                                    0.5f
+                                );
+                                levelUI.buttonBackground.color = isUnlocked ? normalColor : fadedColor;
+                            }
+
+                            for (int s = 0; s < levelUI.stars.Length; s++)
+                            {
+                                if (levelUI.stars[s] != null)
+                                {
+                                    levelUI.stars[s].color = (s < starsCount) ? levelUI.activeStarColor : levelUI.inactiveStarColor;
+                                }
+                            }
+                        }
 
                         Button btn = btnGo.GetComponent<Button>();
                         if (btn != null)
@@ -344,18 +371,26 @@ namespace KidGame.Interface
 
         private void OnLevelSelected(LevelData data, int levelIndex)
         {
-            Debug.Log($"[LevelSelectManager] Loading scene: {data.sceneToLoad} for Level: {data.levelName} (Lesson {levelIndex})");
+            Debug.Log($"[LevelSelectManager] Loading scriptable Level: {data.levelName} (Lesson {levelIndex})");
+            
+            // Assign active level details so GameFlowManager can access it
+            KidGame.Interface.GameFlowManager.ActiveLevel = data;
+
+            // All dynamic scriptable levels run inside the unified "Game" scene
+            string sceneToLoad = "Game";
+
             if (SceneTransitionManager.Instance != null)
             {
                 SceneTransitionManager.Instance.LoadLevelWithTransition(
-                    data.sceneToLoad,
+                    sceneToLoad,
                     "LESSON " + levelIndex,
-                    data.levelName
+                    data.levelName,
+                    data.levelSubtitle
                 );
             }
             else
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(data.sceneToLoad);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneToLoad);
             }
         }
     }

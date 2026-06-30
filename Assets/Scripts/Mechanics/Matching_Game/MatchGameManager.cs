@@ -100,6 +100,19 @@ namespace KidGame.Mechanics.Matching
 
         private bool _wasLandscape;
 
+        public Button PortraitNextButton => portraitNextButton;
+        public Button LandscapeNextButton => landscapeNextButton;
+
+        public void Configure(MatchVariant leftVariant, MatchVariant rightVariant, int slotCount, int minVal, int maxVal, bool shuffleLeftColumn)
+        {
+            this.leftVariant = leftVariant;
+            this.rightVariant = rightVariant;
+            this.slotCount = slotCount;
+            this.minVal = minVal;
+            this.maxVal = maxVal;
+            this.shuffleLeftColumn = shuffleLeftColumn;
+        }
+
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
         private void Start()
@@ -110,8 +123,11 @@ namespace KidGame.Mechanics.Matching
             _wasLandscape = IsLandscape;
             SetNextButtonsInteractable(false);
 
-            if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-            if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            if (KidGame.Interface.GameFlowManager.Instance == null)
+            {
+                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
+                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            }
 
             GenerateRound();
         }
@@ -509,6 +525,11 @@ namespace KidGame.Mechanics.Matching
                     // Play mismatch red shake animation
                     _selectedCard.ShowMismatch();
                     card.ShowMismatch();
+
+                    if (KidGame.Interface.GameFlowManager.Instance != null)
+                    {
+                        KidGame.Interface.GameFlowManager.Instance.RegisterMistake();
+                    }
                 }
                 _selectedCard = null;
             }
@@ -520,6 +541,11 @@ namespace KidGame.Mechanics.Matching
         {
             cardA.SetMatched(matchedOutlineColor);
             cardB.SetMatched(matchedOutlineColor);
+
+            if (KidGame.Interface.GameFlowManager.Instance != null)
+            {
+                KidGame.Interface.GameFlowManager.Instance.RegisterCorrectAnswer();
+            }
 
             var lineGo = Instantiate(linePrefab, ActiveContent);
             lineGo.name = $"line_{cardA.MatchId}";
@@ -632,6 +658,11 @@ namespace KidGame.Mechanics.Matching
 
                     AnimateLineReverseAndDestroy(_dragLine);
                     _dragLine = null;
+
+                    if (KidGame.Interface.GameFlowManager.Instance != null)
+                    {
+                        KidGame.Interface.GameFlowManager.Instance.RegisterMistake();
+                    }
                 }
             }
             else
@@ -659,6 +690,11 @@ namespace KidGame.Mechanics.Matching
         {
             cardA.SetMatched(matchedOutlineColor);
             cardB.SetMatched(matchedOutlineColor);
+
+            if (KidGame.Interface.GameFlowManager.Instance != null)
+            {
+                KidGame.Interface.GameFlowManager.Instance.RegisterCorrectAnswer();
+            }
 
             var conn = new Connection
             {

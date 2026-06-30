@@ -99,6 +99,15 @@ namespace KidGame.Mechanics.Tracing
         private bool _lastIsLandscape;
         private float _portraitMinScale = 1f;
         private float _landscapeMinScale = 1f;
+        public Button PortraitContinueButton => portraitContinueButton;
+        public Button LandscapeContinueButton => landscapeContinueButton;
+
+        public void Configure(bool spellModeActive, List<string> valuesToTrace, int customSpawnCount)
+        {
+            this.spellModeActive = spellModeActive;
+            this.valuesToTrace = new List<string>(valuesToTrace);
+            this.customSpawnCount = customSpawnCount;
+        }
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 

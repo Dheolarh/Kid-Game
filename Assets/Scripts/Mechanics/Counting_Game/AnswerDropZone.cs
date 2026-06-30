@@ -56,6 +56,10 @@ namespace KidGame.Mechanics.Counting
             else
             {
                 Debug.Log($"[CountingGame] ✗ Wrong!   Slot expected {_expectedCount}, dropped {card.Value}. Card returns to tray.");
+                if (KidGame.Interface.GameFlowManager.Instance != null)
+                {
+                    KidGame.Interface.GameFlowManager.Instance.RegisterMistake();
+                }
             }
         }
 
@@ -76,6 +80,12 @@ namespace KidGame.Mechanics.Counting
             _isAnswered       = true;
             _background.color = card.CardColor;
             card.AcceptedByZone(transform);
+
+            if (KidGame.Interface.GameFlowManager.Instance != null)
+            {
+                KidGame.Interface.GameFlowManager.Instance.RegisterCorrectAnswer();
+            }
+
             _onCorrect?.Invoke();
         }
     }

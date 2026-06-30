@@ -77,6 +77,29 @@ namespace KidGame.Mechanics.Comparison
         private Transform ActiveAnswersContainer
             => IsLandscape ? landscapeAnswersContainer : portraitAnswersContainer;
 
+        public Button PortraitNextButton => portraitNextButton;
+        public Button LandscapeNextButton => landscapeNextButton;
+
+        public void Configure(int slotCount, int minVal, int maxVal, bool mixAdditionEquations, bool numbersOnlyMode, string activeThemeName)
+        {
+            this.slotCount = slotCount;
+            this.minVal = minVal;
+            this.maxVal = maxVal;
+            this.mixAdditionEquations = mixAdditionEquations;
+            this.numbersOnlyMode = numbersOnlyMode;
+
+            if (themes != null)
+            {
+                foreach (var theme in themes)
+                {
+                    if (theme != null)
+                    {
+                        theme.isEnabled = (theme.themeName == activeThemeName);
+                    }
+                }
+            }
+        }
+
         private void Start()
         {
             ConfigureNextButton(portraitNextButton);
@@ -88,8 +111,11 @@ namespace KidGame.Mechanics.Comparison
             _wasLandscape = IsLandscape;
             SetNextButtonsInteractable(false);
 
-            if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-            if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            if (KidGame.Interface.GameFlowManager.Instance == null)
+            {
+                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
+                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            }
 
             GenerateRound();
         }

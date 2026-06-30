@@ -82,6 +82,24 @@ namespace KidGame.Mechanics.NumberRecall
 
         private bool _wasLandscape;
 
+        public Button PortraitNextButton => portraitNextButton;
+        public Button LandscapeNextButton => landscapeNextButton;
+
+        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden)
+        {
+            this.slotCount = slotCount;
+            this.minSequenceLength = minSequenceLength;
+            this.maxSequenceLength = maxSequenceLength;
+            this.minStartValue = minStartValue;
+            this.maxStartValue = maxStartValue;
+            this.step = step;
+            this.countBackwards = countBackwards;
+            this.minConsecutiveRevealed = minConsecutiveRevealed;
+            this.maxConsecutiveRevealed = maxConsecutiveRevealed;
+            this.minConsecutiveHidden = minConsecutiveHidden;
+            this.maxConsecutiveHidden = maxConsecutiveHidden;
+        }
+
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
         private void Start()
@@ -96,8 +114,11 @@ namespace KidGame.Mechanics.NumberRecall
             _wasLandscape = IsLandscape;
             SetNextButtonsInteractable(false);
 
-            if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-            if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            if (KidGame.Interface.GameFlowManager.Instance == null)
+            {
+                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
+                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            }
 
             GenerateRound();
         }

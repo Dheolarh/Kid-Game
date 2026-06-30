@@ -79,6 +79,29 @@ namespace KidGame.Mechanics.Counting
 
         private bool _wasLandscape;
 
+        public Button PortraitNextButton => portraitNextButton;
+        public Button LandscapeNextButton => landscapeNextButton;
+
+        public void Configure(int slotCount, int minCount, int maxCount, bool diceMode, bool fingerMode, string activeThemeName)
+        {
+            this.slotCount = slotCount;
+            this.minCount = minCount;
+            this.maxCount = maxCount;
+            this.diceMode = diceMode;
+            this.fingerMode = fingerMode;
+
+            if (themes != null)
+            {
+                foreach (var theme in themes)
+                {
+                    if (theme != null)
+                    {
+                        theme.isEnabled = (theme.themeName == activeThemeName);
+                    }
+                }
+            }
+        }
+
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
         private void Start()
@@ -89,8 +112,11 @@ namespace KidGame.Mechanics.Counting
             _wasLandscape = IsLandscape;
             SetNextButtonsInteractable(false);
 
-            if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-            if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            if (KidGame.Interface.GameFlowManager.Instance == null)
+            {
+                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
+                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+            }
 
             GenerateRound();
         }

@@ -37,7 +37,10 @@ namespace KidGame.Mechanics.Comparison
             else
             {
                 Debug.Log($"[ComparisonGame] ✗ Wrong! Zone expected {_expectedSign}, dropped {card.Sign}.");
-                // The card handles its own destroy on failure since _isAccepted remains false
+                if (KidGame.Interface.GameFlowManager.Instance != null)
+                {
+                    KidGame.Interface.GameFlowManager.Instance.RegisterMistake();
+                }
             }
         }
 
@@ -58,6 +61,12 @@ namespace KidGame.Mechanics.Comparison
                 _background.color = card.CardColor;
             }
             card.AcceptedByZone(transform);
+
+            if (KidGame.Interface.GameFlowManager.Instance != null)
+            {
+                KidGame.Interface.GameFlowManager.Instance.RegisterCorrectAnswer();
+            }
+
             _onCorrect?.Invoke();
         }
     }
