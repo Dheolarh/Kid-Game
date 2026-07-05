@@ -42,8 +42,55 @@ namespace KidGame.Interface
         private bool _isTransitioning = false;
         private static bool _hasCompletedIntro = false;
 
+        private void Awake()
+        {
+            if (profileScreenController == null)
+            {
+                profileScreenController = FindComponentEvenInactive<ProfileScreenController>();
+            }
+            if (homeScreenIntroController == null)
+            {
+                homeScreenIntroController = FindComponentEvenInactive<HomeScreenIntroController>();
+            }
+            if (curtainTransition == null)
+            {
+                curtainTransition = FindComponentEvenInactive<CurtainTransition>();
+            }
+
+            // Auto-assign Screen GameObjects based on resolved controllers
+            if (ageSelectScreen == null && profileScreenController != null)
+            {
+                ageSelectScreen = profileScreenController.gameObject;
+            }
+            if (homeScreen == null && homeScreenIntroController != null)
+            {
+                homeScreen = homeScreenIntroController.gameObject;
+            }
+            if (splashScreen == null)
+            {
+                var splash = GameObject.Find("Splash");
+                if (splash != null)
+                {
+                    splashScreen = splash;
+                }
+            }
+        }
+
         private void Start()
         {
+            if (profileScreenController == null)
+            {
+                profileScreenController = FindComponentEvenInactive<ProfileScreenController>();
+                Debug.Log($"[MenuScreenManager] Start double-check. profileScreenController assigned? {profileScreenController != null}");
+            }
+            if (ageSelectScreen == null && profileScreenController != null)
+            {
+                ageSelectScreen = profileScreenController.gameObject;
+            }
+            if (homeScreen == null && homeScreenIntroController != null)
+            {
+                homeScreen = homeScreenIntroController.gameObject;
+            }
             InitializeScreens();
         }
 
@@ -82,9 +129,10 @@ namespace KidGame.Interface
         {
             _isTransitioning = false;
 
-            // Skip Splash and Profile screens if intro was already completed
-            if (_hasCompletedIntro)
+            // Skip Splash and Profile screens if intro was already completed (static session check or saved Prefs check)
+            if (_hasCompletedIntro || PlayerPrefs.GetInt("HasCompletedProfile", 0) == 1)
             {
+                _hasCompletedIntro = true;
                 if (splashScreen != null) splashScreen.SetActive(false);
                 if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
                 if (homeScreen != null) homeScreen.SetActive(true);
@@ -129,13 +177,26 @@ namespace KidGame.Interface
                 Debug.LogWarning("[MenuScreenManager] CurtainTransition reference is missing. Performing instant switch.");
                 if (splashScreen != null) splashScreen.SetActive(false);
                 if (ageSelectScreen != null) ageSelectScreen.SetActive(true);
+                _isTransitioning = false;
+                if (profileScreenController != null)
+                {
+                    profileScreenController.PlaySetupIntro();
+                }
                 return;
             }
 
-            // 1. Activate the target screen (Age Select) so it's revealed behind the curtains as they open
+            // 1. Activate the target screen (Age Select) and its parents/siblings
             if (ageSelectScreen != null)
             {
                 ageSelectScreen.SetActive(true);
+            }
+            if (profileScreenController != null)
+            {
+                profileScreenController.gameObject.SetActive(true);
+                if (profileScreenController.transform.parent != null)
+                {
+                    profileScreenController.transform.parent.gameObject.SetActive(true);
+                }
             }
 
             // 2. Play the curtain draw animation
@@ -144,17 +205,24 @@ namespace KidGame.Interface
 
         private void OnSplashToAgeSelectComplete()
         {
+            Debug.Log("[MenuScreenManager] OnSplashToAgeSelectComplete triggered.");
             // 3. Deactivate the Splash screen once curtains are fully opened to optimize performance
             if (splashScreen != null)
             {
                 splashScreen.SetActive(false);
+                Debug.Log("[MenuScreenManager] Set splashScreen active = false.");
             }
             _isTransitioning = false;
 
             // Trigger the progressive intro setup animations on the profile screen
             if (profileScreenController != null)
             {
+                Debug.Log("[MenuScreenManager] Invoking profileScreenController.PlaySetupIntro().");
                 profileScreenController.PlaySetupIntro();
+            }
+            else
+            {
+                Debug.LogError("[MenuScreenManager] profileScreenController is null inside OnSplashToAgeSelectComplete!");
             }
         }
 
@@ -166,14 +234,55 @@ namespace KidGame.Interface
         {
             _hasCompletedIntro = true; // Mark intro completed to skip it on future loads of this scene
 
-            if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
-            if (homeScreen != null) homeScreen.SetActive(true);
+            Debug.Log($"[MenuScreenManager] TriggerAgeSelectToHomeTransition called. ageSelectScreen: {ageSelectScreen}, homeScreen: {homeScreen}");
+
+            // 1. Deactivate the assigned ageSelectScreen (e.g. Background if misassigned)
+            if (ageSelectScreen != null)
+            {
+                ageSelectScreen.SetActive(false);
+                Debug.Log($"[MenuScreenManager] Set ageSelectScreen ({ageSelectScreen.name}) inactive.");
+            }
+
+            // 2. Deactivate the Greetings container itself
+            if (profileScreenController != null)
+            {
+                profileScreenController.gameObject.SetActive(false);
+                Debug.Log($"[MenuScreenManager] Set profileScreenController.gameObject ({profileScreenController.gameObject.name}) inactive.");
+
+                // 3. Deactivate the root Profile canvas parent
+                if (profileScreenController.transform.parent != null)
+                {
+                    profileScreenController.transform.parent.gameObject.SetActive(false);
+                    Debug.Log($"[MenuScreenManager] Set profile parent ({profileScreenController.transform.parent.name}) inactive.");
+                }
+            }
+
+            if (homeScreen != null)
+            {
+                homeScreen.SetActive(true);
+            }
 
             // Trigger the intro animations on the home screen
             if (homeScreenIntroController != null)
             {
                 homeScreenIntroController.PlayIntro();
             }
+        }
+
+        private T FindComponentEvenInactive<T>() where T : Component
+        {
+            T comp = FindObjectOfType<T>(true);
+            if (comp != null) return comp;
+
+            T[] components = Resources.FindObjectsOfTypeAll<T>();
+            foreach (var c in components)
+            {
+                if (c != null && c.gameObject != null && !c.gameObject.hideFlags.HasFlag(HideFlags.HideInHierarchy))
+                {
+                    return c;
+                }
+            }
+            return null;
         }
     }
 }

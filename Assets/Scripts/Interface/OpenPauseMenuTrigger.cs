@@ -3,11 +3,7 @@ using UnityEngine.UI;
 
 namespace KidGame.Interface
 {
-    /// <summary>
-    /// Attach this script to any Pause Button in the gameplay scene.
-    /// When clicked, it will automatically find the active PauseMenuController (Instance)
-    /// in the scene and call OpenMenu().
-    /// </summary>
+
     [RequireComponent(typeof(Button))]
     public class OpenPauseMenuTrigger : MonoBehaviour
     {

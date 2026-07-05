@@ -42,11 +42,14 @@ namespace KidGame.Interface
         [SerializeField] private TMP_Text dialogueText;
         [SerializeField] private Button dialogueCloseButton;
         [SerializeField] private Animator dialogueMascotAnimator;
+        [SerializeField] private SpriteRenderer dialogueMascotSpriteRenderer;
 
         [Header("Mascot Animation")]
         [SerializeField] private Animator mascotAnimator;
-        [SerializeField] private string mascotWrongTrigger = "Wrong";
-        [SerializeField] private string mascotWowedTrigger = "Wowed";
+        [SerializeField] private string mascotCorrectTrigger = "";
+        [SerializeField] private string mascotWrongTrigger = "IsNoIdea";
+        [SerializeField] private string mascotWowedTrigger = "IsHappy";
+        [SerializeField] private string mascotVictoryTrigger = "IsWinner";
 
         [Header("Game End Panel")]
         [SerializeField] private GameObject gameEndPanel;
@@ -63,6 +66,9 @@ namespace KidGame.Interface
         private bool _isLevelCompleted = false;
         private int _activeDialogueLineIndex = 0;
         private bool _isCompletionDialogueActive = false;
+        private float _lastDialogueActivityTime;
+        private bool _hasPlayedInactivityAnimation = false;
+        [SerializeField] private float dialogueInactivityTimeout = 8f;
 
         private void Awake()
         {
@@ -92,6 +98,25 @@ namespace KidGame.Interface
             }
 
             InitializeLevel();
+        }
+
+        private void Update()
+        {
+            if (dialoguePanel != null && dialoguePanel.activeSelf && !_hasPlayedInactivityAnimation)
+            {
+                if (Time.time - _lastDialogueActivityTime > dialogueInactivityTimeout)
+                {
+                    _hasPlayedInactivityAnimation = true;
+                    if (dialogueMascotAnimator != null)
+                    {
+                        dialogueMascotAnimator.SetTrigger("IsHi");
+                    }
+                    if (dialogueMascotSpriteRenderer != null)
+                    {
+                        dialogueMascotSpriteRenderer.flipX = true;
+                    }
+                }
+            }
         }
 
         private void InitializeLevel()
@@ -245,10 +270,14 @@ namespace KidGame.Interface
                     StartActiveGameMode(page.gameType);
                 }
             }
-            else
+            if (dialoguePanel != null) dialoguePanel.SetActive(false);
+            StartActiveGameMode(page.gameType);
+
+
+            // Trigger walking transition on the main gameplay mascot when moving to a new page
+            if (mascotAnimator != null)
             {
-                if (dialoguePanel != null) dialoguePanel.SetActive(false);
-                StartActiveGameMode(page.gameType);
+                mascotAnimator.SetTrigger("IsWalking");
             }
         }
 
@@ -282,6 +311,9 @@ namespace KidGame.Interface
         {
             if (line == null) return;
 
+            _lastDialogueActivityTime = Time.time;
+            _hasPlayedInactivityAnimation = false;
+
             if (dialogueText != null)
             {
                 string playerName = PlayerPrefs.GetString("PlayerName", "Kid");
@@ -293,11 +325,26 @@ namespace KidGame.Interface
             {
                 dialogueMascotAnimator.SetTrigger(line.mascotAnimationTrigger);
             }
+
+            if (dialogueMascotSpriteRenderer != null)
+            {
+                // Flip X if the trigger is "IsTalking"
+                dialogueMascotSpriteRenderer.flipX = (!string.IsNullOrEmpty(line.mascotAnimationTrigger) && line.mascotAnimationTrigger == "IsTalking");
+            }
         }
 
         private void OnDialogueClosed()
         {
             if (dialoguePanel != null) dialoguePanel.SetActive(false);
+
+            if (dialogueMascotAnimator != null)
+            {
+                dialogueMascotAnimator.SetTrigger("IsIdle");
+            }
+            if (dialogueMascotSpriteRenderer != null)
+            {
+                dialogueMascotSpriteRenderer.flipX = false;
+            }
 
             if (ActiveLevel != null && _currentPageIndex < ActiveLevel.pages.Count)
             {
@@ -441,6 +488,10 @@ namespace KidGame.Interface
                 _consecutiveRightAnswers = 0;
                 TriggerMascotWowed();
             }
+            else
+            {
+                TriggerMascotCorrect();
+            }
         }
 
         public void RegisterMistake()
@@ -448,6 +499,14 @@ namespace KidGame.Interface
             _totalMistakes++;
             _consecutiveRightAnswers = 0;
             TriggerMascotWrong();
+        }
+
+        private void TriggerMascotCorrect()
+        {
+            if (mascotAnimator != null && !string.IsNullOrEmpty(mascotCorrectTrigger))
+            {
+                mascotAnimator.SetTrigger(mascotCorrectTrigger);
+            }
         }
 
         private void TriggerMascotWrong()
@@ -495,6 +554,16 @@ namespace KidGame.Interface
         private void ProceedAfterPageCompletion()
         {
             _isCompletionDialogueActive = false;
+
+            if (dialogueMascotAnimator != null)
+            {
+                dialogueMascotAnimator.SetTrigger("IsIdle");
+            }
+            if (dialogueMascotSpriteRenderer != null)
+            {
+                dialogueMascotSpriteRenderer.flipX = false;
+            }
+
             if (ActiveLevel != null && _currentPageIndex < ActiveLevel.pages.Count - 1)
             {
                 LoadPage(_currentPageIndex + 1);
@@ -525,6 +594,12 @@ namespace KidGame.Interface
             else if (percent >= 50f) starsEarned = 2;
 
             Debug.Log($"[GameFlowManager] Level Completed! Score: {percent:F1}%, Mistakes: {_totalMistakes}, Stars: {starsEarned}");
+
+            // Trigger winner victory animation on level complete
+            if (mascotAnimator != null && !string.IsNullOrEmpty(mascotVictoryTrigger))
+            {
+                mascotAnimator.SetTrigger(mascotVictoryTrigger);
+            }
 
             // Save performance to PlayerPrefs
             if (ActiveLevel != null)

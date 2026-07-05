@@ -17,7 +17,7 @@ MonoBehaviour:
     themeColor: {r: 0.32156864, g: 0.5921569, b: 0.83921576, a: 0}
     backgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   - themeName: Addition
-    themeColor: {r: 0.7607844, g: 0.06666667, b: 0.6509804, a: 0}
+    themeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
     backgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   - themeName: Counting
     themeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
