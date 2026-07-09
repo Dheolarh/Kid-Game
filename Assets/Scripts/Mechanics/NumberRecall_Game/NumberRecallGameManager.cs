@@ -98,11 +98,14 @@ namespace KidGame.Mechanics.NumberRecall
             this.maxConsecutiveRevealed = maxConsecutiveRevealed;
             this.minConsecutiveHidden = minConsecutiveHidden;
             this.maxConsecutiveHidden = maxConsecutiveHidden;
+
+            _slots.Clear();
+            _cards.Clear();
         }
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
-        private void Start()
+        private void OnEnable()
         {
             // Configure slots containers to not force expand height and control children height
             ConfigureContainerLayout(portraitSlotsContainer);

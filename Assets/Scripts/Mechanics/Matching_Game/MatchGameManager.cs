@@ -111,11 +111,14 @@ namespace KidGame.Mechanics.Matching
             this.minVal = minVal;
             this.maxVal = maxVal;
             this.shuffleLeftColumn = shuffleLeftColumn;
+
+            _slots.Clear();
+            _connections.Clear();
         }
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
-        private void Start()
+        private void OnEnable()
         {
             ConfigureNextButton(portraitNextButton);
             ConfigureNextButton(landscapeNextButton);

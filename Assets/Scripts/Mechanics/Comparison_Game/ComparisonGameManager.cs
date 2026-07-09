@@ -98,9 +98,11 @@ namespace KidGame.Mechanics.Comparison
                     }
                 }
             }
+
+            _slots.Clear();
         }
 
-        private void Start()
+        private void OnEnable()
         {
             ConfigureNextButton(portraitNextButton);
             ConfigureNextButton(landscapeNextButton);

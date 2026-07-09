@@ -45,7 +45,7 @@ namespace KidGame.Interface
             {
                 if (useLevelTransition)
                 {
-                    SceneTransitionManager.Instance.LoadLevelWithTransition(targetSceneName, lessonNumber, lessonTitle, "");
+                    SceneTransitionManager.Instance.LoadLevelWithTransition(targetSceneName, lessonNumber, lessonTitle, "", Color.white);
                 }
                 else
                 {

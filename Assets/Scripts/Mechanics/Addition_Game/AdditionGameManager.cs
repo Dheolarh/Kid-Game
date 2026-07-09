@@ -137,11 +137,13 @@ namespace KidGame.Mechanics.Addition
                     }
                 }
             }
+
+            _slots.Clear();
         }
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
-        private void Start()
+        private void OnEnable()
         {
             ConfigureNextButton(portraitNextButton);
             ConfigureNextButton(landscapeNextButton);

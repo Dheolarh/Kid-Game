@@ -43,6 +43,7 @@ namespace KidGame.Interface
         [SerializeField] private float minimumClosedDuration = 1.5f;
 
         private bool _isTransitioning = false;
+        public bool IsTransitioning => _isTransitioning;
 
         private void Awake()
         {
@@ -243,15 +244,18 @@ namespace KidGame.Interface
         /// Starts transition by closing curtains, fading in the loader and level text,
         /// loading the gameplay level, fading the loader out, and opening curtains.
         /// </summary>
-        public void LoadLevelWithTransition(string sceneName, string lessonNumber, string lessonTitle, string lessonSubtitle)
+        public void LoadLevelWithTransition(string sceneName, string lessonNumber, string lessonTitle, string lessonSubtitle, Color themeColor)
         {
             if (_isTransitioning) return;
-            StartCoroutine(LoadLevelCoroutine(sceneName, lessonNumber, lessonTitle, lessonSubtitle));
+            StartCoroutine(LoadLevelCoroutine(sceneName, lessonNumber, lessonTitle, lessonSubtitle, themeColor));
         }
 
-        private IEnumerator LoadLevelCoroutine(string sceneName, string lessonNumber, string lessonTitle, string lessonSubtitle)
+        private IEnumerator LoadLevelCoroutine(string sceneName, string lessonNumber, string lessonTitle, string lessonSubtitle, Color themeColor)
         {
             _isTransitioning = true;
+
+            // Apply theme color to curtains
+            SetCurtainColor(themeColor);
 
             // 0. Update text values and ensure loading content starts hidden
             if (lessonNumberText != null) lessonNumberText.text = lessonNumber;
@@ -259,6 +263,7 @@ namespace KidGame.Interface
             if (lessonSubtitleText != null) lessonSubtitleText.text = lessonSubtitle;
             if (loadingContentGroup != null)
             {
+                loadingContentGroup.transform.SetAsLastSibling(); // Render on top of the curtains
                 loadingContentGroup.alpha = 0f;
                 loadingContentGroup.blocksRaycasts = false;
                 loadingContentGroup.gameObject.SetActive(false);

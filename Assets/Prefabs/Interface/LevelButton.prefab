@@ -397,6 +397,7 @@ GameObject:
   - component: {fileID: 7860651805182845954}
   - component: {fileID: 3774449332129138902}
   - component: {fileID: 4106991982408345157}
+  - component: {fileID: -6296558614340840970}
   m_Layer: 0
   m_Name: LevelButton
   m_TagString: Untagged
@@ -556,6 +557,23 @@ MonoBehaviour:
   - {fileID: 430162793503053775}
   activeStarColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   inactiveStarColor: {r: 1, g: 1, b: 1, a: 0.2}
+--- !u!114 &-6296558614340840970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7988995160940112909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7922085b72ad7fc42b4f281dcd21da50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.Animations.UIButtonPopFeedback
+  pressScale: 0.85
+  durationDown: 0.08
+  durationUp: 0.12
+  easeDown: 6
+  easeUp: 27
 --- !u!1 &9153222701086219389
 GameObject:
   m_ObjectHideFlags: 0

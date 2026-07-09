@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 using KidGame.Mechanics.Counting;
 using KidGame.Mechanics.Addition;
 using KidGame.Mechanics.Comparison;
@@ -32,13 +33,23 @@ namespace KidGame.Interface
         [SerializeField] private GameObject tracingGameGo;
 
         [Header("UI Visual Styling References")]
-        [SerializeField] private Image pauseButtonOutline;
-        [SerializeField] private Image pauseMenuOutline;
-        [SerializeField] private Image gameEndPanelBg;
         [SerializeField] private Image gameBackgroundImg;
+        [SerializeField] private Image[] themeImages;
+        [SerializeField] private GameObject[] themeOutlines;
+
+        [Header("Always Interactable Next Buttons (Fallback)")]
+        [SerializeField] private Button[] alwaysInteractableButtons;
+
+        private Button _activePortraitNextButton;
+        private Button _activeLandscapeNextButton;
+
+        [Header("Tracing Game Answer Grids")]
+        [SerializeField] private GameObject portraitTracingAnswerGrid;
+        [SerializeField] private GameObject landscapeTracingAnswerGrid;
 
         [Header("Dialogue UI References")]
         [SerializeField] private GameObject dialoguePanel;
+        [SerializeField] private GameObject dialogueMessageBox;
         [SerializeField] private TMP_Text dialogueText;
         [SerializeField] private Button dialogueCloseButton;
         [SerializeField] private Animator dialogueMascotAnimator;
@@ -64,11 +75,21 @@ namespace KidGame.Interface
         private int _totalCorrectRequired = 0;
         private int _consecutiveRightAnswers = 0;
         private bool _isLevelCompleted = false;
+
+        private Coroutine _dialogueCoroutine;
+        private Coroutine _typewriterCoroutine;
+        private bool _isTyping = false;
+        private string _currentFullText = "";
+        private bool _skipDialogueDelay = false;
+        private bool _hasTriggeredCompletionDialogueForCurrentPage = false;
         private int _activeDialogueLineIndex = 0;
         private bool _isCompletionDialogueActive = false;
         private float _lastDialogueActivityTime;
         private bool _hasPlayedInactivityAnimation = false;
         [SerializeField] private float dialogueInactivityTimeout = 8f;
+
+        private float _lastGameplayActivityTime;
+        private bool _hasPlayedGameplayInactivity = false;
 
         private void Awake()
         {
@@ -102,6 +123,16 @@ namespace KidGame.Interface
 
         private void Update()
         {
+            // Hide the main gameplay mascot when dialogue shows
+            if (mascotAnimator != null)
+            {
+                bool shouldShowMascot = dialoguePanel != null && !dialoguePanel.activeSelf;
+                if (mascotAnimator.gameObject.activeSelf != shouldShowMascot)
+                {
+                    mascotAnimator.gameObject.SetActive(shouldShowMascot);
+                }
+            }
+
             if (dialoguePanel != null && dialoguePanel.activeSelf && !_hasPlayedInactivityAnimation)
             {
                 if (Time.time - _lastDialogueActivityTime > dialogueInactivityTimeout)
@@ -109,11 +140,68 @@ namespace KidGame.Interface
                     _hasPlayedInactivityAnimation = true;
                     if (dialogueMascotAnimator != null)
                     {
-                        dialogueMascotAnimator.SetTrigger("IsHi");
+                        dialogueMascotAnimator.SetTrigger("isHi");
                     }
                     if (dialogueMascotSpriteRenderer != null)
                     {
-                        dialogueMascotSpriteRenderer.flipX = true;
+                        dialogueMascotSpriteRenderer.flipX = false;
+                    }
+                }
+            }
+
+            // Force next buttons to be always interactable so they don't fade to zero opacity
+            if (_activePortraitNextButton != null && !_activePortraitNextButton.interactable)
+            {
+                _activePortraitNextButton.interactable = true;
+            }
+            if (_activeLandscapeNextButton != null && !_activeLandscapeNextButton.interactable)
+            {
+                _activeLandscapeNextButton.interactable = true;
+            }
+            if (alwaysInteractableButtons != null)
+            {
+                foreach (var btn in alwaysInteractableButtons)
+                {
+                    if (btn != null && !btn.interactable)
+                    {
+                        btn.interactable = true;
+                    }
+                }
+            }
+
+            // Automatically trigger completion dialogue the moment the round is finished
+            if (!_hasTriggeredCompletionDialogueForCurrentPage && IsCurrentRoundCompleted())
+            {
+                if (ActiveLevel != null && _currentPageIndex < ActiveLevel.pages.Count)
+                {
+                    PageData page = ActiveLevel.pages[_currentPageIndex];
+                    _hasTriggeredCompletionDialogueForCurrentPage = true;
+
+                    _isCompletionDialogueActive = true;
+                    if (page.completionDialogueLines != null && page.completionDialogueLines.Count > 0)
+                    {
+                        StartDialogueSequence(page.completionDialogueLines, () => {
+                            ProceedAfterPageCompletion();
+                        });
+                    }
+                    else
+                    {
+                        ProceedAfterPageCompletion();
+                    }
+                }
+            }
+
+            // Gameplay inactivity check (2 minutes = 120 seconds) triggers isHi with flipX
+            if (dialoguePanel != null && !dialoguePanel.activeSelf && !_hasPlayedGameplayInactivity)
+            {
+                if (Time.time - _lastGameplayActivityTime > 120f)
+                {
+                    _hasPlayedGameplayInactivity = true;
+                    if (mascotAnimator != null)
+                    {
+                        mascotAnimator.SetTrigger("isHi");
+                        var sr = mascotAnimator.GetComponent<SpriteRenderer>();
+                        if (sr != null) sr.flipX = false;
                     }
                 }
             }
@@ -126,6 +214,8 @@ namespace KidGame.Interface
             _totalCorrectRequired = 0;
             _consecutiveRightAnswers = 0;
             _isLevelCompleted = false;
+            _lastGameplayActivityTime = Time.time;
+            _hasPlayedGameplayInactivity = false;
 
             // Apply theme styling
             ApplyVisualTheme();
@@ -189,15 +279,23 @@ namespace KidGame.Interface
                     themeColor = preset.themeColor;
                 }
             }
+            themeColor.a = 1f; // Force alpha to 1.0 so theme colors are never transparent
             return themeColor;
         }
 
         private void ApplyVisualTheme()
         {
-            if (ActiveLevel == null) return;
+            if (ActiveLevel == null)
+            {
+                Debug.LogWarning("[GameFlowManager] ApplyVisualTheme aborted: ActiveLevel is null!");
+                return;
+            }
 
             Color themeColor = GetActiveThemeColor();
+            themeColor.a = 1f; // Force alpha to 1.0 (fully visible) so theme colors aren't invisible
             Sprite bgSprite = ActiveLevel.levelBackgroundSprite;
+
+            Debug.Log($"[GameFlowManager] ApplyVisualTheme: Styling {ActiveLevel.levelName} with color {themeColor}. Images: {(themeImages != null ? themeImages.Length : 0)}, Outlines: {(themeOutlines != null ? themeOutlines.Length : 0)}");
 
             // Check for theme preset override for background
             if (themeDatabase != null && !string.IsNullOrEmpty(ActiveLevel.themePresetName))
@@ -209,30 +307,35 @@ namespace KidGame.Interface
                 }
             }
 
-            // Apply theme outline colors
-            if (pauseButtonOutline != null) pauseButtonOutline.color = themeColor;
-            if (pauseMenuOutline != null) pauseMenuOutline.color = themeColor;
-            if (gameEndPanelBg != null) gameEndPanelBg.color = themeColor;
+            // Apply theme colors to configured images
+            if (themeImages != null)
+            {
+                foreach (var img in themeImages)
+                {
+                    if (img != null) img.color = themeColor;
+                }
+            }
+
+            // Apply theme colors to configured outlines
+            if (themeOutlines != null)
+            {
+                foreach (var go in themeOutlines)
+                {
+                    if (go != null)
+                    {
+                        var outlines = go.GetComponents<UnityEngine.UI.Outline>();
+                        foreach (var outline in outlines)
+                        {
+                            if (outline != null) outline.effectColor = themeColor;
+                        }
+                    }
+                }
+            }
 
             // Apply background sprite
             if (gameBackgroundImg != null && bgSprite != null)
             {
                 gameBackgroundImg.sprite = bgSprite;
-            }
-
-            // Find all Outline components in the active scene recursively and color them
-            var rootObjs = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
-            foreach (var root in rootObjs)
-            {
-                if (root == null) continue;
-                var outlines = root.GetComponentsInChildren<UnityEngine.UI.Outline>(true);
-                foreach (var outline in outlines)
-                {
-                    if (outline != null)
-                    {
-                        outline.effectColor = themeColor;
-                    }
-                }
             }
 
             // Customize transition curtains color
@@ -249,61 +352,52 @@ namespace KidGame.Interface
             _currentPageIndex = index;
             PageData page = ActiveLevel.pages[index];
 
+            _hasTriggeredCompletionDialogueForCurrentPage = false;
+            _isCompletionDialogueActive = false;
+
             // Deactivate all managers initially
             DeactivateAllGameModes();
 
             // Configure the specific manager
             ConfigureAndSetupGameMode(page);
 
-            // Dialogue popup check
-            _activeDialogueLineIndex = 0;
-            if (page.dialogueLines != null && page.dialogueLines.Count > 0)
-            {
-                if (dialoguePanel != null && dialogueText != null)
-                {
-                    DisplayActiveDialogueLine(page.dialogueLines[0]);
-                    dialoguePanel.SetActive(true);
-                }
-                else
-                {
-                    // Fallback if UI not assigned
-                    StartActiveGameMode(page.gameType);
-                }
-            }
-            if (dialoguePanel != null) dialoguePanel.SetActive(false);
+            // Start active game mode immediately so it is visible in the background
             StartActiveGameMode(page.gameType);
 
+            // Dialogue popup check
+            if (page.dialogueLines != null && page.dialogueLines.Count > 0)
+            {
+                StartDialogueSequence(page.dialogueLines, null);
+            }
+            else
+            {
+                if (dialoguePanel != null) dialoguePanel.SetActive(false);
+            }
 
-            // Trigger walking transition on the main gameplay mascot when moving to a new page
+            _lastGameplayActivityTime = Time.time;
+            _hasPlayedGameplayInactivity = false;
+
             if (mascotAnimator != null)
             {
-                mascotAnimator.SetTrigger("IsWalking");
+                mascotAnimator.SetTrigger("isIdle");
+                var sr = mascotAnimator.GetComponent<SpriteRenderer>();
+                if (sr != null) sr.flipX = true;
             }
         }
 
         private void OnDialogueCloseButtonClicked()
         {
-            if (ActiveLevel == null || _currentPageIndex >= ActiveLevel.pages.Count) return;
-            PageData page = ActiveLevel.pages[_currentPageIndex];
-
-            var activeLines = _isCompletionDialogueActive ? page.completionDialogueLines : page.dialogueLines;
-
-            if (activeLines != null && _activeDialogueLineIndex < activeLines.Count - 1)
+            if (_isTyping)
             {
-                _activeDialogueLineIndex++;
-                DisplayActiveDialogueLine(activeLines[_activeDialogueLineIndex]);
+                // Instantly complete typing
+                if (_typewriterCoroutine != null) StopCoroutine(_typewriterCoroutine);
+                if (dialogueText != null) dialogueText.text = _currentFullText;
+                _isTyping = false;
             }
             else
             {
-                if (_isCompletionDialogueActive)
-                {
-                    if (dialoguePanel != null) dialoguePanel.SetActive(false);
-                    ProceedAfterPageCompletion();
-                }
-                else
-                {
-                    OnDialogueClosed();
-                }
+                // Skip the delay and advance
+                _skipDialogueDelay = true;
             }
         }
 
@@ -441,6 +535,11 @@ namespace KidGame.Interface
                         tracing.Configure(page.tracingSpellModeActive, page.tracingValuesToTrace, page.tracingCustomSpawnCount);
                         SetupNextButtons(tracing.PortraitContinueButton, tracing.LandscapeContinueButton);
                     }
+
+                    // Set answer grid opacity based on spell mode
+                    float alphaVal = page.tracingSpellModeActive ? 1f : 0f;
+                    SetAnswerGridOpacity(portraitTracingAnswerGrid, alphaVal);
+                    SetAnswerGridOpacity(landscapeTracingAnswerGrid, alphaVal);
                     break;
             }
         }
@@ -449,17 +548,22 @@ namespace KidGame.Interface
         {
             Color themeColor = GetActiveThemeColor();
 
+            _activePortraitNextButton = portraitBtn;
+            _activeLandscapeNextButton = landscapeBtn;
+
             if (portraitBtn != null)
             {
                 portraitBtn.onClick.RemoveAllListeners();
                 portraitBtn.onClick.AddListener(OnNextClicked);
                 StyleNextButton(portraitBtn, themeColor);
+                portraitBtn.interactable = true;
             }
             if (landscapeBtn != null)
             {
                 landscapeBtn.onClick.RemoveAllListeners();
                 landscapeBtn.onClick.AddListener(OnNextClicked);
                 StyleNextButton(landscapeBtn, themeColor);
+                landscapeBtn.interactable = true;
             }
         }
 
@@ -477,20 +581,20 @@ namespace KidGame.Interface
             colors.normalColor = Color.white;
             colors.selectedColor = Color.white;
             colors.highlightedColor = new Color(0.9f, 0.9f, 0.9f, 1f);
+            colors.disabledColor = new Color(1f, 1f, 1f, 0.8f); // Increased opacity (80%) so uninteractable buttons aren't transparent
             btn.colors = colors;
         }
 
         public void RegisterCorrectAnswer()
         {
             _consecutiveRightAnswers++;
-            if (_consecutiveRightAnswers >= 3)
+            _lastGameplayActivityTime = Time.time;
+            _hasPlayedGameplayInactivity = false;
+            if (mascotAnimator != null)
             {
-                _consecutiveRightAnswers = 0;
-                TriggerMascotWowed();
-            }
-            else
-            {
-                TriggerMascotCorrect();
+                mascotAnimator.SetTrigger("isIdle");
+                var sr = mascotAnimator.GetComponent<SpriteRenderer>();
+                if (sr != null) sr.flipX = true;
             }
         }
 
@@ -498,56 +602,67 @@ namespace KidGame.Interface
         {
             _totalMistakes++;
             _consecutiveRightAnswers = 0;
-            TriggerMascotWrong();
-        }
-
-        private void TriggerMascotCorrect()
-        {
-            if (mascotAnimator != null && !string.IsNullOrEmpty(mascotCorrectTrigger))
+            _lastGameplayActivityTime = Time.time;
+            _hasPlayedGameplayInactivity = false;
+            if (mascotAnimator != null)
             {
-                mascotAnimator.SetTrigger(mascotCorrectTrigger);
+                var sr = mascotAnimator.GetComponent<SpriteRenderer>();
+                if (sr != null) sr.flipX = true;
             }
+            TriggerMascotWrong();
         }
 
         private void TriggerMascotWrong()
         {
-            if (mascotAnimator != null && !string.IsNullOrEmpty(mascotWrongTrigger))
+            if (mascotAnimator != null)
             {
-                mascotAnimator.SetTrigger(mascotWrongTrigger);
-            }
-        }
-
-        private void TriggerMascotWowed()
-        {
-            if (mascotAnimator != null && !string.IsNullOrEmpty(mascotWowedTrigger))
-            {
-                mascotAnimator.SetTrigger(mascotWowedTrigger);
+                mascotAnimator.SetTrigger("isNoIdea");
             }
         }
 
         private void OnNextClicked()
         {
             if (ActiveLevel == null || _currentPageIndex >= ActiveLevel.pages.Count) return;
-            PageData page = ActiveLevel.pages[_currentPageIndex];
 
-            // Completion dialogue check
-            _activeDialogueLineIndex = 0;
-            _isCompletionDialogueActive = true;
-            if (page.completionDialogueLines != null && page.completionDialogueLines.Count > 0)
+            // If completion dialogue is already active, make Next button act as skip/dismiss
+            if (_isCompletionDialogueActive)
             {
+                OnDialogueCloseButtonClicked();
+                return;
+            }
+
+            // Check if the current round's task is completed
+            if (!IsCurrentRoundCompleted())
+            {
+                TriggerMascotWrong();
+
+                // Show the dialogue panel with the warning message (lasts 3 seconds or closes on click)
                 if (dialoguePanel != null && dialogueText != null)
                 {
-                    DisplayActiveDialogueLine(page.completionDialogueLines[0]);
-                    dialoguePanel.SetActive(true);
+                    List<DialogueLine> warningLine = new List<DialogueLine> {
+                        new DialogueLine { text = "Let's complete this task", mascotAnimationTrigger = "IsNoIdea" }
+                    };
+                    StartDialogueSequence(warningLine, null);
+                }
+                return;
+            }
+
+            // Fallback: if completed but completion dialogue hasn't triggered yet
+            if (!_hasTriggeredCompletionDialogueForCurrentPage)
+            {
+                PageData page = ActiveLevel.pages[_currentPageIndex];
+                _hasTriggeredCompletionDialogueForCurrentPage = true;
+                _isCompletionDialogueActive = true;
+                if (page.completionDialogueLines != null && page.completionDialogueLines.Count > 0)
+                {
+                    StartDialogueSequence(page.completionDialogueLines, () => {
+                        ProceedAfterPageCompletion();
+                    });
                 }
                 else
                 {
                     ProceedAfterPageCompletion();
                 }
-            }
-            else
-            {
-                ProceedAfterPageCompletion();
             }
         }
 
@@ -557,7 +672,7 @@ namespace KidGame.Interface
 
             if (dialogueMascotAnimator != null)
             {
-                dialogueMascotAnimator.SetTrigger("IsIdle");
+                dialogueMascotAnimator.SetTrigger("isIdle");
             }
             if (dialogueMascotSpriteRenderer != null)
             {
@@ -718,6 +833,281 @@ namespace KidGame.Interface
             }
 
             return words.Trim();
+        }
+
+        private bool IsCurrentRoundCompleted()
+        {
+            if (ActiveLevel == null || _currentPageIndex >= ActiveLevel.pages.Count) return true;
+            PageData page = ActiveLevel.pages[_currentPageIndex];
+
+            switch (page.gameType)
+            {
+                case GameType.Counting:
+                    var counting = countingGameGo?.GetComponent<CountingGameManager>();
+                    if (counting != null)
+                    {
+                        int answered = GetPrivateField<int>(counting, "_answeredCount");
+                        int total = GetPrivateListCount(counting, "_slots");
+                        if (total == 0) return false; // Still initializing slots!
+                        return answered >= total;
+                    }
+                    break;
+
+                case GameType.Addition:
+                    var addition = additionGameGo?.GetComponent<AdditionGameManager>();
+                    if (addition != null)
+                    {
+                        int answered = GetPrivateField<int>(addition, "_answeredCount");
+                        int total = GetPrivateListCount(addition, "_slots");
+                        if (total == 0) return false;
+                        return answered >= total;
+                    }
+                    break;
+
+                case GameType.Comparison:
+                    var comparison = comparisonGameGo?.GetComponent<ComparisonGameManager>();
+                    if (comparison != null)
+                    {
+                        int answered = GetPrivateField<int>(comparison, "_answeredCount");
+                        int total = GetPrivateListCount(comparison, "_slots");
+                        if (total == 0) return false;
+                        return answered >= total;
+                    }
+                    break;
+
+                case GameType.Matching:
+                    var matching = matchingGameGo?.GetComponent<MatchGameManager>();
+                    if (matching != null)
+                    {
+                        int connections = GetPrivateListCount(matching, "_connections");
+                        int total = GetPrivateListCount(matching, "_slots");
+                        if (total == 0) return false;
+                        return connections >= total;
+                    }
+                    break;
+
+                case GameType.Recall:
+                    var recall = recallGameGo?.GetComponent<NumberRecallGameManager>();
+                    if (recall != null)
+                    {
+                        int answered = GetPrivateField<int>(recall, "_answeredCount");
+                        int total = GetPrivateListCount(recall, "_slots");
+                        if (total == 0) return false;
+                        return answered >= total;
+                    }
+                    break;
+
+                case GameType.Tracing:
+                    var tracing = tracingGameGo?.GetComponent<TracingModeManager>();
+                    if (tracing != null)
+                    {
+                        bool isSpellMode = GetPrivateField<bool>(tracing, "spellModeActive");
+                        if (isSpellMode)
+                        {
+                            var zones = InvokePrivateMethod<System.Collections.IEnumerable>(tracing, "GetActiveSpellingZones") as System.Collections.ICollection;
+                            if (zones == null || zones.Count == 0) return false; // Still initializing spelling zones!
+                            bool allCorrect = true;
+                            foreach (var zone in zones)
+                            {
+                                bool isAnswered = GetProperty<bool>(zone, "IsAnswered");
+                                if (!isAnswered) { allCorrect = false; break; }
+                            }
+                            return allCorrect;
+                        }
+                        else
+                        {
+                            return InvokePrivateMethod<bool>(tracing, "IsAllTracingComplete");
+                        }
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        private T GetPrivateField<T>(object obj, string fieldName)
+        {
+            if (obj == null) return default;
+            var field = obj.GetType().GetField(fieldName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (field != null)
+            {
+                return (T)field.GetValue(obj);
+            }
+            return default;
+        }
+
+        private int GetPrivateListCount(object obj, string fieldName)
+        {
+            if (obj == null) return 0;
+            var field = obj.GetType().GetField(fieldName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (field != null)
+            {
+                var list = field.GetValue(obj) as System.Collections.ICollection;
+                if (list != null) return list.Count;
+            }
+            return 0;
+        }
+
+        private T InvokePrivateMethod<T>(object obj, string methodName)
+        {
+            if (obj == null) return default;
+            var method = obj.GetType().GetMethod(methodName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (method != null)
+            {
+                return (T)method.Invoke(obj, null);
+            }
+            return default;
+        }
+
+        private T GetProperty<T>(object obj, string propertyName)
+        {
+            if (obj == null) return default;
+            var prop = obj.GetType().GetProperty(propertyName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (prop != null)
+            {
+                return (T)prop.GetValue(obj);
+            }
+            return default;
+        }
+
+        private void SetAnswerGridOpacity(GameObject gridGo, float alpha)
+        {
+            if (gridGo == null) return;
+            var cg = gridGo.GetComponent<CanvasGroup>();
+            if (cg == null) cg = gridGo.AddComponent<CanvasGroup>();
+            cg.alpha = alpha;
+            cg.blocksRaycasts = (alpha > 0.1f);
+        }
+
+        private void StartDialogueSequence(List<DialogueLine> lines, System.Action onSequenceComplete)
+        {
+            if (lines == null || lines.Count == 0)
+            {
+                onSequenceComplete?.Invoke();
+                return;
+            }
+
+            if (_dialogueCoroutine != null) StopCoroutine(_dialogueCoroutine);
+            _dialogueCoroutine = StartCoroutine(DialogueSequenceRoutine(lines, onSequenceComplete));
+        }
+
+        private IEnumerator DialogueSequenceRoutine(List<DialogueLine> lines, System.Action onSequenceComplete)
+        {
+            // 0. Wait until the scene transition curtains are fully open/inactive before showing the dialogue
+            if (SceneTransitionManager.Instance != null)
+            {
+                while (SceneTransitionManager.Instance.IsTransitioning)
+                {
+                    yield return null;
+                }
+            }
+
+            if (dialoguePanel != null)
+            {
+                dialoguePanel.transform.DOKill();
+                dialoguePanel.transform.localScale = Vector3.zero;
+                dialoguePanel.SetActive(true);
+                dialoguePanel.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            }
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                var line = lines[i];
+                _activeDialogueLineIndex = i;
+                _skipDialogueDelay = false;
+
+                // 1. Set up mascot animation and flip
+                if (dialogueMascotAnimator != null)
+                {
+                    if (!string.IsNullOrEmpty(line.mascotAnimationTrigger))
+                    {
+                        string triggerName = line.mascotAnimationTrigger;
+                        if (triggerName.Equals("Hi", System.StringComparison.OrdinalIgnoreCase))
+                        {
+                            triggerName = "isHi";
+                        }
+                        else if (triggerName.Equals("Idle", System.StringComparison.OrdinalIgnoreCase))
+                        {
+                            triggerName = "isIdle";
+                        }
+                        dialogueMascotAnimator.SetTrigger(triggerName);
+                    }
+                    else
+                    {
+                        dialogueMascotAnimator.SetTrigger("isIdle");
+                    }
+                }
+
+                if (dialogueMascotSpriteRenderer != null)
+                {
+                    dialogueMascotSpriteRenderer.flipX = false;
+                }
+
+                // Pop up only the message bubble/box on every new line
+                if (dialogueMessageBox != null)
+                {
+                    dialogueMessageBox.transform.DOKill();
+                    dialogueMessageBox.transform.localScale = Vector3.zero;
+                    dialogueMessageBox.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+                }
+
+                // 2. Format and typewrite text
+                string playerName = PlayerPrefs.GetString("PlayerName", "Kid");
+                _currentFullText = line.text.Replace("{PLAYERNAME}", playerName).Replace("{playername}", playerName);
+
+                _isTyping = true;
+                if (_typewriterCoroutine != null) StopCoroutine(_typewriterCoroutine);
+                _typewriterCoroutine = StartCoroutine(TypewriteText(_currentFullText));
+
+                // Wait until typing is finished
+                yield return new WaitUntil(() => !_isTyping);
+
+                // 3. Wait for the required duration (10 seconds for all lines)
+                float delay = 10.0f;
+                float elapsed = 0f;
+                while (elapsed < delay && !_skipDialogueDelay)
+                {
+                    elapsed += Time.deltaTime;
+                    yield return null;
+                }
+            }
+
+            // Close dialogue with scale down tween
+            if (dialoguePanel != null)
+            {
+                bool isClosed = false;
+                dialoguePanel.transform.DOKill();
+                dialoguePanel.transform.DOScale(Vector3.zero, 0.25f).SetEase(Ease.InBack).OnComplete(() => {
+                    dialoguePanel.SetActive(false);
+                    isClosed = true;
+                });
+                yield return new WaitUntil(() => isClosed);
+            }
+
+            // Trigger isIdle on closed
+            if (dialogueMascotAnimator != null)
+            {
+                dialogueMascotAnimator.SetTrigger("isIdle");
+            }
+            if (dialogueMascotSpriteRenderer != null)
+            {
+                dialogueMascotSpriteRenderer.flipX = false;
+            }
+
+            onSequenceComplete?.Invoke();
+        }
+
+        private IEnumerator TypewriteText(string text)
+        {
+            if (dialogueText != null)
+            {
+                dialogueText.text = "";
+                for (int i = 0; i <= text.Length; i++)
+                {
+                    dialogueText.text = text.Substring(0, i);
+                    yield return new WaitForSeconds(0.03f); // Slower, more readable typing speed
+                }
+            }
+            _isTyping = false;
         }
     }
 }

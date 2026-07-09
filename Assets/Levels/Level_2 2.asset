@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_1
+  m_Name: Level_2 2
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 1
   levelName: LESSON 1
@@ -26,12 +26,12 @@ MonoBehaviour:
     - text: Hi {playername}, welcome to your first lesson
       mascotAnimationTrigger: Hi
     - text: Let's learn how to write 0
-      mascotAnimationTrigger: isIdle
+      mascotAnimationTrigger: 
     - text: Draw a line from the green dot to the red dot
-      mascotAnimationTrigger: isIdle
+      mascotAnimationTrigger: 
     completionDialogueLines:
     - text: Well done {playername} you nailed it!
-      mascotAnimationTrigger: isHappy
+      mascotAnimationTrigger: goodjob
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -83,7 +83,7 @@ MonoBehaviour:
       mascotAnimationTrigger: 
     completionDialogueLines:
     - text: You're doing just great!
-      mascotAnimationTrigger: isHappy
+      mascotAnimationTrigger: goodjob
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12

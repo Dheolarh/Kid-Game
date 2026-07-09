@@ -107,11 +107,20 @@ namespace KidGame.Mechanics.Tracing
             this.spellModeActive = spellModeActive;
             this.valuesToTrace = new List<string>(valuesToTrace);
             this.customSpawnCount = customSpawnCount;
+
+            // Clear old tracers immediately to prevent premature completion checks
+            _portraitRowTracers.Clear();
+            _landscapeRowTracers.Clear();
         }
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
-        private IEnumerator Start()
+        private void OnEnable()
+        {
+            StartCoroutine(InitializeRoundRoutine());
+        }
+
+        private IEnumerator InitializeRoundRoutine()
         {
             if (slotPrefab == null)
             {

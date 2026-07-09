@@ -23,6 +23,7 @@ namespace KidGame.Interface
 
         [Header("Dynamic Database Settings")]
         [SerializeField] private LevelDatabase levelDatabase; // Drop your LevelDatabase asset here!
+        [SerializeField] private ThemeDatabase themeDatabase; // Drop your ThemeDatabase asset here!
         [SerializeField] private int levelsPerPage = 9;
         [SerializeField] private float transitionDuration = 0.4f;
         [SerializeField] private Ease transitionEase = Ease.OutQuad;
@@ -135,6 +136,16 @@ namespace KidGame.Interface
                             if (levelUI.buttonBackground != null)
                             {
                                 Color normalColor = data.levelThemeColor;
+                                if (themeDatabase != null && !string.IsNullOrEmpty(data.themePresetName))
+                                {
+                                    var preset = themeDatabase.GetPreset(data.themePresetName);
+                                    if (preset != null)
+                                    {
+                                        normalColor = preset.themeColor;
+                                    }
+                                }
+                                normalColor.a = 1f;
+
                                 // Create a faded/desaturated version of the theme color for locked buttons
                                 Color fadedColor = new Color(
                                     Mathf.Lerp(normalColor.r, 0.5f, 0.5f),
@@ -381,11 +392,23 @@ namespace KidGame.Interface
 
             if (SceneTransitionManager.Instance != null)
             {
+                Color themeColor = data.levelThemeColor;
+                if (themeDatabase != null && !string.IsNullOrEmpty(data.themePresetName))
+                {
+                    var preset = themeDatabase.GetPreset(data.themePresetName);
+                    if (preset != null)
+                    {
+                        themeColor = preset.themeColor;
+                    }
+                }
+                themeColor.a = 1f;
+
                 SceneTransitionManager.Instance.LoadLevelWithTransition(
                     sceneToLoad,
                     "LESSON " + levelIndex,
                     data.levelName,
-                    data.levelSubtitle
+                    data.levelSubtitle,
+                    themeColor
                 );
             }
             else
