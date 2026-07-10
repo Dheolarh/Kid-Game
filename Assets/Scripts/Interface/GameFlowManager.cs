@@ -64,10 +64,20 @@ namespace KidGame.Interface
 
         [Header("Game End Panel")]
         [SerializeField] private GameObject gameEndPanel;
+        [SerializeField] private RectTransform endPanelBackground;     // Brown background panel
+        [SerializeField] private TMP_Text lessonCompleteText;           // "LESSON COMPLETE!" text
+        [SerializeField] private RectTransform endSphere;               // White sphere/dome shape
+        [SerializeField] private Animator endMascotAnimator;            // Mascot animator (IsWinner loop)
+        [SerializeField] private TMP_Text greatJobText;                 // "Great Job!" text
+        [SerializeField] private Animator endConfettiAnimator;          // Confetti sprite animator
         [SerializeField] private TMP_Text endTipsText;
         [SerializeField] private Image[] endStars = new Image[3];
         [SerializeField] private Color activeStarColor = Color.yellow;
         [SerializeField] private Color inactiveStarColor = new Color(1f, 1f, 1f, 0.2f);
+        [SerializeField] private Button endHomeButton;                  // Home button
+        [SerializeField] private Button endNextButton;                  // Next button
+        [SerializeField] private Image endNextButtonBg;                 // Next button bg image (tinted next level color)
+        [SerializeField] private GameObject endNoNextLevelPanel;        // Panel shown when no next level exists
 
         // State variables
         private int _currentPageIndex = 0;
@@ -731,24 +741,204 @@ namespace KidGame.Interface
                 PlayerPrefs.Save();
             }
 
-            // Display End Screen with Stars
+            // Play animated end panel sequence
             if (gameEndPanel != null)
             {
                 gameEndPanel.SetActive(true);
+                StartCoroutine(PlayEndPanelSequence(starsEarned));
+            }
+        }
 
-                if (endTipsText != null && ActiveLevel != null)
-                {
-                    string playerName = PlayerPrefs.GetString("PlayerName", "Kid");
-                    endTipsText.text = ActiveLevel.levelEndTip.Replace("{PLAYERNAME}", playerName).Replace("{playername}", playerName);
-                }
+        private IEnumerator PlayEndPanelSequence(int starsEarned)
+        {
+            // ── Prep: hide all elements before animating ──────────────────────────────
+            if (endPanelBackground != null) endPanelBackground.localScale = Vector3.zero;
+            if (lessonCompleteText != null) lessonCompleteText.transform.localScale = Vector3.zero;
 
-                for (int i = 0; i < endStars.Length; i++)
+            // Store sphere's home position, then push it 300px below so it can slide up
+            Vector2 sphereHomePos = Vector2.zero;
+            if (endSphere != null)
+            {
+                sphereHomePos = endSphere.anchoredPosition;
+                endSphere.anchoredPosition = new Vector2(sphereHomePos.x, sphereHomePos.y - 300f);
+            }
+
+            if (greatJobText != null) greatJobText.transform.localScale = Vector3.zero;
+
+            if (endStars != null)
+            {
+                foreach (var star in endStars)
                 {
-                    if (endStars[i] != null)
+                    if (star != null)
                     {
-                        endStars[i].color = (i < starsEarned) ? activeStarColor : inactiveStarColor;
+                        star.color = inactiveStarColor;
+                        star.transform.localScale = Vector3.zero;
                     }
                 }
+            }
+
+            if (endConfettiAnimator != null) endConfettiAnimator.gameObject.SetActive(false);
+            if (endTipsText != null) endTipsText.text = "";
+            if (endHomeButton != null) endHomeButton.transform.localScale = Vector3.zero;
+            if (endNextButton != null) endNextButton.transform.localScale = Vector3.zero;
+
+            yield return null; // let layout settle
+
+            // ── Step 1: Background pops in ────────────────────────────────────────────
+            if (endPanelBackground != null)
+                endPanelBackground.DOScale(Vector3.one, 0.4f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(0.25f);
+
+            // ── Step 2: "LESSON COMPLETE!" pops in ────────────────────────────────────
+            if (lessonCompleteText != null)
+                lessonCompleteText.transform.DOScale(Vector3.one, 0.35f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(0.3f);
+
+            // ── Step 3: Sphere slides up to its home position ─────────────────────────
+            if (endSphere != null)
+                endSphere.DOAnchorPosY(sphereHomePos.y, 0.5f).SetEase(Ease.OutCubic);
+            yield return new WaitForSeconds(0.35f);
+
+            // ── Step 4: Mascot IsWinner trigger + "Great Job!" pop in ─────────────────
+            if (endMascotAnimator != null)
+                endMascotAnimator.SetTrigger("IsWinner");
+            if (greatJobText != null)
+                greatJobText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(0.5f);
+
+            // ── Step 5: Stars animate in one by one ───────────────────────────────────
+            for (int i = 0; i < endStars.Length; i++)
+            {
+                if (endStars[i] == null) continue;
+
+                Image starImg = endStars[i]; // local capture to avoid closure bug
+                bool isEarned = (i < starsEarned);
+
+                if (isEarned)
+                {
+                    // Smash-in: scale punch from 0→1.3→1 and color flash to gold
+                    starImg.color = Color.white;
+                    starImg.transform.localScale = Vector3.zero;
+                    starImg.transform.DOScale(1.3f, 0.18f).SetEase(Ease.OutCubic)
+                        .OnComplete(() => starImg.transform.DOScale(1f, 0.15f).SetEase(Ease.InCubic));
+                    starImg.DOColor(activeStarColor, 0.2f);
+                    yield return new WaitForSeconds(0.28f);
+                }
+                else
+                {
+                    // Unearned: quietly fade in at dim white, no fanfare
+                    starImg.color = inactiveStarColor;
+                    starImg.transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
+                    yield return new WaitForSeconds(0.15f);
+                }
+            }
+            yield return new WaitForSeconds(0.2f);
+
+            // ── Step 6: Confetti blast ────────────────────────────────────────────────
+            if (endConfettiAnimator != null)
+                endConfettiAnimator.gameObject.SetActive(true); // entry animation plays automatically
+            yield return new WaitForSeconds(0.3f);
+
+            // ── Step 7: Tip text fast typewriter ──────────────────────────────────────
+            if (endTipsText != null && ActiveLevel != null)
+            {
+                string playerName = PlayerPrefs.GetString("SingleWordName", "Kid");
+                string tipText = ActiveLevel.levelEndTip
+                    .Replace("{PLAYERNAME}", playerName)
+                    .Replace("{playername}", playerName);
+                yield return StartCoroutine(TypewriteEndTip(endTipsText, tipText, 0.02f));
+            }
+            yield return new WaitForSeconds(0.2f);
+
+            // ── Step 8: Home & Next buttons pop in together ───────────────────────────
+            // Tint Next button with next level's theme color
+            LevelData nextLevel = GetNextLevel();
+            if (endNextButtonBg != null && nextLevel != null)
+            {
+                Color nextColor = nextLevel.levelThemeColor;
+                if (themeDatabase != null && !string.IsNullOrEmpty(nextLevel.themePresetName))
+                {
+                    var preset = themeDatabase.GetPreset(nextLevel.themePresetName);
+                    if (preset != null) nextColor = preset.themeColor;
+                }
+                nextColor.a = 1f;
+                endNextButtonBg.color = nextColor;
+            }
+
+            if (endHomeButton != null)
+            {
+                endHomeButton.onClick.RemoveAllListeners();
+                endHomeButton.onClick.AddListener(OnEndHomeClicked);
+                endHomeButton.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            }
+            if (endNextButton != null)
+            {
+                endNextButton.onClick.RemoveAllListeners();
+                endNextButton.onClick.AddListener(OnEndNextClicked);
+                endNextButton.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetDelay(0.05f);
+            }
+        }
+
+        private IEnumerator TypewriteEndTip(TMP_Text textComponent, string text, float charDelay)
+        {
+            textComponent.text = "";
+            for (int i = 0; i <= text.Length; i++)
+            {
+                textComponent.text = text.Substring(0, i);
+                yield return new WaitForSeconds(charDelay);
+            }
+        }
+
+        private LevelData GetNextLevel()
+        {
+            if (ActiveLevel == null || levelDatabase == null) return null;
+            int nextNumber = ActiveLevel.levelNumber + 1;
+            return levelDatabase.allLevels.Find(l => l != null && l.levelNumber == nextNumber);
+        }
+
+        private void OnEndHomeClicked()
+        {
+            if (SceneTransitionManager.Instance != null)
+            {
+                // "Level" is the Level Select scene
+                SceneTransitionManager.Instance.LoadSceneWithTransition("Level");
+            }
+        }
+
+        private void OnEndNextClicked()
+        {
+            LevelData nextLevel = GetNextLevel();
+            if (nextLevel == null)
+            {
+                // No next level — show the placeholder panel (to be configured later)
+                if (endNoNextLevelPanel != null)
+                    endNoNextLevelPanel.SetActive(true);
+                return;
+            }
+
+            // Determine next level's theme color
+            Color nextColor = nextLevel.levelThemeColor;
+            if (themeDatabase != null && !string.IsNullOrEmpty(nextLevel.themePresetName))
+            {
+                var preset = themeDatabase.GetPreset(nextLevel.themePresetName);
+                if (preset != null) nextColor = preset.themeColor;
+            }
+            nextColor.a = 1f;
+
+            // Set next level as active and transition with its curtain color
+            GameFlowManager.ActiveLevel = nextLevel;
+
+            if (SceneTransitionManager.Instance != null)
+            {
+                string sceneToLoad = string.IsNullOrEmpty(nextLevel.sceneToLoad) ? "Game" : nextLevel.sceneToLoad;
+                SceneTransitionManager.Instance.SetCurtainColor(nextColor);
+                SceneTransitionManager.Instance.LoadLevelWithTransition(
+                    sceneToLoad,
+                    $"Level {nextLevel.levelNumber}",
+                    nextLevel.levelName,
+                    nextLevel.levelSubtitle,
+                    nextColor
+                );
             }
         }
 
