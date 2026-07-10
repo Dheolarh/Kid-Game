@@ -15,10 +15,3 @@ MonoBehaviour:
   allLevels:
   - {fileID: 11400000, guid: eaf9074bd3cebb0428908936030c0b33, type: 2}
   - {fileID: 11400000, guid: d90ab85e664029f488f284e9ca62335e, type: 2}
-  - {fileID: 11400000, guid: 813d4fcb6085b4a4fa6e93ac3c07c2a0, type: 2}
-  - {fileID: 11400000, guid: 10eaacd8fb393e54290299b68c52e776, type: 2}
-  - {fileID: 11400000, guid: 1dbc2d168d21e144bbe17b24a7643aa4, type: 2}
-  - {fileID: 11400000, guid: 1b9ef98f6c40856438015bef11d187a2, type: 2}
-  - {fileID: 11400000, guid: 37a00aca11edcd34d95cde729b824645, type: 2}
-  - {fileID: 11400000, guid: f40c689ec4efea14f85f2946fc789312, type: 2}
-  - {fileID: 11400000, guid: c8a7da1e67959c442b1c91e9a87741bf, type: 2}

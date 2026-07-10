@@ -12,26 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_2
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 1
-  levelName: LESSON 1
-  levelSubtitle: Practice writing numbers
-  levelEndTip: 'Tip: 0 is spelled "zero"'
+  levelNumber: 2
+  levelName: LESSON 2
+  levelSubtitle: Learn to write number one
+  levelEndTip: Try pronouncing "ONE"
   isUnlockedByDefault: 1
-  themePresetName: Tracing
-  levelThemeColor: {r: 0.32156864, g: 0.5921569, b: 0.83921576, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
+  themePresetName: Orange
+  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}, welcome to your first lesson
-      mascotAnimationTrigger: Hi
-    - text: Let's learn how to write 0
-      mascotAnimationTrigger: 
-    - text: Draw a line from the green dot to the red dot
-      mascotAnimationTrigger: 
+    - text: Now let's practice writing 1
+      mascotAnimationTrigger: isIdle
+    - text: Trace a line from the green dot to the red dot
+      mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Well done {playername} you nailed it!
-      mascotAnimationTrigger: goodjob
+    - text: You're a great learner!
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -75,65 +73,12 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
     tracingValuesToTrace:
-    - 0
+    - 1
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Now let's try that again
-      mascotAnimationTrigger: 
-    completionDialogueLines:
-    - text: You're doing just great!
-      mascotAnimationTrigger: goodjob
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 0
-    - 0
-    tracingCustomSpawnCount: 2
-  - gameType: 5
-    dialogueLines:
-    - text: Let's do that one more time
-      mascotAnimationTrigger: 
+    - text: Easy right?, now let's do it once more
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -178,10 +123,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
     tracingValuesToTrace:
-    - 0
-    - 0
-    - 0
-    - 0
-    tracingCustomSpawnCount: 4
+    - 1
+    - 1
+    tracingCustomSpawnCount: 2
   sceneToLoad: Game
   levelIcon: {fileID: 0}

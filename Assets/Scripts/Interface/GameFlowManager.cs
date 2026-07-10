@@ -58,17 +58,19 @@ namespace KidGame.Interface
         [Header("Mascot Animation")]
         [SerializeField] private Animator mascotAnimator;
         [SerializeField] private string mascotCorrectTrigger = "";
-        [SerializeField] private string mascotWrongTrigger = "IsNoIdea";
-        [SerializeField] private string mascotWowedTrigger = "IsHappy";
-        [SerializeField] private string mascotVictoryTrigger = "IsWinner";
+        [SerializeField] private string mascotWrongTrigger = "isNoIdea";
+        [SerializeField] private string mascotWowedTrigger = "isHappy";
+        [SerializeField] private string mascotVictoryTrigger = "isWinner";
 
         [Header("Game End Panel")]
         [SerializeField] private GameObject gameEndPanel;
         [SerializeField] private RectTransform endPanelBackground;     // Brown background panel
         [SerializeField] private TMP_Text lessonCompleteText;           // "LESSON COMPLETE!" text
-        [SerializeField] private RectTransform endSphere;               // White sphere/dome shape
-        [SerializeField] private Animator endMascotAnimator;            // Mascot animator (IsWinner loop)
+        [SerializeField] private RectTransform endSphere;                // White sphere/dome shape
+        [SerializeField] private GameObject endMascotObject;            // End mascot object
+        [SerializeField] private Animator endMascotAnimator;            // Mascot animator (isWinner loop)
         [SerializeField] private TMP_Text greatJobText;                 // "Great Job!" text
+        [SerializeField] private GameObject endConfettiObject;          // Confetti object
         [SerializeField] private Animator endConfettiAnimator;          // Confetti sprite animator
         [SerializeField] private TMP_Text endTipsText;
         [SerializeField] private Image[] endStars = new Image[3];
@@ -799,9 +801,10 @@ namespace KidGame.Interface
                 endSphere.DOAnchorPosY(sphereHomePos.y, 0.5f).SetEase(Ease.OutCubic);
             yield return new WaitForSeconds(0.35f);
 
-            // ── Step 4: Mascot IsWinner trigger + "Great Job!" pop in ─────────────────
+            // ── Step 4: Mascot isWinner trigger + "Great Job!" pop in ─────────────────
             if (endMascotAnimator != null)
-                endMascotAnimator.SetTrigger("IsWinner");
+                endMascotObject.SetActive(true);
+                endMascotAnimator.SetTrigger("isWinner");
             if (greatJobText != null)
                 greatJobText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
             yield return new WaitForSeconds(0.5f);
@@ -836,6 +839,7 @@ namespace KidGame.Interface
 
             // ── Step 6: Confetti blast ────────────────────────────────────────────────
             if (endConfettiAnimator != null)
+                endConfettiObject.SetActive(true);
                 endConfettiAnimator.gameObject.SetActive(true); // entry animation plays automatically
             yield return new WaitForSeconds(0.3f);
 

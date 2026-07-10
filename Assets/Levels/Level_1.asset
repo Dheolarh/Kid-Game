@@ -15,11 +15,11 @@ MonoBehaviour:
   levelNumber: 1
   levelName: LESSON 1
   levelSubtitle: Practice writing numbers
-  levelEndTip: 'Tip: 0 is spelled "zero"'
+  levelEndTip: 'Tip: 0 is spelled "ZERO"'
   isUnlockedByDefault: 1
-  themePresetName: Tracing
-  levelThemeColor: {r: 0.32156864, g: 0.5921569, b: 0.83921576, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
+  themePresetName: TealGreen
+  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
   pages:
   - gameType: 5
     dialogueLines:
