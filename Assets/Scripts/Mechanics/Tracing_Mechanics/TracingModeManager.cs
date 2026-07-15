@@ -948,7 +948,7 @@ namespace KidGame.Mechanics.Tracing
                 hlg.childControlHeight = true;
                 hlg.childForceExpandWidth = false;
                 hlg.childForceExpandHeight = false;
-                hlg.spacing = 10f;
+                hlg.spacing = (characters.Length > 1) ? spacing : 10f;
                 hlg.padding = new RectOffset(0, 0, 0, 0);
             }
             else
@@ -1014,7 +1014,14 @@ namespace KidGame.Mechanics.Tracing
 
                 // Check if the character is narrow (e.g. '1', 'I', 'l', 'i')
                 bool isNarrow = (c == '1' || c == 'I' || c == 'l' || c == 'i');
-                float cellWidth = isNarrow ? cellSize * 0.80f : cellSize;
+                
+                // Tighter layout bounds for multi-character numbers/words to bring glyphs close together
+                float widthMultiplier = 1f;
+                if (characters.Length > 1)
+                {
+                    widthMultiplier = isDigit ? 0.65f : 0.85f;
+                }
+                float cellWidth = isNarrow ? (cellSize * 0.80f * widthMultiplier) : (cellSize * widthMultiplier);
 
                 // Set cell container size statically to cellWidth x cellSize
                 RectTransform cellRt = cellGo.GetComponent<RectTransform>();
@@ -1443,6 +1450,8 @@ namespace KidGame.Mechanics.Tracing
             if (allCorrect)
             {
                 Debug.Log("[TracingModeManager] spelling completed successfully!");
+                // Signal GameFlowManager that the round may now be complete
+                GameFlowManager.Instance?.NotifyRoundStateChanged();
                 StartCoroutine(SpellingSuccessRoutine());
             }
         }
@@ -1492,6 +1501,8 @@ namespace KidGame.Mechanics.Tracing
             if (IsAllTracingComplete())
             {
                 Debug.Log("[TracingModeManager] All shapes traced successfully!");
+                // Signal GameFlowManager that the round may now be complete
+                GameFlowManager.Instance?.NotifyRoundStateChanged();
                 StartCoroutine(NormalModeSuccessRoutine());
             }
         }
@@ -2170,18 +2181,6 @@ namespace KidGame.Mechanics.Tracing
             }
         }
 
-        // ── Editor Helpers ────────────────────────────────────────────────────
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) return;
-            if (UnityEditor.EditorApplication.isCompiling) return;
-
-            FindCharacterPrefabs();
-            ApplyMode(tutorialModeActive);
-        }
-
         public bool IsRoundCompleted()
         {
             if (spellModeActive)
@@ -2198,6 +2197,18 @@ namespace KidGame.Mechanics.Tracing
             {
                 return IsAllTracingComplete();
             }
+        }
+
+        // ── Editor Helpers ────────────────────────────────────────────────────
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) return;
+            if (UnityEditor.EditorApplication.isCompiling) return;
+
+            FindCharacterPrefabs();
+            ApplyMode(tutorialModeActive);
         }
 
         [ContextMenu("Switch to Tutorial Mode")]

@@ -42,10 +42,16 @@ namespace KidGame.Mechanics.Tracing
 
             if (Application.isPlaying)
             {
+                // Temporarily scale the inactive panel to zero so it initializes but remains completely hidden
+                _wasLandscape = IsLandscape;
+                (IsLandscape ? portraitPanel : landscapePanel).transform.localScale = Vector3.zero;
+                (IsLandscape ? landscapePanel : portraitPanel).transform.localScale = Vector3.one;
+
                 for (int i = 0; i < 5; i++) yield return null;
 
-                _wasLandscape = IsLandscape;
                 (IsLandscape ? portraitPanel : landscapePanel).SetActive(false);
+                (IsLandscape ? portraitPanel : landscapePanel).transform.localScale = Vector3.one; // Restore scale for future use
+                (IsLandscape ? landscapePanel : portraitPanel).transform.localScale = Vector3.one;
 
                 Debug.Log($"[TracingOrientation] Initialized in {(IsLandscape ? "landscape" : "portrait")} mode.");
             }

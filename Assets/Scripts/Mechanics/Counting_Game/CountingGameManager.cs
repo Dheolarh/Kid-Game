@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using KidGame.Interface;
 
 namespace KidGame.Mechanics.Counting
 {
@@ -190,6 +191,7 @@ namespace KidGame.Mechanics.Counting
             _answeredCount++;
             if (_answeredCount >= _slots.Count)
                 SetNextButtonsInteractable(true);
+            GameFlowManager.Instance?.NotifyRoundStateChanged();
         }
 
         // ── Round Management ──────────────────────────────────────────────────

@@ -581,6 +581,7 @@ namespace KidGame.Mechanics.Matching
             if (_connections.Count >= _slots.Count)
             {
                 SetNextButtonsInteractable(true);
+                KidGame.Interface.GameFlowManager.Instance?.NotifyRoundStateChanged();
             }
         }
 

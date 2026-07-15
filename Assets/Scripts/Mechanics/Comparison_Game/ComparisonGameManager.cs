@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using KidGame.Mechanics.Counting;
+using KidGame.Interface;
 
 namespace KidGame.Mechanics.Comparison
 {
@@ -214,6 +215,7 @@ namespace KidGame.Mechanics.Comparison
             {
                 SetNextButtonsInteractable(true);
             }
+            GameFlowManager.Instance?.NotifyRoundStateChanged();
         }
 
         public Color GetColorForIndex(int idx)

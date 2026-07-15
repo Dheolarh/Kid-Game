@@ -172,7 +172,7 @@ MonoBehaviour:
   - gameType: 5
     dialogueLines: []
     completionDialogueLines:
-    - text: 
+    - text: Great job! you are as smart as ever.
       mascotAnimationTrigger: 
     countingSlotCount: 5
     countingMinCount: 1

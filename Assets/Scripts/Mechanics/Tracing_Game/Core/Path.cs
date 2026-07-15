@@ -34,12 +34,23 @@ namespace KidGame.Mechanics.Tracing
         // ── Public API ────────────────────────────────────────────
         public void AutoFill() => StartCoroutine(AutoFillCoroutine());
 
+        // Cached references to avoid per-call GetComponent lookups in hot paths
+        private Collider2D  _startCollider;
+        private readonly List<Transform> _numberBuffer = new List<Transform>(4);
+
+        private void Start()
+        {
+            // Cache start collider once
+            _startCollider = transform.Find("Start")?.GetComponent<Collider2D>();
+        }
+
         public void SetNumbersStatus(bool active)
         {
-            var numbers = TracingUtil.FindChildrenByTag(transform.Find("Numbers"), "Number");
+            // Zero-allocation: reuse _numberBuffer instead of creating a new list
+            TracingUtil.FindChildrenByTag(transform.Find("Numbers"), "Number", _numberBuffer);
             Color c = Color.white;
 
-            foreach (Transform n in numbers)
+            foreach (Transform n in _numberBuffer)
             {
                 if (n == null) continue;
 
@@ -66,9 +77,9 @@ namespace KidGame.Mechanics.Tracing
 
         public void SetNumbersVisibility(bool visible)
         {
-            var numbers = TracingUtil.FindChildrenByTag(
-                transform.Find("Numbers"), "Number");
-            foreach (Transform n in numbers)
+            // Zero-allocation: reuse _numberBuffer instead of creating a new list
+            TracingUtil.FindChildrenByTag(transform.Find("Numbers"), "Number", _numberBuffer);
+            foreach (Transform n in _numberBuffer)
                 if (n != null) n.gameObject.SetActive(visible);
         }
 

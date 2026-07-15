@@ -102,6 +102,9 @@ namespace KidGame.Interface
         private bool _hasPlayedInactivityAnimation = false;
         [SerializeField] private float dialogueInactivityTimeout = 8f;
         private bool _isTransitioningPage = false;
+        // Dirty flag: set true when a game event may have completed the round.
+        // This avoids polling IsCurrentRoundCompleted() every frame.
+        private bool _roundCompletionDirty = false;
         private float _lineDisplayStartTime = 0f;
 
         private float _lastGameplayActivityTime;
@@ -197,6 +200,30 @@ namespace KidGame.Interface
                 return;
             }
 
+            StartCoroutine(InitializeLevelAfterTransition());
+        }
+
+        /// <summary>
+        /// Waits for the curtain transition to finish opening before running the heavy level
+        /// initialization (game mode instantiation, slot spawning, etc.).
+        /// This prevents the 60ms+ frame spike visible in the profiler.
+        /// </summary>
+        private IEnumerator InitializeLevelAfterTransition()
+        {
+            // Wait until the SceneTransitionManager has finished its opening animation.
+            // This ensures the heavy instantiation work (prefab + slot spawning) does not
+            // collide with the curtain DOTween animation on the same frames.
+            if (SceneTransitionManager.Instance != null)
+            {
+                while (SceneTransitionManager.Instance.IsTransitioning)
+                {
+                    yield return null;
+                }
+            }
+
+            // Give the renderer one more frame to settle after the curtain is fully open
+            yield return null;
+
             InitializeLevel();
         }
 
@@ -228,44 +255,29 @@ namespace KidGame.Interface
                 }
             }
 
-            // Force next buttons to be always interactable so they don't fade to zero opacity
-            if (_activePortraitNextButton != null && !_activePortraitNextButton.interactable)
+            // Only check round completion when signalled by a game event (dirty flag)
+            // This prevents expensive per-frame tracer iteration
+            if (_roundCompletionDirty && !_isTransitioningPage && !_hasTriggeredCompletionDialogueForCurrentPage)
             {
-                _activePortraitNextButton.interactable = true;
-            }
-            if (_activeLandscapeNextButton != null && !_activeLandscapeNextButton.interactable)
-            {
-                _activeLandscapeNextButton.interactable = true;
-            }
-            if (alwaysInteractableButtons != null)
-            {
-                foreach (var btn in alwaysInteractableButtons)
+                _roundCompletionDirty = false;
+                if (IsCurrentRoundCompleted())
                 {
-                    if (btn != null && !btn.interactable)
+                    if (ActiveLevel != null && _currentPageIndex < ActiveLevel.pages.Count)
                     {
-                        btn.interactable = true;
-                    }
-                }
-            }
+                        PageData page = ActiveLevel.pages[_currentPageIndex];
+                        _hasTriggeredCompletionDialogueForCurrentPage = true;
 
-            // Automatically trigger completion dialogue the moment the round is finished
-            if (!_isTransitioningPage && !_hasTriggeredCompletionDialogueForCurrentPage && IsCurrentRoundCompleted())
-            {
-                if (ActiveLevel != null && _currentPageIndex < ActiveLevel.pages.Count)
-                {
-                    PageData page = ActiveLevel.pages[_currentPageIndex];
-                    _hasTriggeredCompletionDialogueForCurrentPage = true;
-
-                    _isCompletionDialogueActive = true;
-                    if (page.completionDialogueLines != null && page.completionDialogueLines.Count > 0)
-                    {
-                        StartDialogueSequence(page.completionDialogueLines, () => {
-                            ProceedAfterPageCompletion();
-                        });
-                    }
-                    else
-                    {
-                        StartCoroutine(DelayedProceedAfterPageCompletion(0.5f));
+                        _isCompletionDialogueActive = true;
+                        if (page.completionDialogueLines != null && page.completionDialogueLines.Count > 0)
+                        {
+                            StartDialogueSequence(page.completionDialogueLines, () => {
+                                ProceedAfterPageCompletion();
+                            });
+                        }
+                        else
+                        {
+                            StartCoroutine(DelayedProceedAfterPageCompletion(0.5f));
+                        }
                     }
                 }
             }
@@ -284,6 +296,15 @@ namespace KidGame.Interface
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Called by game managers (tracers, answer zones, etc.) whenever a player action
+        /// may have completed the round. Avoids polling IsCurrentRoundCompleted() every frame.
+        /// </summary>
+        public void NotifyRoundStateChanged()
+        {
+            _roundCompletionDirty = true;
         }
 
         private void InitializeLevel()
@@ -1195,7 +1216,7 @@ namespace KidGame.Interface
                 SceneTransitionManager.Instance.SetCurtainColor(nextColor);
                 SceneTransitionManager.Instance.LoadLevelWithTransition(
                     sceneToLoad,
-                    $"Level {nextLevel.levelNumber}",
+                    $"LESSON {nextLevel.levelNumber}",
                     nextLevel.levelName,
                     nextLevel.levelSubtitle,
                     nextColor

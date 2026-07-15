@@ -333,6 +333,7 @@ namespace KidGame.Mechanics.NumberRecall
             {
                 SetNextButtonsInteractable(true);
             }
+            KidGame.Interface.GameFlowManager.Instance?.NotifyRoundStateChanged();
         }
 
         private void ClearPrevious()

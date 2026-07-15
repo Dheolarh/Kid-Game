@@ -24,6 +24,12 @@ namespace KidGame.Mechanics.Tracing
         private RaycastHit2D   _hit;
         private ScrollRect     _scrollRect;         // locked while tracing
 
+        // Cached path geometry — populated once per BeginPath to avoid per-frame allocations
+        private RectTransform  _activePathRt;
+        private Vector3        _cachedPos1;         // start world-space point for linear fill
+        private Vector3        _cachedPos2;         // end world-space point for linear fill
+        private bool           _linearCacheDirty = true;
+
         // ──────────────────────────────────────────────────
         // Unity Lifecycle
         // ──────────────────────────────────────────────────
@@ -124,6 +130,10 @@ namespace KidGame.Mechanics.Tracing
             _activeTracer = tracer;
             _activeTracer.BeginPath(path);
 
+            // Cache the path's RectTransform so LinearFill doesn't call GetComponent every frame
+            _activePathRt = path.GetComponent<RectTransform>();
+            _linearCacheDirty = true;
+
             // Lock the ScrollRect so dragging draws instead of scrolling
             _scrollRect = tracer.GetComponentInParent<ScrollRect>();
             if (_scrollRect != null) _scrollRect.enabled = false;
@@ -220,37 +230,45 @@ namespace KidGame.Mechanics.Tracing
         {
             _clickPos = GetWorldPos();
 
-            var rotation = path.transform.eulerAngles;
-            rotation.z -= path.offset;
-
-            var rect = TracingUtil.RectTransformToScreenSpace(
-                           path.GetComponent<RectTransform>());
-
-            Vector3 pos1 = Vector3.zero, pos2 = Vector3.zero;
-
-            if (path.type == Path.ShapeType.Horizontal)
+            // Recompute the start/end world positions only when a new path segment begins.
+            // Avoids new Rect() allocation and GetComponent call every frame.
+            if (_linearCacheDirty && _activePathRt != null)
             {
-                pos1.x = path.transform.position.x - Mathf.Sin(rotation.z * Mathf.Deg2Rad) * rect.width  / 2f;
-                pos1.y = path.transform.position.y - Mathf.Cos(rotation.z * Mathf.Deg2Rad) * rect.width  / 2f;
-                pos2.x = path.transform.position.x + Mathf.Sin(rotation.z * Mathf.Deg2Rad) * rect.width  / 2f;
-                pos2.y = path.transform.position.y + Mathf.Cos(rotation.z * Mathf.Deg2Rad) * rect.width  / 2f;
+                _linearCacheDirty = false;
+
+                var rotation = path.transform.eulerAngles;
+                rotation.z -= path.offset;
+
+                // Use lossyScale to convert local rect size to world space (no new Rect allocation)
+                float width  = _activePathRt.rect.width  * _activePathRt.lossyScale.x;
+                float height = _activePathRt.rect.height * _activePathRt.lossyScale.y;
+
+                Vector3 center = path.transform.position;
+
+                if (path.type == Path.ShapeType.Horizontal)
+                {
+                    _cachedPos1.x = center.x - Mathf.Sin(rotation.z * Mathf.Deg2Rad) * width  / 2f;
+                    _cachedPos1.y = center.y - Mathf.Cos(rotation.z * Mathf.Deg2Rad) * width  / 2f;
+                    _cachedPos2.x = center.x + Mathf.Sin(rotation.z * Mathf.Deg2Rad) * width  / 2f;
+                    _cachedPos2.y = center.y + Mathf.Cos(rotation.z * Mathf.Deg2Rad) * width  / 2f;
+                }
+                else
+                {
+                    _cachedPos1.x = center.x - Mathf.Cos(rotation.z * Mathf.Deg2Rad) * height / 2f;
+                    _cachedPos1.y = center.y - Mathf.Sin(rotation.z * Mathf.Deg2Rad) * height / 2f;
+                    _cachedPos2.x = center.x + Mathf.Cos(rotation.z * Mathf.Deg2Rad) * height / 2f;
+                    _cachedPos2.y = center.y + Mathf.Sin(rotation.z * Mathf.Deg2Rad) * height / 2f;
+                }
+
+                _cachedPos1.z = _cachedPos2.z = center.z;
+
+                if (path.flip) { var tmp = _cachedPos2; _cachedPos2 = _cachedPos1; _cachedPos1 = tmp; }
             }
-            else
-            {
-                pos1.x = path.transform.position.x - Mathf.Cos(rotation.z * Mathf.Deg2Rad) * rect.height / 2f;
-                pos1.y = path.transform.position.y - Mathf.Sin(rotation.z * Mathf.Deg2Rad) * rect.height / 2f;
-                pos2.x = path.transform.position.x + Mathf.Cos(rotation.z * Mathf.Deg2Rad) * rect.height / 2f;
-                pos2.y = path.transform.position.y + Mathf.Sin(rotation.z * Mathf.Deg2Rad) * rect.height / 2f;
-            }
 
-            pos1.z = pos2.z = path.transform.position.z;
+            _clickPos.x = Mathf.Clamp(_clickPos.x, Mathf.Min(_cachedPos1.x, _cachedPos2.x), Mathf.Max(_cachedPos1.x, _cachedPos2.x));
+            _clickPos.y = Mathf.Clamp(_clickPos.y, Mathf.Min(_cachedPos1.y, _cachedPos2.y), Mathf.Max(_cachedPos1.y, _cachedPos2.y));
 
-            if (path.flip) { var tmp = pos2; pos2 = pos1; pos1 = tmp; }
-
-            _clickPos.x = Mathf.Clamp(_clickPos.x, Mathf.Min(pos1.x, pos2.x), Mathf.Max(pos1.x, pos2.x));
-            _clickPos.y = Mathf.Clamp(_clickPos.y, Mathf.Min(pos1.y, pos2.y), Mathf.Max(pos1.y, pos2.y));
-
-            _fillAmount          = Vector2.Distance(_clickPos, pos1) / Vector2.Distance(pos1, pos2);
+            _fillAmount          = Vector2.Distance(_clickPos, _cachedPos1) / Vector2.Distance(_cachedPos1, _cachedPos2);
             fillImage.fillAmount = _fillAmount;
             CheckFillComplete(path);
         }
