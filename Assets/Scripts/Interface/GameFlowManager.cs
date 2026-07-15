@@ -437,7 +437,9 @@ namespace KidGame.Interface
                     nameLower.Contains("bg") || 
                     nameLower.Contains("frame") || 
                     nameLower.Contains("header") || 
-                    nameLower.Contains("pause"))
+                    nameLower.Contains("pause") ||
+                    nameLower.Contains("answer grid") ||
+                    nameLower.Contains("answergrid"))
                 {
                     continue;
                 }
