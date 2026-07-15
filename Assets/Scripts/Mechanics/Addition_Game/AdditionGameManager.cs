@@ -622,6 +622,12 @@ namespace KidGame.Mechanics.Addition
             }
         }
 
+        public bool IsRoundCompleted()
+        {
+            if (_slots == null || _slots.Count == 0) return false;
+            return _answeredCount >= _slots.Count;
+        }
+
         private static void Shuffle<T>(List<T> list)
         {
             for (int i = list.Count - 1; i > 0; i--)

@@ -88,6 +88,8 @@ namespace KidGame.Interface
         private int _consecutiveRightAnswers = 0;
         private bool _isLevelCompleted = false;
 
+        private GameObject _activeGameModeInstance;
+
         private Coroutine _dialogueCoroutine;
         private Coroutine _typewriterCoroutine;
         private bool _isTyping = false;
@@ -99,9 +101,53 @@ namespace KidGame.Interface
         private float _lastDialogueActivityTime;
         private bool _hasPlayedInactivityAnimation = false;
         [SerializeField] private float dialogueInactivityTimeout = 8f;
+        private bool _isTransitioningPage = false;
+        private float _lineDisplayStartTime = 0f;
 
         private float _lastGameplayActivityTime;
         private bool _hasPlayedGameplayInactivity = false;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void InitializeGameResolution()
+        {
+            #if UNITY_EDITOR
+            // Do not apply resolution capping in the Unity Editor to keep the game view crisp and sharp
+            Debug.Log("[GameFlowManager] Running in Unity Editor. Resolution capping disabled to ensure a sharp preview.");
+            return;
+            #endif
+
+            // Detect if the device is a tablet based on screen diagonal size in inches
+            bool isTablet = false;
+            if (Screen.dpi > 0)
+            {
+                float widthInches = Screen.width / Screen.dpi;
+                float heightInches = Screen.height / Screen.dpi;
+                float diagonalInches = Mathf.Sqrt(widthInches * widthInches + heightInches * heightInches);
+                
+                // Tablets generally have a diagonal screen size larger than 6.5 inches
+                if (diagonalInches > 6.5f)
+                {
+                    isTablet = true;
+                }
+            }
+            
+            #if UNITY_IOS
+            if (UnityEngine.iOS.Device.generation.ToString().Contains("iPad"))
+            {
+                isTablet = true;
+            }
+            #endif
+
+            // Set high-density target resolutions: 1440p (QHD) for phones, 2048p (2K+) for tablets
+            int maxResolutionHeight = isTablet ? 2048 : 1440;
+
+            if (Screen.currentResolution.height > maxResolutionHeight)
+            {
+                int targetWidth = Mathf.RoundToInt(maxResolutionHeight * ((float)Screen.width / Screen.height));
+                Screen.SetResolution(targetWidth, maxResolutionHeight, true);
+                Debug.Log($"[GameFlowManager] Tablet Detected: {isTablet}. Setting screen resolution to: {targetWidth}x{maxResolutionHeight}");
+            }
+        }
 
         private void Awake()
         {
@@ -118,6 +164,27 @@ namespace KidGame.Interface
 
         private void Start()
         {
+            #if UNITY_EDITOR
+            if (levelDatabase == null)
+            {
+                string[] guids = UnityEditor.AssetDatabase.FindAssets("t:LevelDatabase");
+                if (guids.Length > 0)
+                {
+                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                    levelDatabase = UnityEditor.AssetDatabase.LoadAssetAtPath<LevelDatabase>(path);
+                }
+            }
+            if (themeDatabase == null)
+            {
+                string[] guids = UnityEditor.AssetDatabase.FindAssets("t:ThemeDatabase");
+                if (guids.Length > 0)
+                {
+                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                    themeDatabase = UnityEditor.AssetDatabase.LoadAssetAtPath<ThemeDatabase>(path);
+                }
+            }
+            #endif
+
             // If playing directly in the editor, load a fallback test level from database
             if (ActiveLevel == null && levelDatabase != null && levelDatabase.allLevels.Count > testLevelIndex)
             {
@@ -182,7 +249,7 @@ namespace KidGame.Interface
             }
 
             // Automatically trigger completion dialogue the moment the round is finished
-            if (!_hasTriggeredCompletionDialogueForCurrentPage && IsCurrentRoundCompleted())
+            if (!_isTransitioningPage && !_hasTriggeredCompletionDialogueForCurrentPage && IsCurrentRoundCompleted())
             {
                 if (ActiveLevel != null && _currentPageIndex < ActiveLevel.pages.Count)
                 {
@@ -198,7 +265,7 @@ namespace KidGame.Interface
                     }
                     else
                     {
-                        ProceedAfterPageCompletion();
+                        StartCoroutine(DelayedProceedAfterPageCompletion(0.5f));
                     }
                 }
             }
@@ -278,7 +345,7 @@ namespace KidGame.Interface
             LoadPage(0);
         }
 
-        private Color GetActiveThemeColor()
+        public Color GetActiveThemeColor()
         {
             if (ActiveLevel == null) return Color.white;
 
@@ -357,6 +424,48 @@ namespace KidGame.Interface
             }
         }
 
+        private List<Transform> GetGameplayContainers(GameObject gameModeInstance)
+        {
+            List<Transform> containers = new List<Transform>();
+            if (gameModeInstance == null) return containers;
+
+            foreach (Transform child in gameModeInstance.GetComponentsInChildren<Transform>(true))
+            {
+                string nameLower = child.name.ToLower();
+                if (nameLower.Contains("board") || 
+                    nameLower.Contains("background") || 
+                    nameLower.Contains("bg") || 
+                    nameLower.Contains("frame") || 
+                    nameLower.Contains("header") || 
+                    nameLower.Contains("pause"))
+                {
+                    continue;
+                }
+
+                if (nameLower.Contains("container") || 
+                    nameLower.Contains("content") || 
+                    nameLower.Contains("grid") || 
+                    nameLower.Contains("column") || 
+                    nameLower.Contains("slots"))
+                {
+                    bool hasParentAlreadyAdded = false;
+                    foreach (var c in containers)
+                    {
+                        if (child.IsChildOf(c))
+                        {
+                            hasParentAlreadyAdded = true;
+                            break;
+                        }
+                    }
+                    if (!hasParentAlreadyAdded)
+                    {
+                        containers.Add(child);
+                    }
+                }
+            }
+            return containers;
+        }
+
         private void LoadPage(int index)
         {
             if (ActiveLevel == null || index < 0 || index >= ActiveLevel.pages.Count) return;
@@ -367,14 +476,49 @@ namespace KidGame.Interface
             _hasTriggeredCompletionDialogueForCurrentPage = false;
             _isCompletionDialogueActive = false;
 
-            // Deactivate all managers initially
-            DeactivateAllGameModes();
+            // Find slot containers on the old page and pop them out
+            var oldContainers = GetGameplayContainers(_activeGameModeInstance);
+            if (oldContainers.Count > 0)
+            {
+                int completedCount = 0;
+                foreach (var container in oldContainers)
+                {
+                    container.DOKill();
+                    container.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InQuad).OnComplete(() =>
+                    {
+                        completedCount++;
+                        if (completedCount == oldContainers.Count)
+                        {
+                            DeactivateAllGameModes();
+                            SetupNewPage(page);
+                        }
+                    });
+                }
+            }
+            else
+            {
+                DeactivateAllGameModes();
+                SetupNewPage(page);
+            }
+        }
 
+        private void SetupNewPage(PageData page)
+        {
+            _isTransitioningPage = false;
             // Configure the specific manager
             ConfigureAndSetupGameMode(page);
 
             // Start active game mode immediately so it is visible in the background
             StartActiveGameMode(page.gameType);
+
+            // Pop in the new slot containers
+            var newContainers = GetGameplayContainers(_activeGameModeInstance);
+            foreach (var container in newContainers)
+            {
+                container.DOKill();
+                container.localScale = Vector3.zero;
+                container.DOScale(Vector3.one, 0.35f).SetEase(Ease.OutBack);
+            }
 
             // Dialogue popup check
             if (page.dialogueLines != null && page.dialogueLines.Count > 0)
@@ -399,6 +543,9 @@ namespace KidGame.Interface
 
         private void OnDialogueCloseButtonClicked()
         {
+            // Ignore accidental skips during the first 0.5 seconds of display (e.g. from finger release after tracing)
+            if (Time.time - _lineDisplayStartTime < 0.5f) return;
+
             if (_isTyping)
             {
                 // Instantly complete typing
@@ -460,20 +607,47 @@ namespace KidGame.Interface
 
         private void DeactivateAllGameModes()
         {
-            if (countingGameGo) countingGameGo.SetActive(false);
-            if (additionGameGo) additionGameGo.SetActive(false);
-            if (comparisonGameGo) comparisonGameGo.SetActive(false);
-            if (matchingGameGo) matchingGameGo.SetActive(false);
-            if (recallGameGo) recallGameGo.SetActive(false);
-            if (tracingGameGo) tracingGameGo.SetActive(false);
+            if (_activeGameModeInstance != null)
+            {
+                Destroy(_activeGameModeInstance);
+                _activeGameModeInstance = null;
+            }
+        }
+
+        private void ApplyThemeToInstantiatedGameMode(GameObject go, Color themeColor)
+        {
+            if (go == null) return;
+
+            // 1. Color all Outline components inside the instantiated game mode
+            var outlines = go.GetComponentsInChildren<UnityEngine.UI.Outline>(true);
+            foreach (var outline in outlines)
+            {
+                if (outline != null)
+                {
+                    outline.effectColor = themeColor;
+                }
+            }
+
+            // 2. Color any Image components named "Outline", "ThemeColor", "Border", or similar inside the prefab
+            var images = go.GetComponentsInChildren<UnityEngine.UI.Image>(true);
+            foreach (var img in images)
+            {
+                if (img != null)
+                {
+                    string nameLower = img.gameObject.name.ToLower();
+                    if (nameLower.Contains("outline") || nameLower.Contains("themecolor") || nameLower.Contains("border"))
+                    {
+                        img.color = themeColor;
+                    }
+                }
+            }
         }
 
         private void StartActiveGameMode(GameType type)
         {
-            GameObject targetGo = GetGameObjectForType(type);
-            if (targetGo != null)
+            if (_activeGameModeInstance != null)
             {
-                targetGo.SetActive(true);
+                _activeGameModeInstance.SetActive(true);
             }
         }
 
@@ -493,10 +667,23 @@ namespace KidGame.Interface
 
         private void ConfigureAndSetupGameMode(PageData page)
         {
+            DeactivateAllGameModes();
+
+            GameObject prefab = GetGameObjectForType(page.gameType);
+            if (prefab != null)
+            {
+                _activeGameModeInstance = Instantiate(prefab, prefab.transform.parent);
+                _activeGameModeInstance.name = prefab.name; // Keep name matching
+                _activeGameModeInstance.SetActive(false); // Keep inactive until StartActiveGameMode is called
+
+                // Dynamically apply visual themes to the newly instantiated prefab
+                ApplyThemeToInstantiatedGameMode(_activeGameModeInstance, GetActiveThemeColor());
+            }
+
             switch (page.gameType)
             {
                 case GameType.Counting:
-                    var counting = countingGameGo?.GetComponent<CountingGameManager>();
+                    var counting = _activeGameModeInstance?.GetComponent<CountingGameManager>();
                     if (counting != null)
                     {
                         counting.Configure(page.countingSlotCount, page.countingMinCount, page.countingMaxCount, page.countingDiceMode, page.countingFingerMode, page.countingActiveThemeName);
@@ -505,7 +692,7 @@ namespace KidGame.Interface
                     break;
 
                 case GameType.Addition:
-                    var addition = additionGameGo?.GetComponent<AdditionGameManager>();
+                    var addition = _activeGameModeInstance?.GetComponent<AdditionGameManager>();
                     if (addition != null)
                     {
                         addition.Configure(page.additionSlotCount, page.additionMinPerGrid, page.additionMaxPerGrid, page.additionDiceMode, page.additionFingerMode, page.additionCountAddMode, page.additionNumbersOnlyMode, page.additionMinOperandCount, page.additionMaxOperandCount, page.additionMinNumberValue, page.additionMaxNumberValue, page.additionActiveThemeName);
@@ -514,7 +701,7 @@ namespace KidGame.Interface
                     break;
 
                 case GameType.Comparison:
-                    var comparison = comparisonGameGo?.GetComponent<ComparisonGameManager>();
+                    var comparison = _activeGameModeInstance?.GetComponent<ComparisonGameManager>();
                     if (comparison != null)
                     {
                         comparison.Configure(page.comparisonSlotCount, page.comparisonMinVal, page.comparisonMaxVal, page.comparisonMixAdditionEquations, page.comparisonNumbersOnlyMode, page.comparisonActiveThemeName);
@@ -523,7 +710,7 @@ namespace KidGame.Interface
                     break;
 
                 case GameType.Matching:
-                    var matching = matchingGameGo?.GetComponent<MatchGameManager>();
+                    var matching = _activeGameModeInstance?.GetComponent<MatchGameManager>();
                     if (matching != null)
                     {
                         matching.Configure(page.matchingLeftVariant, page.matchingRightVariant, page.matchingSlotCount, page.matchingMinVal, page.matchingMaxVal, page.matchingShuffleLeftColumn);
@@ -532,7 +719,7 @@ namespace KidGame.Interface
                     break;
 
                 case GameType.Recall:
-                    var recall = recallGameGo?.GetComponent<NumberRecallGameManager>();
+                    var recall = _activeGameModeInstance?.GetComponent<NumberRecallGameManager>();
                     if (recall != null)
                     {
                         recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden);
@@ -541,17 +728,61 @@ namespace KidGame.Interface
                     break;
 
                 case GameType.Tracing:
-                    var tracing = tracingGameGo?.GetComponent<TracingModeManager>();
+                    var tracing = _activeGameModeInstance?.GetComponent<TracingModeManager>();
                     if (tracing != null)
                     {
                         tracing.Configure(page.tracingSpellModeActive, page.tracingValuesToTrace, page.tracingCustomSpawnCount);
                         SetupNextButtons(tracing.PortraitContinueButton, tracing.LandscapeContinueButton);
                     }
 
-                    // Set answer grid opacity based on spell mode
+                    // Dynamically look up the answer grids in the instantiated game mode prefab to target the active instance
+                    GameObject portGrid = portraitTracingAnswerGrid;
+                    GameObject landGrid = landscapeTracingAnswerGrid;
+
+                    if (_activeGameModeInstance != null)
+                    {
+                        var allChildren = _activeGameModeInstance.GetComponentsInChildren<Transform>(true);
+                        foreach (var child in allChildren)
+                        {
+                            string childNameLower = child.name.ToLower();
+                            if (childNameLower.Contains("answer grid") || childNameLower.Contains("answergrid") || childNameLower.Contains("spellingui"))
+                            {
+                                bool isPortrait = false;
+                                bool isLandscape = false;
+
+                                Transform current = child;
+                                while (current != null && current != _activeGameModeInstance.transform)
+                                {
+                                    string pNameLower = current.name.ToLower();
+                                    if (pNameLower.Contains("portrait") || pNameLower.Contains("potrait"))
+                                    {
+                                        isPortrait = true;
+                                        break;
+                                    }
+                                    if (pNameLower.Contains("landscape") || pNameLower.Contains("lanscape"))
+                                    {
+                                        isLandscape = true;
+                                        break;
+                                    }
+                                    current = current.parent;
+                                }
+
+                                if (isPortrait)
+                                {
+                                    portGrid = child.gameObject;
+                                }
+                                else if (isLandscape)
+                                {
+                                    landGrid = child.gameObject;
+                                }
+                            }
+                        }
+                    }
+
+                    // Set answer grid visibility based on spell mode
                     float alphaVal = page.tracingSpellModeActive ? 1f : 0f;
-                    SetAnswerGridOpacity(portraitTracingAnswerGrid, alphaVal);
-                    SetAnswerGridOpacity(landscapeTracingAnswerGrid, alphaVal);
+                    SetAnswerGridOpacity(portGrid, alphaVal);
+                    SetAnswerGridOpacity(landGrid, alphaVal);
                     break;
             }
         }
@@ -673,13 +904,16 @@ namespace KidGame.Interface
                 }
                 else
                 {
-                    ProceedAfterPageCompletion();
+                    StartCoroutine(DelayedProceedAfterPageCompletion(0.5f));
                 }
             }
         }
 
         private void ProceedAfterPageCompletion()
         {
+            if (_isTransitioningPage) return;
+            _isTransitioningPage = true;
+
             _isCompletionDialogueActive = false;
 
             if (dialogueMascotAnimator != null)
@@ -699,6 +933,12 @@ namespace KidGame.Interface
             {
                 CompleteLevel();
             }
+        }
+
+        private IEnumerator DelayedProceedAfterPageCompletion(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            ProceedAfterPageCompletion();
         }
 
         private void CompleteLevel()
@@ -803,8 +1043,10 @@ namespace KidGame.Interface
 
             // ── Step 4: Mascot isWinner trigger + "Great Job!" pop in ─────────────────
             if (endMascotAnimator != null)
+            {
                 endMascotObject.SetActive(true);
                 endMascotAnimator.SetTrigger("isWinner");
+            }
             if (greatJobText != null)
                 greatJobText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
             yield return new WaitForSeconds(0.5f);
@@ -839,8 +1081,14 @@ namespace KidGame.Interface
 
             // ── Step 6: Confetti blast ────────────────────────────────────────────────
             if (endConfettiAnimator != null)
-                endConfettiObject.SetActive(true);
-                endConfettiAnimator.gameObject.SetActive(true); // entry animation plays automatically
+            {
+                endConfettiAnimator.gameObject.SetActive(true);
+                // Ensure confetti panel and elements do not block UI clicks/raycasts
+                var cg = endConfettiAnimator.GetComponent<CanvasGroup>();
+                if (cg == null) cg = endConfettiAnimator.gameObject.AddComponent<CanvasGroup>();
+                cg.blocksRaycasts = false;
+                cg.interactable = false;
+            }
             yield return new WaitForSeconds(0.3f);
 
             // ── Step 7: Tip text fast typewriter ──────────────────────────────────────
@@ -902,18 +1150,25 @@ namespace KidGame.Interface
 
         private void OnEndHomeClicked()
         {
+            Debug.Log("[GameFlowManager] Home button clicked on Game End Panel.");
             if (SceneTransitionManager.Instance != null)
             {
                 // "Level" is the Level Select scene
                 SceneTransitionManager.Instance.LoadSceneWithTransition("Level");
             }
+            else
+            {
+                Debug.LogError("[GameFlowManager] Cannot load Home scene: SceneTransitionManager.Instance is null!");
+            }
         }
 
         private void OnEndNextClicked()
         {
+            Debug.Log("[GameFlowManager] Next button clicked on Game End Panel.");
             LevelData nextLevel = GetNextLevel();
             if (nextLevel == null)
             {
+                Debug.LogWarning("[GameFlowManager] Cannot transition to next level: No next level found in database.");
                 // No next level — show the placeholder panel (to be configured later)
                 if (endNoNextLevelPanel != null)
                     endNoNextLevelPanel.SetActive(true);
@@ -943,6 +1198,10 @@ namespace KidGame.Interface
                     nextLevel.levelSubtitle,
                     nextColor
                 );
+            }
+            else
+            {
+                Debug.LogError("[GameFlowManager] Cannot transition to next level: SceneTransitionManager.Instance is null!");
             }
         }
 
@@ -1034,86 +1293,33 @@ namespace KidGame.Interface
             if (ActiveLevel == null || _currentPageIndex >= ActiveLevel.pages.Count) return true;
             PageData page = ActiveLevel.pages[_currentPageIndex];
 
+            if (_activeGameModeInstance == null) return false;
+
             switch (page.gameType)
             {
                 case GameType.Counting:
-                    var counting = countingGameGo?.GetComponent<CountingGameManager>();
-                    if (counting != null)
-                    {
-                        int answered = GetPrivateField<int>(counting, "_answeredCount");
-                        int total = GetPrivateListCount(counting, "_slots");
-                        if (total == 0) return false; // Still initializing slots!
-                        return answered >= total;
-                    }
-                    break;
+                    var counting = _activeGameModeInstance.GetComponent<CountingGameManager>();
+                    return counting != null && counting.IsRoundCompleted();
 
                 case GameType.Addition:
-                    var addition = additionGameGo?.GetComponent<AdditionGameManager>();
-                    if (addition != null)
-                    {
-                        int answered = GetPrivateField<int>(addition, "_answeredCount");
-                        int total = GetPrivateListCount(addition, "_slots");
-                        if (total == 0) return false;
-                        return answered >= total;
-                    }
-                    break;
+                    var addition = _activeGameModeInstance.GetComponent<AdditionGameManager>();
+                    return addition != null && addition.IsRoundCompleted();
 
                 case GameType.Comparison:
-                    var comparison = comparisonGameGo?.GetComponent<ComparisonGameManager>();
-                    if (comparison != null)
-                    {
-                        int answered = GetPrivateField<int>(comparison, "_answeredCount");
-                        int total = GetPrivateListCount(comparison, "_slots");
-                        if (total == 0) return false;
-                        return answered >= total;
-                    }
-                    break;
+                    var comparison = _activeGameModeInstance.GetComponent<ComparisonGameManager>();
+                    return comparison != null && comparison.IsRoundCompleted();
 
                 case GameType.Matching:
-                    var matching = matchingGameGo?.GetComponent<MatchGameManager>();
-                    if (matching != null)
-                    {
-                        int connections = GetPrivateListCount(matching, "_connections");
-                        int total = GetPrivateListCount(matching, "_slots");
-                        if (total == 0) return false;
-                        return connections >= total;
-                    }
-                    break;
+                    var matching = _activeGameModeInstance.GetComponent<MatchGameManager>();
+                    return matching != null && matching.IsRoundCompleted();
 
                 case GameType.Recall:
-                    var recall = recallGameGo?.GetComponent<NumberRecallGameManager>();
-                    if (recall != null)
-                    {
-                        int answered = GetPrivateField<int>(recall, "_answeredCount");
-                        int total = GetPrivateListCount(recall, "_slots");
-                        if (total == 0) return false;
-                        return answered >= total;
-                    }
-                    break;
+                    var recall = _activeGameModeInstance.GetComponent<NumberRecallGameManager>();
+                    return recall != null && recall.IsRoundCompleted();
 
                 case GameType.Tracing:
-                    var tracing = tracingGameGo?.GetComponent<TracingModeManager>();
-                    if (tracing != null)
-                    {
-                        bool isSpellMode = GetPrivateField<bool>(tracing, "spellModeActive");
-                        if (isSpellMode)
-                        {
-                            var zones = InvokePrivateMethod<System.Collections.IEnumerable>(tracing, "GetActiveSpellingZones") as System.Collections.ICollection;
-                            if (zones == null || zones.Count == 0) return false; // Still initializing spelling zones!
-                            bool allCorrect = true;
-                            foreach (var zone in zones)
-                            {
-                                bool isAnswered = GetProperty<bool>(zone, "IsAnswered");
-                                if (!isAnswered) { allCorrect = false; break; }
-                            }
-                            return allCorrect;
-                        }
-                        else
-                        {
-                            return InvokePrivateMethod<bool>(tracing, "IsAllTracingComplete");
-                        }
-                    }
-                    break;
+                    var tracing = _activeGameModeInstance.GetComponent<TracingModeManager>();
+                    return tracing != null && tracing.IsRoundCompleted();
             }
             return true;
         }
@@ -1208,6 +1414,7 @@ namespace KidGame.Interface
                 var line = lines[i];
                 _activeDialogueLineIndex = i;
                 _skipDialogueDelay = false;
+                _lineDisplayStartTime = Time.time;
 
                 // 1. Set up mascot animation and flip
                 if (dialogueMascotAnimator != null)
@@ -1245,7 +1452,7 @@ namespace KidGame.Interface
                 }
 
                 // 2. Format and typewrite text
-                string playerName = PlayerPrefs.GetString("PlayerName", "Kid");
+                string playerName = PlayerPrefs.GetString("SingleWordName", "Kid");
                 _currentFullText = line.text.Replace("{PLAYERNAME}", playerName).Replace("{playername}", playerName);
 
                 _isTyping = true;

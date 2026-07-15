@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3874433697045276898}
   - component: {fileID: 4054933763968742908}
   - component: {fileID: 999062544381489596}
+  - component: {fileID: 8354900258014664983}
   m_Layer: 5
   m_Name: Answer box
   m_TagString: Untagged
@@ -120,3 +121,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ce00935c96da11449e20547418e1583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.AnswerDropZone
+--- !u!114 &8354900258014664983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7493580431218611394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e7ca7afbea1ef24e919869de395a488, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.ThemeColorBinder
+  outlineHolders:
+  - {fileID: 7493580431218611394}
+  specificOutlines: []
+  images: []

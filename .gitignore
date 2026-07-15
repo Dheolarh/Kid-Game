@@ -154,7 +154,7 @@ Assets/Plugins/Editor/Backtrace/
 # ----- Coverage & test results ------------------------------
 /CodeCoverage/
 /TestResults/
-
+/ProfilerCaptures
 # ----- Perforce (if mixed VCS environment) ------------------
 *.p4ignore
 

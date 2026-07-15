@@ -14,24 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 1
   levelName: LESSON 1
-  levelSubtitle: Practice writing numbers
-  levelEndTip: 'Tip: 0 is spelled "ZERO"'
+  levelSubtitle: Let's practice writing 0
+  levelEndTip: Here's how to spell 0 - "Z E R O"
   isUnlockedByDefault: 1
-  themePresetName: TealGreen
-  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
   - gameType: 5
     dialogueLines:
     - text: Hi {playername}, welcome to your first lesson
-      mascotAnimationTrigger: Hi
-    - text: Let's learn how to write 0
-      mascotAnimationTrigger: isIdle
-    - text: Draw a line from the green dot to the red dot
+      mascotAnimationTrigger: isHi
+    - text: Let's practice how to write 0
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Well done {playername} you nailed it!
+    - text: Great Job!
       mascotAnimationTrigger: isHappy
+    - text: Now let's try that again
+      mascotAnimationTrigger: 
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -78,12 +78,12 @@ MonoBehaviour:
     - 0
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines:
-    - text: Now let's try that again
-      mascotAnimationTrigger: 
+    dialogueLines: []
     completionDialogueLines:
-    - text: You're doing just great!
-      mascotAnimationTrigger: isHappy
+    - text: You're a fast learner!
+      mascotAnimationTrigger: isHappy!
+    - text: Let's go one more time!
+      mascotAnimationTrigger: isIdle
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -129,11 +129,9 @@ MonoBehaviour:
     tracingValuesToTrace:
     - 0
     - 0
-    tracingCustomSpawnCount: 2
+    tracingCustomSpawnCount: 4
   - gameType: 5
-    dialogueLines:
-    - text: Let's do that one more time
-      mascotAnimationTrigger: 
+    dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1

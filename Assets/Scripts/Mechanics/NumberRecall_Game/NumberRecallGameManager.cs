@@ -426,6 +426,12 @@ namespace KidGame.Mechanics.NumberRecall
             }
         }
 
+        public bool IsRoundCompleted()
+        {
+            if (_slots == null || _slots.Count == 0) return false;
+            return _answeredCount >= _slots.Count;
+        }
+
         private void Shuffle<T>(IList<T> list)
         {
             int n = list.Count;

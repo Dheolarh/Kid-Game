@@ -146,21 +146,24 @@ namespace KidGame.Interface
                                 }
                                 normalColor.a = 1f;
 
-                                // Create a faded/desaturated version of the theme color for locked buttons
-                                Color fadedColor = new Color(
-                                    Mathf.Lerp(normalColor.r, 0.5f, 0.5f),
-                                    Mathf.Lerp(normalColor.g, 0.5f, 0.5f),
-                                    Mathf.Lerp(normalColor.b, 0.5f, 0.5f),
-                                    0.5f
-                                );
-                                levelUI.buttonBackground.color = isUnlocked ? normalColor : fadedColor;
+                                // Keep normal color for locked levels (Unity's disabled button state will desaturate/blur it naturally)
+                                levelUI.buttonBackground.color = normalColor;
                             }
 
                             for (int s = 0; s < levelUI.stars.Length; s++)
                             {
                                 if (levelUI.stars[s] != null)
                                 {
-                                    levelUI.stars[s].color = (s < starsCount) ? levelUI.activeStarColor : levelUI.inactiveStarColor;
+                                    if (s < starsCount)
+                                    {
+                                        levelUI.stars[s].color = levelUI.activeStarColor;
+                                    }
+                                    else
+                                    {
+                                        // Default star color is white, with a higher opacity if the level is unlocked
+                                        float alpha = isUnlocked ? 0.5f : 0.25f;
+                                        levelUI.stars[s].color = new Color(1f, 1f, 1f, alpha);
+                                    }
                                 }
                             }
                         }

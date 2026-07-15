@@ -2182,6 +2182,24 @@ namespace KidGame.Mechanics.Tracing
             ApplyMode(tutorialModeActive);
         }
 
+        public bool IsRoundCompleted()
+        {
+            if (spellModeActive)
+            {
+                var zones = GetActiveSpellingZones();
+                if (zones == null || zones.Count == 0) return false;
+                foreach (var zone in zones)
+                {
+                    if (!zone.IsAnswered) return false;
+                }
+                return true;
+            }
+            else
+            {
+                return IsAllTracingComplete();
+            }
+        }
+
         [ContextMenu("Switch to Tutorial Mode")]
         private void EditorSetTutorial() { tutorialModeActive = true;  ApplyMode(true);  }
 
