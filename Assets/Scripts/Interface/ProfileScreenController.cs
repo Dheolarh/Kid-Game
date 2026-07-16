@@ -305,6 +305,9 @@ namespace KidGame.Interface
             string fullName = nameInputField.text.Trim();
             if (string.IsNullOrEmpty(fullName)) return;
 
+            // Play button click SFX for either button tap or keyboard Enter submission
+            KidGame.Audio.AudioManager.Instance?.PlayButtonClickSfx();
+
             // Apply Title Case: each word starts with a capital, rest lowercase (e.g. "john doe" -> "John Doe")
             fullName = ToTitleCase(fullName);
 

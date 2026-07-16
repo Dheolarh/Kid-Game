@@ -107,7 +107,7 @@ namespace KidGame.Audio
         {
             if (gameplayPlaylist == null || gameplayPlaylist.Count == 0)
             {
-                Debug.LogWarning("[AudioManager] Gameplay playlist is empty.");
+                Debug.LogWarning("[AudioManager] Gameplay playlist is empty. Cannot transition BGM.");
                 return;
             }
 
@@ -127,9 +127,11 @@ namespace KidGame.Audio
                 selectedClip = options[Random.Range(0, options.Count)];
             }
 
+            Debug.Log($"[AudioManager] Transitioning to gameplay BGM: {selectedClip.name} at volume {gameplayVolume}");
             _lastGameBgmPlayed = selectedClip;
             TransitionBgm(selectedClip, gameplayVolume);
         }
+
 
         /// <summary>
         /// Handles smooth transition (fade-out/fade-in or volume adjustments) of background music.
