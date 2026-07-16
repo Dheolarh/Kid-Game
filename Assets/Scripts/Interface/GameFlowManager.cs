@@ -230,7 +230,11 @@ namespace KidGame.Interface
             yield return null;
 
             InitializeLevel();
+
+            // Play a random gameplay track from playlist once curtains are opened and level is initialized
+            KidGame.Audio.AudioManager.Instance?.PlayRandomGameplayBgm();
         }
+
 
         private void Update()
         {
@@ -1382,6 +1386,9 @@ namespace KidGame.Interface
                 dialoguePanel.transform.localScale = Vector3.zero;
                 dialoguePanel.SetActive(true);
                 dialoguePanel.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+                // Play dialogue pop SFX
+                KidGame.Audio.AudioManager.Instance?.PlayDialoguePopSfx();
+
             }
 
             for (int i = 0; i < lines.Count; i++)

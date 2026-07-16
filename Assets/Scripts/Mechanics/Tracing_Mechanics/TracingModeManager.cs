@@ -129,9 +129,14 @@ namespace KidGame.Mechanics.Tracing
             yield return null;
             Canvas.ForceUpdateCanvases();
 
-            // Spawn into all four containers
-            SpawnInto(tutorialContent, _rowTracers);
-            SpawnInto(gameContent, _rowTracers);
+            // Spawn into this orientation's tutorial and game containers.
+            // These now run as coroutines that yield between rows, so the heavy
+            // Instantiate/layout work for a level is spread across several frames
+            // instead of happening in one blocking burst during scene activation
+            // (the burst was invisible on desktop but caused visible stutter on
+            // lower-end Android devices, including freezing the loading animation).
+            yield return SpawnInto(tutorialContent, _rowTracers);
+            yield return SpawnInto(gameContent, _rowTracers);
 
 
             // Wait for SlotTracer.Start() coroutines to finish spawning shapes:
@@ -395,9 +400,9 @@ namespace KidGame.Mechanics.Tracing
             return tracerTransform.parent; // fallback
         }
 
-        private void SpawnInto(Transform container, List<List<SlotTracer>> rowTracersList)
+        private IEnumerator SpawnInto(Transform container, List<List<SlotTracer>> rowTracersList)
         {
-            if (container == null) return;
+            if (container == null) yield break;
 
             // Clear any existing children first
             for (int i = container.childCount - 1; i >= 0; i--)
@@ -455,7 +460,7 @@ namespace KidGame.Mechanics.Tracing
                     {
                         rowTracersList.Add(new List<SlotTracer> { tracer });
                     }
-                    return;
+                    yield break;
                 }
 
                 List<string> entriesToSpawn = new List<string>();
@@ -527,6 +532,11 @@ namespace KidGame.Mechanics.Tracing
                     {
                         rowTracersList.Add(list);
                     }
+
+                    // Let the current frame render before spawning the next row —
+                    // spawning every row in one unbroken burst is what stalls the
+                    // loading animation on lower-end devices during scene activation.
+                    yield return null;
                 }
 
                 if (spellModeActive)
@@ -652,7 +662,7 @@ namespace KidGame.Mechanics.Tracing
                         }
                     }
                 }
-                return;
+                yield break;
             }
 
             // Fallback: If no values to trace are provided, use standard slotPrefab instantiation
@@ -667,7 +677,7 @@ namespace KidGame.Mechanics.Tracing
                         rowTracersList.Add(new List<SlotTracer> { tracer });
                     }
                 }
-                return;
+                yield break;
             }
 
             // Adjust layout of the container
@@ -781,6 +791,9 @@ namespace KidGame.Mechanics.Tracing
                         groupRt.sizeDelta = new Vector2(totalWidth, C);
                     }
                 }
+
+                // Let the current frame render before spawning the next entry group.
+                yield return null;
             }
         }
 
@@ -1312,7 +1325,6 @@ namespace KidGame.Mechanics.Tracing
 
                                 if (scale > 0f)
                                 {
-                                    Debug.Log($"[FindMinScale] tracer: {tracer.name}, slotSize: {slotSize}, shapeSize: {shapeSize}, calculated scale: {scale}, sizePadding: {tracer.SizePadding}");
                                     minScale = Mathf.Min(minScale, scale);
                                     foundAny = true;
                                 }
@@ -2118,7 +2130,10 @@ namespace KidGame.Mechanics.Tracing
                 {
                     RebuildLayoutsRecursive(child);
                     var childRt = child as RectTransform;
-                    if (childRt != null)
+                    // Only force a rebuild if this node actually drives layout (LayoutGroup or
+                    // ContentSizeFitter) — plain children have nothing for the rebuilder to recompute.
+                    if (childRt != null &&
+                        (child.GetComponent<LayoutGroup>() != null || child.GetComponent<ContentSizeFitter>() != null))
                     {
                         LayoutRebuilder.ForceRebuildLayoutImmediate(childRt);
                     }

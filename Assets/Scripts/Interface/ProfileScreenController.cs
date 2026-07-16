@@ -234,6 +234,8 @@ namespace KidGame.Interface
                 {
                     TriggerNameGreeting();
                 });
+                // Play dialogue pop SFX
+                KidGame.Audio.AudioManager.Instance?.PlayDialoguePopSfx();
             }
             else
             {
@@ -396,6 +398,8 @@ namespace KidGame.Interface
                 {
                     TriggerAgeGreeting(firstName);
                 });
+                // Play dialogue pop SFX
+                KidGame.Audio.AudioManager.Instance?.PlayDialoguePopSfx();
             }
             else
             {
@@ -430,6 +434,9 @@ namespace KidGame.Interface
 
             ShowSelectedAgeVisual(age);
 
+            // Play answer drop SFX since selected age drops into slot
+            KidGame.Audio.AudioManager.Instance?.PlayAnswerDropSfx();
+
             if (ageAnswerSlot != null)
             {
                 ageAnswerSlot.transform.DOKill();
@@ -437,6 +444,7 @@ namespace KidGame.Interface
                 ageAnswerSlot.transform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 10, 1f)
                     .OnComplete(() => ageAnswerSlot.transform.localScale = Vector3.one);
             }
+
 
             // Reveal the next button
             if (ageNextButton != null && !ageNextButton.gameObject.activeSelf)
@@ -519,6 +527,8 @@ namespace KidGame.Interface
                 {
                     TriggerAvatarGreeting();
                 });
+                // Play dialogue pop SFX
+                KidGame.Audio.AudioManager.Instance?.PlayDialoguePopSfx();
             }
             else
             {

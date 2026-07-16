@@ -26,6 +26,10 @@ namespace KidGame.Mechanics.Counting
             // Kill any running punch so rapid taps restart cleanly
             DOTween.Kill(transform);
             transform.DOPunchScale(Vector3.one * punchStrength, punchDuration, punchVibrato, 0.5f);
+
+            // Play counting object tap SFX
+            KidGame.Audio.AudioManager.Instance?.PlayCountObjectSfx();
         }
+
     }
 }

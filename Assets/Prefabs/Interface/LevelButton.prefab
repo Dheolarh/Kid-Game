@@ -398,6 +398,7 @@ GameObject:
   - component: {fileID: 3774449332129138902}
   - component: {fileID: 4106991982408345157}
   - component: {fileID: -6296558614340840970}
+  - component: {fileID: 3719425483425913438}
   m_Layer: 0
   m_Name: LevelButton
   m_TagString: Untagged
@@ -574,6 +575,18 @@ MonoBehaviour:
   durationUp: 0.12
   easeDown: 6
   easeUp: 27
+--- !u!114 &3719425483425913438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7988995160940112909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb68e123cf4b0340a75a059411f1f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Audio.ButtonClickSfx
 --- !u!1 &9153222701086219389
 GameObject:
   m_ObjectHideFlags: 0

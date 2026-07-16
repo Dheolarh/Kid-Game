@@ -81,6 +81,9 @@ namespace KidGame.Mechanics.Counting
             _background.color = card.CardColor;
             card.AcceptedByZone(transform);
 
+            // Play correct answer card drop SFX
+            KidGame.Audio.AudioManager.Instance?.PlayAnswerDropSfx();
+
             if (KidGame.Interface.GameFlowManager.Instance != null)
             {
                 KidGame.Interface.GameFlowManager.Instance.RegisterCorrectAnswer();
@@ -88,5 +91,6 @@ namespace KidGame.Mechanics.Counting
 
             _onCorrect?.Invoke();
         }
+
     }
 }

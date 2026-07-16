@@ -136,8 +136,12 @@ namespace KidGame.Interface
                 if (splashScreen != null) splashScreen.SetActive(false);
                 if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
                 if (homeScreen != null) homeScreen.SetActive(true);
+
+                // Play Main Menu BGM immediately if intro is skipped
+                KidGame.Audio.AudioManager.Instance?.PlayMainMenuBgm();
                 return;
             }
+
 
             // Ensure Splash screen is active and others are inactive at start (first run)
             if (splashScreen != null) splashScreen.SetActive(true);
@@ -214,6 +218,9 @@ namespace KidGame.Interface
             }
             _isTransitioning = false;
 
+            // Play Registration BGM now that the splash screen curtains are fully open and registration screen shows
+            KidGame.Audio.AudioManager.Instance?.PlayRegistrationBgm();
+
             // Trigger the progressive intro setup animations on the profile screen
             if (profileScreenController != null)
             {
@@ -262,10 +269,14 @@ namespace KidGame.Interface
                 homeScreen.SetActive(true);
             }
 
+            // Play Main Menu BGM (higher volume)
+            KidGame.Audio.AudioManager.Instance?.PlayMainMenuBgm();
+
             // Trigger the intro animations on the home screen
             if (homeScreenIntroController != null)
             {
                 homeScreenIntroController.PlayIntro();
+
             }
         }
 
