@@ -23,6 +23,8 @@ namespace KidGame.Interface
         private void Update()
         {
             if (this == null) return;
+            // Once orientation is locked for the session, no need to keep checking.
+            if (OrientationManager.IsLocked) return;
             if (portraitView == null || landscapeView == null) return;
 
             bool landscape = IsLandscape();
@@ -37,7 +39,8 @@ namespace KidGame.Interface
             if (this == null) return;
             if (portraitView == null || landscapeView == null) return;
 
-            bool landscape = IsLandscape();
+            // Use the locked orientation if available, otherwise detect live
+            bool landscape = OrientationManager.IsLocked ? !OrientationManager.IsPortrait : IsLandscape();
 
             portraitView.SetActive(!landscape);
             landscapeView.SetActive(landscape);

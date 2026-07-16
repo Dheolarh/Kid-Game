@@ -19,14 +19,11 @@ namespace KidGame.Mechanics.Matching
         // ── Inspector ────────────────────────────────────────────────────────
 
         [Header("Containers")]
-        [Tooltip("The Content container inside the Portrait ScrollRect.")]
-        [SerializeField] private RectTransform portraitContent;
-        [Tooltip("The Content container inside the Landscape ScrollRect.")]
-        [SerializeField] private RectTransform landscapeContent;
+        [Tooltip("The Content container inside the ScrollRect.")]
+        [SerializeField] private RectTransform content;
 
-        [Header("Next Buttons")]
-        [SerializeField] private Button portraitNextButton;
-        [SerializeField] private Button landscapeNextButton;
+        [Header("Next Button")]
+        [SerializeField] private Button nextButton;
 
         [Header("Prefabs & Templates")]
         [Tooltip("The horizontal Slot row prefab containing [left] [space] [right] children.")]
@@ -93,15 +90,7 @@ namespace KidGame.Mechanics.Matching
 
         // ── Orientation ───────────────────────────────────────────────────────
 
-        private bool IsLandscape => Screen.width > Screen.height;
-
-        private RectTransform ActiveContent
-            => IsLandscape ? landscapeContent : portraitContent;
-
-        private bool _wasLandscape;
-
-        public Button PortraitNextButton => portraitNextButton;
-        public Button LandscapeNextButton => landscapeNextButton;
+                        public Button NextButton => nextButton;
 
         public void Configure(MatchVariant leftVariant, MatchVariant rightVariant, int slotCount, int minVal, int maxVal, bool shuffleLeftColumn)
         {
@@ -120,16 +109,12 @@ namespace KidGame.Mechanics.Matching
 
         private void OnEnable()
         {
-            ConfigureNextButton(portraitNextButton);
-            ConfigureNextButton(landscapeNextButton);
-
-            _wasLandscape = IsLandscape;
-            SetNextButtonsInteractable(false);
+            ConfigureNextButton(nextButton);
+            SetNextButtonInteractable(false);
 
             if (KidGame.Interface.GameFlowManager.Instance == null)
             {
-                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+                if (nextButton != null) nextButton.onClick.AddListener(GenerateRound);
             }
 
             GenerateRound();
@@ -145,24 +130,12 @@ namespace KidGame.Mechanics.Matching
             btn.colors = colors;
         }
 
-        private void SetNextButtonsInteractable(bool interactable)
+        private void SetNextButtonInteractable(bool interactable)
         {
-            if (portraitNextButton != null) portraitNextButton.interactable = interactable;
-            if (landscapeNextButton != null) landscapeNextButton.interactable = interactable;
+            if (nextButton != null) nextButton.interactable = interactable;
         }
 
-        private void Update()
-        {
-            if (this == null) return;
-            if (portraitContent == null || landscapeContent == null) return;
-
-            bool landscape = IsLandscape;
-            if (landscape != _wasLandscape && _slots.Count > 0)
-            {
-                _wasLandscape = landscape;
-                MoveToActiveContainers();
-            }
-        }
+        
 
         private void LateUpdate()
         {
@@ -170,35 +143,6 @@ namespace KidGame.Mechanics.Matching
             UpdateLinePositions();
         }
 
-        private void MoveToActiveContainers()
-        {
-            if (this == null) return;
-            var newContent = ActiveContent;
-            if (newContent == null) return;
-
-            // Move slots
-            foreach (var slot in _slots)
-            {
-                if (slot) slot.transform.SetParent(newContent, worldPositionStays: false);
-            }
-
-            // Move permanent lines and send to back
-            foreach (var conn in _connections)
-            {
-                if (conn.line)
-                {
-                    conn.line.transform.SetParent(newContent, worldPositionStays: false);
-                    conn.line.transform.SetAsFirstSibling();
-                }
-            }
-
-            // Rebuild layout
-            var rt = newContent.GetComponent<RectTransform>();
-            if (rt) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
-
-            UpdateLinePositions();
-            UpdateScrollLocking();
-        }
 
         // ── Round Management ──────────────────────────────────────────────────
 
@@ -215,9 +159,9 @@ namespace KidGame.Mechanics.Matching
                 Debug.LogError("[MatchGame] Line Prefab is not assigned.");
                 return;
             }
-            if (portraitContent == null || landscapeContent == null)
+            if (content == null)
             {
-                Debug.LogError("[MatchGame] Portrait/Landscape Content containers are missing.");
+                Debug.LogError("[MatchGame] Content container is missing.");
                 return;
             }
             if (leftVariant == MatchVariant.Dice || rightVariant == MatchVariant.Dice)
@@ -238,7 +182,7 @@ namespace KidGame.Mechanics.Matching
             }
 
             ClearPrevious();
-            SetNextButtonsInteractable(false);
+            SetNextButtonInteractable(false);
 
             // Determine upper limit bounds based on selected variants (Dice max 6, Finger max 5)
             int maxAllowedValue = maxVal;
@@ -296,7 +240,7 @@ namespace KidGame.Mechanics.Matching
             // Spawn rows
             for (int i = 0; i < count; i++)
             {
-                var rowGo = Instantiate(slotRowPrefab, ActiveContent);
+                var rowGo = Instantiate(slotRowPrefab, content);
                 rowGo.name = $"SlotRow_{i}";
 
                 Transform leftAnchor = rowGo.transform.Find("left");
@@ -339,7 +283,7 @@ namespace KidGame.Mechanics.Matching
             }
 
             // Rebuild active layout
-            var rt = ActiveContent.GetComponent<RectTransform>();
+            var rt = content.GetComponent<RectTransform>();
             if (rt) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
 
             UpdateScrollLocking();
@@ -460,17 +404,10 @@ namespace KidGame.Mechanics.Matching
             _leftColors.Clear();
             _rightColors.Clear();
 
-            // Clear any editor design-time static slots from the content containers
-            if (portraitContent != null)
+            // Clear any editor design-time static slots from the content container
+            if (content != null)
             {
-                foreach (Transform child in portraitContent)
-                {
-                    Destroy(child.gameObject);
-                }
-            }
-            if (landscapeContent != null)
-            {
-                foreach (Transform child in landscapeContent)
+                foreach (Transform child in content)
                 {
                     Destroy(child.gameObject);
                 }
@@ -550,7 +487,7 @@ namespace KidGame.Mechanics.Matching
                 KidGame.Interface.GameFlowManager.Instance.RegisterCorrectAnswer();
             }
 
-            var lineGo = Instantiate(linePrefab, ActiveContent);
+            var lineGo = Instantiate(linePrefab, content);
             lineGo.name = $"line_{cardA.MatchId}";
 
             // Prevent Layout Group from positioning this line object
@@ -580,7 +517,7 @@ namespace KidGame.Mechanics.Matching
 
             if (_connections.Count >= _slots.Count)
             {
-                SetNextButtonsInteractable(true);
+                SetNextButtonInteractable(true);
                 KidGame.Interface.GameFlowManager.Instance?.NotifyRoundStateChanged();
             }
         }
@@ -602,7 +539,7 @@ namespace KidGame.Mechanics.Matching
             _dragStartCard.SetSelected(true);
 
             // Instantiate a temporary line
-            var lineGo = Instantiate(linePrefab, ActiveContent);
+            var lineGo = Instantiate(linePrefab, content);
             lineGo.name = $"drag_line_{card.MatchId}";
             
             var layoutElement = lineGo.GetComponent<LayoutElement>();
@@ -712,7 +649,7 @@ namespace KidGame.Mechanics.Matching
 
             if (_connections.Count >= _slots.Count)
             {
-                SetNextButtonsInteractable(true);
+                SetNextButtonInteractable(true);
             }
         }
 
@@ -751,7 +688,7 @@ namespace KidGame.Mechanics.Matching
         private Vector2 ScreenPointToLocalPoint(Vector2 screenPoint, PointerEventData eventData)
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                ActiveContent,
+                content,
                 screenPoint,
                 eventData.pressEventCamera,
                 out Vector2 localPoint
@@ -774,8 +711,8 @@ namespace KidGame.Mechanics.Matching
 
         private Vector2 GetLocalPositionInContent(RectTransform target)
         {
-            if (target == null || ActiveContent == null) return Vector2.zero;
-            return ActiveContent.InverseTransformPoint(target.position);
+            if (target == null || content == null) return Vector2.zero;
+            return content.InverseTransformPoint(target.position);
         }
 
         private Color GetLeftColorForValue(int value)
@@ -814,8 +751,7 @@ namespace KidGame.Mechanics.Matching
 
         private void UpdateScrollLockingInternal()
         {
-            UpdateScrollLockForContainer(portraitContent);
-            UpdateScrollLockForContainer(landscapeContent);
+            UpdateScrollLockForContainer(content);
         }
 
         private void UpdateScrollLockForContainer(RectTransform contentRt)

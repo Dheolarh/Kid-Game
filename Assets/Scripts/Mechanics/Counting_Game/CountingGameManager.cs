@@ -18,17 +18,12 @@ namespace KidGame.Mechanics.Counting
         [Tooltip("The AnswerCard draggable prefab.")]
         [SerializeField] private GameObject answerCardPrefab;
 
-        [Header("Portrait Containers")]
-        [SerializeField] private Transform portraitSlotsContainer;
-        [SerializeField] private Transform portraitAnswersContainer;
-
-        [Header("Landscape Containers")]
-        [SerializeField] private Transform landscapeSlotsContainer;
-        [SerializeField] private Transform landscapeAnswersContainer;
+        [Header("Containers")]
+        [SerializeField] private Transform slotsContainer;
+        [SerializeField] private Transform answersContainer;
 
         [Header("Shared")]
-        [SerializeField] private Button portraitNextButton;
-        [SerializeField] private Button landscapeNextButton;
+        [SerializeField] private Button nextButton;
 
         [Header("Config")]
         [Tooltip("Number of slot rows per round (always 5 per design).")]
@@ -67,21 +62,7 @@ namespace KidGame.Mechanics.Counting
         private readonly List<CountingSlot> _slots = new List<CountingSlot>();
         private readonly List<AnswerCard>   _cards = new List<AnswerCard>();
         private int _answeredCount;
-
-        // ── Orientation ─────────────────────────────────────────────────────
-
-        private bool IsLandscape => Screen.width > Screen.height;
-
-        private Transform ActiveSlotsContainer
-            => IsLandscape ? landscapeSlotsContainer   : portraitSlotsContainer;
-
-        private Transform ActiveAnswersContainer
-            => IsLandscape ? landscapeAnswersContainer : portraitAnswersContainer;
-
-        private bool _wasLandscape;
-
-        public Button PortraitNextButton => portraitNextButton;
-        public Button LandscapeNextButton => landscapeNextButton;
+        public Button NextButton => nextButton;
 
         public void Configure(int slotCount, int minCount, int maxCount, bool diceMode, bool fingerMode, string activeThemeName)
         {
@@ -109,16 +90,13 @@ namespace KidGame.Mechanics.Counting
 
         private void OnEnable()
         {
-            ConfigureNextButton(portraitNextButton);
-            ConfigureNextButton(landscapeNextButton);
+            ConfigureNextButton(nextButton);
 
-            _wasLandscape = IsLandscape;
-            SetNextButtonsInteractable(false);
+            SetNextButtonInteractable(false);
 
             if (KidGame.Interface.GameFlowManager.Instance == null)
             {
-                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+                if (nextButton != null) nextButton.onClick.AddListener(GenerateRound);
             }
 
             GenerateRound();
@@ -134,53 +112,12 @@ namespace KidGame.Mechanics.Counting
             btn.colors = colors;
         }
 
-        private void SetNextButtonsInteractable(bool interactable)
+        private void SetNextButtonInteractable(bool interactable)
         {
-            if (portraitNextButton != null) portraitNextButton.interactable = interactable;
-            if (landscapeNextButton != null) landscapeNextButton.interactable = interactable;
+            if (nextButton != null) nextButton.interactable = interactable;
         }
 
-        private void Update()
-        {
-            if (this == null) return;
-            if (portraitSlotsContainer == null || landscapeSlotsContainer == null ||
-                portraitAnswersContainer == null || landscapeAnswersContainer == null) return;
 
-            bool landscape = IsLandscape;
-            if (landscape != _wasLandscape && _slots.Count > 0)
-            {
-                _wasLandscape = landscape;
-                MoveToActiveContainers();
-            }
-        }
-
-        private void MoveToActiveContainers()
-        {
-            if (this == null) return;
-            var newSlots   = ActiveSlotsContainer;
-            var newAnswers = ActiveAnswersContainer;
-            if (newSlots == null || newAnswers == null) return;
-
-            foreach (var slot in _slots)
-                if (slot) slot.transform.SetParent(newSlots, worldPositionStays: false);
-
-            foreach (var card in _cards)
-            {
-                if (card && !card.IsAccepted)
-                {
-                    card.transform.SetParent(newAnswers, worldPositionStays: false);
-                    card.UpdateHomeParent(newAnswers);
-                }
-            }
-
-            var rtSlots   = newSlots.GetComponent<RectTransform>();
-            var rtAnswers = newAnswers.GetComponent<RectTransform>();
-            if (rtSlots)   UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtSlots);
-            if (rtAnswers) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
- 
-            Debug.Log($"[CountingGame] Orientation changed → moved {_slots.Count} slots, {_cards.Count} cards.");
-            UpdateScrollLocking();
-        }
 
 
         // ── Public API ────────────────────────────────────────────────────────
@@ -190,7 +127,7 @@ namespace KidGame.Mechanics.Counting
         {
             _answeredCount++;
             if (_answeredCount >= _slots.Count)
-                SetNextButtonsInteractable(true);
+                SetNextButtonInteractable(true);
             GameFlowManager.Instance?.NotifyRoundStateChanged();
         }
 
@@ -249,21 +186,21 @@ namespace KidGame.Mechanics.Counting
                 Debug.LogError("[CountingGame] Answer Card Prefab is not assigned in the Inspector.");
                 return;
             }
-            if (ActiveSlotsContainer == null)
+            if (slotsContainer == null)
             {
-                Debug.LogError("[CountingGame] Slots Container for the current orientation is not assigned.");
+                Debug.LogError("[CountingGame] Slots Container is not assigned.");
                 return;
             }
-            if (ActiveAnswersContainer == null)
+            if (answersContainer == null)
             {
-                Debug.LogError("[CountingGame] Answers Container for the current orientation is not assigned.");
+                Debug.LogError("[CountingGame] Answers Container is not assigned.");
                 return;
             }
             // ─────────────────────────────────────────────────────────────────
 
             ClearPrevious();
             _answeredCount = 0;
-            SetNextButtonsInteractable(false);
+            SetNextButtonInteractable(false);
 
             List<int> counts;
             List<(List<GameObject> prefabs, int totalSum)> slotData = null;
@@ -326,14 +263,14 @@ namespace KidGame.Mechanics.Counting
                 Debug.LogError("[CountingGame] Answer Card Prefab is not assigned in the Inspector.");
                 return;
             }
-            if (ActiveSlotsContainer == null)
+            if (slotsContainer == null)
             {
-                Debug.LogError("[CountingGame] Slots Container for the current orientation is not assigned.");
+                Debug.LogError("[CountingGame] Slots Container is not assigned.");
                 return;
             }
-            if (ActiveAnswersContainer == null)
+            if (answersContainer == null)
             {
-                Debug.LogError("[CountingGame] Answers Container for the current orientation is not assigned.");
+                Debug.LogError("[CountingGame] Answers Container is not assigned.");
                 return;
             }
             // ─────────────────────────────────────────────────────────────────
@@ -379,7 +316,7 @@ namespace KidGame.Mechanics.Counting
             int actualSlotCount = (diceMode || fingerMode) ? slotData.Count : normalCounts.Count;
             for (int i = 0; i < actualSlotCount; i++)
             {
-                var go   = Instantiate(slotPrefab, ActiveSlotsContainer);
+                var go   = Instantiate(slotPrefab, slotsContainer);
                 var slot = go.GetComponent<CountingSlot>();
 
                 if (diceMode || fingerMode)
@@ -395,13 +332,13 @@ namespace KidGame.Mechanics.Counting
             }
 
             // Force layout to recalculate immediately after spawning all slots
-            var rt = ActiveSlotsContainer.GetComponent<RectTransform>();
+            var rt = slotsContainer.GetComponent<RectTransform>();
             if (rt != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
 
-            // 6. Spawn answer cards into the active orientation's answer grid
+            // 6. Spawn answer cards into the answer grid
             for (int i = 0; i < answerValues.Count; i++)
             {
-                var go   = Instantiate(answerCardPrefab, ActiveAnswersContainer);
+                var go   = Instantiate(answerCardPrefab, answersContainer);
                 var card = go.GetComponent<AnswerCard>();
                 card.Setup(answerValues[i], colors[i]);
                 _cards.Add(card);
@@ -490,10 +427,8 @@ namespace KidGame.Mechanics.Counting
 
         private void UpdateScrollLockingInternal()
         {
-            UpdateScrollLockForContainer(portraitSlotsContainer);
-            UpdateScrollLockForContainer(portraitAnswersContainer);
-            UpdateScrollLockForContainer(landscapeSlotsContainer);
-            UpdateScrollLockForContainer(landscapeAnswersContainer);
+            UpdateScrollLockForContainer(slotsContainer);
+            UpdateScrollLockForContainer(answersContainer);
         }
 
         private void UpdateScrollLockForContainer(Transform container)
@@ -519,8 +454,8 @@ namespace KidGame.Mechanics.Counting
                 LayoutRebuilder.ForceRebuildLayoutImmediate(viewportRt);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
 
-                // Portrait answers scroll horizontally, all other lists (slots and landscape answers) scroll vertically
-                bool scrollVertical = (container != portraitAnswersContainer);
+                // Answers scroll horizontally; slots scroll vertically
+                bool scrollVertical = (container != answersContainer);
 
                 if (scrollVertical)
                 {

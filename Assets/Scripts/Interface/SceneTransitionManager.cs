@@ -195,6 +195,8 @@ namespace KidGame.Interface
         public void LoadSceneWithTransition(string sceneName)
         {
             if (_isTransitioning) return;
+            // Unlock screen orientation when leaving the gameplay scene
+            OrientationManager.Unlock();
             StartCoroutine(LoadSceneCoroutine(sceneName));
         }
 

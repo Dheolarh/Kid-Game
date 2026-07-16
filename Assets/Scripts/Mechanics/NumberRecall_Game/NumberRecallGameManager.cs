@@ -16,17 +16,12 @@ namespace KidGame.Mechanics.NumberRecall
         [Tooltip("The AnswerCard draggable card prefab.")]
         [SerializeField] private GameObject answerCardPrefab;
 
-        [Header("Portrait Containers")]
-        [SerializeField] private Transform portraitSlotsContainer;
-        [SerializeField] private Transform portraitAnswersContainer;
-
-        [Header("Landscape Containers")]
-        [SerializeField] private Transform landscapeSlotsContainer;
-        [SerializeField] private Transform landscapeAnswersContainer;
+        [Header("Containers")]
+        [SerializeField] private Transform slotsContainer;
+        [SerializeField] private Transform answersContainer;
 
         [Header("Shared")]
-        [SerializeField] private Button portraitNextButton;
-        [SerializeField] private Button landscapeNextButton;
+        [SerializeField] private Button nextButton;
 
         [Header("Sequence Config")]
         [Tooltip("Number of slots (sequences) to spawn per round.")]
@@ -72,18 +67,7 @@ namespace KidGame.Mechanics.NumberRecall
 
         // ── Orientation ───────────────────────────────────────────────────────
 
-        private bool IsLandscape => Screen.width > Screen.height;
-
-        private Transform ActiveSlotsContainer
-            => IsLandscape ? landscapeSlotsContainer   : portraitSlotsContainer;
-
-        private Transform ActiveAnswersContainer
-            => IsLandscape ? landscapeAnswersContainer : portraitAnswersContainer;
-
-        private bool _wasLandscape;
-
-        public Button PortraitNextButton => portraitNextButton;
-        public Button LandscapeNextButton => landscapeNextButton;
+                public Button NextButton => nextButton;
 
         public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden)
         {
@@ -108,19 +92,14 @@ namespace KidGame.Mechanics.NumberRecall
         private void OnEnable()
         {
             // Configure slots containers to not force expand height and control children height
-            ConfigureContainerLayout(portraitSlotsContainer);
-            ConfigureContainerLayout(landscapeSlotsContainer);
+            ConfigureContainerLayout(slotsContainer);
 
-            ConfigureNextButton(portraitNextButton);
-            ConfigureNextButton(landscapeNextButton);
-
-            _wasLandscape = IsLandscape;
-            SetNextButtonsInteractable(false);
+            ConfigureNextButton(nextButton);
+            SetNextButtonInteractable(false);
 
             if (KidGame.Interface.GameFlowManager.Instance == null)
             {
-                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+                if (nextButton != null) nextButton.onClick.AddListener(GenerateRound);
             }
 
             GenerateRound();
@@ -136,10 +115,9 @@ namespace KidGame.Mechanics.NumberRecall
             btn.colors = colors;
         }
 
-        private void SetNextButtonsInteractable(bool interactable)
+        private void SetNextButtonInteractable(bool interactable)
         {
-            if (portraitNextButton != null) portraitNextButton.interactable = interactable;
-            if (landscapeNextButton != null) landscapeNextButton.interactable = interactable;
+            if (nextButton != null) nextButton.interactable = interactable;
         }
 
         private void ConfigureContainerLayout(Transform container)
@@ -151,53 +129,6 @@ namespace KidGame.Mechanics.NumberRecall
                 vg.childForceExpandHeight = false;
                 vg.childControlHeight = true;
             }
-        }
-
-        private void Update()
-        {
-            if (this == null) return;
-            if (portraitSlotsContainer == null || landscapeSlotsContainer == null ||
-                portraitAnswersContainer == null || landscapeAnswersContainer == null) return;
-
-            bool landscape = IsLandscape;
-            if (landscape != _wasLandscape && _slots.Count > 0)
-            {
-                _wasLandscape = landscape;
-                MoveToActiveContainers();
-            }
-        }
-
-        private void MoveToActiveContainers()
-        {
-            if (this == null) return;
-            var newSlots   = ActiveSlotsContainer;
-            var newAnswers = ActiveAnswersContainer;
-            if (newSlots == null || newAnswers == null) return;
-
-            foreach (var slot in _slots)
-            {
-                if (slot)
-                {
-                    slot.transform.SetParent(newSlots, worldPositionStays: false);
-                    slot.RecalculateHeight();
-                }
-            }
-
-            foreach (var card in _cards)
-            {
-                if (card && !card.IsAccepted)
-                {
-                    card.transform.SetParent(newAnswers, worldPositionStays: false);
-                    card.UpdateHomeParent(newAnswers);
-                }
-            }
-
-            var rtSlots   = newSlots.GetComponent<RectTransform>();
-            var rtAnswers = newAnswers.GetComponent<RectTransform>();
-            if (rtSlots)   UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtSlots);
-            if (rtAnswers) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
- 
-            UpdateScrollLocking();
         }
 
         // ── Round Generation ──────────────────────────────────────────────────
@@ -215,16 +146,16 @@ namespace KidGame.Mechanics.NumberRecall
                 Debug.LogError("[NumberRecall] Answer Card Prefab is not assigned in the Inspector.");
                 return;
             }
-            if (ActiveSlotsContainer == null || ActiveAnswersContainer == null)
+            if (slotsContainer == null || answersContainer == null)
             {
-                Debug.LogError("[NumberRecall] Portrait or Landscape containers are missing.");
+                Debug.LogError("[NumberRecall] Slots or Answers container is not assigned.");
                 return;
             }
             // ─────────────────────────────────────────────────────────────────
 
             ClearPrevious();
             _answeredCount = 0;
-            SetNextButtonsInteractable(false);
+            SetNextButtonInteractable(false);
 
             var trayValues = new List<int>();
 
@@ -278,7 +209,7 @@ namespace KidGame.Mechanics.NumberRecall
                 }
 
                 // 3. Spawns the sequence container slot
-                var slotGo = Instantiate(slotPrefab, ActiveSlotsContainer);
+                var slotGo = Instantiate(slotPrefab, slotsContainer);
                 var slot = slotGo.GetComponent<NumberRecallSlot>();
                 if (slot == null) slot = slotGo.AddComponent<NumberRecallSlot>();
 
@@ -311,16 +242,16 @@ namespace KidGame.Mechanics.NumberRecall
             for (int i = 0; i < trayValues.Count; i++)
             {
                 int valIdx = shuffledIndices[i];
-                var cardGo = Instantiate(answerCardPrefab, ActiveAnswersContainer);
+                var cardGo = Instantiate(answerCardPrefab, answersContainer);
                 var card = cardGo.GetComponent<AnswerCard>();
                 card.Setup(trayValues[valIdx], colors[i]);
                 _cards.Add(card);
             }
 
             // Forces layout calculations immediate
-            var rtSlots = ActiveSlotsContainer.GetComponent<RectTransform>();
+            var rtSlots = slotsContainer.GetComponent<RectTransform>();
             if (rtSlots != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtSlots);
-            var rtAnswers = ActiveAnswersContainer.GetComponent<RectTransform>();
+            var rtAnswers = answersContainer.GetComponent<RectTransform>();
             if (rtAnswers != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
  
             UpdateScrollLocking();
@@ -331,7 +262,7 @@ namespace KidGame.Mechanics.NumberRecall
             _answeredCount++;
             if (_answeredCount >= _slots.Count)
             {
-                SetNextButtonsInteractable(true);
+                SetNextButtonInteractable(true);
             }
             KidGame.Interface.GameFlowManager.Instance?.NotifyRoundStateChanged();
         }
@@ -362,11 +293,10 @@ namespace KidGame.Mechanics.NumberRecall
 
         private void UpdateScrollLockingInternal()
         {
-            UpdateScrollLockForContainer(portraitSlotsContainer);
-            UpdateScrollLockForContainer(portraitAnswersContainer);
-            UpdateScrollLockForContainer(landscapeSlotsContainer);
-            UpdateScrollLockForContainer(landscapeAnswersContainer);
+            UpdateScrollLockForContainer(slotsContainer);
+            UpdateScrollLockForContainer(answersContainer);
         }
+
 
         private void UpdateScrollLockForContainer(Transform container)
         {
@@ -392,7 +322,7 @@ namespace KidGame.Mechanics.NumberRecall
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
 
                 // Portrait answers scroll horizontally, all other lists (slots and landscape answers) scroll vertically
-                bool scrollVertical = (container != portraitAnswersContainer);
+                bool scrollVertical = (container != answersContainer);
 
                 if (scrollVertical)
                 {

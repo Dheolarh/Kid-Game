@@ -24,13 +24,21 @@ namespace KidGame.Interface
         [SerializeField] private ThemeDatabase themeDatabase;
         [SerializeField] private int testLevelIndex = 0;
 
-        [Header("Game Mode GameObjects")]
-        [SerializeField] private GameObject countingGameGo;
-        [SerializeField] private GameObject additionGameGo;
-        [SerializeField] private GameObject comparisonGameGo;
-        [SerializeField] private GameObject matchingGameGo;
-        [SerializeField] private GameObject recallGameGo;
-        [SerializeField] private GameObject tracingGameGo;
+        [Header("Game Mode Prefabs — Portrait")]
+        [SerializeField] private GameObject countingPortraitGo;
+        [SerializeField] private GameObject additionPortraitGo;
+        [SerializeField] private GameObject comparisonPortraitGo;
+        [SerializeField] private GameObject matchingPortraitGo;
+        [SerializeField] private GameObject recallPortraitGo;
+        [SerializeField] private GameObject tracingPortraitGo;
+
+        [Header("Game Mode Prefabs — Landscape")]
+        [SerializeField] private GameObject countingLandscapeGo;
+        [SerializeField] private GameObject additionLandscapeGo;
+        [SerializeField] private GameObject comparisonLandscapeGo;
+        [SerializeField] private GameObject matchingLandscapeGo;
+        [SerializeField] private GameObject recallLandscapeGo;
+        [SerializeField] private GameObject tracingLandscapeGo;
 
         [Header("UI Visual Styling References")]
         [SerializeField] private Image gameBackgroundImg;
@@ -40,12 +48,8 @@ namespace KidGame.Interface
         [Header("Always Interactable Next Buttons (Fallback)")]
         [SerializeField] private Button[] alwaysInteractableButtons;
 
-        private Button _activePortraitNextButton;
-        private Button _activeLandscapeNextButton;
+        private Button _activeNextButton;
 
-        [Header("Tracing Game Answer Grids")]
-        [SerializeField] private GameObject portraitTracingAnswerGrid;
-        [SerializeField] private GameObject landscapeTracingAnswerGrid;
 
         [Header("Dialogue UI References")]
         [SerializeField] private GameObject dialoguePanel;
@@ -210,9 +214,10 @@ namespace KidGame.Interface
         /// </summary>
         private IEnumerator InitializeLevelAfterTransition()
         {
+            // Lock orientation once per session on first level load
+            OrientationManager.LockToCurrentOrientation();
+
             // Wait until the SceneTransitionManager has finished its opening animation.
-            // This ensures the heavy instantiation work (prefab + slot spawning) does not
-            // collide with the curtain DOTween animation on the same frames.
             if (SceneTransitionManager.Instance != null)
             {
                 while (SceneTransitionManager.Instance.IsTransitioning)
@@ -676,14 +681,15 @@ namespace KidGame.Interface
 
         private GameObject GetGameObjectForType(GameType type)
         {
+            bool portrait = OrientationManager.IsPortrait;
             switch (type)
             {
-                case GameType.Counting:   return countingGameGo;
-                case GameType.Addition:   return additionGameGo;
-                case GameType.Comparison: return comparisonGameGo;
-                case GameType.Matching:   return matchingGameGo;
-                case GameType.Recall:     return recallGameGo;
-                case GameType.Tracing:    return tracingGameGo;
+                case GameType.Counting:   return portrait ? countingPortraitGo   : countingLandscapeGo;
+                case GameType.Addition:   return portrait ? additionPortraitGo   : additionLandscapeGo;
+                case GameType.Comparison: return portrait ? comparisonPortraitGo : comparisonLandscapeGo;
+                case GameType.Matching:   return portrait ? matchingPortraitGo   : matchingLandscapeGo;
+                case GameType.Recall:     return portrait ? recallPortraitGo     : recallLandscapeGo;
+                case GameType.Tracing:    return portrait ? tracingPortraitGo    : tracingLandscapeGo;
                 default:                  return null;
             }
         }
@@ -710,7 +716,7 @@ namespace KidGame.Interface
                     if (counting != null)
                     {
                         counting.Configure(page.countingSlotCount, page.countingMinCount, page.countingMaxCount, page.countingDiceMode, page.countingFingerMode, page.countingActiveThemeName);
-                        SetupNextButtons(counting.PortraitNextButton, counting.LandscapeNextButton);
+                        SetupNextButton(counting.NextButton);
                     }
                     break;
 
@@ -719,7 +725,7 @@ namespace KidGame.Interface
                     if (addition != null)
                     {
                         addition.Configure(page.additionSlotCount, page.additionMinPerGrid, page.additionMaxPerGrid, page.additionDiceMode, page.additionFingerMode, page.additionCountAddMode, page.additionNumbersOnlyMode, page.additionMinOperandCount, page.additionMaxOperandCount, page.additionMinNumberValue, page.additionMaxNumberValue, page.additionActiveThemeName);
-                        SetupNextButtons(addition.PortraitNextButton, addition.LandscapeNextButton);
+                        SetupNextButton(addition.NextButton);
                     }
                     break;
 
@@ -728,7 +734,7 @@ namespace KidGame.Interface
                     if (comparison != null)
                     {
                         comparison.Configure(page.comparisonSlotCount, page.comparisonMinVal, page.comparisonMaxVal, page.comparisonMixAdditionEquations, page.comparisonNumbersOnlyMode, page.comparisonActiveThemeName);
-                        SetupNextButtons(comparison.PortraitNextButton, comparison.LandscapeNextButton);
+                        SetupNextButton(comparison.NextButton);
                     }
                     break;
 
@@ -737,7 +743,7 @@ namespace KidGame.Interface
                     if (matching != null)
                     {
                         matching.Configure(page.matchingLeftVariant, page.matchingRightVariant, page.matchingSlotCount, page.matchingMinVal, page.matchingMaxVal, page.matchingShuffleLeftColumn);
-                        SetupNextButtons(matching.PortraitNextButton, matching.LandscapeNextButton);
+                        SetupNextButton(matching.NextButton);
                     }
                     break;
 
@@ -746,7 +752,7 @@ namespace KidGame.Interface
                     if (recall != null)
                     {
                         recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden);
-                        SetupNextButtons(recall.PortraitNextButton, recall.LandscapeNextButton);
+                        SetupNextButton(recall.NextButton);
                     }
                     break;
 
@@ -755,81 +761,27 @@ namespace KidGame.Interface
                     if (tracing != null)
                     {
                         tracing.Configure(page.tracingSpellModeActive, page.tracingValuesToTrace, page.tracingCustomSpawnCount);
-                        SetupNextButtons(tracing.PortraitContinueButton, tracing.LandscapeContinueButton);
+                        SetupNextButton(tracing.ContinueButton);
                     }
-
-                    // Dynamically look up the answer grids in the instantiated game mode prefab to target the active instance
-                    GameObject portGrid = portraitTracingAnswerGrid;
-                    GameObject landGrid = landscapeTracingAnswerGrid;
-
-                    if (_activeGameModeInstance != null)
-                    {
-                        var allChildren = _activeGameModeInstance.GetComponentsInChildren<Transform>(true);
-                        foreach (var child in allChildren)
-                        {
-                            string childNameLower = child.name.ToLower();
-                            if (childNameLower.Contains("answer grid") || childNameLower.Contains("answergrid") || childNameLower.Contains("spellingui"))
-                            {
-                                bool isPortrait = false;
-                                bool isLandscape = false;
-
-                                Transform current = child;
-                                while (current != null && current != _activeGameModeInstance.transform)
-                                {
-                                    string pNameLower = current.name.ToLower();
-                                    if (pNameLower.Contains("portrait") || pNameLower.Contains("potrait"))
-                                    {
-                                        isPortrait = true;
-                                        break;
-                                    }
-                                    if (pNameLower.Contains("landscape") || pNameLower.Contains("lanscape"))
-                                    {
-                                        isLandscape = true;
-                                        break;
-                                    }
-                                    current = current.parent;
-                                }
-
-                                if (isPortrait)
-                                {
-                                    portGrid = child.gameObject;
-                                }
-                                else if (isLandscape)
-                                {
-                                    landGrid = child.gameObject;
-                                }
-                            }
-                        }
-                    }
-
                     // Set answer grid visibility based on spell mode
                     float alphaVal = page.tracingSpellModeActive ? 1f : 0f;
-                    SetAnswerGridOpacity(portGrid, alphaVal);
-                    SetAnswerGridOpacity(landGrid, alphaVal);
+                    SetAnswerGridOpacity(tracing?.AnswerGrid, alphaVal);
                     break;
             }
         }
 
-        private void SetupNextButtons(Button portraitBtn, Button landscapeBtn)
+        private void SetupNextButton(Button btn)
         {
             Color themeColor = GetActiveThemeColor();
 
-            _activePortraitNextButton = portraitBtn;
-            _activeLandscapeNextButton = landscapeBtn;
+            _activeNextButton = btn;
 
-            if (portraitBtn != null)
+            if (btn != null)
             {
-                portraitBtn.onClick.RemoveAllListeners();
-                portraitBtn.onClick.AddListener(OnNextClicked);
-                StyleNextButton(portraitBtn, themeColor);
-                portraitBtn.interactable = true;
-            }
-            if (landscapeBtn != null)
-            {
-                landscapeBtn.onClick.RemoveAllListeners();
-                landscapeBtn.onClick.AddListener(OnNextClicked);
-                StyleNextButton(landscapeBtn, themeColor);
-                landscapeBtn.interactable = true;
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(OnNextClicked);
+                StyleNextButton(btn, themeColor);
+                btn.interactable = true;
             }
         }
 

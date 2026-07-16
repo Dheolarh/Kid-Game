@@ -16,17 +16,12 @@ namespace KidGame.Mechanics.Comparison
         [SerializeField] private GameObject comparisonDropZonePrefab;
         [SerializeField] private GameObject answerCardPrefab;
 
-        [Header("Portrait Containers")]
-        [SerializeField] private Transform portraitSlotsContainer;
-        [SerializeField] private Transform portraitAnswersContainer;
-
-        [Header("Landscape Containers")]
-        [SerializeField] private Transform landscapeSlotsContainer;
-        [SerializeField] private Transform landscapeAnswersContainer;
+        [Header("Containers")]
+        [SerializeField] private Transform slotsContainer;
+        [SerializeField] private Transform answersContainer;
 
         [Header("Shared UI")]
-        [SerializeField] private Button portraitNextButton;
-        [SerializeField] private Button landscapeNextButton;
+        [SerializeField] private Button nextButton;
 
         [Header("Config")]
         [SerializeField] private int slotCount = 3;
@@ -64,22 +59,12 @@ namespace KidGame.Mechanics.Comparison
         private readonly List<ComparisonCard> _cards = new List<ComparisonCard>();
         private List<Color> _shuffledColors = new List<Color>();
         private int _answeredCount;
-        private bool _wasLandscape;
 
         public bool NumbersOnlyMode => numbersOnlyMode;
         public GameObject LeftObjectPrefab { get; private set; }
         public GameObject RightObjectPrefab { get; private set; }
+        public Button NextButton => nextButton;
 
-        private bool IsLandscape => Screen.width > Screen.height;
-
-        private Transform ActiveSlotsContainer
-            => IsLandscape ? landscapeSlotsContainer : portraitSlotsContainer;
-
-        private Transform ActiveAnswersContainer
-            => IsLandscape ? landscapeAnswersContainer : portraitAnswersContainer;
-
-        public Button PortraitNextButton => portraitNextButton;
-        public Button LandscapeNextButton => landscapeNextButton;
 
         public void Configure(int slotCount, int minVal, int maxVal, bool mixAdditionEquations, bool numbersOnlyMode, string activeThemeName)
         {
@@ -105,19 +90,14 @@ namespace KidGame.Mechanics.Comparison
 
         private void OnEnable()
         {
-            ConfigureNextButton(portraitNextButton);
-            ConfigureNextButton(landscapeNextButton);
+            ConfigureNextButton(nextButton);
 
-            ConfigureSlotsContainer(portraitSlotsContainer);
-            ConfigureSlotsContainer(landscapeSlotsContainer);
-
-            _wasLandscape = IsLandscape;
-            SetNextButtonsInteractable(false);
+            ConfigureSlotsContainer(slotsContainer);
+            SetNextButtonInteractable(false);
 
             if (KidGame.Interface.GameFlowManager.Instance == null)
             {
-                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+                if (nextButton != null) nextButton.onClick.AddListener(GenerateRound);
             }
 
             GenerateRound();
@@ -148,72 +128,19 @@ namespace KidGame.Mechanics.Comparison
             btn.colors = colors;
         }
 
-        private void SetNextButtonsInteractable(bool interactable)
+        private void SetNextButtonInteractable(bool interactable)
         {
-            if (portraitNextButton != null) portraitNextButton.interactable = interactable;
-            if (landscapeNextButton != null) landscapeNextButton.interactable = interactable;
+            if (nextButton != null) nextButton.interactable = interactable;
         }
 
-        private void Update()
-        {
-            if (this == null) return;
-            if (portraitSlotsContainer == null || landscapeSlotsContainer == null ||
-                portraitAnswersContainer == null || landscapeAnswersContainer == null) return;
 
-            bool landscape = IsLandscape;
-            if (landscape != _wasLandscape && _slots.Count > 0)
-            {
-                _wasLandscape = landscape;
-                MoveToActiveContainers();
-            }
-        }
-
-        private void MoveToActiveContainers()
-        {
-            if (this == null) return;
-            var newSlots = ActiveSlotsContainer;
-            var newAnswers = ActiveAnswersContainer;
-            if (newSlots == null || newAnswers == null) return;
-
-            // Migrate active slot rows
-            foreach (var slot in _slots)
-            {
-                if (slot)
-                {
-                    slot.transform.SetParent(newSlots, worldPositionStays: false);
-                }
-            }
-
-            // Migrate stationary cards in the old tray to the new tray
-            Transform oldAnswers = IsLandscape ? portraitAnswersContainer : landscapeAnswersContainer;
-            if (oldAnswers != null)
-            {
-                var cardsInOldTray = oldAnswers.GetComponentsInChildren<ComparisonCard>(true);
-                foreach (var card in cardsInOldTray)
-                {
-                    if (card && !card.IsAccepted)
-                    {
-                        card.transform.SetParent(newAnswers, worldPositionStays: false);
-                        card.UpdateHomeParent(newAnswers);
-                    }
-                }
-            }
-
-            var rtSlots = newSlots.GetComponent<RectTransform>();
-            var rtAnswers = newAnswers.GetComponent<RectTransform>();
-            if (rtSlots) LayoutRebuilder.ForceRebuildLayoutImmediate(rtSlots);
-            if (rtAnswers) LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
-
-            Debug.Log($"[ComparisonGame] Orientation changed → moved {_slots.Count} slots.");
-            UpdateScrollLocking();
-        }
 
         public void OnSlotAnswered()
         {
             _answeredCount++;
             if (_answeredCount >= _slots.Count)
             {
-                SetNextButtonsInteractable(true);
+                SetNextButtonInteractable(true);
             }
             GameFlowManager.Instance?.NotifyRoundStateChanged();
         }
@@ -239,7 +166,7 @@ namespace KidGame.Mechanics.Comparison
                 return;
             }
 
-            if (ActiveSlotsContainer == null || ActiveAnswersContainer == null)
+            if (slotsContainer == null || answersContainer == null)
             {
                 Debug.LogError("[ComparisonGame] Active slot or active answers container is not assigned.");
                 return;
@@ -273,7 +200,7 @@ namespace KidGame.Mechanics.Comparison
 
             ClearPrevious();
             _answeredCount = 0;
-            SetNextButtonsInteractable(false);
+            SetNextButtonInteractable(false);
 
             // Prepare shuffled colors for operand boxes
             _shuffledColors = new List<Color>(Palette);
@@ -329,7 +256,7 @@ namespace KidGame.Mechanics.Comparison
                 }
 
                 var slotPrefabToUse = numbersOnlyMode ? numbersOnlySlotPrefab : slotPrefab;
-                var slotGo = Instantiate(slotPrefabToUse, ActiveSlotsContainer);
+                var slotGo = Instantiate(slotPrefabToUse, slotsContainer);
                 var slot = slotGo.GetComponent<ComparisonSlot>();
                 if (slot == null) slot = slotGo.AddComponent<ComparisonSlot>();
 
@@ -343,10 +270,10 @@ namespace KidGame.Mechanics.Comparison
             SpawnAnswerCard(ComparisonSign.GreaterThan, greaterThanColor);
 
             // Rebuild layouts
-            var rtSlots = ActiveSlotsContainer.GetComponent<RectTransform>();
+            var rtSlots = slotsContainer.GetComponent<RectTransform>();
             if (rtSlots != null) LayoutRebuilder.ForceRebuildLayoutImmediate(rtSlots);
 
-            var rtAnswers = ActiveAnswersContainer.GetComponent<RectTransform>();
+            var rtAnswers = answersContainer.GetComponent<RectTransform>();
             if (rtAnswers != null) LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
 
             UpdateScrollLocking();
@@ -354,7 +281,7 @@ namespace KidGame.Mechanics.Comparison
 
         private void SpawnAnswerCard(ComparisonSign sign, Color color)
         {
-            var cardGo = Instantiate(answerCardPrefab, ActiveAnswersContainer);
+            var cardGo = Instantiate(answerCardPrefab, answersContainer);
             var card = cardGo.GetComponent<ComparisonCard>();
             if (card == null) card = cardGo.AddComponent<ComparisonCard>();
 
@@ -488,8 +415,7 @@ namespace KidGame.Mechanics.Comparison
             _cards.Clear();
 
             // Also clear any runtime cloned cards in the active and inactive tray containers
-            ClearTrayChildren(portraitAnswersContainer);
-            ClearTrayChildren(landscapeAnswersContainer);
+            ClearTrayChildren(answersContainer);
         }
 
         private void ClearTrayChildren(Transform tray)
@@ -532,10 +458,8 @@ namespace KidGame.Mechanics.Comparison
 
         private void UpdateScrollLockingInternal()
         {
-            UpdateScrollLockForContainer(portraitSlotsContainer);
-            UpdateScrollLockForContainer(portraitAnswersContainer);
-            UpdateScrollLockForContainer(landscapeSlotsContainer);
-            UpdateScrollLockForContainer(landscapeAnswersContainer);
+            UpdateScrollLockForContainer(slotsContainer);
+            UpdateScrollLockForContainer(answersContainer);
         }
 
         private void UpdateScrollLockForContainer(Transform container)
@@ -562,7 +486,7 @@ namespace KidGame.Mechanics.Comparison
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
 
                 // Portrait answers scroll horizontally, all other lists (slots and landscape answers) scroll vertically
-                bool scrollVertical = (container != portraitAnswersContainer);
+                bool scrollVertical = (container != answersContainer);
 
                 if (scrollVertical)
                 {

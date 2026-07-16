@@ -34,20 +34,20 @@ namespace KidGame.Mechanics.Tracing
         [Tooltip("AnswerDropZone prefab used to represent letter drop slots (shared for both orientations).")]
         [SerializeField] private GameObject spellDropZonePrefab;
 
-        [Header("Spell Mode – Next Buttons")]
-        [Tooltip("Continue / Next button in the PORTRAIT layout. Locked until spelling is complete.")]
-        [SerializeField] private Button portraitContinueButton;
-        [Tooltip("Continue / Next button in the LANDSCAPE layout. Locked until spelling is complete.")]
-        [SerializeField] private Button landscapeContinueButton;
+        [Header("Spell Mode - Continue Button")]
+        [Tooltip("Continue / Next button. Locked until spelling is complete.")]
+        [SerializeField] private Button continueButton;
 
-        [Header("Spell Mode – Answer Card Tray Containers")]
-        [Tooltip("The container Transform in the PORTRAIT layout where answer cards spawn so the player can drag from.")]
-        [SerializeField] private Transform portraitAnswerCardsContainer;
-        [Tooltip("The container Transform in the LANDSCAPE layout where answer cards spawn so the player can drag from.")]
-        [SerializeField] private Transform landscapeAnswerCardsContainer;
+        [Header("Spell Mode - Answer Grid")]
+        [Tooltip("The answer card tray / spelling UI root. Assign the root GameObject inside this prefab.")]
+        [SerializeField] private GameObject answerGrid;
+
+        [Header("Spell Mode - Answer Cards Container")]
+        [Tooltip("Container where answer cards spawn for dragging.")]
+        [SerializeField] private Transform answerCardsContainer;
 
         [Header("Dynamic Slots")]
-        [Tooltip("Optional list of numbers (e.g. '123') or word phrases (e.g. 'one hundred forty eight') to trace dynamically. If empty, defaults to spawning the editor prefab's shape slotCount times.")]
+        [Tooltip("Optional list of numbers to trace dynamically.")]
         [SerializeField] private List<string> valuesToTrace = new List<string>();
 
         [Header("Character Prefabs Lookup")]
@@ -55,52 +55,36 @@ namespace KidGame.Mechanics.Tracing
         [SerializeField] private List<GameObject> lowercasePrefabs = new List<GameObject>();
         [SerializeField] private List<GameObject> uppercasePrefabs = new List<GameObject>();
 
-        [Header("Portrait – Content Containers")]
-        [SerializeField] private Transform portraitTutorialContent;
-        [SerializeField] private Transform portraitGameContent;
+        [Header("Content Containers")]
+        [SerializeField] private Transform tutorialContent;
+        [SerializeField] private Transform gameContent;
 
-        [Header("Landscape – Content Containers")]
-        [SerializeField] private Transform landscapeTutorialContent;
-        [SerializeField] private Transform landscapeGameContent;
+        [Header("Mode GameObjects")]
+        [SerializeField] private GameObject tutorialModeGo;
+        [SerializeField] private GameObject gameModeGo;
 
-        [Header("Portrait – Mode GameObjects")]
-        [SerializeField] private GameObject portraitTutorialMode;
-        [SerializeField] private GameObject portraitGameMode;
-
-        [Header("Landscape – Mode GameObjects")]
-        [SerializeField] private GameObject landscapeTutorialMode;
-        [SerializeField] private GameObject landscapeGameMode;
-
-        [Header("Portrait – Tutorial Objective UI")]
-        [Tooltip("Example TMP — shows the character large  e.g.  0")]
-        [SerializeField] private TMP_Text portraitExampleText;
-        [Tooltip("Description TMP — shows: Let's practice writing \"zero\", \"0\"")]
-        [SerializeField] private TMP_Text portraitDescriptionText;
-
-        [Header("Landscape – Tutorial Objective UI")]
-        [Tooltip("Example TMP — shows the character large  e.g.  0")]
-        [SerializeField] private TMP_Text landscapeExampleText;
-        [Tooltip("Description TMP — shows: Let's practice writing \"zero\", \"0\"")]
-        [SerializeField] private TMP_Text landscapeDescriptionText;
+        [Header("Tutorial Objective UI")]
+        [Tooltip("Example TMP - shows the character large e.g. 0")]
+        [SerializeField] private TMP_Text exampleText;
+        [Tooltip("Description TMP - shows the description")]
+        [SerializeField] private TMP_Text descriptionText;
 
         [Header("Test")]
         [Tooltip("Flip this in the Inspector at runtime to switch modes instantly.")]
         [SerializeField] private bool tutorialModeActive = true;
 
-        // ── Private state ─────────────────────────────────────────────────────
+        // Private state
 
         private string _exampleText;
         private string _descriptionWord;
         private string _descriptionNumber;
         private string _customSentence;
 
-        private List<List<SlotTracer>> _portraitRowTracers = new List<List<SlotTracer>>();
-        private List<List<SlotTracer>> _landscapeRowTracers = new List<List<SlotTracer>>();
-        private bool _lastIsLandscape;
-        private float _portraitMinScale = 1f;
-        private float _landscapeMinScale = 1f;
-        public Button PortraitContinueButton => portraitContinueButton;
-        public Button LandscapeContinueButton => landscapeContinueButton;
+        private List<List<SlotTracer>> _rowTracers = new List<List<SlotTracer>>();
+        private float _minScale = 1f;
+
+        public Button ContinueButton => continueButton;
+        public GameObject AnswerGrid => answerGrid;
 
         public void Configure(bool spellModeActive, List<string> valuesToTrace, int customSpawnCount)
         {
@@ -109,8 +93,8 @@ namespace KidGame.Mechanics.Tracing
             this.customSpawnCount = customSpawnCount;
 
             // Clear old tracers immediately to prevent premature completion checks
-            _portraitRowTracers.Clear();
-            _landscapeRowTracers.Clear();
+            _rowTracers.Clear();
+            
         }
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
@@ -128,8 +112,8 @@ namespace KidGame.Mechanics.Tracing
                 yield break;
             }
 
-            _portraitRowTracers.Clear();
-            _landscapeRowTracers.Clear();
+            _rowTracers.Clear();
+            
 
             // Read display info from the prefab's SlotTracer BEFORE instantiating
             var prefabTracer = slotPrefab.GetComponent<SlotTracer>();
@@ -146,10 +130,9 @@ namespace KidGame.Mechanics.Tracing
             Canvas.ForceUpdateCanvases();
 
             // Spawn into all four containers
-            SpawnInto(portraitTutorialContent, _portraitRowTracers);
-            SpawnInto(portraitGameContent, _portraitRowTracers);
-            SpawnInto(landscapeTutorialContent, _landscapeRowTracers);
-            SpawnInto(landscapeGameContent, _landscapeRowTracers);
+            SpawnInto(tutorialContent, _rowTracers);
+            SpawnInto(gameContent, _rowTracers);
+
 
             // Wait for SlotTracer.Start() coroutines to finish spawning shapes:
             //   Frame 1: yield → SpawnShape
@@ -158,8 +141,8 @@ namespace KidGame.Mechanics.Tracing
             yield return null;
 
             // Calculate uniform scales for Portrait and Landscape independently
-            _portraitMinScale = FindMinScale(_portraitRowTracers);
-            _landscapeMinScale = FindMinScale(_landscapeRowTracers);
+            _minScale = FindMinScale(_rowTracers);
+
 
             // Apply the uniform scales
             ApplyAllUniformScales();
@@ -168,11 +151,10 @@ namespace KidGame.Mechanics.Tracing
             ApplyMode(tutorialModeActive);
 
             // Initialize orientation
-            _lastIsLandscape = Screen.width > Screen.height;
 
             // Lock continue buttons at start until tracing/spelling tasks are completed
-            if (portraitContinueButton != null) portraitContinueButton.interactable = false;
-            if (landscapeContinueButton != null) landscapeContinueButton.interactable = false;
+            if (continueButton != null) continueButton.interactable = false;
+
 
             // Perform initial sequencing update
             UpdateAllSequencing();
@@ -187,15 +169,6 @@ namespace KidGame.Mechanics.Tracing
             }
         }
 
-        private void Update()
-        {
-            bool currentIsLandscape = Screen.width > Screen.height;
-            if (currentIsLandscape != _lastIsLandscape)
-            {
-                _lastIsLandscape = currentIsLandscape;
-                StartCoroutine(UpdateAllSequencingDelayed());
-            }
-        }
 
         private IEnumerator UpdateAllSequencingDelayed()
         {
@@ -211,10 +184,10 @@ namespace KidGame.Mechanics.Tracing
 
         private void UpdateAllSequencing()
         {
-            foreach (var list in _portraitRowTracers)
+            foreach (var list in _rowTracers)
                 UpdateSequencingState(list);
 
-            foreach (var list in _landscapeRowTracers)
+            foreach (var list in _rowTracers)
                 UpdateSequencingState(list);
         }
 
@@ -229,10 +202,8 @@ namespace KidGame.Mechanics.Tracing
         private void ApplyMode(bool isTutorial)
         {
             // Show / hide mode root GameObjects
-            if (portraitTutorialMode)  portraitTutorialMode .SetActive(isTutorial);
-            if (portraitGameMode)      portraitGameMode     .SetActive(!isTutorial);
-            if (landscapeTutorialMode) landscapeTutorialMode.SetActive(isTutorial);
-            if (landscapeGameMode)     landscapeGameMode    .SetActive(!isTutorial);
+            if (tutorialModeGo)  tutorialModeGo .SetActive(isTutorial);
+            if (gameModeGo)      gameModeGo     .SetActive(!isTutorial);
 
             // Update objective panel if switching into tutorial
             if (isTutorial) RefreshObjective();
@@ -260,12 +231,12 @@ namespace KidGame.Mechanics.Tracing
                 : $"Let's practice writing {_descriptionWord} \"{_descriptionNumber}\"";
 
             // Portrait
-            if (portraitExampleText)     portraitExampleText.text     = _exampleText;
-            if (portraitDescriptionText) portraitDescriptionText.text = desc;
+            if (exampleText)     exampleText.text     = _exampleText;
+            if (descriptionText) descriptionText.text = desc;
 
             // Landscape
-            if (landscapeExampleText)     landscapeExampleText.text     = _exampleText;
-            if (landscapeDescriptionText) landscapeDescriptionText.text = desc;
+            if (exampleText)     exampleText.text     = _exampleText;
+            if (descriptionText) descriptionText.text = desc;
         }
 
         private float GetContainerWidth(Transform container)
@@ -435,8 +406,7 @@ namespace KidGame.Mechanics.Tracing
             }
 
             // Determine which continue button belongs to this container and lock it
-            bool isLandscapeContainer = IsLandscapeContainer(container);
-            Button activeContinueButton = isLandscapeContainer ? landscapeContinueButton : portraitContinueButton;
+            Button activeContinueButton = continueButton;
             if (activeContinueButton != null)
             {
                 activeContinueButton.interactable = false;
@@ -660,8 +630,7 @@ namespace KidGame.Mechanics.Tracing
                     }
 
                     // Spawn answer cards into the pre-assigned portrait or landscape container
-                    bool isLandscapeTray = IsLandscapeContainer(container);
-                    Transform cardTrayContainer = isLandscapeTray ? landscapeAnswerCardsContainer : portraitAnswerCardsContainer;
+                    Transform cardTrayContainer = answerCardsContainer;
 
                     if (cardTrayContainer != null && spellAnswerCardPrefab != null)
                     {
@@ -1410,8 +1379,7 @@ namespace KidGame.Mechanics.Tracing
             List<AnswerDropZone> activeZones = new List<AnswerDropZone>();
 
             // Determine which game content is currently visible
-            bool portraitActive = portraitGameMode != null && portraitGameMode.activeInHierarchy;
-            Transform activeContent = portraitActive ? portraitGameContent : landscapeGameContent;
+            Transform activeContent = gameContent;
 
             if (activeContent != null)
             {
@@ -1426,11 +1394,7 @@ namespace KidGame.Mechanics.Tracing
             return activeZones;
         }
 
-        private Button GetActiveContinueButton()
-        {
-            bool portraitActive = portraitGameMode != null && portraitGameMode.activeInHierarchy;
-            return portraitActive ? portraitContinueButton : landscapeContinueButton;
-        }
+        private Button GetActiveContinueButton() => continueButton;
 
         private void CheckSpellingComplete()
         {
@@ -1475,8 +1439,7 @@ namespace KidGame.Mechanics.Tracing
 
         private bool IsAllTracingComplete()
         {
-            bool portraitActive = portraitGameMode != null && portraitGameMode.activeInHierarchy;
-            var activeList = portraitActive ? _portraitRowTracers : _landscapeRowTracers;
+            var activeList = _rowTracers;
 
             if (activeList.Count == 0) return false;
 
@@ -1530,7 +1493,7 @@ namespace KidGame.Mechanics.Tracing
             yield return null;
             yield return null;
 
-            foreach (var list in _portraitRowTracers)
+            foreach (var list in _rowTracers)
             {
                 foreach (var tracer in list)
                 {
@@ -1538,7 +1501,7 @@ namespace KidGame.Mechanics.Tracing
                 }
             }
 
-            foreach (var list in _landscapeRowTracers)
+            foreach (var list in _rowTracers)
             {
                 foreach (var tracer in list)
                 {
@@ -2042,8 +2005,8 @@ namespace KidGame.Mechanics.Tracing
 
         private void ApplyAllUniformScales()
         {
-            ApplyUniformScale(_portraitRowTracers, _portraitMinScale);
-            ApplyUniformScale(_landscapeRowTracers, _landscapeMinScale);
+            ApplyUniformScale(_rowTracers, _minScale);
+            ApplyUniformScale(_rowTracers, _minScale);
             UpdateScrollLocking();
         }
 
@@ -2065,12 +2028,11 @@ namespace KidGame.Mechanics.Tracing
 
         private void UpdateScrollLockingInternal()
         {
-            UpdateScrollLockForContainer(portraitTutorialContent);
-            UpdateScrollLockForContainer(portraitGameContent);
-            UpdateScrollLockForContainer(landscapeTutorialContent);
-            UpdateScrollLockForContainer(landscapeGameContent);
-            UpdateScrollLockForContainer(portraitAnswerCardsContainer);
-            UpdateScrollLockForContainer(landscapeAnswerCardsContainer);
+            UpdateScrollLockForContainer(tutorialContent);
+            UpdateScrollLockForContainer(gameContent);
+
+            UpdateScrollLockForContainer(answerCardsContainer);
+
         }
 
         private void UpdateScrollLockForContainer(Transform container)
@@ -2116,15 +2078,15 @@ namespace KidGame.Mechanics.Tracing
                 }
 
                 // Determine scrolling direction:
-                // - portraitAnswerCardsContainer scrolls HORIZONTALLY.
-                // - landscapeAnswerCardsContainer scrolls VERTICALLY.
+                // - answerCardsContainer scrolls HORIZONTALLY.
+                // - answerCardsContainer scrolls VERTICALLY.
                 // - For other containers, portrait is VERTICAL and landscape is HORIZONTAL.
                 bool scrollVertical;
-                if (container == portraitAnswerCardsContainer)
+                if (container == answerCardsContainer)
                 {
                     scrollVertical = false;
                 }
-                else if (container == landscapeAnswerCardsContainer)
+                else if (container == answerCardsContainer)
                 {
                     scrollVertical = true;
                 }

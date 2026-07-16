@@ -23,17 +23,12 @@ namespace KidGame.Mechanics.Addition
         [Tooltip("The AnswerCard draggable prefab (same as counting game).")]
         [SerializeField] private GameObject answerCardPrefab;
 
-        [Header("Portrait Containers")]
-        [SerializeField] private Transform portraitSlotsContainer;
-        [SerializeField] private Transform portraitAnswersContainer;
-
-        [Header("Landscape Containers")]
-        [SerializeField] private Transform landscapeSlotsContainer;
-        [SerializeField] private Transform landscapeAnswersContainer;
+        [Header("Containers")]
+        [SerializeField] private Transform slotsContainer;
+        [SerializeField] private Transform answersContainer;
 
         [Header("Shared")]
-        [SerializeField] private Button portraitNextButton;
-        [SerializeField] private Button landscapeNextButton;
+        [SerializeField] private Button nextButton;
 
         [Header("Config")]
         [Tooltip("Number of slot rows per round.")]
@@ -99,20 +94,9 @@ namespace KidGame.Mechanics.Addition
         private readonly List<AnswerCard>   _cards = new List<AnswerCard>();
         private int _answeredCount;
 
-        // ── Orientation ───────────────────────────────────────────────────────
+        // ── Orientation ─────────────────────────────────────────────────────
 
-        private bool IsLandscape => Screen.width > Screen.height;
-
-        private Transform ActiveSlotsContainer
-            => IsLandscape ? landscapeSlotsContainer   : portraitSlotsContainer;
-
-        private Transform ActiveAnswersContainer
-            => IsLandscape ? landscapeAnswersContainer : portraitAnswersContainer;
-
-        private bool _wasLandscape;
-
-        public Button PortraitNextButton => portraitNextButton;
-        public Button LandscapeNextButton => landscapeNextButton;
+        public Button NextButton => nextButton;
 
         public void Configure(int slotCount, int minPerGrid, int maxPerGrid, bool diceMode, bool fingerMode, bool countAddMode, bool numbersOnlyMode, int minOperandCount, int maxOperandCount, int minNumberValue, int maxNumberValue, string activeThemeName)
         {
@@ -146,16 +130,12 @@ namespace KidGame.Mechanics.Addition
 
         private void OnEnable()
         {
-            ConfigureNextButton(portraitNextButton);
-            ConfigureNextButton(landscapeNextButton);
-
-            _wasLandscape = IsLandscape;
-            SetNextButtonsInteractable(false);
+            ConfigureNextButton(nextButton);
+            SetNextButtonInteractable(false);
 
             if (KidGame.Interface.GameFlowManager.Instance == null)
             {
-                if (portraitNextButton != null) portraitNextButton.onClick.AddListener(GenerateRound);
-                if (landscapeNextButton != null) landscapeNextButton.onClick.AddListener(GenerateRound);
+                if (nextButton != null) nextButton.onClick.AddListener(GenerateRound);
             }
 
             GenerateRound();
@@ -171,53 +151,9 @@ namespace KidGame.Mechanics.Addition
             btn.colors = colors;
         }
 
-        private void SetNextButtonsInteractable(bool interactable)
+        private void SetNextButtonInteractable(bool interactable)
         {
-            if (portraitNextButton != null) portraitNextButton.interactable = interactable;
-            if (landscapeNextButton != null) landscapeNextButton.interactable = interactable;
-        }
-
-        private void Update()
-        {
-            if (this == null) return;
-            if (portraitSlotsContainer == null || landscapeSlotsContainer == null ||
-                portraitAnswersContainer == null || landscapeAnswersContainer == null) return;
-
-            // Detect orientation flip and migrate live slots/cards to the new containers
-            bool landscape = IsLandscape;
-            if (landscape != _wasLandscape && _slots.Count > 0)
-            {
-                _wasLandscape = landscape;
-                MoveToActiveContainers();
-            }
-        }
-
-        private void MoveToActiveContainers()
-        {
-            if (this == null) return;
-            var newSlots   = ActiveSlotsContainer;
-            var newAnswers = ActiveAnswersContainer;
-            if (newSlots == null || newAnswers == null) return;
-
-            foreach (var slot in _slots)
-                if (slot) slot.transform.SetParent(newSlots, worldPositionStays: false);
-
-            foreach (var card in _cards)
-            {
-                if (card && !card.IsAccepted)
-                {
-                    card.transform.SetParent(newAnswers, worldPositionStays: false);
-                    card.UpdateHomeParent(newAnswers);
-                }
-            }
-
-            var rtSlots   = newSlots.GetComponent<RectTransform>();
-            var rtAnswers = newAnswers.GetComponent<RectTransform>();
-            if (rtSlots)   UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtSlots);
-            if (rtAnswers) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtAnswers);
-
-            Debug.Log($"[AdditionGame] Orientation changed → moved {_slots.Count} slots, {_cards.Count} cards.");
-            UpdateScrollLocking();
+            if (nextButton != null) nextButton.interactable = interactable;
         }
 
         // ── Public API (called by AdditionSlot via lambda) ────────────────────
@@ -227,7 +163,7 @@ namespace KidGame.Mechanics.Addition
         {
             _answeredCount++;
             if (_answeredCount >= _slots.Count)
-                SetNextButtonsInteractable(true);
+                SetNextButtonInteractable(true);
             GameFlowManager.Instance?.NotifyRoundStateChanged();
         }
 
@@ -295,12 +231,12 @@ namespace KidGame.Mechanics.Addition
                 Debug.LogError("[AdditionGame] Answer Card Prefab is not assigned in the Inspector.");
                 return;
             }
-            if (ActiveSlotsContainer == null)
+            if (slotsContainer == null)
             {
                 Debug.LogError("[AdditionGame] Slots Container for the current orientation is not assigned.");
                 return;
             }
-            if (ActiveAnswersContainer == null)
+            if (answersContainer == null)
             {
                 Debug.LogError("[AdditionGame] Answers Container for the current orientation is not assigned.");
                 return;
@@ -309,7 +245,7 @@ namespace KidGame.Mechanics.Addition
 
             ClearPrevious();
             _answeredCount = 0;
-            SetNextButtonsInteractable(false);
+            SetNextButtonInteractable(false);
 
             List<int> sums = new List<int>();
             var slotData = new List<(List<GameObject> leftPrefabs, List<GameObject> rightPrefabs, int leftSum, int rightSum)>();
@@ -401,7 +337,7 @@ namespace KidGame.Mechanics.Addition
             int actualSlotCount = numbersOnlyMode ? equations.Count : ((diceMode || fingerMode) ? slotData.Count : normalPairs.Count);
             for (int i = 0; i < actualSlotCount; i++)
             {
-                var go = Instantiate(prefabToSpawn, ActiveSlotsContainer);
+                var go = Instantiate(prefabToSpawn, slotsContainer);
 
                 if (numbersOnlyMode)
                 {
@@ -434,7 +370,7 @@ namespace KidGame.Mechanics.Addition
             }
 
             // Force layout to recalculate immediately after spawning all slots
-            var rt = ActiveSlotsContainer.GetComponent<RectTransform>();
+            var rt = slotsContainer.GetComponent<RectTransform>();
             if (rt != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
 
 
@@ -442,7 +378,7 @@ namespace KidGame.Mechanics.Addition
             // 6. Spawn answer cards into the active orientation's answer grid
             for (int i = 0; i < answerValues.Count; i++)
             {
-                var go   = Instantiate(answerCardPrefab, ActiveAnswersContainer);
+                var go   = Instantiate(answerCardPrefab, answersContainer);
                 var card = go.GetComponent<AnswerCard>();
                 card.Setup(answerValues[i], colors[i]);
                 _cards.Add(card);
@@ -559,11 +495,10 @@ namespace KidGame.Mechanics.Addition
 
         private void UpdateScrollLockingInternal()
         {
-            UpdateScrollLockForContainer(portraitSlotsContainer);
-            UpdateScrollLockForContainer(portraitAnswersContainer);
-            UpdateScrollLockForContainer(landscapeSlotsContainer);
-            UpdateScrollLockForContainer(landscapeAnswersContainer);
+            UpdateScrollLockForContainer(slotsContainer);
+            UpdateScrollLockForContainer(answersContainer);
         }
+
 
         private void UpdateScrollLockForContainer(Transform container)
         {
@@ -589,7 +524,7 @@ namespace KidGame.Mechanics.Addition
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentRt);
 
                 // Portrait answers scroll horizontally, all other lists (slots and landscape answers) scroll vertically
-                bool scrollVertical = (container != portraitAnswersContainer);
+                bool scrollVertical = (container != answersContainer);
 
                 if (scrollVertical)
                 {
