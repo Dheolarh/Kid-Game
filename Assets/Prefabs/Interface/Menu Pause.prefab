@@ -795,7 +795,7 @@ GameObject:
   - component: {fileID: 2782109193144063086}
   - component: {fileID: 1862878311737599163}
   m_Layer: 5
-  m_Name: Orientation Control
+  m_Name: Vibration Control
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2893,6 +2893,7 @@ GameObject:
   - component: {fileID: 2145153259863368246}
   - component: {fileID: 1794752084474664638}
   - component: {fileID: 3647092120527841858}
+  - component: {fileID: 6477402790598305342}
   m_Layer: 5
   m_Name: Menu Pause
   m_TagString: Untagged
@@ -2984,6 +2985,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6477402790598305342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7500866564326996971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77d00068081ba5a4d80437e4cca3ba27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Audio.AudioSettingsController
+  musicSlider: {fileID: 3454143614585276423}
+  sfxSlider: {fileID: 8934258719369977793}
+  vibrationSlider: {fileID: 1862878311737599163}
 --- !u!1 &7538343139152087439
 GameObject:
   m_ObjectHideFlags: 0

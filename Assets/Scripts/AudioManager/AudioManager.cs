@@ -32,7 +32,7 @@ namespace KidGame.Audio
         [Header("Volume Configuration")]
         [Range(0f, 1f)] [SerializeField] private float registrationVolume = 0.12f;
         [Range(0f, 1f)] [SerializeField] private float mainMenuVolume = 0.25f;
-        [Range(0f, 1f)] [SerializeField] private float gameplayVolume = 0.25f;
+        [Range(0f, 1f)] [SerializeField] private float gameplayVolume = 0.08f; // Reduced from 0.25f to be much softer
         [Range(0f, 1f)] [SerializeField] private float sfxVolume = 0.8f;
 
         [Header("Fade Settings")]
@@ -41,6 +41,12 @@ namespace KidGame.Audio
         private Coroutine _fadeCoroutine;
         private AudioClip _lastGameBgmPlayed;
 
+
+
+        // Settings Settings (Range 0 - 10)
+        public int MusicVolumeSetting { get; private set; }
+        public int SfxVolumeSetting { get; private set; }
+        public int VibrationSetting { get; private set; }
 
         private void Awake()
         {
@@ -53,6 +59,11 @@ namespace KidGame.Audio
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
+            // Load Settings (Range 0-10, Default to 8 for good preset)
+            MusicVolumeSetting = PlayerPrefs.GetInt("Setting_MusicVolume", 8);
+            SfxVolumeSetting = PlayerPrefs.GetInt("Setting_SfxVolume", 8);
+            VibrationSetting = PlayerPrefs.GetInt("Setting_Vibration", 5); // Default vibration in middle
+
             if (bgmSource == null)
             {
                 bgmSource = GetComponent<AudioSource>();
@@ -64,7 +75,6 @@ namespace KidGame.Audio
 
             if (sfxSource == null)
             {
-                // Try to find a second AudioSource on the game object, or add one
                 var sources = GetComponents<AudioSource>();
                 if (sources.Length > 1)
                 {
@@ -81,7 +91,72 @@ namespace KidGame.Audio
             
             sfxSource.loop = false;
             sfxSource.playOnAwake = false;
+
+            // Apply initial BGM volume if a clip is already playing or pre-set
+            UpdateActiveBgmVolume();
         }
+
+        // ── Settings API ──────────────────────────────────────────────────────────
+
+        public void SetMusicVolumeSetting(int val)
+        {
+            MusicVolumeSetting = Mathf.Clamp(val, 0, 10);
+            PlayerPrefs.SetInt("Setting_MusicVolume", MusicVolumeSetting);
+            PlayerPrefs.Save();
+            UpdateActiveBgmVolume();
+        }
+
+        public void SetSfxVolumeSetting(int val)
+        {
+            SfxVolumeSetting = Mathf.Clamp(val, 0, 10);
+            PlayerPrefs.SetInt("Setting_SfxVolume", SfxVolumeSetting);
+            PlayerPrefs.Save();
+        }
+
+        public void SetVibrationSetting(int val)
+        {
+            VibrationSetting = Mathf.Clamp(val, 0, 10);
+            PlayerPrefs.SetInt("Setting_Vibration", VibrationSetting);
+            PlayerPrefs.Save();
+        }
+
+        private void UpdateActiveBgmVolume()
+        {
+            if (bgmSource == null) return;
+            
+            // Scaled BGM volume based on active track preset and global slider Setting
+            float currentPresetVolume = GetCurrentBgmPresetVolume();
+            bgmSource.volume = currentPresetVolume * (MusicVolumeSetting / 10f);
+        }
+
+        private float GetCurrentBgmPresetVolume()
+        {
+            if (bgmSource.clip == registrationBgm) return registrationVolume;
+            if (bgmSource.clip == mainMenuBgm) return mainMenuVolume;
+            return gameplayVolume;
+        }
+
+        /// <summary>
+        /// Triggers device vibration scaled by intensity setting.
+        /// </summary>
+        public void Vibrate()
+        {
+            if (VibrationSetting <= 0) return;
+
+            // Only trigger vibration if on mobile platform
+#if UNITY_ANDROID || UNITY_IOS
+            // Handheld.Vibrate() is a standard Unity call.
+            // On some platforms we can customize it or trigger it directly.
+            // If the vibration setting is low, we might skip or do normal vibration depending on device capabilities.
+            if (Application.isPlaying)
+            {
+                Handheld.Vibrate();
+            }
+#else
+            Debug.Log($"[AudioManager] Vibrate triggered (Intensity: {VibrationSetting}/10)");
+#endif
+        }
+
 
 
         /// <summary>
@@ -148,6 +223,9 @@ namespace KidGame.Audio
 
         private IEnumerator FadeToBgmRoutine(AudioClip newClip, float targetVolume)
         {
+            float musicScalar = MusicVolumeSetting / 10f;
+            float finalTargetVolume = targetVolume * musicScalar;
+
             // If the clip is the same and already playing, just smoothly adjust the volume
             if (bgmSource.clip == newClip && bgmSource.isPlaying)
             {
@@ -156,10 +234,10 @@ namespace KidGame.Audio
                 while (elapsed < transitionFadeDuration)
                 {
                     elapsed += Time.deltaTime;
-                    bgmSource.volume = Mathf.Lerp(startVol, targetVolume, elapsed / transitionFadeDuration);
+                    bgmSource.volume = Mathf.Lerp(startVol, finalTargetVolume, elapsed / transitionFadeDuration);
                     yield return null;
                 }
-                bgmSource.volume = targetVolume;
+                bgmSource.volume = finalTargetVolume;
                 yield break;
             }
 
@@ -189,10 +267,10 @@ namespace KidGame.Audio
                 while (elapsed < transitionFadeDuration)
                 {
                     elapsed += Time.deltaTime;
-                    bgmSource.volume = Mathf.Lerp(0f, targetVolume, elapsed / transitionFadeDuration);
+                    bgmSource.volume = Mathf.Lerp(0f, finalTargetVolume, elapsed / transitionFadeDuration);
                     yield return null;
                 }
-                bgmSource.volume = targetVolume;
+                bgmSource.volume = finalTargetVolume;
             }
         }
 
@@ -203,7 +281,8 @@ namespace KidGame.Audio
         {
             if (sfxSource != null && dialoguePopSfx != null)
             {
-                sfxSource.PlayOneShot(dialoguePopSfx, sfxVolume);
+                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                sfxSource.PlayOneShot(dialoguePopSfx, finalVol);
             }
         }
 
@@ -214,7 +293,8 @@ namespace KidGame.Audio
         {
             if (sfxSource != null && countObjectSfx != null)
             {
-                sfxSource.PlayOneShot(countObjectSfx, sfxVolume);
+                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                sfxSource.PlayOneShot(countObjectSfx, finalVol);
             }
         }
 
@@ -225,7 +305,8 @@ namespace KidGame.Audio
         {
             if (sfxSource != null && buttonClickSfx != null)
             {
-                sfxSource.PlayOneShot(buttonClickSfx, sfxVolume);
+                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                sfxSource.PlayOneShot(buttonClickSfx, finalVol);
             }
         }
 
@@ -236,9 +317,11 @@ namespace KidGame.Audio
         {
             if (sfxSource != null && answerDropSfx != null)
             {
-                sfxSource.PlayOneShot(answerDropSfx, sfxVolume);
+                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                sfxSource.PlayOneShot(answerDropSfx, finalVol);
             }
         }
+
     }
 }
 

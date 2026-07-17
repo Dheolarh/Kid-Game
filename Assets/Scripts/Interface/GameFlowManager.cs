@@ -582,7 +582,7 @@ namespace KidGame.Interface
             {
                 // Instantly complete typing
                 if (_typewriterCoroutine != null) StopCoroutine(_typewriterCoroutine);
-                if (dialogueText != null) dialogueText.text = _currentFullText;
+                if (dialogueText != null) dialogueText.maxVisibleCharacters = _currentFullText.Length;
                 _isTyping = false;
             }
             else
@@ -1483,10 +1483,12 @@ namespace KidGame.Interface
         {
             if (dialogueText != null)
             {
-                dialogueText.text = "";
+                dialogueText.text = text;
+                dialogueText.maxVisibleCharacters = 0;
+
                 for (int i = 0; i <= text.Length; i++)
                 {
-                    dialogueText.text = text.Substring(0, i);
+                    dialogueText.maxVisibleCharacters = i;
                     yield return new WaitForSeconds(0.03f); // Slower, more readable typing speed
                 }
             }
