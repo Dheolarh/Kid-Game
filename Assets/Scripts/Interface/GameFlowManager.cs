@@ -74,6 +74,10 @@ namespace KidGame.Interface
         [SerializeField] private GameObject endMascotObject;            // End mascot object
         [SerializeField] private Animator endMascotAnimator;            // Mascot animator (isWinner loop)
         [SerializeField] private TMP_Text greatJobText;                 // "Great Job!" text
+
+        [Header("Debug / Perf Testing")]
+        [Tooltip("Disables all mascot GameObjects and animation triggers for this build. Used to isolate whether mascot animation is a source of in-game lag.")]
+        [SerializeField] private bool disableMascotAnimations = false;
         [SerializeField] private GameObject endConfettiObject;          // Confetti object
         [SerializeField] private Animator endConfettiAnimator;          // Confetti sprite animator
         [SerializeField] private TMP_Text endTipsText;
@@ -171,6 +175,11 @@ namespace KidGame.Interface
 
         private void Start()
         {
+            if (disableMascotAnimations)
+            {
+                ApplyMascotAnimationsDisabled();
+            }
+
             #if UNITY_EDITOR
             if (levelDatabase == null)
             {
@@ -208,6 +217,18 @@ namespace KidGame.Interface
         }
 
         /// <summary>
+        /// Debug/perf-testing toggle: hard-disables every mascot GameObject so no mascot
+        /// Animator (and its per-frame sprite-swap flipbook animation) runs at all in this
+        /// build. Used to isolate whether mascot animation is a source of in-game lag.
+        /// </summary>
+        private void ApplyMascotAnimationsDisabled()
+        {
+            if (mascotAnimator != null) mascotAnimator.gameObject.SetActive(false);
+            if (dialogueMascotAnimator != null) dialogueMascotAnimator.gameObject.SetActive(false);
+            if (endMascotObject != null) endMascotObject.SetActive(false);
+        }
+
+        /// <summary>
         /// Waits for the curtain transition to finish opening before running the heavy level
         /// initialization (game mode instantiation, slot spawning, etc.).
         /// This prevents the 60ms+ frame spike visible in the profiler.
@@ -239,7 +260,7 @@ namespace KidGame.Interface
         private void Update()
         {
             // Hide the main gameplay mascot when dialogue shows
-            if (mascotAnimator != null)
+            if (!disableMascotAnimations && mascotAnimator != null)
             {
                 bool shouldShowMascot = dialoguePanel != null && !dialoguePanel.activeSelf;
                 if (mascotAnimator.gameObject.activeSelf != shouldShowMascot)
@@ -1021,7 +1042,7 @@ namespace KidGame.Interface
             yield return new WaitForSeconds(0.35f);
 
             // ── Step 4: Mascot isWinner trigger + "Great Job!" pop in ─────────────────
-            if (endMascotAnimator != null)
+            if (!disableMascotAnimations && endMascotAnimator != null)
             {
                 endMascotObject.SetActive(true);
                 endMascotAnimator.SetTrigger("isWinner");
