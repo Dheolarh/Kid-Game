@@ -2184,7 +2184,6 @@ namespace KidGame.Mechanics.Tracing
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) return;
             if (UnityEditor.EditorApplication.isCompiling) return;
 
-            FindCharacterPrefabs();
             ApplyMode(tutorialModeActive);
         }
 
@@ -2222,7 +2221,6 @@ namespace KidGame.Mechanics.Tracing
             }
 
             UnityEditor.EditorUtility.SetDirty(this);
-            Debug.Log($"Loaded {numberPrefabs.Count} numbers, {lowercasePrefabs.Count} lowercase, {uppercasePrefabs.Count} uppercase prefabs.");
         }
 #endif
     }

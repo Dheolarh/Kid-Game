@@ -9,7 +9,7 @@ namespace KidGame.Audio
     /// Uses IPointerClickHandler so it is immune to button.onClick.RemoveAllListeners().
     /// </summary>
     [RequireComponent(typeof(Button))]
-    public class ButtonClickSfx : MonoBehaviour, IPointerClickHandler
+    public class ButtonClickSfx : MonoBehaviour, IPointerDownHandler
     {
         private Button _button;
 
@@ -18,7 +18,7 @@ namespace KidGame.Audio
             _button = GetComponent<Button>();
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public void OnPointerDown(PointerEventData eventData)
         {
             // Only play SFX if the button exists, is active, and is interactable
             if (_button != null && _button.interactable && _button.gameObject.activeInHierarchy)

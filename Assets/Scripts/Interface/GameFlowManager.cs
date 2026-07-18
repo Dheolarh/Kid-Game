@@ -1515,5 +1515,32 @@ namespace KidGame.Interface
             }
             _isTyping = false;
         }
+
+        public void RestartCurrentLevel()
+        {
+            Debug.Log("[GameFlowManager] Restarting Current Level...");
+            if (SceneTransitionManager.Instance != null)
+            {
+                string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+                SceneTransitionManager.Instance.LoadSceneWithTransition(currentScene);
+            }
+            else
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+
+        public void QuitCurrentLevelAndGoHome()
+        {
+            Debug.Log("[GameFlowManager] Quitting to Home...");
+            if (SceneTransitionManager.Instance != null)
+            {
+                SceneTransitionManager.Instance.LoadSceneWithTransition("Level");
+            }
+            else
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Level");
+            }
+        }
     }
 }
