@@ -1510,7 +1510,7 @@ namespace KidGame.Interface
                 for (int i = 0; i <= text.Length; i++)
                 {
                     dialogueText.maxVisibleCharacters = i;
-                    yield return new WaitForSeconds(0.03f); // Slower, more readable typing speed
+                    yield return new WaitForSeconds(0.01f); // Slower, more readable typing speed
                 }
             }
             _isTyping = false;
