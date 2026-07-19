@@ -137,7 +137,6 @@ namespace KidGame.Mechanics.NumberRecall
                 float verticalPadding = layoutGroup != null ? (layoutGroup.padding.top + layoutGroup.padding.bottom) : 0f;
 
                 // Since gridHeight from GetGridCalculatedHeight already includes the grid padding,
-                // if layoutGroup is the GridLayoutGroup itself, we do not double-add the padding.
                 float newSlotHeight = gridHeight;
                 if (layoutGroup != null && !(layoutGroup is GridLayoutGroup))
                 {
