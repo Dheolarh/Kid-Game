@@ -82,19 +82,21 @@ namespace KidGame.Mechanics.NumberRecall
 
         private float _lastParentWidth = -1f;
 
-        private void Update()
+        private bool _isAdjusting;
+
+        private void OnRectTransformDimensionsChange()
         {
-            if (_sequenceLength <= 0) return;
+            if (_sequenceLength <= 0 || _isAdjusting) return;
+            if (!isActiveAndEnabled) return;
 
             var parentRt = transform.parent as RectTransform;
-            if (parentRt != null)
+            if (parentRt == null) return;
+
+            float parentWidth = parentRt.rect.width;
+            if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
             {
-                float parentWidth = parentRt.rect.width;
-                if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
-                {
-                    _lastParentWidth = parentWidth;
-                    AdjustHeights(_sequenceLength);
-                }
+                _lastParentWidth = parentWidth;
+                AdjustHeights(_sequenceLength);
             }
         }
 
@@ -105,49 +107,57 @@ namespace KidGame.Mechanics.NumberRecall
 
         private void AdjustHeights(int length)
         {
-            var grid = GetComponentInChildren<GridLayoutGroup>();
-            if (grid == null) return;
-
-            // Force layout rebuild on slot's parent container to resolve parent width first
-            var parentRt = transform.parent as RectTransform;
-            if (parentRt != null)
+            _isAdjusting = true;
+            try
             {
-                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(parentRt);
+                var grid = GetComponentInChildren<GridLayoutGroup>();
+                if (grid == null) return;
+
+                // Force layout rebuild on slot's parent container to resolve parent width first
+                var parentRt = transform.parent as RectTransform;
+                if (parentRt != null)
+                {
+                    UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(parentRt);
+                }
+
+                float gridHeight = GetGridCalculatedHeight(grid.transform, length);
+
+                // Resize Grid RectTransform if it is a child
+                if (grid.transform != transform)
+                {
+                    var rtGrid = grid.transform as RectTransform;
+                    if (rtGrid != null) rtGrid.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridHeight);
+                    var leGrid = grid.GetComponent<LayoutElement>();
+                    if (leGrid == null) leGrid = grid.gameObject.AddComponent<LayoutElement>();
+                    leGrid.preferredHeight = gridHeight;
+                }
+
+                // Calculate slot preferred height from any LayoutGroup (like GridLayoutGroup, HorizontalLayoutGroup, or VerticalLayoutGroup)
+                LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
+                float verticalPadding = layoutGroup != null ? (layoutGroup.padding.top + layoutGroup.padding.bottom) : 0f;
+
+                // Since gridHeight from GetGridCalculatedHeight already includes the grid padding,
+                // if layoutGroup is the GridLayoutGroup itself, we do not double-add the padding.
+                float newSlotHeight = gridHeight;
+                if (layoutGroup != null && !(layoutGroup is GridLayoutGroup))
+                {
+                    newSlotHeight += verticalPadding;
+                }
+                newSlotHeight = Mathf.Max(100f, newSlotHeight);
+
+                var leSlot = GetComponent<LayoutElement>();
+                if (leSlot == null) leSlot = gameObject.AddComponent<LayoutElement>();
+                leSlot.preferredHeight = newSlotHeight;
+
+                var slotRt = transform as RectTransform;
+                if (slotRt != null)
+                {
+                    slotRt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newSlotHeight);
+                }
             }
-
-            float gridHeight = GetGridCalculatedHeight(grid.transform, length);
-
-            // Resize Grid RectTransform if it is a child
-            if (grid.transform != transform)
+            finally
             {
-                var rtGrid = grid.transform as RectTransform;
-                if (rtGrid != null) rtGrid.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridHeight);
-                var leGrid = grid.GetComponent<LayoutElement>();
-                if (leGrid == null) leGrid = grid.gameObject.AddComponent<LayoutElement>();
-                leGrid.preferredHeight = gridHeight;
-            }
-
-            // Calculate slot preferred height from any LayoutGroup (like GridLayoutGroup, HorizontalLayoutGroup, or VerticalLayoutGroup)
-            LayoutGroup layoutGroup = GetComponent<LayoutGroup>();
-            float verticalPadding = layoutGroup != null ? (layoutGroup.padding.top + layoutGroup.padding.bottom) : 0f;
-
-            // Since gridHeight from GetGridCalculatedHeight already includes the grid padding,
-            // if layoutGroup is the GridLayoutGroup itself, we do not double-add the padding.
-            float newSlotHeight = gridHeight;
-            if (layoutGroup != null && !(layoutGroup is GridLayoutGroup))
-            {
-                newSlotHeight += verticalPadding;
-            }
-            newSlotHeight = Mathf.Max(100f, newSlotHeight);
-
-            var leSlot = GetComponent<LayoutElement>();
-            if (leSlot == null) leSlot = gameObject.AddComponent<LayoutElement>();
-            leSlot.preferredHeight = newSlotHeight;
-
-            var slotRt = transform as RectTransform;
-            if (slotRt != null)
-            {
-                slotRt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newSlotHeight);
+                _isAdjusting = false;
             }
         }
 

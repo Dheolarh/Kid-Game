@@ -129,19 +129,21 @@ namespace KidGame.Mechanics.Addition
         private float _initialSlotHeight = -1f;
         private float _initialObjectBoxHeight = -1f;
 
-        private void Update()
+        private bool _isAdjusting;
+
+        private void OnRectTransformDimensionsChange()
         {
-            if (!_isSetup || _leftCount < 0 || _rightCount < 0) return;
+            if (!_isSetup || _leftCount < 0 || _rightCount < 0 || _isAdjusting) return;
+            if (!isActiveAndEnabled) return;
 
             var parentRt = transform.parent as RectTransform;
-            if (parentRt != null)
+            if (parentRt == null) return;
+
+            float parentWidth = parentRt.rect.width;
+            if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
             {
-                float parentWidth = parentRt.rect.width;
-                if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
-                {
-                    _lastParentWidth = parentWidth;
-                    AdjustHeights(_leftCount, _rightCount, _countAddMode);
-                }
+                _lastParentWidth = parentWidth;
+                AdjustHeights(_leftCount, _rightCount, _countAddMode);
             }
         }
 
@@ -184,6 +186,9 @@ namespace KidGame.Mechanics.Addition
 
         private void AdjustHeights(int leftCount, int rightCount, bool countAddMode)
         {
+            _isAdjusting = true;
+            try
+            {
             var parentRt = transform.parent as RectTransform;
             if (parentRt != null)
             {
@@ -281,6 +286,11 @@ namespace KidGame.Mechanics.Addition
             if (slotRt != null)
             {
                 slotRt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newSlotHeight);
+            }
+            }
+            finally
+            {
+                _isAdjusting = false;
             }
         }
 

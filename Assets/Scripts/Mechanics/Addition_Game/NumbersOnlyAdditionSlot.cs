@@ -80,77 +80,87 @@ namespace KidGame.Mechanics.Addition
             AdjustHeights();
         }
 
-        private void Update()
+        private bool _isAdjusting;
+
+        private void OnRectTransformDimensionsChange()
         {
-            if (!_isSetup || _lastOperandCount <= 0 || objectBox == null) return;
+            if (!_isSetup || _lastOperandCount <= 0 || objectBox == null || _isAdjusting) return;
+            if (!isActiveAndEnabled) return;
 
             var parentRt = transform.parent as RectTransform;
-            if (parentRt != null)
+            if (parentRt == null) return;
+
+            float parentWidth = parentRt.rect.width;
+            if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
             {
-                float parentWidth = parentRt.rect.width;
-                if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
-                {
-                    _lastParentWidth = parentWidth;
-                    AdjustHeights();
-                }
+                _lastParentWidth = parentWidth;
+                AdjustHeights();
             }
         }
 
         private void AdjustHeights()
         {
-            if (objectBox == null) return;
-
-            var grid = objectBox.GetComponent<UnityEngine.UI.GridLayoutGroup>();
-            if (grid == null) return;
-
-            // Force layout rebuild on parent RectTransform first to resolve parent width
-            var parentRt = transform.parent as RectTransform;
-            if (parentRt != null)
+            _isAdjusting = true;
+            try
             {
-                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(parentRt);
+                if (objectBox == null) return;
+
+                var grid = objectBox.GetComponent<UnityEngine.UI.GridLayoutGroup>();
+                if (grid == null) return;
+
+                // Force layout rebuild on parent RectTransform first to resolve parent width
+                var parentRt = transform.parent as RectTransform;
+                if (parentRt != null)
+                {
+                    UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(parentRt);
+                }
+
+                // Total grid items count in the objectBox container is:
+                // itemCount numbers + (itemCount - 1) pluses
+                int totalItemsInGrid = _lastOperandCount + (_lastOperandCount - 1);
+
+                float gridHeight = GetGridCalculatedHeight(objectBox, totalItemsInGrid);
+
+                // Set size on Object box
+                var rtObjectBox = objectBox as RectTransform;
+                if (rtObjectBox != null)
+                {
+                    rtObjectBox.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridHeight);
+                    var leObjectBox = objectBox.GetComponent<UnityEngine.UI.LayoutElement>();
+                    if (leObjectBox == null) leObjectBox = objectBox.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                    leObjectBox.preferredHeight = gridHeight;
+                }
+
+                // Set size on Slot Row (this slot)
+                var leSlot = GetComponent<UnityEngine.UI.LayoutElement>();
+                if (leSlot == null) leSlot = gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+
+                // Calculate height. If slot contains answerDropZone parallel/outside objectBox (e.g. In a HorizontalLayoutGroup),
+                // the slot height needs to be at least the max of gridHeight and answerDropZone height.
+                float targetContentHeight = gridHeight;
+                if (answerDropZone != null)
+                {
+                    var rtDrop = answerDropZone.transform as RectTransform;
+                    float dropHeight = rtDrop != null ? rtDrop.rect.height : 100f;
+                    targetContentHeight = Mathf.Max(gridHeight, dropHeight);
+                }
+
+                var layoutGroup = GetComponent<UnityEngine.UI.HorizontalLayoutGroup>();
+                float verticalPadding = layoutGroup != null ? (layoutGroup.padding.top + layoutGroup.padding.bottom) : 0f;
+
+                // Use base height of 100f or calculated height
+                float newSlotHeight = Mathf.Max(100f, targetContentHeight + verticalPadding);
+                leSlot.preferredHeight = newSlotHeight;
+
+                var slotRt = transform as RectTransform;
+                if (slotRt != null)
+                {
+                    slotRt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newSlotHeight);
+                }
             }
-
-            // Total grid items count in the objectBox container is:
-            // itemCount numbers + (itemCount - 1) pluses
-            int totalItemsInGrid = _lastOperandCount + (_lastOperandCount - 1);
-
-            float gridHeight = GetGridCalculatedHeight(objectBox, totalItemsInGrid);
-
-            // Set size on Object box
-            var rtObjectBox = objectBox as RectTransform;
-            if (rtObjectBox != null)
+            finally
             {
-                rtObjectBox.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridHeight);
-                var leObjectBox = objectBox.GetComponent<UnityEngine.UI.LayoutElement>();
-                if (leObjectBox == null) leObjectBox = objectBox.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
-                leObjectBox.preferredHeight = gridHeight;
-            }
-
-            // Set size on Slot Row (this slot)
-            var leSlot = GetComponent<UnityEngine.UI.LayoutElement>();
-            if (leSlot == null) leSlot = gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
-
-            // Calculate height. If slot contains answerDropZone parallel/outside objectBox (e.g. In a HorizontalLayoutGroup),
-            // the slot height needs to be at least the max of gridHeight and answerDropZone height.
-            float targetContentHeight = gridHeight;
-            if (answerDropZone != null)
-            {
-                var rtDrop = answerDropZone.transform as RectTransform;
-                float dropHeight = rtDrop != null ? rtDrop.rect.height : 100f;
-                targetContentHeight = Mathf.Max(gridHeight, dropHeight);
-            }
-
-            var layoutGroup = GetComponent<UnityEngine.UI.HorizontalLayoutGroup>();
-            float verticalPadding = layoutGroup != null ? (layoutGroup.padding.top + layoutGroup.padding.bottom) : 0f;
-
-            // Use base height of 100f or calculated height
-            float newSlotHeight = Mathf.Max(100f, targetContentHeight + verticalPadding);
-            leSlot.preferredHeight = newSlotHeight;
-
-            var slotRt = transform as RectTransform;
-            if (slotRt != null)
-            {
-                slotRt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newSlotHeight);
+                _isAdjusting = false;
             }
         }
 

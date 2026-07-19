@@ -83,24 +83,29 @@ namespace KidGame.Mechanics.Counting
         private bool _isSetup = false;
         private float _lastParentWidth = -1f;
 
-        private void Update()
+        private bool _isAdjusting;
+
+        private void OnRectTransformDimensionsChange()
         {
-            if (!_isSetup || _itemCount <= 0) return;
+            if (!_isSetup || _itemCount <= 0 || _isAdjusting) return;
+            if (!isActiveAndEnabled) return;
 
             var parentRt = transform.parent as RectTransform;
-            if (parentRt != null)
+            if (parentRt == null) return;
+
+            float parentWidth = parentRt.rect.width;
+            if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
             {
-                float parentWidth = parentRt.rect.width;
-                if (parentWidth > 0f && Mathf.Abs(parentWidth - _lastParentWidth) > 0.1f)
-                {
-                    _lastParentWidth = parentWidth;
-                    AdjustHeights(_itemCount);
-                }
+                _lastParentWidth = parentWidth;
+                AdjustHeights(_itemCount);
             }
         }
 
         private void AdjustHeights(int itemCount)
         {
+            _isAdjusting = true;
+            try
+            {
             var parentRt = transform.parent as RectTransform;
             if (parentRt != null)
             {
@@ -142,6 +147,11 @@ namespace KidGame.Mechanics.Counting
             if (slotRt != null)
             {
                 slotRt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newSlotHeight);
+            }
+            }
+            finally
+            {
+                _isAdjusting = false;
             }
         }
 
