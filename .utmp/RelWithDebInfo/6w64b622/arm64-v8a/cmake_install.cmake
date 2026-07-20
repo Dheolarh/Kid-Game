@@ -45,7 +45,6 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("D:/Unity Games/Kid Game/.utmp/RelWithDebInfo/6w64b622/arm64-v8a/GameActivity/cmake_install.cmake")
-  include("D:/Unity Games/Kid Game/.utmp/RelWithDebInfo/6w64b622/arm64-v8a/FramePacing/cmake_install.cmake")
 
 endif()
 
