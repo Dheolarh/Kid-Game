@@ -303,6 +303,11 @@ namespace KidGame.Mechanics.Tracing
                 {
                     _activeTracer = nextTracer;
                     _activeTracer.BeginPath(nextPath);
+
+                    // FIX: Must update the geometry cache for the new path so it doesn't 
+                    // use the previous path's dimensions and instantly autocomplete!
+                    _activePathRt = nextPath.GetComponent<RectTransform>();
+                    _linearCacheDirty = true;
                 }
                 else
                 {
