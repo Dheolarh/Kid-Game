@@ -863,6 +863,115 @@ namespace KidGame.Interface
             }
         }
 
+        private static readonly Dictionary<GameType, string[]> WarningSentencesByGame = new Dictionary<GameType, string[]>
+        {
+            {
+                GameType.Tracing, new string[]
+                {
+                    "We still have something to trace, {playername}!",
+                    "Almost there, {playername}! Keep tracing the number!",
+                    "Don't stop now, {playername}! Trace to the end!",
+                    "Let me see you finish writing this, {playername}!",
+                    "Hold on, {playername}! We need to trace this one first!",
+                    "You're doing great, {playername}! Complete the tracing!",
+                    "Tracing time isn't done yet, {playername}!",
+                    "Give it a try, {playername}! Trace all the paths!",
+                    "One stroke at a time, {playername}! Finish tracing first!",
+                    "Wait, {playername}! Let's finish tracing the number!"
+                }
+            },
+            {
+                GameType.Counting, new string[]
+                {
+                    "Let me see you count all of them, {playername}!",
+                    "Wait, {playername}! How many items do you see here?",
+                    "Hold on, {playername}! We still need to count these!",
+                    "Count them up first, {playername}!",
+                    "You can do it, {playername}! Finish counting!",
+                    "Let's count together, {playername}! Complete this one first!",
+                    "Don't forget to count them all, {playername}!",
+                    "Almost counted, {playername}! Pick the right number!",
+                    "Wait, {playername}! Put the numbers in the right spot!",
+                    "Count carefully, {playername}! You've got this!",
+                    "Count them up, {playername}! Which number is it?"
+                }
+            },
+            {
+                GameType.Addition, new string[]
+                {
+                    "Let's solve this math problem first, {playername}!",
+                    "Wait, {playername}! What does this add up to?",
+                    "Hold on, {playername}! Finish the addition first!",
+                    "Add the numbers together, {playername}!",
+                    "You're a math genius, {playername}! Solve this one first!",
+                    "Let me see you add them, {playername}!",
+                    "Almost solved, {playername}! Find the sum!",
+                    "Wait, {playername}! Complete the math equation!",
+                    "Keep going, {playername}! What is the total?",
+                    "Don't give up, {playername}! Add them up!",
+                    "Work your math magic, {playername}! Solve it first!"
+                }
+            },
+            {
+                GameType.Comparison, new string[]
+                {
+                    "Which one is bigger, {playername}? Let me see!",
+                    "Wait, {playername}! Drag the right sign to compare!",
+                    "Hold on, {playername}! Is it greater or less?",
+                    "Let me see which side has more, {playername}!",
+                    "Compare them first, {playername}!",
+                    "Which side is greater, {playername}? Pick the sign!",
+                    "Wait, {playername}! Are they equal or different?",
+                    "Look closely, {playername}! Finish comparing first!",
+                    "You can do it, {playername}! Place the comparison sign!",
+                    "Let me see you compare these two, {playername}!",
+                    "Which group is larger, {playername}?"
+                }
+            },
+            {
+                GameType.Matching, new string[]
+                {
+                    "Match all the cards first, {playername}!",
+                    "Wait, {playername}! Find the matching pairs!",
+                    "Hold on, {playername}! There are still cards to match!",
+                    "Where does this match go, {playername}?",
+                    "Let me see you match them all, {playername}!",
+                    "Almost matched, {playername}! Keep pairing!",
+                    "Don't leave any cards behind, {playername}!",
+                    "Match the numbers and pictures, {playername}!",
+                    "You're great at memory games, {playername}! Finish matching!",
+                    "Wait, {playername}! Match the items first!",
+                    "Find the twin cards, {playername}!"
+                }
+            },
+            {
+                GameType.Recall, new string[]
+                {
+                    "Remember the order of the numbers, {playername}!",
+                    "Wait, {playername}! Put the numbers back in order!",
+                    "Hold on, {playername}! Complete the memory challenge first!",
+                    "Which number came first, {playername}?",
+                    "Use your magic memory, {playername}!",
+                    "Recall all the numbers, {playername}!",
+                    "Almost remembered, {playername}! Place the cards!",
+                    "Wait, {playername}! Put them in the right sequence!",
+                    "You have a great memory, {playername}! Finish this one!",
+                    "Look carefully and recall, {playername}!",
+                    "Where did that number go, {playername}?"
+                }
+            }
+        };
+
+        private string GetRandomWarningSentence(GameType gameType)
+        {
+            if (WarningSentencesByGame.TryGetValue(gameType, out string[] sentences) && sentences.Length > 0)
+            {
+                int idx = UnityEngine.Random.Range(0, sentences.Length);
+                return sentences[idx];
+            }
+            return "Wait {playername}, let's complete this task first!";
+        }
+
         private void OnNextClicked()
         {
             if (ActiveLevel == null || _currentPageIndex >= ActiveLevel.pages.Count) return;
@@ -879,11 +988,14 @@ namespace KidGame.Interface
             {
                 TriggerMascotWrong();
 
-                // Show the dialogue panel with the warning message (lasts 3 seconds or closes on click)
+                // Show the dialogue panel with a dynamic warning message for this game type
                 if (dialoguePanel != null && dialogueText != null)
                 {
+                    PageData page = ActiveLevel.pages[_currentPageIndex];
+                    string warningText = GetRandomWarningSentence(page.gameType);
+
                     List<DialogueLine> warningLine = new List<DialogueLine> {
-                        new DialogueLine { text = "Let's complete this task", mascotAnimationTrigger = "IsNoIdea" }
+                        new DialogueLine { text = warningText, mascotAnimationTrigger = "IsNoIdea" }
                     };
                     StartDialogueSequence(warningLine, null);
                 }
