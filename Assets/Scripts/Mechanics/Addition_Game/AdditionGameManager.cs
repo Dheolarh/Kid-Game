@@ -153,7 +153,7 @@ namespace KidGame.Mechanics.Addition
 
         private void SetNextButtonInteractable(bool interactable)
         {
-            if (nextButton != null) nextButton.interactable = interactable;
+            if (nextButton != null) nextButton.interactable = (KidGame.Interface.GameFlowManager.Instance != null) || interactable;
         }
 
         // ── Public API (called by AdditionSlot via lambda) ────────────────────

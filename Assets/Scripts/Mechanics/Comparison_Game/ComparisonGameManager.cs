@@ -130,7 +130,7 @@ namespace KidGame.Mechanics.Comparison
 
         private void SetNextButtonInteractable(bool interactable)
         {
-            if (nextButton != null) nextButton.interactable = interactable;
+            if (nextButton != null) nextButton.interactable = (KidGame.Interface.GameFlowManager.Instance != null) || interactable;
         }
 
 

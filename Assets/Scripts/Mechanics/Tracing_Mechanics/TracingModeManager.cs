@@ -157,8 +157,8 @@ namespace KidGame.Mechanics.Tracing
 
             // Initialize orientation
 
-            // Lock continue buttons at start until tracing/spelling tasks are completed
-            if (continueButton != null) continueButton.interactable = false;
+            // Lock continue buttons at start until tracing/spelling tasks are completed (unless managed by GameFlowManager)
+            if (continueButton != null) continueButton.interactable = (KidGame.Interface.GameFlowManager.Instance != null);
 
 
             // Perform initial sequencing update
@@ -414,7 +414,7 @@ namespace KidGame.Mechanics.Tracing
             Button activeContinueButton = continueButton;
             if (activeContinueButton != null)
             {
-                activeContinueButton.interactable = false;
+                activeContinueButton.interactable = (KidGame.Interface.GameFlowManager.Instance != null);
             }
 
             if (spellModeActive)
