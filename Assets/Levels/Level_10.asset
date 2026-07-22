@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 10
   levelName: LESSON 10
-  levelSubtitle: Let's practice 0 to 5
-  levelEndTip: You are super smart!
+  levelSubtitle: Trace 5 to 6
+  levelEndTip: "Six is one more than five. Count \"5, then one more makes 6!\""
   isUnlockedByDefault: 0
   themePresetName: Green
   levelThemeColor: {r: 0.1215686, g: 0.7372549, b: 0.4235294, a: 0}
@@ -23,7 +23,7 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Let's play with 0 to 5!
+    - text: "Hi {playername}! Trace Five to start us off!"
       mascotAnimationTrigger: isHi
     completionDialogueLines: []
     countingSlotCount: 5
@@ -68,16 +68,15 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 0
-    - 1
-    - 2
-    tracingCustomSpawnCount: 3
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines:
-    - text: You know all of them!
+    dialogueLines:
+    - text: "Meet Six! A curl that closes into a little loop!"
       mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "You traced Six! Wonderful!"
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -120,10 +119,58 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 3
-    - 4
-    - 5
-    tracingCustomSpawnCount: 3
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  - gameType: 5
+    dialogueLines:
+    - text: "Let's trace Five and Six together!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "You're doing amazing, {playername}!"
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    tracingSpellModeActive: 0
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 2
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 12
   levelName: LESSON 12
-  levelSubtitle: Let's write number seven
-  levelEndTip: Seven colors in a rainbow! 'S E V E N'
+  levelSubtitle: Trace 6 to 7
+  levelEndTip: "Seven is a great number for a game, hop seven times together!"
   isUnlockedByDefault: 0
-  themePresetName: Pink
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  themePresetName: Orange
+  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Let's try writing number 7!
+    - text: "Hi {playername}! Trace Six to begin!"
       mascotAnimationTrigger: isHi
     completionDialogueLines: []
     countingSlotCount: 5
@@ -68,14 +68,15 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 7
+    tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines:
-    - text: Perfect straight line!
+    dialogueLines:
+    - text: "This is Seven! A flat line on top, then down we go!"
       mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "You traced Seven! Great work!"
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -118,13 +119,15 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 7
-    - 7
-    tracingCustomSpawnCount: 2
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
+    dialogueLines:
+    - text: "Let's trace Six and Seven together!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "You're really getting the hang of this!"
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -167,11 +170,7 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 7
-    - 7
-    - 7
-    - 7
-    tracingCustomSpawnCount: 4
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 2
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 3
   levelName: LESSON 3
-  levelSubtitle: Let's practice one and zero
-  levelEndTip: 0,1,.............
+  levelSubtitle: Trace 1 to 2
+  levelEndTip: "Look for the number 2 somewhere in your house, a clock, a book page, anywhere!"
   isUnlockedByDefault: 0
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
+  levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Time to test your knowledege
+    - text: "Hi {playername}! Show me how you trace One!"
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -68,112 +68,15 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 0
-    - 0
-    tracingCustomSpawnCount: 2
-  - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 1
-    - 1
-    tracingCustomSpawnCount: 4
-  - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 0
+    tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
+    dialogueLines:
+    - text: "Meet Two! It curves like a little duck, then a flat line."
+      mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great job! you are as smart as ever.
-      mascotAnimationTrigger: 
+    - text: "You traced Two! Nicely done!"
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -216,8 +119,58 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 1
+    tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
+  - gameType: 5
+    dialogueLines:
+    - text: "One more round, trace One and Two!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "You're getting so good at this!"
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    tracingSpellModeActive: 0
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 2
   sceneToLoad: Game
   levelIcon: {fileID: 0}

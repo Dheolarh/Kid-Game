@@ -22,7 +22,7 @@ namespace KidGame.Interface
         [Header("Fallback Settings (For Editor Testing)")]
         [SerializeField] private LevelDatabase levelDatabase;
         [SerializeField] private ThemeDatabase themeDatabase;
-        [SerializeField] private int testLevelIndex = 0;
+        [SerializeField] private int testLevelIndex;
 
         [Header("Game Mode Prefabs — Portrait")]
         [SerializeField] private GameObject countingPortraitGo;

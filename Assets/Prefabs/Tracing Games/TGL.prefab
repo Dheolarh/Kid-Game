@@ -1030,6 +1030,7 @@ MonoBehaviour:
   spellModeActive: 0
   spellAnswerCardPrefab: {fileID: 7026504693343592554, guid: 0182651f93afea3489412a78a9040cd4, type: 3}
   spellDropZonePrefab: {fileID: 4419697180656248584, guid: 047b985e91e28d64c9300e180bd2ed59, type: 3}
+  spellSlotPrefab: {fileID: 4879581565838152133, guid: 3efe13b74ff3eb446b200cffd7f7ff5b, type: 3}
   continueButton: {fileID: 1949065754723461941}
   answerGrid: {fileID: 8938871096851646238}
   answerCardsContainer: {fileID: 2045115537202679025}
@@ -1333,8 +1334,8 @@ MonoBehaviour:
   m_Spacing: 10
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0

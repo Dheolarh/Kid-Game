@@ -13,123 +13,14 @@ MonoBehaviour:
   m_Name: Level_1
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 1
-  levelName: LESSON 1
-  levelSubtitle: Let's practice writing 0
-  levelEndTip: Here's how to spell 0 - "Z E R O"
-  isUnlockedByDefault: 1
-  themePresetName: Pink
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
+  levelName: Test Spell Mode
+  levelSubtitle: 
+  levelEndTip: 
+  isUnlockedByDefault: 0
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 5
-    dialogueLines:
-    - text: Hi {playername}, welcome to your first lesson
-      mascotAnimationTrigger: isHi
-    - text: Let's practice how to write 0
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Great Job!
-      mascotAnimationTrigger: isHappy
-    - text: Now let's try that again
-      mascotAnimationTrigger: 
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 0
-    tracingCustomSpawnCount: 1
-  - gameType: 5
-    dialogueLines: []
-    completionDialogueLines:
-    - text: You're a fast learner!
-      mascotAnimationTrigger: isHappy!
-    - text: Let's go one more time!
-      mascotAnimationTrigger: isIdle
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 0
-    - 0
-    tracingCustomSpawnCount: 4
   - gameType: 5
     dialogueLines: []
     completionDialogueLines: []
@@ -174,12 +65,9 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
+    tracingSpellModeActive: 1
     tracingValuesToTrace:
-    - 0
-    - 0
-    - 0
-    - 0
-    tracingCustomSpawnCount: 4
+    - 777
+    tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

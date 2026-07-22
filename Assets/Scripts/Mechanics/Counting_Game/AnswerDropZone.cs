@@ -8,6 +8,8 @@ namespace KidGame.Mechanics.Counting
     {
         // ── State ─────────────────────────────────────────────────────────────
 
+        [SerializeField] private TMPro.TMP_Text hintText;
+
         private int                 _expectedCount;
         private bool                _isAnswered;
         private Image               _background;
@@ -19,17 +21,44 @@ namespace KidGame.Mechanics.Counting
         private void Awake()
         {
             _background = GetComponent<Image>();
+            if (hintText == null)
+            {
+                hintText = GetComponentInChildren<TMPro.TMP_Text>(true);
+            }
         }
 
         // ── Setup ─────────────────────────────────────────────────────────────
 
         /// <param name="onCorrect">Invoked once when the correct card is dropped.</param>
-        public void Setup(int expectedCount, System.Action onCorrect, System.Func<bool> canAccept = null)
+        public void Setup(int expectedCount, System.Action onCorrect, System.Func<bool> canAccept = null, string customHint = null)
         {
             _expectedCount = expectedCount;
             _onCorrect     = onCorrect;
             _canAccept     = canAccept;
             _isAnswered    = false;
+
+            if (hintText == null)
+            {
+                hintText = GetComponentInChildren<TMPro.TMP_Text>(true);
+            }
+
+            if (hintText != null)
+            {
+                hintText.gameObject.SetActive(true);
+                hintText.color = new Color(0.25f, 0.25f, 0.25f, 0.45f); // Visible ghost text
+                if (!string.IsNullOrEmpty(customHint))
+                {
+                    hintText.text = customHint;
+                }
+                else if (expectedCount == 32 || (expectedCount >= 65 && expectedCount <= 90) || (expectedCount >= 97 && expectedCount <= 122))
+                {
+                    hintText.text = ((char)expectedCount).ToString();
+                }
+                else
+                {
+                    hintText.text = expectedCount.ToString();
+                }
+            }
         }
 
         // ── IDropHandler ──────────────────────────────────────────────────────
@@ -79,6 +108,10 @@ namespace KidGame.Mechanics.Counting
         {
             _isAnswered       = true;
             _background.color = card.CardColor;
+            if (hintText != null)
+            {
+                hintText.gameObject.SetActive(false);
+            }
             card.AcceptedByZone(transform);
 
             // Play correct answer card drop SFX

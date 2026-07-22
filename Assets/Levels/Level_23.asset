@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
+  m_Name: Level_23
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  levelNumber: 23
+  levelName: LESSON 23
+  levelSubtitle: Counting Objects 1-5
+  levelEndTip: "Count five fingers on one hand, then try the other hand too!"
+  isUnlockedByDefault: 0
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 0}
+  pages:
+  - gameType: 0
+    dialogueLines:
+    - text: "Hi {playername}! Let's count some new things today!"
+      mascotAnimationTrigger: isHi
+    - text: "Count how many you see, then pick the matching number!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 5
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: General
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    tracingSpellModeActive: 0
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  - gameType: 0
+    dialogueLines:
+    - text: "You're doing great, a few more to count!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "Hooray! You counted up to five like a pro!"
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 6
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: General
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    tracingSpellModeActive: 0
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  sceneToLoad: Game
+  levelIcon: {fileID: 0}

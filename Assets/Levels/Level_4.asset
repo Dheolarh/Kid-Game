@@ -14,22 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 4
   levelName: LESSON 4
-  levelSubtitle: Number 2
-  levelEndTip: It goes 0,1,2
+  levelSubtitle: Trace 2 to 3
+  levelEndTip: "Count \"1, 2, 3!\" before a jump or a clap. Numbers are everywhere in play!"
   isUnlockedByDefault: 0
   themePresetName: Blue
   levelThemeColor: {r: 0.18823531, g: 0.06666667, b: 0.7568628, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
+  levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Let's move on a bit
-      mascotAnimationTrigger: isIdle
-    - text: Practice how to write number 2
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: You're are genius!
-      mascotAnimationTrigger: isidle
+    - text: "Hi {playername}! Let's warm up with Two!"
+      mascotAnimationTrigger: isHi
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -72,12 +68,15 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 2
+    tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
+    dialogueLines:
+    - text: "This is Three, two little bumps, just like a butterfly!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "Great job tracing Three!"
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -120,15 +119,15 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 2
-    - 2
-    tracingCustomSpawnCount: 2
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Now try 0, 1, 2
+    - text: "Let's trace Two and Three one more time!"
       mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
+    completionDialogueLines:
+    - text: "You did it! You're a tracing champ!"
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -171,10 +170,7 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 0
-    - 1
-    - 2
-    tracingCustomSpawnCount: 4
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 2
   sceneToLoad: Game
   levelIcon: {fileID: 0}

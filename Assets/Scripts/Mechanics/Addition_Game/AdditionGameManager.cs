@@ -388,8 +388,20 @@ namespace KidGame.Mechanics.Addition
 
         private void ClearPrevious()
         {
-            foreach (var s in _slots) { if (s) Destroy(s.gameObject); }
-            foreach (var c in _cards) { if (c) Destroy(c.gameObject); }
+            if (slotsContainer != null)
+            {
+                for (int i = slotsContainer.childCount - 1; i >= 0; i--)
+                {
+                    Destroy(slotsContainer.GetChild(i).gameObject);
+                }
+            }
+            if (answersContainer != null)
+            {
+                for (int i = answersContainer.childCount - 1; i >= 0; i--)
+                {
+                    Destroy(answersContainer.GetChild(i).gameObject);
+                }
+            }
             _slots.Clear();
             _cards.Clear();
         }

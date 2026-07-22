@@ -14,127 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 5
   levelName: LESSON 5
-  levelSubtitle: Let's write number three
-  levelEndTip: Here is how to spell 3 - 'T H R E E'
+  levelSubtitle: Counting Objects 1-3
+  levelEndTip: "Count your toy animals at home, how many teddy bears can you find?"
   isUnlockedByDefault: 0
   themePresetName: Green
   levelThemeColor: {r: 0.1215686, g: 0.7372549, b: 0.4235294, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
-  - gameType: 5
+  - gameType: 0
     dialogueLines:
-    - text: Hi! Let's practice writing 3!
+    - text: "Hi {playername}! Let's visit some animal friends and count them!"
       mascotAnimationTrigger: isHi
-    - text: Trace the lines carefully!
+    - text: "Count how many animals you see, then pick the right number!"
       mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: You did it!
-      mascotAnimationTrigger: isIdle
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 3
-    tracingCustomSpawnCount: 1
-  - gameType: 5
-    dialogueLines: []
-    completionDialogueLines:
-    - text: Nice job!
-      mascotAnimationTrigger: isIdle
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 3
-    - 3
-    tracingCustomSpawnCount: 2
-  - gameType: 5
-    dialogueLines: []
     completionDialogueLines: []
-    countingSlotCount: 5
+    countingSlotCount: 3
     countingMinCount: 1
-    countingMaxCount: 12
+    countingMaxCount: 3
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: 
+    countingActiveThemeName: Animals
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -171,11 +70,58 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 3
-    - 3
-    - 3
-    - 3
-    tracingCustomSpawnCount: 4
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  - gameType: 0
+    dialogueLines:
+    - text: "You're a counting star! Let's count a few more!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "Hooray! You counted all the animals!"
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 4
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: Animals
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    tracingSpellModeActive: 0
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -14,29 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 21
   levelName: LESSON 21
-  levelSubtitle: Let's add count objects
-  levelEndTip: One ball, two cars, 3 cups.....
-  isUnlockedByDefault: 1
-  themePresetName: Purple
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
+  levelSubtitle: Combo, Counting + Tracing Together
+  levelEndTip: "Count how many wheels are on a car, four is easy once you know it!"
+  isUnlockedByDefault: 0
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  levelBackgroundSprite: {fileID: 0}
   pages:
-  - gameType: 0
+  - gameType: 5
     dialogueLines:
-    - text: Now you know your numbers
-      mascotAnimationTrigger: isIdle
-    - text: Let's count objects
-      mascotAnimationTrigger: isIdle
-    - text: How many objects do you see?
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Well done!
-      mascotAnimationTrigger: isHappy
-    - text: Let's do that again
-      mascotAnimationTrigger: isIdle
+    - text: "Hi {playername}! One quick trace before counting!"
+      mascotAnimationTrigger: isHi
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 5
+    countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
@@ -76,21 +68,23 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
+    tracingValuesToTrace:
+    - 1
+    - 1
+    tracingCustomSpawnCount: 2
   - gameType: 0
     dialogueLines:
-    - text: How many fingers can you count
+    - text: "Beep beep! How many vehicles do you see this time?"
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: You're brilliant!
+    - text: "You counted all the vehicles!"
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 2
+    countingMaxCount: 5
     countingDiceMode: 0
-    countingFingerMode: 1
-    countingActiveThemeName: 
+    countingFingerMode: 0
+    countingActiveThemeName: Vehicles
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -128,6 +122,58 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
     tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  - gameType: 5
+    dialogueLines:
+    - text: "Count the vehicles, then trace the number!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "Beep beep, great job, {playername}!"
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    tracingSpellModeActive: 0
+    tracingValuesToTrace:
+    - 11
     tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

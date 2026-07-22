@@ -33,6 +33,8 @@ namespace KidGame.Mechanics.Tracing
         [SerializeField] private GameObject spellAnswerCardPrefab;
         [Tooltip("AnswerDropZone prefab used to represent letter drop slots (shared for both orientations).")]
         [SerializeField] private GameObject spellDropZonePrefab;
+        [Tooltip("Custom slot prefab used for Spell Mode (e.g. Spell Slot.prefab). Falls back to slotPrefab if unassigned.")]
+        [SerializeField] private GameObject spellSlotPrefab;
 
         [Header("Spell Mode - Continue Button")]
         [Tooltip("Continue / Next button. Locked until spelling is complete.")]
@@ -489,7 +491,8 @@ namespace KidGame.Mechanics.Tracing
                     if (string.IsNullOrWhiteSpace(entryVal)) continue;
 
                     bool isNumeric = IsNumericExpression(entryVal);
-                    GameObject slotRowGo = Instantiate(slotPrefab, container);
+                    GameObject prefabToInstantiate = (spellModeActive && spellSlotPrefab != null) ? spellSlotPrefab : slotPrefab;
+                    GameObject slotRowGo = Instantiate(prefabToInstantiate, container);
                     if (isNumeric)
                     {
                         slotRowGo.name = $"Slot_Number_{entryVal}";
@@ -566,59 +569,102 @@ namespace KidGame.Mechanics.Tracing
                         slotsGridRt.offsetMin = Vector2.zero;
                         slotsGridRt.offsetMax = Vector2.zero;
                     }
-                    var slotsGridGroup = slotsGridGo.AddComponent<GridLayoutGroup>();
-                    slotsGridGroup.childAlignment = TextAnchor.MiddleCenter;
-
-                    // Calculate layout metrics
-                    float availableWidth = GetContainerWidth(container);
-                    float slotCellSize = Mathf.Max(45f, Mathf.Min(80f, availableWidth / 14f));
-
-                    slotsGridGroup.cellSize = new Vector2(slotCellSize, slotCellSize);
-                    slotsGridGroup.spacing = new Vector2(10f, 10f);
-
-                    // Combine all entries to form spelling target
-                    List<string> spellingParts = new List<string>();
+                    // Combine all entries to form spelling target words
+                    List<string> rawSpellingWords = new List<string>();
                     foreach (string entry in entriesToSpawn)
                     {
-                        spellingParts.Add(IsNumericExpression(entry) ? NumberToWords(int.Parse(entry)).ToUpper() : entry.ToUpper());
-                    }
-                    string targetSpelling = string.Join(" ", spellingParts);
-
-                    // Spawn slots
-                    foreach (char c in targetSpelling)
-                    {
-                        if (c == ' ')
+                        string wordText = IsNumericExpression(entry) ? NumberToWords(int.Parse(entry)).ToUpper() : entry.ToUpper();
+                        string[] parts = wordText.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var p in parts)
                         {
-                            GameObject spacer = new GameObject("SpaceSpacer", typeof(RectTransform));
-                            spacer.transform.SetParent(slotsGridGo.transform, false);
-                            var spacerRt = spacer.GetComponent<RectTransform>();
-                            if (spacerRt != null)
-                            {
-                                spacerRt.sizeDelta = new Vector2(slotCellSize, slotCellSize);
-                            }
-                            var spacerLe = spacer.AddComponent<LayoutElement>();
-                            spacerLe.preferredWidth = slotCellSize;
-                            spacerLe.preferredHeight = slotCellSize;
+                            if (p.Equals("AND", System.StringComparison.OrdinalIgnoreCase)) continue;
+                            rawSpellingWords.Add(p);
                         }
-                        else
+                    }
+
+                    int maxWordLen = 1;
+                    foreach (string w in rawSpellingWords)
+                    {
+                        if (w.Length > maxWordLen) maxWordLen = w.Length;
+                    }
+
+                    float availableWidth = GetContainerWidth(container);
+                    float sideMargin = 25f;
+                    float totalWidthForSlots = Mathf.Max(200f, availableWidth - (sideMargin * 2f));
+
+                    float slotSpacing = 10f;
+                    float totalSpacing = (maxWordLen - 1) * slotSpacing;
+
+                    float rawSlotSize = (totalWidthForSlots - totalSpacing) / maxWordLen;
+                    float slotCellSize = Mathf.Clamp(rawSlotSize, 40f, 120f);
+
+                    var slotsGridGroup = slotsGridGo.AddComponent<VerticalLayoutGroup>();
+                    slotsGridGroup.childAlignment = TextAnchor.MiddleCenter;
+                    slotsGridGroup.spacing = 50f;
+                    slotsGridGroup.padding = new RectOffset((int)sideMargin, (int)sideMargin, 0, 0);
+                    slotsGridGroup.childControlWidth = true;
+                    slotsGridGroup.childControlHeight = false;
+                    slotsGridGroup.childForceExpandWidth = true;
+                    slotsGridGroup.childForceExpandHeight = false;
+
+                    // Spawn word rows (each word takes one row)
+                    foreach (string word in rawSpellingWords)
+                    {
+                        GameObject wordRowGo = new GameObject($"WordRow_{word}", typeof(RectTransform));
+                        wordRowGo.transform.SetParent(slotsGridGo.transform, false);
+
+                        var rowRt = wordRowGo.GetComponent<RectTransform>();
+                        if (rowRt != null)
+                        {
+                            rowRt.anchorMin = new Vector2(0f, 0.5f);
+                            rowRt.anchorMax = new Vector2(1f, 0.5f);
+                            rowRt.sizeDelta = new Vector2(0f, slotCellSize);
+                        }
+
+                        var rowLe = wordRowGo.AddComponent<LayoutElement>();
+                        rowLe.preferredHeight = slotCellSize;
+                        rowLe.minHeight = slotCellSize;
+
+                        var rowHlg = wordRowGo.AddComponent<HorizontalLayoutGroup>();
+                        rowHlg.childAlignment = TextAnchor.MiddleCenter;
+                        rowHlg.spacing = 10f;
+                        rowHlg.childControlWidth = false;
+                        rowHlg.childControlHeight = false;
+                        rowHlg.childForceExpandWidth = false;
+                        rowHlg.childForceExpandHeight = false;
+
+                        foreach (char c in word)
                         {
                             if (spellDropZonePrefab != null)
                             {
-                                GameObject zoneGo = Instantiate(spellDropZonePrefab, slotsGridGo.transform);
+                                GameObject zoneGo = Instantiate(spellDropZonePrefab, wordRowGo.transform);
+
+                                var zoneRt = zoneGo.GetComponent<RectTransform>();
+                                if (zoneRt != null)
+                                {
+                                    zoneRt.sizeDelta = new Vector2(slotCellSize, slotCellSize);
+                                }
+                                var zoneLe = zoneGo.GetComponent<LayoutElement>();
+                                if (zoneLe == null) zoneLe = zoneGo.AddComponent<LayoutElement>();
+                                zoneLe.preferredWidth = slotCellSize;
+                                zoneLe.preferredHeight = slotCellSize;
+                                zoneLe.minWidth = slotCellSize;
+                                zoneLe.minHeight = slotCellSize;
+
                                 var zone = zoneGo.GetComponent<AnswerDropZone>();
                                 if (zone == null)
                                 {
                                     zone = zoneGo.AddComponent<AnswerDropZone>();
                                 }
-                                zone.Setup((int)c, () => CheckSpellingComplete());
+                                zone.Setup((int)c, () => CheckSpellingComplete(), null, c.ToString());
                             }
                         }
                     }
 
                     // Spawn tray cards
-                    string cleanSpelling = targetSpelling.Replace(" ", "");
+                    string targetSpelling = string.Join("", rawSpellingWords);
                     List<char> trayLetters = new List<char>();
-                    foreach (char c in cleanSpelling)
+                    foreach (char c in targetSpelling)
                     {
                         trayLetters.Add(c);
                     }
@@ -647,7 +693,11 @@ namespace KidGame.Mechanics.Tracing
                         // Clear any pre-existing children in the tray container
                         for (int i = cardTrayContainer.childCount - 1; i >= 0; i--)
                         {
-                            SafeDestroy(cardTrayContainer.GetChild(i).gameObject);
+                            Transform child = cardTrayContainer.GetChild(i);
+                            if (child != null && child.name != "SpellingUI")
+                            {
+                                SafeDestroy(child.gameObject);
+                            }
                         }
 
                         foreach (char letter in trayLetters)
@@ -860,21 +910,29 @@ namespace KidGame.Mechanics.Tracing
 
         private void PopulateSlotRowCharacters(GameObject rowGo, string characters, bool isDigit, float cellSize, List<List<SlotTracer>> rowTracersList)
         {
-            // Set spacing dynamically: -30% of cellSize for multi-digit numbers, -15% of cellSize for letters/words, 0 for comma lists
+            // Set spacing dynamically: smart spacing based on character count and narrow glyphs
             bool isNumber = IsNumericExpression(characters);
             bool isCommaList = rowGo.name.StartsWith("Slot_CommaList_");
-            float spacing = 0f;
+            float spacing = 10f;
             if (isCommaList)
             {
                 spacing = 0f;
             }
             else if (isNumber && characters.Length > 1)
             {
-                spacing = -0.30f * cellSize;
+                if (characters.Length == 2)
+                {
+                    bool hasNarrow = characters.Contains("1") || characters.Contains("I") || characters.Contains("l");
+                    spacing = hasNarrow ? -0.25f * cellSize : -0.10f * cellSize;
+                }
+                else
+                {
+                    spacing = -0.04f * cellSize;
+                }
             }
             else if (!isNumber)
             {
-                spacing = -0.15f * cellSize;
+                spacing = 10f;
             }
 
             // Locate target parent (TracerContainer if it exists in the slotPrefab hierarchy, otherwise fallback to rowGo itself)
@@ -923,26 +981,13 @@ namespace KidGame.Mechanics.Tracing
 
             HorizontalLayoutGroup hlg = targetParent.GetComponent<HorizontalLayoutGroup>();
             if (hlg == null) hlg = targetParent.gameObject.AddComponent<HorizontalLayoutGroup>();
-            if (disableScrollingLayout)
-            {
-                hlg.childAlignment = TextAnchor.MiddleCenter;
-                hlg.childControlWidth = true;
-                hlg.childControlHeight = true;
-                hlg.childForceExpandWidth = false;
-                hlg.childForceExpandHeight = false;
-                hlg.spacing = (characters.Length > 1) ? spacing : 10f;
-                hlg.padding = new RectOffset(0, 0, 0, 0);
-            }
-            else
-            {
-                hlg.childAlignment = TextAnchor.MiddleLeft;
-                hlg.childControlWidth = true;
-                hlg.childControlHeight = true;
-                hlg.childForceExpandWidth = false;
-                hlg.childForceExpandHeight = false;
-                hlg.spacing = spacing;
-                hlg.padding = new RectOffset(0, 0, Mathf.RoundToInt(cellSize * slotTopPaddingRatio), 0);
-            }
+            hlg.childAlignment = TextAnchor.MiddleCenter;
+            hlg.childControlWidth = true;
+            hlg.childControlHeight = true;
+            hlg.childForceExpandWidth = false;
+            hlg.childForceExpandHeight = false;
+            hlg.spacing = spacing;
+            hlg.padding = new RectOffset(0, 0, 0, 0);
 
             // Remove/Disable Masks from rowGo and targetParent to avoid clipping paths or hand guides
             var rowMask = rowGo.GetComponent<Mask>();
@@ -1001,9 +1046,9 @@ namespace KidGame.Mechanics.Tracing
                 float widthMultiplier = 1f;
                 if (characters.Length > 1)
                 {
-                    widthMultiplier = isDigit ? 0.65f : 0.85f;
+                    widthMultiplier = isDigit ? (characters.Length > 2 ? 0.95f : 0.85f) : 0.85f;
                 }
-                float cellWidth = isNarrow ? (cellSize * 0.80f * widthMultiplier) : (cellSize * widthMultiplier);
+                float cellWidth = isNarrow ? (cellSize * 0.45f * widthMultiplier) : (cellSize * widthMultiplier);
 
                 // Set cell container size statically to cellWidth x cellSize
                 RectTransform cellRt = cellGo.GetComponent<RectTransform>();
@@ -1625,10 +1670,10 @@ namespace KidGame.Mechanics.Tracing
                 // Position the slot row (rowRt) based on totalRows and index
                 if (totalRows == 1)
                 {
-                    float leftPad = w * 0.15f;
-                    float rightPad = w * 0.15f;
-                    float topPad = effectiveH * 0.15f;
-                    float bottomPad = effectiveH * 0.08f;
+                    float leftPad = w * 0.05f;
+                    float rightPad = w * 0.05f;
+                    float topPad = effectiveH * 0.05f;
+                    float bottomPad = effectiveH * 0.05f;
                     rowWidth = w - (leftPad + rightPad);
                     rowHeight = effectiveH - (topPad + bottomPad);
 
@@ -1636,7 +1681,7 @@ namespace KidGame.Mechanics.Tracing
                     rowRt.anchorMin = new Vector2(0.5f, anchorY);
                     rowRt.anchorMax = new Vector2(0.5f, anchorY);
                     rowRt.pivot = new Vector2(0.5f, 0.5f);
-                    rowRt.anchoredPosition = new Vector2(0f, -(topPad - bottomPad) / 2f);
+                    rowRt.anchoredPosition = Vector2.zero;
                     rowRt.sizeDelta = new Vector2(rowWidth, rowHeight);
                 }
                 else if (totalRows == 2)
@@ -1731,17 +1776,14 @@ namespace KidGame.Mechanics.Tracing
                     spellingUiRt.offsetMax = Vector2.zero;
 
                     // Resize the drop-zone slots grid — tray cards live in the user-assigned container
-                    var slotsGrid = spellingUiRt.Find("AnswerSlotsGrid")?.GetComponent<GridLayoutGroup>();
-                    if (slotsGrid != null)
+                    var slotsGridTransform = spellingUiRt.Find("AnswerSlotsGrid");
+                    if (slotsGridTransform != null)
                     {
-                        float spellingH = h * 0.6f;
-                        float slotCellSize = Mathf.Max(45f, Mathf.Min(80f, w / 14f));
-                        // Clamp so cells fit inside the SpellingUI height
-                        if (spellingH * 0.75f < slotCellSize)
-                            slotCellSize = spellingH * 0.75f;
-
-                        slotsGrid.cellSize = new Vector2(slotCellSize, slotCellSize);
-                        slotsGrid.spacing  = new Vector2(10f, 10f);
+                        var vlg = slotsGridTransform.GetComponent<VerticalLayoutGroup>();
+                        if (vlg != null)
+                        {
+                            vlg.spacing = 10f;
+                        }
                     }
                 }
             }

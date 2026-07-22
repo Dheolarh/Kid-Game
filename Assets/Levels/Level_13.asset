@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 13
   levelName: LESSON 13
-  levelSubtitle: Let's practice 6 and 7
-  levelEndTip: Keep tracing and shining!
+  levelSubtitle: Combo, Counting + Tracing Together
+  levelEndTip: "Count cars out the window on your next walk or drive!"
   isUnlockedByDefault: 0
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
@@ -23,8 +23,8 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Let's play with 6 and 7!
-      mascotAnimationTrigger: isIdle
+    - text: "Hi {playername}! One quick trace before we count!"
+      mascotAnimationTrigger: isHi
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -70,13 +70,65 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingValuesToTrace:
     - 6
-    - 7
-    tracingCustomSpawnCount: 2
-  - gameType: 5
-    dialogueLines: []
-    completionDialogueLines:
-    - text: So much fun tracing!
+    tracingCustomSpawnCount: 1
+  - gameType: 0
+    dialogueLines:
+    - text: "Beep beep! How many cars and trucks do you see?"
       mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "You counted all the vehicles!"
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 4
+    countingMinCount: 1
+    countingMaxCount: 4
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: Vehicles
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    tracingSpellModeActive: 0
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  - gameType: 5
+    dialogueLines:
+    - text: "Count the vehicles, then trace the number that matches!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "Beep beep, great job, {playername}!"
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -120,10 +172,7 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
     tracingValuesToTrace:
-    - 6
-    - 6
     - 7
-    - 7
-    tracingCustomSpawnCount: 4
+    tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

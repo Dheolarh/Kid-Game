@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 8
   levelName: LESSON 8
-  levelSubtitle: Let's write number five
-  levelEndTip: Five fingers on your hand! 'F I V E'
+  levelSubtitle: Trace 4 to 5
+  levelEndTip: "Five matches the fingers on one hand! Count them together, one by one."
   isUnlockedByDefault: 0
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
@@ -23,7 +23,7 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Time to practice writing 5!
+    - text: "Hi {playername}! Trace Four to warm up!"
       mascotAnimationTrigger: isHi
     completionDialogueLines: []
     countingSlotCount: 5
@@ -68,14 +68,15 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 5
+    tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines:
-    - text: Super tracing!
+    dialogueLines:
+    - text: "This is Five! A little hat on top, then a curve, like a wave!"
       mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "You traced Five! Fantastic!"
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -118,13 +119,15 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 5
-    - 5
-    tracingCustomSpawnCount: 2
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
+    dialogueLines:
+    - text: "Let's trace Four and Five one more time!"
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: "You know FIVE numbers now, amazing!"
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -167,11 +170,7 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     tracingSpellModeActive: 0
-    tracingValuesToTrace:
-    - 5
-    - 5
-    - 5
-    - 5
-    tracingCustomSpawnCount: 4
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 2
   sceneToLoad: Game
   levelIcon: {fileID: 0}
