@@ -785,7 +785,7 @@ namespace KidGame.Interface
                     var tracing = _activeGameModeInstance?.GetComponent<TracingModeManager>();
                     if (tracing != null)
                     {
-                        tracing.Configure(page.tracingSpellModeActive, page.tracingValuesToTrace, page.tracingCustomSpawnCount);
+                        tracing.Configure(page.tracingSpellModeActive, page.tracingValuesToTrace, page.tracingCustomSpawnCount, page.tracingIsLearningMode);
                         SetupNextButton(tracing.ContinueButton);
                     }
                     // Set answer grid visibility based on spell mode

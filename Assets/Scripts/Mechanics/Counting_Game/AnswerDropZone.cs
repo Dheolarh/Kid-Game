@@ -30,7 +30,7 @@ namespace KidGame.Mechanics.Counting
         // ── Setup ─────────────────────────────────────────────────────────────
 
         /// <param name="onCorrect">Invoked once when the correct card is dropped.</param>
-        public void Setup(int expectedCount, System.Action onCorrect, System.Func<bool> canAccept = null, string customHint = null)
+        public void Setup(int expectedCount, System.Action onCorrect, System.Func<bool> canAccept = null, string customHint = null, bool showHint = true)
         {
             _expectedCount = expectedCount;
             _onCorrect     = onCorrect;
@@ -44,19 +44,22 @@ namespace KidGame.Mechanics.Counting
 
             if (hintText != null)
             {
-                hintText.gameObject.SetActive(true);
-                hintText.color = new Color(0.25f, 0.25f, 0.25f, 0.45f); // Visible ghost text
-                if (!string.IsNullOrEmpty(customHint))
+                hintText.gameObject.SetActive(showHint);
+                if (showHint)
                 {
-                    hintText.text = customHint;
-                }
-                else if (expectedCount == 32 || (expectedCount >= 65 && expectedCount <= 90) || (expectedCount >= 97 && expectedCount <= 122))
-                {
-                    hintText.text = ((char)expectedCount).ToString();
-                }
-                else
-                {
-                    hintText.text = expectedCount.ToString();
+                    hintText.color = new Color(0.25f, 0.25f, 0.25f, 0.45f); // Visible ghost text
+                    if (!string.IsNullOrEmpty(customHint))
+                    {
+                        hintText.text = customHint;
+                    }
+                    else if (expectedCount == 32 || (expectedCount >= 65 && expectedCount <= 90) || (expectedCount >= 97 && expectedCount <= 122))
+                    {
+                        hintText.text = ((char)expectedCount).ToString();
+                    }
+                    else
+                    {
+                        hintText.text = expectedCount.ToString();
+                    }
                 }
             }
         }

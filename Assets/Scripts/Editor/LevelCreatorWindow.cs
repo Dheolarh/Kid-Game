@@ -290,6 +290,10 @@ namespace KidGame.Editor
 
                     case GameType.Tracing:
                         page.tracingSpellModeActive = EditorGUILayout.Toggle("Spell Mode Active", page.tracingSpellModeActive);
+                        if (page.tracingSpellModeActive)
+                        {
+                            page.tracingIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.tracingIsLearningMode);
+                        }
                         page.tracingCustomSpawnCount = EditorGUILayout.IntSlider("Custom Spawn Count", page.tracingCustomSpawnCount, 1, 4);
                         
                         // List of values to trace
@@ -486,6 +490,7 @@ namespace KidGame.Editor
                     recallMinConsecutiveHidden = page.recallMinConsecutiveHidden,
                     recallMaxConsecutiveHidden = page.recallMaxConsecutiveHidden,
                     tracingSpellModeActive = page.tracingSpellModeActive,
+                    tracingIsLearningMode = page.tracingIsLearningMode,
                     tracingCustomSpawnCount = page.tracingCustomSpawnCount,
                     tracingValuesToTrace = page.tracingValuesToTrace != null ? new List<string>(page.tracingValuesToTrace) : new List<string>()
                 };

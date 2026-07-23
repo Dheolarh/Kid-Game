@@ -29,6 +29,8 @@ namespace KidGame.Mechanics.Tracing
         [Header("Spell Mode Settings")]
         [Tooltip("If true, Spell Mode is active: the numerals appear fully traced, and kids must spell out the number names.")]
         [SerializeField] private bool spellModeActive = false;
+        [Tooltip("If true, letter hints are displayed on drop zones. If false, hints are hidden.")]
+        [SerializeField] private bool isLearningMode = true;
         [Tooltip("Draggable AnswerCard prefab used to represent letter cards (shared for both orientations).")]
         [SerializeField] private GameObject spellAnswerCardPrefab;
         [Tooltip("AnswerDropZone prefab used to represent letter drop slots (shared for both orientations).")]
@@ -88,9 +90,10 @@ namespace KidGame.Mechanics.Tracing
         public Button ContinueButton => continueButton;
         public GameObject AnswerGrid => answerGrid;
 
-        public void Configure(bool spellModeActive, List<string> valuesToTrace, int customSpawnCount)
+        public void Configure(bool spellModeActive, List<string> valuesToTrace, int customSpawnCount, bool isLearningMode = true)
         {
             this.spellModeActive = spellModeActive;
+            this.isLearningMode = isLearningMode;
             this.valuesToTrace = new List<string>(valuesToTrace);
             this.customSpawnCount = customSpawnCount;
 
@@ -656,7 +659,7 @@ namespace KidGame.Mechanics.Tracing
                                 {
                                     zone = zoneGo.AddComponent<AnswerDropZone>();
                                 }
-                                zone.Setup((int)c, () => CheckSpellingComplete(), null, c.ToString());
+                                zone.Setup((int)c, () => CheckSpellingComplete(), null, c.ToString(), isLearningMode);
                             }
                         }
                     }

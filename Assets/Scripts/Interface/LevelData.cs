@@ -90,6 +90,7 @@ namespace KidGame.Interface
 
         [Header("Tracing Game Settings")]
         public bool tracingSpellModeActive = false;
+        public bool tracingIsLearningMode = true;
         public List<string> tracingValuesToTrace = new List<string>();
         public int tracingCustomSpawnCount = 1;
     }
