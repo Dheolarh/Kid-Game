@@ -710,7 +710,7 @@ namespace KidGame.Mechanics.Tracing
                             if (card != null)
                             {
                                 Color cardColor = cardColors[UnityEngine.Random.Range(0, cardColors.Length)];
-                                card.Setup((int)letter, cardColor);
+                                card.Setup((int)letter, cardColor, letter.ToString());
                             }
                         }
                     }

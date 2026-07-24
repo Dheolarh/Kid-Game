@@ -64,10 +64,6 @@ namespace KidGame.Mechanics.Counting
                         {
                             hintText.text = customHint;
                         }
-                        else if (expectedCount == 32 || (expectedCount >= 65 && expectedCount <= 90) || (expectedCount >= 97 && expectedCount <= 122))
-                        {
-                            hintText.text = ((char)expectedCount).ToString();
-                        }
                         else
                         {
                             hintText.text = expectedCount.ToString();

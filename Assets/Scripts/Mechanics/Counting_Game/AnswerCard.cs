@@ -63,21 +63,24 @@ namespace KidGame.Mechanics.Counting
 
         // ── Setup ─────────────────────────────────────────────────────────────
 
-        public void Setup(int value, Color color)
+        public void Setup(int value, Color color, string displayText = null)
         {
             Value            = value;
             CardColor        = color;
             
-            if (value == 32 || (value >= 65 && value <= 90) || (value >= 97 && value <= 122))
+            if (!string.IsNullOrEmpty(displayText))
             {
-                label.text = ((char)value).ToString();
+                label.text = displayText;
             }
             else
             {
                 label.text = value.ToString();
             }
             
-            background.color = color;
+            if (background != null)
+            {
+                background.color = color;
+            }
 
             // Pop-in on spawn
             transform.localScale = Vector3.zero;

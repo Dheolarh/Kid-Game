@@ -392,14 +392,22 @@ namespace KidGame.Mechanics.Addition
             {
                 for (int i = slotsContainer.childCount - 1; i >= 0; i--)
                 {
-                    Destroy(slotsContainer.GetChild(i).gameObject);
+                    var child = slotsContainer.GetChild(i);
+                    child.gameObject.SetActive(false);
+                    child.SetParent(null);
+                    if (Application.isPlaying) Destroy(child.gameObject);
+                    else DestroyImmediate(child.gameObject);
                 }
             }
             if (answersContainer != null)
             {
                 for (int i = answersContainer.childCount - 1; i >= 0; i--)
                 {
-                    Destroy(answersContainer.GetChild(i).gameObject);
+                    var child = answersContainer.GetChild(i);
+                    child.gameObject.SetActive(false);
+                    child.SetParent(null);
+                    if (Application.isPlaying) Destroy(child.gameObject);
+                    else DestroyImmediate(child.gameObject);
                 }
             }
             _slots.Clear();
