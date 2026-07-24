@@ -13,18 +13,16 @@ MonoBehaviour:
   m_Name: Level_14
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 14
-  levelName: LESSON 14
-  levelSubtitle: Trace 7 to 8
-  levelEndTip: "Eight looks like a snowman lying down. Can you draw one in the air?"
+  levelName: "LESSON 14"
+  levelSubtitle: "Practice Writing Five"
+  levelEndTip: "Five fingers on your hand!"
   isUnlockedByDefault: 0
-  themePresetName: Blue
-  levelThemeColor: {r: 0.18823531, g: 0.06666667, b: 0.7568628, a: 0}
+  themePresetName: Pink
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
-    dialogueLines:
-    - text: "Hi {playername}! Trace Seven to warm up!"
-      mascotAnimationTrigger: isHi
+    dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -67,15 +65,16 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 5
+    tracingCustomSpawnCount: 4
   - gameType: 5
-    dialogueLines:
-    - text: "Meet Eight! Two loops stacked up, like a little snowman!"
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines:
-    - text: "You traced Eight! Wonderful!"
+    - text: "Well traced!"
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -118,59 +117,11 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-  - gameType: 5
-    dialogueLines:
-    - text: "Let's trace Seven and Eight together!"
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: "You know so many numbers now!"
-      mascotAnimationTrigger: isHappy
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 2
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 5
+    tracingCustomSpawnCount: 4
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -18,6 +18,8 @@ namespace KidGame.Mechanics.Counting
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
+        public TMPro.TMP_Text HintText { get => hintText; set => hintText = value; }
+
         private void Awake()
         {
             _background = GetComponent<Image>();
@@ -37,28 +39,39 @@ namespace KidGame.Mechanics.Counting
             _canAccept     = canAccept;
             _isAnswered    = false;
 
-            if (hintText == null)
-            {
-                hintText = GetComponentInChildren<TMPro.TMP_Text>(true);
-            }
+            var recallHintDisplay = GetComponent<NumberRecall.NumberRecallHintDisplay>();
+            if (recallHintDisplay == null) recallHintDisplay = GetComponentInChildren<NumberRecall.NumberRecallHintDisplay>(true);
 
-            if (hintText != null)
+            if (recallHintDisplay != null)
             {
-                hintText.gameObject.SetActive(showHint);
-                if (showHint)
+                string textToDisplay = !string.IsNullOrEmpty(customHint) ? customHint : expectedCount.ToString();
+                recallHintDisplay.SetupHint(textToDisplay, showHint);
+            }
+            else
+            {
+                if (hintText == null)
                 {
-                    hintText.color = new Color(0.25f, 0.25f, 0.25f, 0.45f); // Visible ghost text
-                    if (!string.IsNullOrEmpty(customHint))
+                    hintText = GetComponentInChildren<TMPro.TMP_Text>(true);
+                }
+
+                if (hintText != null)
+                {
+                    hintText.gameObject.SetActive(showHint);
+                    if (showHint)
                     {
-                        hintText.text = customHint;
-                    }
-                    else if (expectedCount == 32 || (expectedCount >= 65 && expectedCount <= 90) || (expectedCount >= 97 && expectedCount <= 122))
-                    {
-                        hintText.text = ((char)expectedCount).ToString();
-                    }
-                    else
-                    {
-                        hintText.text = expectedCount.ToString();
+                        hintText.color = new Color(0.25f, 0.25f, 0.25f, 0.45f); // Visible ghost text
+                        if (!string.IsNullOrEmpty(customHint))
+                        {
+                            hintText.text = customHint;
+                        }
+                        else if (expectedCount == 32 || (expectedCount >= 65 && expectedCount <= 90) || (expectedCount >= 97 && expectedCount <= 122))
+                        {
+                            hintText.text = ((char)expectedCount).ToString();
+                        }
+                        else
+                        {
+                            hintText.text = expectedCount.ToString();
+                        }
                     }
                 }
             }

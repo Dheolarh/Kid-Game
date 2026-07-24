@@ -13,27 +13,25 @@ MonoBehaviour:
   m_Name: Level_15
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 15
-  levelName: LESSON 15
-  levelSubtitle: Counting Objects 1-4
-  levelEndTip: "Count anything nearby, spoons, socks, toys, counting is everywhere!"
+  levelName: "LESSON 15"
+  levelSubtitle: "Curl Into Six"
+  levelEndTip: "Curve down into a loop!"
   isUnlockedByDefault: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.1215686, g: 0.7372549, b: 0.4235294, a: 0}
+  themePresetName: TealGreen
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
-  - gameType: 0
+  - gameType: 5
     dialogueLines:
-    - text: "Hi {playername}! Let's count some fun things together!"
-      mascotAnimationTrigger: isHi
-    - text: "Count how many you see, then pick the matching number!"
+    - text: "Let's trace Six!"
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 4
+    countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 4
+    countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: General
+    countingActiveThemeName: 
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -69,22 +67,23 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-  - gameType: 0
-    dialogueLines:
-    - text: "You're doing great, let's count a few more!"
-      mascotAnimationTrigger: isIdle
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 6
+    tracingCustomSpawnCount: 2
+  - gameType: 5
+    dialogueLines: []
     completionDialogueLines:
-    - text: "Hooray! You're a super counter, {playername}!"
+    - text: "Six done, super!"
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: General
+    countingActiveThemeName: 
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -120,8 +119,11 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 6
+    tracingCustomSpawnCount: 4
   sceneToLoad: Game
   levelIcon: {fileID: 0}

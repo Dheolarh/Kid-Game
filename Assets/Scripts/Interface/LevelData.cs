@@ -87,6 +87,7 @@ namespace KidGame.Interface
         public int recallMaxConsecutiveRevealed = 2;
         public int recallMinConsecutiveHidden = 1;
         public int recallMaxConsecutiveHidden = 2;
+        public bool recallIsLearningMode = true;
 
         [Header("Tracing Game Settings")]
         public bool tracingSpellModeActive = false;

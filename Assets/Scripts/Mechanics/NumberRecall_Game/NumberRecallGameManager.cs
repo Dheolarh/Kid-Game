@@ -49,6 +49,10 @@ namespace KidGame.Mechanics.NumberRecall
         [Tooltip("Maximum consecutive hidden answers.")]
         [SerializeField] private int maxConsecutiveHidden = 2;
 
+        [Header("Learning Mode Config")]
+        [Tooltip("If true, hints are displayed in empty answer slots (Learning Mode). If false, slots are empty (Normal Mode).")]
+        [SerializeField] private bool isLearningMode = true;
+
         private static readonly Color[] Palette =
         {
             new Color(0.91f, 0.30f, 0.24f),   // red
@@ -67,9 +71,9 @@ namespace KidGame.Mechanics.NumberRecall
 
         // ── Orientation ───────────────────────────────────────────────────────
 
-                public Button NextButton => nextButton;
+        public Button NextButton => nextButton;
 
-        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden)
+        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true)
         {
             this.slotCount = slotCount;
             this.minSequenceLength = minSequenceLength;
@@ -82,6 +86,7 @@ namespace KidGame.Mechanics.NumberRecall
             this.maxConsecutiveRevealed = maxConsecutiveRevealed;
             this.minConsecutiveHidden = minConsecutiveHidden;
             this.maxConsecutiveHidden = maxConsecutiveHidden;
+            this.isLearningMode = isLearningMode;
 
             _slots.Clear();
             _cards.Clear();
@@ -213,7 +218,7 @@ namespace KidGame.Mechanics.NumberRecall
                 var slot = slotGo.GetComponent<NumberRecallSlot>();
                 if (slot == null) slot = slotGo.AddComponent<NumberRecallSlot>();
 
-                slot.Setup(startValue, sequenceLength, actualStep, hiddenIndices, Palette, OnSequenceCompleted);
+                slot.Setup(startValue, sequenceLength, actualStep, hiddenIndices, Palette, OnSequenceCompleted, isLearningMode);
                 _slots.Add(slot);
 
                 // Collect missing values for answer tray

@@ -13,18 +13,16 @@ MonoBehaviour:
   m_Name: Level_20
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 20
-  levelName: LESSON 20
-  levelSubtitle: Trace 10 to 11
-  levelEndTip: "Eleven looks like two matching sticks standing together, one and one!"
+  levelName: "LESSON 20"
+  levelSubtitle: "Practice Writing Seven"
+  levelEndTip: "Seven days in a week!"
   isUnlockedByDefault: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.1215686, g: 0.7372549, b: 0.4235294, a: 0}
+  themePresetName: Pink
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
-    dialogueLines:
-    - text: "Hi {playername}! Show me how you trace Ten!"
-      mascotAnimationTrigger: isHi
+    dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -67,17 +65,16 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 1
-    - 0
-    tracingCustomSpawnCount: 2
+    - 7
+    tracingCustomSpawnCount: 4
   - gameType: 5
-    dialogueLines:
-    - text: "This is Eleven, two Ones standing side by side!"
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines:
-    - text: "You traced Eleven! Wonderful!"
+    - text: "Nicely done!"
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -120,61 +117,11 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 1
-    - 1
-    tracingCustomSpawnCount: 2
-  - gameType: 5
-    dialogueLines:
-    - text: "Let's trace Ten, then Eleven!"
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: "You're a two-digit tracing star!"
-      mascotAnimationTrigger: isHappy
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace: []
+    - 7
     tracingCustomSpawnCount: 4
   sceneToLoad: Game
   levelIcon: {fileID: 0}

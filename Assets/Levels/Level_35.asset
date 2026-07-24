@@ -13,18 +13,20 @@ MonoBehaviour:
   m_Name: Level_35
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 35
-  levelName: LESSON 35
-  levelSubtitle: Combo, Counting + Tracing Together
-  levelEndTip: "Count kitchen towels or cups together at home!"
+  levelName: "LESSON 35"
+  levelSubtitle: "Single Digit Superstar"
+  levelEndTip: "Zero to Nine, all mastered!"
   isUnlockedByDefault: 0
   themePresetName: Green
-  levelThemeColor: {r: 0.1215686, g: 0.7372549, b: 0.4235294, a: 0}
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: "Hi {playername}! Let's trace before counting today!"
+    - text: "You have learned so much!"
       mascotAnimationTrigger: isHi
+    - text: "Let's remember every number from Zero to Nine!"
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -67,24 +69,21 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 1
-    - 8
-    tracingCustomSpawnCount: 2
-  - gameType: 0
-    dialogueLines:
-    - text: "How many kitchen things can you count?"
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: "Great counting in the kitchen!"
-      mascotAnimationTrigger: isHappy
-    countingSlotCount: 8
+    - 0
+    tracingCustomSpawnCount: 1
+  - gameType: 5
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 8
+    countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: Kitchen
+    countingActiveThemeName: 
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -120,15 +119,18 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 4
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines:
-    - text: "Count it, then trace the number that matches!"
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines:
-    - text: "You're doing amazing, {playername}!"
+    - text: "WOW! You know all your single digit numbers!"
+      mascotAnimationTrigger: isHappy
+    - text: "You are a true number superstar!"
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -171,9 +173,11 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 18
+    - 8
     tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

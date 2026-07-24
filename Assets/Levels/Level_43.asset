@@ -13,19 +13,17 @@ MonoBehaviour:
   m_Name: Level_43
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 43
-  levelName: LESSON 43
-  levelSubtitle: Count Back from 6 (Backward)
-  levelEndTip: "Try a countdown together, like a rocket launch, \"3, 2, 1, blast off!\""
+  levelName: "LESSON 43"
+  levelSubtitle: "Teen Number Trio"
+  levelEndTip: "Teen numbers are getting easier!"
   isUnlockedByDefault: 0
-  themePresetName: Purple
+  themePresetName: Orange
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
-  - gameType: 4
+  - gameType: 5
     dialogueLines:
-    - text: "Hi {playername}! Let's count backward this time!"
-      mascotAnimationTrigger: isHi
-    - text: "What number comes before this one?"
+    - text: "Let's remember our teen numbers!"
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -58,26 +56,77 @@ MonoBehaviour:
     matchingMinVal: 1
     matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
-    recallSlotCount: 2
-    recallMinSequenceLength: 2
-    recallMaxSequenceLength: 2
-    recallMinStartValue: 6
-    recallMaxStartValue: 6
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
     recallStep: 1
-    recallCountBackwards: 1
+    recallCountBackwards: 0
     recallMinConsecutiveRevealed: 1
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-  - gameType: 4
-    dialogueLines:
-    - text: "Now try counting backward from six, what's missing?"
-      mascotAnimationTrigger: isIdle
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 10
+    tracingCustomSpawnCount: 2
+  - gameType: 5
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 13
+    tracingCustomSpawnCount: 2
+  - gameType: 5
+    dialogueLines: []
     completionDialogueLines:
-    - text: "You counted backward so well!"
+    - text: "Ten, Thirteen, Fourteen, all remembered!"
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -109,19 +158,22 @@ MonoBehaviour:
     matchingMinVal: 1
     matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
-    recallSlotCount: 3
-    recallMinSequenceLength: 3
-    recallMaxSequenceLength: 3
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
     recallMinStartValue: 1
     recallMaxStartValue: 20
     recallStep: 1
-    recallCountBackwards: 1
+    recallCountBackwards: 0
     recallMinConsecutiveRevealed: 1
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 14
+    tracingCustomSpawnCount: 2
   sceneToLoad: Game
   levelIcon: {fileID: 0}

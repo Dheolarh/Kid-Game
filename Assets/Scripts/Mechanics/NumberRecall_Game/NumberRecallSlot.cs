@@ -17,7 +17,7 @@ namespace KidGame.Mechanics.NumberRecall
         private System.Action _onCompleted;
         private int _sequenceLength;
 
-        public void Setup(int startValue, int length, int step, List<int> hiddenIndices, Color[] palette, System.Action onCompleted)
+        public void Setup(int startValue, int length, int step, List<int> hiddenIndices, Color[] palette, System.Action onCompleted, bool isLearningMode = true)
         {
             _sequenceLength = length;
             _onCompleted = onCompleted;
@@ -55,7 +55,7 @@ namespace KidGame.Mechanics.NumberRecall
                         {
                             _onCompleted?.Invoke();
                         }
-                    });
+                    }, showHint: isLearningMode);
                 }
                 else
                 {

@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: Level_10
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 10
-  levelName: LESSON 10
-  levelSubtitle: Trace 5 to 6
-  levelEndTip: "Six is one more than five. Count \"5, then one more makes 6!\""
+  levelName: "LESSON 10"
+  levelSubtitle: "Zero and Four Together"
+  levelEndTip: "Round Zero, straight Four!"
   isUnlockedByDefault: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.1215686, g: 0.7372549, b: 0.4235294, a: 0}
+  themePresetName: Blue
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: "Hi {playername}! Trace Five to start us off!"
-      mascotAnimationTrigger: isHi
+    - text: "Quick recap time!"
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -67,15 +67,16 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 0
+    tracingCustomSpawnCount: 4
   - gameType: 5
-    dialogueLines:
-    - text: "Meet Six! A curl that closes into a little loop!"
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines:
-    - text: "You traced Six! Wonderful!"
+    - text: "You remembered both!"
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -118,59 +119,11 @@ MonoBehaviour:
     recallMaxConsecutiveRevealed: 2
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
     tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-  - gameType: 5
-    dialogueLines:
-    - text: "Let's trace Five and Six together!"
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: "You're doing amazing, {playername}!"
-      mascotAnimationTrigger: isHappy
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    tracingSpellModeActive: 0
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 2
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 4
+    tracingCustomSpawnCount: 4
   sceneToLoad: Game
   levelIcon: {fileID: 0}
