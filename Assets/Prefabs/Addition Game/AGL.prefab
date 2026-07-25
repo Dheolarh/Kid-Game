@@ -1160,6 +1160,7 @@ GameObject:
   - component: {fileID: 3329769309087376775}
   - component: {fileID: 1576348747853343145}
   - component: {fileID: 313642588537627056}
+  - component: {fileID: 4630127050804176370}
   m_Layer: 5
   m_Name: next
   m_TagString: Untagged
@@ -1321,6 +1322,18 @@ MonoBehaviour:
   durationUp: 0.12
   easeDown: 6
   easeUp: 27
+--- !u!114 &4630127050804176370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5926338299059464229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb68e123cf4b0340a75a059411f1f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Audio.ButtonClickSfx
 --- !u!1 &6770255143140147351
 GameObject:
   m_ObjectHideFlags: 0

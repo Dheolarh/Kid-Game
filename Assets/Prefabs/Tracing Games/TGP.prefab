@@ -1108,6 +1108,7 @@ MonoBehaviour:
   disableScrollingLayout: 1
   customSpawnCount: 2
   spellModeActive: 0
+  isLearningMode: 1
   spellAnswerCardPrefab: {fileID: 7026504693343592554, guid: 0182651f93afea3489412a78a9040cd4, type: 3}
   spellDropZonePrefab: {fileID: 3763011450510801289, guid: 55c48dae11d9b52439bf4a14cd6058d0, type: 3}
   spellSlotPrefab: {fileID: 4879581565838152133, guid: 3efe13b74ff3eb446b200cffd7f7ff5b, type: 3}
@@ -1216,6 +1217,7 @@ GameObject:
   - component: {fileID: 804734282860752342}
   - component: {fileID: 5447042213738335418}
   - component: {fileID: 500154659997850091}
+  - component: {fileID: 1177470664388690516}
   m_Layer: 5
   m_Name: next
   m_TagString: Untagged
@@ -1371,6 +1373,18 @@ MonoBehaviour:
   durationUp: 0.12
   easeDown: 6
   easeUp: 27
+--- !u!114 &1177470664388690516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7353094051076796924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb68e123cf4b0340a75a059411f1f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Audio.ButtonClickSfx
 --- !u!1 &7858166946452962180
 GameObject:
   m_ObjectHideFlags: 0

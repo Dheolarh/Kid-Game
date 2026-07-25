@@ -28,6 +28,23 @@ namespace KidGame.Audio
         [SerializeField] private AudioClip buttonClickSfx;
         [SerializeField] private AudioClip answerDropSfx;
 
+        [Header("Victory & End Game SFX Clips")]
+        [Tooltip("Victory sound played when player earns 1 star.")]
+        [SerializeField] private AudioClip victory1StarSfx;
+        [Tooltip("Victory sound played when player earns 2 stars.")]
+        [SerializeField] private AudioClip victory2StarSfx;
+        [Tooltip("Victory sound played when player earns 3 stars.")]
+        [SerializeField] private AudioClip victory3StarSfx;
+
+        [Tooltip("SFX played for each star pop/collected on the end panel.")]
+        [SerializeField] private AudioClip starEarnedSfx;
+
+        [Tooltip("Confetti pop SFX played when confetti triggers.")]
+        [SerializeField] private AudioClip confettiPopSfx;
+
+        [Tooltip("Kid yay / cheer SFX played when confetti pops at 3 stars.")]
+        [SerializeField] private AudioClip kidYaySfx;
+
 
         [Header("Volume Configuration")]
         [Range(0f, 1f)] [SerializeField] private float registrationVolume = 0.12f;
@@ -322,6 +339,78 @@ namespace KidGame.Audio
             }
         }
 
+        /// <summary>
+        /// Pauses/stops background music and any active SFX when the end game panel shows up.
+        /// </summary>
+        public void PauseAllSounds()
+        {
+            if (bgmSource != null && bgmSource.isPlaying)
+            {
+                bgmSource.Pause();
+            }
+            if (sfxSource != null && sfxSource.isPlaying)
+            {
+                sfxSource.Stop();
+            }
+        }
+
+        /// <summary>
+        /// Plays victory sound based on stars won (1, 2, or 3 stars).
+        /// </summary>
+        public void PlayVictorySfx(int stars)
+        {
+            AudioClip clipToPlay = null;
+            if (stars == 1) clipToPlay = victory1StarSfx;
+            else if (stars == 2) clipToPlay = victory2StarSfx;
+            else if (stars >= 3) clipToPlay = victory3StarSfx;
+
+            if (clipToPlay == null)
+            {
+                clipToPlay = victory3StarSfx != null ? victory3StarSfx : (victory2StarSfx != null ? victory2StarSfx : victory1StarSfx);
+            }
+
+            if (sfxSource != null && clipToPlay != null)
+            {
+                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                sfxSource.PlayOneShot(clipToPlay, finalVol);
+            }
+        }
+
+        /// <summary>
+        /// Plays the star earned SFX for each star collected on the end game panel.
+        /// </summary>
+        public void PlayStarEarnedSfx()
+        {
+            if (sfxSource != null && starEarnedSfx != null)
+            {
+                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                sfxSource.PlayOneShot(starEarnedSfx, finalVol);
+            }
+        }
+
+        /// <summary>
+        /// Plays the confetti pop SFX when confetti triggers.
+        /// </summary>
+        public void PlayConfettiPopSfx()
+        {
+            if (sfxSource != null && confettiPopSfx != null)
+            {
+                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                sfxSource.PlayOneShot(confettiPopSfx, finalVol);
+            }
+        }
+
+        /// <summary>
+        /// Plays the kid yay / cheer SFX when 3-star confetti pops.
+        /// </summary>
+        public void PlayKidYaySfx()
+        {
+            if (sfxSource != null && kidYaySfx != null)
+            {
+                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                sfxSource.PlayOneShot(kidYaySfx, finalVol);
+            }
+        }
     }
 }
 

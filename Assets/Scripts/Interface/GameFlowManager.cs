@@ -89,6 +89,12 @@ namespace KidGame.Interface
         [SerializeField] private Image endNextButtonBg;                 // Next button bg image (tinted next level color)
         [SerializeField] private GameObject endNoNextLevelPanel;        // Panel shown when no next level exists
 
+        [Header("Game End Panel Animation Timing")]
+        [Tooltip("Time delay in seconds between each star animation on the end panel.")]
+        [SerializeField] private float starAnimationInterval = 0.55f;
+        [Tooltip("Duration of each star scale pop animation.")]
+        [SerializeField] private float starScaleDuration = 0.35f;
+
         // State variables
         private int _currentPageIndex = 0;
         private int _totalMistakes = 0;
@@ -1105,6 +1111,13 @@ namespace KidGame.Interface
 
         private IEnumerator PlayEndPanelSequence(int starsEarned)
         {
+            // ── Step 0: Pause all other sounds & play Victory sound based on stars won ─
+            if (KidGame.Audio.AudioManager.Instance != null)
+            {
+                KidGame.Audio.AudioManager.Instance.PauseAllSounds();
+                KidGame.Audio.AudioManager.Instance.PlayVictorySfx(starsEarned);
+            }
+
             // ── Prep: hide all elements before animating ──────────────────────────────
             if (endPanelBackground != null) endPanelBackground.localScale = Vector3.zero;
             if (lessonCompleteText != null) lessonCompleteText.transform.localScale = Vector3.zero;
@@ -1163,7 +1176,10 @@ namespace KidGame.Interface
                 greatJobText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
             yield return new WaitForSeconds(0.5f);
 
-            // ── Step 5: Stars animate in one by one ───────────────────────────────────
+            // ── Step 5: Stars animate in one by one with deliberate pacing ─────────────
+            float scaleUpTime = starScaleDuration * 0.6f;
+            float scaleDownTime = starScaleDuration * 0.4f;
+
             for (int i = 0; i < endStars.Length; i++)
             {
                 if (endStars[i] == null) continue;
@@ -1173,33 +1189,47 @@ namespace KidGame.Interface
 
                 if (isEarned)
                 {
-                    // Smash-in: scale punch from 0→1.3→1 and color flash to gold
+                    // Play star SFX for each earned star
+                    if (KidGame.Audio.AudioManager.Instance != null)
+                    {
+                        KidGame.Audio.AudioManager.Instance.PlayStarEarnedSfx();
+                    }
+
+                    // Smash-in: scale punch from 0→1.35→1.0 and color flash to gold
                     starImg.color = Color.white;
                     starImg.transform.localScale = Vector3.zero;
-                    starImg.transform.DOScale(1.3f, 0.18f).SetEase(Ease.OutCubic)
-                        .OnComplete(() => starImg.transform.DOScale(1f, 0.15f).SetEase(Ease.InCubic));
-                    starImg.DOColor(activeStarColor, 0.2f);
-                    yield return new WaitForSeconds(0.28f);
+                    starImg.transform.DOScale(1.35f, scaleUpTime).SetEase(Ease.OutCubic)
+                        .OnComplete(() => starImg.transform.DOScale(1f, scaleDownTime).SetEase(Ease.OutBack));
+                    starImg.DOColor(activeStarColor, starScaleDuration);
+
+                    // If player earned 3 stars, pop confetti & play Kid Yay + Confetti SFX EXACTLY at the 3rd star (i == 2)
+                    if (starsEarned == 3 && i == 2)
+                    {
+                        if (endConfettiAnimator != null)
+                        {
+                            endConfettiAnimator.gameObject.SetActive(true);
+                            var cg = endConfettiAnimator.GetComponent<CanvasGroup>();
+                            if (cg == null) cg = endConfettiAnimator.gameObject.AddComponent<CanvasGroup>();
+                            cg.blocksRaycasts = false;
+                            cg.interactable = false;
+                        }
+
+                        if (KidGame.Audio.AudioManager.Instance != null)
+                        {
+                            KidGame.Audio.AudioManager.Instance.PlayConfettiPopSfx();
+                            KidGame.Audio.AudioManager.Instance.PlayKidYaySfx();
+                        }
+                    }
+
+                    yield return new WaitForSeconds(starAnimationInterval);
                 }
                 else
                 {
                     // Unearned: quietly fade in at dim white, no fanfare
                     starImg.color = inactiveStarColor;
-                    starImg.transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
-                    yield return new WaitForSeconds(0.15f);
+                    starImg.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+                    yield return new WaitForSeconds(starAnimationInterval * 0.6f);
                 }
-            }
-            yield return new WaitForSeconds(0.2f);
-
-            // ── Step 6: Confetti blast ────────────────────────────────────────────────
-            if (endConfettiAnimator != null)
-            {
-                endConfettiAnimator.gameObject.SetActive(true);
-                // Ensure confetti panel and elements do not block UI clicks/raycasts
-                var cg = endConfettiAnimator.GetComponent<CanvasGroup>();
-                if (cg == null) cg = endConfettiAnimator.gameObject.AddComponent<CanvasGroup>();
-                cg.blocksRaycasts = false;
-                cg.interactable = false;
             }
             yield return new WaitForSeconds(0.3f);
 
