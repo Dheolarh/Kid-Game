@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Level_19
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 19
-  levelName: "LESSON 19"
-  levelSubtitle: "Straight Line Numbers"
-  levelEndTip: "Straight lines make these numbers!"
+  levelName: LESSON 19
+  levelSubtitle: Straight Line Numbers
+  levelEndTip: Straight lines make these numbers!
   isUnlockedByDefault: 0
   themePresetName: Orange
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
@@ -23,7 +23,7 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: "Remember our straight numbers?"
+    - text: Remember our straight numbers?
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -71,7 +71,7 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 0
+    - ' 1'
     tracingCustomSpawnCount: 4
   - gameType: 5
     dialogueLines: []
@@ -126,7 +126,7 @@ MonoBehaviour:
   - gameType: 5
     dialogueLines: []
     completionDialogueLines:
-    - text: "All three remembered!"
+    - text: All three remembered!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1

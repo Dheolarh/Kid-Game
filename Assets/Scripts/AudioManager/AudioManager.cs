@@ -52,6 +52,12 @@ namespace KidGame.Audio
         [Range(0f, 1f)] [SerializeField] private float gameplayVolume = 0.08f; // Reduced from 0.25f to be much softer
         [Range(0f, 1f)] [SerializeField] private float sfxVolume = 0.8f;
 
+        [Header("End Game SFX Volume Balancers")]
+        [Range(0f, 1f)] [SerializeField] private float victoryVolume = 0.9f;
+        [Range(0f, 1f)] [SerializeField] private float starEarnedVolume = 0.30f;   // Softened so star SFX doesn't overpower victory BGM
+        [Range(0f, 1f)] [SerializeField] private float confettiPopVolume = 0.40f;  // Softened pop sound
+        [Range(0f, 1f)] [SerializeField] private float kidYayVolume = 0.35f;      // Softened yay sound so victory BGM stays prominent
+
         [Header("Fade Settings")]
         [SerializeField] private float transitionFadeDuration = 1.0f;
 
@@ -371,7 +377,7 @@ namespace KidGame.Audio
 
             if (sfxSource != null && clipToPlay != null)
             {
-                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                float finalVol = sfxVolume * victoryVolume * (SfxVolumeSetting / 10f);
                 sfxSource.PlayOneShot(clipToPlay, finalVol);
             }
         }
@@ -383,7 +389,7 @@ namespace KidGame.Audio
         {
             if (sfxSource != null && starEarnedSfx != null)
             {
-                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                float finalVol = sfxVolume * starEarnedVolume * (SfxVolumeSetting / 10f);
                 sfxSource.PlayOneShot(starEarnedSfx, finalVol);
             }
         }
@@ -395,7 +401,7 @@ namespace KidGame.Audio
         {
             if (sfxSource != null && confettiPopSfx != null)
             {
-                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                float finalVol = sfxVolume * confettiPopVolume * (SfxVolumeSetting / 10f);
                 sfxSource.PlayOneShot(confettiPopSfx, finalVol);
             }
         }
@@ -407,7 +413,7 @@ namespace KidGame.Audio
         {
             if (sfxSource != null && kidYaySfx != null)
             {
-                float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+                float finalVol = sfxVolume * kidYayVolume * (SfxVolumeSetting / 10f);
                 sfxSource.PlayOneShot(kidYaySfx, finalVol);
             }
         }

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Level_22
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 22
-  levelName: "LESSON 22"
-  levelSubtitle: "Curvy Number Recap"
-  levelEndTip: "Curvy numbers are fun!"
+  levelName: LESSON 22
+  levelSubtitle: Curved Numbers
+  levelEndTip: Curvy numbers are fun!
   isUnlockedByDefault: 0
   themePresetName: Blue
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
@@ -23,7 +23,7 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: "Curvy numbers time!"
+    - text: Let's trace curves!
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -76,7 +76,7 @@ MonoBehaviour:
   - gameType: 5
     dialogueLines: []
     completionDialogueLines:
-    - text: "Both remembered!"
+    - text: Both remembered!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1

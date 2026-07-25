@@ -82,6 +82,10 @@ namespace KidGame.Interface
         [SerializeField] private Animator endConfettiAnimator;          // Confetti sprite animator
         [SerializeField] private TMP_Text endTipsText;
         [SerializeField] private Image[] endStars = new Image[3];
+        [Tooltip("Sprite used for earned/collected stars.")]
+        [SerializeField] private Sprite activeStarSprite;
+        [Tooltip("Sprite used for unearned/empty stars.")]
+        [SerializeField] private Sprite inactiveStarSprite;
         [SerializeField] private Color activeStarColor = Color.yellow;
         [SerializeField] private Color inactiveStarColor = new Color(1f, 1f, 1f, 0.2f);
         [SerializeField] private Button endHomeButton;                  // Home button
@@ -853,6 +857,10 @@ namespace KidGame.Interface
             _consecutiveRightAnswers = 0;
             _lastGameplayActivityTime = Time.time;
             _hasPlayedGameplayInactivity = false;
+
+            // Trigger device vibration nudge on wrong drop or wrong match
+            KidGame.Audio.AudioManager.Instance?.Vibrate();
+
             if (mascotAnimator != null)
             {
                 var sr = mascotAnimator.GetComponent<SpriteRenderer>();
@@ -1138,7 +1146,8 @@ namespace KidGame.Interface
                 {
                     if (star != null)
                     {
-                        star.color = inactiveStarColor;
+                        if (inactiveStarSprite != null) star.sprite = inactiveStarSprite;
+                        else star.color = inactiveStarColor;
                         star.transform.localScale = Vector3.zero;
                     }
                 }
@@ -1189,18 +1198,27 @@ namespace KidGame.Interface
 
                 if (isEarned)
                 {
+                    // Swap to active/earned star sprite
+                    if (activeStarSprite != null)
+                    {
+                        starImg.sprite = activeStarSprite;
+                        starImg.color = Color.white;
+                    }
+                    else
+                    {
+                        starImg.color = activeStarColor;
+                    }
+
                     // Play star SFX for each earned star
                     if (KidGame.Audio.AudioManager.Instance != null)
                     {
                         KidGame.Audio.AudioManager.Instance.PlayStarEarnedSfx();
                     }
 
-                    // Smash-in: scale punch from 0→1.35→1.0 and color flash to gold
-                    starImg.color = Color.white;
+                    // Smash-in: scale punch from 0→1.35→1.0
                     starImg.transform.localScale = Vector3.zero;
                     starImg.transform.DOScale(1.35f, scaleUpTime).SetEase(Ease.OutCubic)
                         .OnComplete(() => starImg.transform.DOScale(1f, scaleDownTime).SetEase(Ease.OutBack));
-                    starImg.DOColor(activeStarColor, starScaleDuration);
 
                     // If player earned 3 stars, pop confetti & play Kid Yay + Confetti SFX EXACTLY at the 3rd star (i == 2)
                     if (starsEarned == 3 && i == 2)
@@ -1225,8 +1243,16 @@ namespace KidGame.Interface
                 }
                 else
                 {
-                    // Unearned: quietly fade in at dim white, no fanfare
-                    starImg.color = inactiveStarColor;
+                    // Unearned: quietly fade in at unearned sprite or dim white
+                    if (inactiveStarSprite != null)
+                    {
+                        starImg.sprite = inactiveStarSprite;
+                        starImg.color = Color.white;
+                    }
+                    else
+                    {
+                        starImg.color = inactiveStarColor;
+                    }
                     starImg.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
                     yield return new WaitForSeconds(starAnimationInterval * 0.6f);
                 }
@@ -1549,9 +1575,6 @@ namespace KidGame.Interface
                 dialoguePanel.transform.localScale = Vector3.zero;
                 dialoguePanel.SetActive(true);
                 dialoguePanel.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-                // Play dialogue pop SFX
-                KidGame.Audio.AudioManager.Instance?.PlayDialoguePopSfx();
-
             }
 
             for (int i = 0; i < lines.Count; i++)
@@ -1560,6 +1583,9 @@ namespace KidGame.Interface
                 _activeDialogueLineIndex = i;
                 _skipDialogueDelay = false;
                 _lineDisplayStartTime = Time.time;
+
+                // Play dialogue pop SFX on every line change in the sequence
+                KidGame.Audio.AudioManager.Instance?.PlayDialoguePopSfx();
 
                 // 1. Set up mascot animation and flip
                 if (dialogueMascotAnimator != null)

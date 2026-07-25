@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Level_36
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 36
-  levelName: "LESSON 36"
-  levelSubtitle: "Meet the Number Ten"
-  levelEndTip: "Ten combines One and Zero!"
+  levelName: LESSON 36
+  levelSubtitle: Meet the Number Ten
+  levelEndTip: Ten combines One and Zero!
   isUnlockedByDefault: 0
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
@@ -23,9 +23,9 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: "Welcome to double digit numbers!"
+    - text: Welcome to double digit numbers!
       mascotAnimationTrigger: isHi
-    - text: "This is Ten, it has two parts, One and Zero!"
+    - text: This is Ten, it has two parts, One and Zero!
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -178,7 +178,7 @@ MonoBehaviour:
   - gameType: 5
     dialogueLines: []
     completionDialogueLines:
-    - text: "Ten complete, fantastic!"
+    - text: Ten complete, fantastic!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1

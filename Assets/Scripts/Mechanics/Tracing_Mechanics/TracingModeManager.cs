@@ -1743,25 +1743,73 @@ namespace KidGame.Mechanics.Tracing
                     rowLe.preferredHeight = rowHeight;
                 }
 
-                // Size and scale the character cells inside this row
+                // Size and scale the character cells inside this row with smart narrow-glyph and tight digit spacing
                 int charCount = row.Count;
-                float spacing = 10f;
-                float availableRowWidth = rowWidth - Mathf.Max(0, charCount - 1) * spacing;
-                float cellW = availableRowWidth / charCount;
-                float cellSize = Mathf.Min(cellW, rowHeight);
+                float totalWidthFactor = 0f;
+                List<float> cellWidthFactors = new List<float>();
 
-                foreach (var tracer in row)
+                for (int cIdx = 0; cIdx < charCount; cIdx++)
                 {
+                    var tracer = row[cIdx];
+                    char c = (tracer != null && tracer.ShapePrefab != null) ? tracer.ShapePrefab.name[0] : '0';
+                    bool isNarrow = (c == '1' || c == 'I' || c == 'l' || c == 'i');
+                    float factor = isNarrow ? 0.50f : 0.85f;
+                    cellWidthFactors.Add(factor);
+                    totalWidthFactor += factor;
+                }
+
+                // Tight negative spacing for multi-digit numbers so digits sit close together
+                float customSpacing = 10f;
+                if (charCount > 1)
+                {
+                    bool hasNarrowChar = false;
+                    for (int cIdx = 0; cIdx < charCount; cIdx++)
+                    {
+                        var tracer = row[cIdx];
+                        char c = (tracer != null && tracer.ShapePrefab != null) ? tracer.ShapePrefab.name[0] : '0';
+                        if (c == '1' || c == 'I' || c == 'l' || c == 'i') hasNarrowChar = true;
+                    }
+                    customSpacing = hasNarrowChar ? -0.22f * rowHeight : -0.10f * rowHeight;
+                }
+
+                // Apply spacing to the HorizontalLayoutGroup inside tracerContainerRt
+                if (tracerContainerRt != null)
+                {
+                    var rowHlg = tracerContainerRt.GetComponent<HorizontalLayoutGroup>();
+                    if (rowHlg != null)
+                    {
+                        rowHlg.spacing = customSpacing;
+                        rowHlg.childAlignment = TextAnchor.MiddleCenter;
+                        rowHlg.childControlWidth = false;
+                        rowHlg.childControlHeight = false;
+                        rowHlg.childForceExpandWidth = false;
+                        rowHlg.childForceExpandHeight = false;
+                    }
+                }
+
+                float availableRowWidth = rowWidth - Mathf.Max(0, charCount - 1) * customSpacing;
+                float rawCellSize = availableRowWidth / Mathf.Max(1f, totalWidthFactor);
+                float cellSize = Mathf.Min(rawCellSize, rowHeight);
+
+                for (int cIdx = 0; cIdx < charCount; cIdx++)
+                {
+                    var tracer = row[cIdx];
                     if (tracer == null) continue;
+
+                    float factor = cellWidthFactors[cIdx];
+                    float cellW = cellSize * factor;
+
                     var cellRt = tracer.GetComponent<RectTransform>();
                     if (cellRt != null)
                     {
-                        cellRt.sizeDelta = new Vector2(cellSize, cellSize);
+                        cellRt.sizeDelta = new Vector2(cellW, cellSize);
                         var cellLe = cellRt.GetComponent<LayoutElement>();
                         if (cellLe != null)
                         {
-                            cellLe.preferredWidth = cellSize;
+                            cellLe.preferredWidth = cellW;
                             cellLe.preferredHeight = cellSize;
+                            cellLe.minWidth = cellW;
+                            cellLe.minHeight = cellSize;
                         }
                     }
                     RescaleShapeForCell(tracer, cellSize);
