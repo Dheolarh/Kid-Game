@@ -122,7 +122,7 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace:
     - 32
-    tracingCustomSpawnCount: 1
+    tracingCustomSpawnCount: 2
   - gameType: 5
     dialogueLines: []
     completionDialogueLines: []

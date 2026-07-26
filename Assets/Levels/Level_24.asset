@@ -72,7 +72,7 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace:
     - 9
-    tracingCustomSpawnCount: 2
+    tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines: []
     completionDialogueLines:
@@ -124,6 +124,6 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace:
     - 9
-    tracingCustomSpawnCount: 4
+    tracingCustomSpawnCount: 2
   sceneToLoad: Game
   levelIcon: {fileID: 0}
