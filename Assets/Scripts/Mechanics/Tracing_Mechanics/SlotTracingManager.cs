@@ -210,13 +210,24 @@ namespace KidGame.Mechanics.Tracing
             if (path.quarterRestriction)
             {
                 float tq = _activeTracer.targetQuarter;
+
+                // If player has already traced 360 degrees (full loop) and crosses 0 degrees at top, complete immediately
+                if (tq >= 360f && (angle >= 315f || angle < 45f))
+                {
+                    _fillAmount = 1f;
+                    fillImage.fillAmount = 1f;
+                    CheckFillComplete(path);
+                    return;
+                }
+
                 if (!(angle >= 0f && angle <= tq))
                 {
                     fillImage.fillAmount = 0f;
                     return;
                 }
-                if (angle >= tq / 2f) tq += 90f;
-                else if (angle < 45f) tq  = 90f;
+
+                if (angle >= tq / 2f && tq < 360f) tq += 90f;
+                else if (angle < 45f && tq < 360f) tq = 90f;
 
                 _activeTracer.targetQuarter = Mathf.Clamp(tq, 90f, 360f);
             }

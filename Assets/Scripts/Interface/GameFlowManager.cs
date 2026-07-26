@@ -986,6 +986,47 @@ namespace KidGame.Interface
             return "Wait {playername}, let's complete this task first!";
         }
 
+        private string GetScrollWarningSentence(GameType gameType)
+        {
+            switch (gameType)
+            {
+                case GameType.Counting:
+                    return "Scroll up {playername}! There are more objects below waiting for you to count!";
+                case GameType.Addition:
+                    return "Scroll up {playername}! You have more addition problems below to solve!";
+                case GameType.Comparison:
+                    return "Scroll up {playername}! Check below for more numbers to compare!";
+                case GameType.Matching:
+                    return "Scroll up {playername}! There are more matching pairs below to connect!";
+                case GameType.Recall:
+                    return "Scroll up {playername}! Look below for the rest of the numbers!";
+                default:
+                    return "Scroll up {playername}! There are more tasks below for you to complete!";
+            }
+        }
+
+        private bool HasUnscrolledIncompleteTasks(GameType gameType)
+        {
+            // Tracing game does not use scroll warning dialogue
+            if (gameType == GameType.Tracing) return false;
+
+#if UNITY_2023_1_OR_NEWER
+            ScrollRect scrollRect = FindFirstObjectByType<ScrollRect>();
+#else
+            ScrollRect scrollRect = FindObjectOfType<ScrollRect>();
+#endif
+            if (scrollRect == null || scrollRect.content == null) return false;
+
+            RectTransform viewport = scrollRect.viewport != null ? scrollRect.viewport : (scrollRect.transform as RectTransform);
+            if (viewport == null) return false;
+
+            bool canScrollVertically = scrollRect.content.rect.height > (viewport.rect.height + 30f);
+            if (!canScrollVertically) return false;
+
+            // Return true if vertical position is still near top (> 0.15f) leaving lower tasks hidden below
+            return scrollRect.verticalNormalizedPosition > 0.15f;
+        }
+
         private void OnNextClicked()
         {
             if (ActiveLevel == null || _currentPageIndex >= ActiveLevel.pages.Count) return;
@@ -1006,7 +1047,9 @@ namespace KidGame.Interface
                 if (dialoguePanel != null && dialogueText != null)
                 {
                     PageData page = ActiveLevel.pages[_currentPageIndex];
-                    string warningText = GetRandomWarningSentence(page.gameType);
+                    string warningText = HasUnscrolledIncompleteTasks(page.gameType)
+                        ? GetScrollWarningSentence(page.gameType)
+                        : GetRandomWarningSentence(page.gameType);
 
                     List<DialogueLine> warningLine = new List<DialogueLine> {
                         new DialogueLine { text = warningText, mascotAnimationTrigger = "IsNoIdea" }
@@ -1381,12 +1424,16 @@ namespace KidGame.Interface
             
             // Build the spelled words sequence
             List<string> spellingParts = new List<string>();
-            for (int i = 0; i < Mathf.Min(page.tracingValuesToTrace.Count, page.tracingCustomSpawnCount); i++)
+            if (page.tracingValuesToTrace != null && page.tracingValuesToTrace.Count > 0)
             {
-                string entry = page.tracingValuesToTrace[i].Trim();
-                if (IsNumericExpression(entry))
+                for (int i = 0; i < page.tracingCustomSpawnCount; i++)
                 {
-                    spellingParts.Add(NumberToWords(int.Parse(entry)).ToUpper());
+                    int valIdx = (i < page.tracingValuesToTrace.Count) ? i : 0;
+                    string entry = page.tracingValuesToTrace[valIdx].Trim();
+                    if (IsNumericExpression(entry))
+                    {
+                        spellingParts.Add(NumberToWords(int.Parse(entry)).ToUpper());
+                    }
                 }
             }
             string spellingTarget = string.Join(" ", spellingParts);

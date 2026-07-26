@@ -199,40 +199,10 @@ namespace KidGame.Interface
         {
             if (loadingContentGroup == null) return;
 
-            var scripts = loadingContentGroup.GetComponentsInChildren<MonoBehaviour>(true);
-            foreach (var script in scripts)
-            {
-                if (script == null) continue;
-                string typeName = script.GetType().Name;
-                if (typeName.Contains("Lottie") || typeName.Contains("Loader") || typeName.Contains("Animation"))
-                {
-                    script.enabled = false;
-                    script.enabled = true;
-
-                    var playMethod = script.GetType().GetMethod("Play", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, System.Type.EmptyTypes, null);
-                    if (playMethod != null)
-                    {
-                        try { playMethod.Invoke(script, null); } catch { }
-                    }
-                    var restartMethod = script.GetType().GetMethod("Restart", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, System.Type.EmptyTypes, null);
-                    if (restartMethod != null)
-                    {
-                        try { restartMethod.Invoke(script, null); } catch { }
-                    }
-                }
-            }
-
-            var animators = loadingContentGroup.GetComponentsInChildren<Animator>(true);
-            foreach (var anim in animators)
-            {
-                if (anim != null)
-                {
-                    anim.enabled = true;
-                    anim.Rebind();
-                    anim.Update(0f);
-                    anim.Play(0, -1, 0f);
-                }
-            }
+            // Deactivate and reactivate the loading content GameObject
+            // so Unity's native OnDisable / OnEnable lifecycle triggers AutoPlay safely
+            loadingContentGroup.gameObject.SetActive(false);
+            loadingContentGroup.gameObject.SetActive(true);
         }
 
         /// <summary>

@@ -475,12 +475,16 @@ namespace KidGame.Mechanics.Tracing
                 }
 
                 List<string> entriesToSpawn = new List<string>();
-                for (int i = 0; i < Mathf.Min(valuesToTrace.Count, customSpawnCount); i++)
+                if (valuesToTrace != null && valuesToTrace.Count > 0)
                 {
-                    string raw = valuesToTrace[i].Trim();
-                    if (!string.IsNullOrEmpty(raw))
+                    for (int i = 0; i < customSpawnCount; i++)
                     {
-                        entriesToSpawn.Add(raw);
+                        int valIdx = (i < valuesToTrace.Count) ? i : 0;
+                        string raw = valuesToTrace[valIdx].Trim();
+                        if (!string.IsNullOrEmpty(raw))
+                        {
+                            entriesToSpawn.Add(raw);
+                        }
                     }
                 }
 
