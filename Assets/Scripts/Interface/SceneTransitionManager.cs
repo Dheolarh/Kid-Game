@@ -192,11 +192,62 @@ namespace KidGame.Interface
         /// and opening them back up.
         /// </summary>
         /// <param name="sceneName">Target scene name.</param>
+        /// <summary>
+        /// Restarts any Lottie animation, Animator, or animation scripts on the loading curtain.
+        /// </summary>
+        private void RestartLoadingAnimations()
+        {
+            if (loadingContentGroup == null) return;
+
+            var scripts = loadingContentGroup.GetComponentsInChildren<MonoBehaviour>(true);
+            foreach (var script in scripts)
+            {
+                if (script == null) continue;
+                string typeName = script.GetType().Name;
+                if (typeName.Contains("Lottie") || typeName.Contains("Loader") || typeName.Contains("Animation"))
+                {
+                    script.enabled = false;
+                    script.enabled = true;
+
+                    var playMethod = script.GetType().GetMethod("Play", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, System.Type.EmptyTypes, null);
+                    if (playMethod != null)
+                    {
+                        try { playMethod.Invoke(script, null); } catch { }
+                    }
+                    var restartMethod = script.GetType().GetMethod("Restart", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, System.Type.EmptyTypes, null);
+                    if (restartMethod != null)
+                    {
+                        try { restartMethod.Invoke(script, null); } catch { }
+                    }
+                }
+            }
+
+            var animators = loadingContentGroup.GetComponentsInChildren<Animator>(true);
+            foreach (var anim in animators)
+            {
+                if (anim != null)
+                {
+                    anim.enabled = true;
+                    anim.Rebind();
+                    anim.Update(0f);
+                    anim.Play(0, -1, 0f);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Starts transition by closing curtains, loading the new scene asynchronously,
+        /// and opening them back up.
+        /// </summary>
+        /// <param name="sceneName">Target scene name.</param>
         public void LoadSceneWithTransition(string sceneName)
         {
             if (_isTransitioning) return;
-            // Unlock screen orientation when leaving the gameplay scene
-            OrientationManager.Unlock();
+            // All non-Game scenes are locked strictly to Portrait
+            if (sceneName != "Game")
+            {
+                OrientationManager.LockToPortrait();
+            }
             StartCoroutine(LoadSceneCoroutine(sceneName));
         }
 
@@ -234,6 +285,12 @@ namespace KidGame.Interface
             // 3. Wait one frame to let scene initialize
             yield return new WaitForEndOfFrame();
 
+            // Lock to Portrait if returning to a menu or non-Game scene
+            if (sceneName != "Game")
+            {
+                OrientationManager.LockToPortrait();
+            }
+
             // 4. Open curtains to reveal the new scene
             bool isOpened = false;
             OpenCurtains(() => isOpened = true);
@@ -255,6 +312,9 @@ namespace KidGame.Interface
         private IEnumerator LoadLevelCoroutine(string sceneName, string lessonNumber, string lessonTitle, string lessonSubtitle, Color themeColor)
         {
             _isTransitioning = true;
+
+            // Enable transition rotation grace period while curtain is closed
+            OrientationManager.AllowTransitionRotationGracePeriod();
 
             // Apply theme color to curtains
             SetCurtainColor(themeColor);
@@ -288,6 +348,10 @@ namespace KidGame.Interface
                 {
                     child.gameObject.SetActive(true);
                 }
+
+                // Restart Lottie and loader animations for fresh playback
+                RestartLoadingAnimations();
+
                 bool isFadeInComplete = false;
                 loadingContentGroup.DOFade(1f, 0.4f).OnComplete(() => isFadeInComplete = true);
                 yield return new WaitUntil(() => isFadeInComplete);
@@ -329,7 +393,10 @@ namespace KidGame.Interface
                 yield return new WaitUntil(() => isFadeOutComplete);
             }
 
-            // 6. Open curtains to reveal the newly loaded level
+            // 6. Lock screen orientation right before opening curtains to reveal game
+            OrientationManager.LockGameplayOrientation();
+
+            // 7. Open curtains to reveal the newly loaded level
             bool isOpened = false;
             OpenCurtains(() => isOpened = true);
             yield return new WaitUntil(() => isOpened);

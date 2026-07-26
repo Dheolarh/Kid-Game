@@ -94,8 +94,19 @@ namespace KidGame.Mechanics.Tracing
         {
             this.spellModeActive = spellModeActive;
             this.isLearningMode = isLearningMode;
-            this.valuesToTrace = new List<string>(valuesToTrace);
-            this.customSpawnCount = customSpawnCount;
+            this.valuesToTrace = valuesToTrace != null ? new List<string>(valuesToTrace) : new List<string>();
+
+            // Double-digit numbers and multi-character values (or spelling words) are automatically capped at max 2 slots
+            int maxSlots = 4;
+            if (this.valuesToTrace.Count > 0)
+            {
+                string cleanVal = this.valuesToTrace[0].Trim().Trim('\'', '"');
+                if (cleanVal.Length >= 2 || spellModeActive)
+                {
+                    maxSlots = 2;
+                }
+            }
+            this.customSpawnCount = Mathf.Clamp(customSpawnCount, 1, maxSlots);
 
             // Clear old tracers immediately to prevent premature completion checks
             _rowTracers.Clear();
@@ -336,7 +347,7 @@ namespace KidGame.Mechanics.Tracing
                     }
                 }
 
-                float spacingFactor = hasCommas ? 0f : -0.30f;
+                float spacingFactor = hasCommas ? 0f : -0.04f;
                 float totalFactor = cellFactorSum + (cleanNum.Length - 1) * spacingFactor;
                 return Mathf.Max(0.5f, totalFactor);
             }
@@ -365,12 +376,7 @@ namespace KidGame.Mechanics.Tracing
                     }
 
                     bool isWordNumber = IsDigitsOnly(clean);
-                    float spacingFactor = -0.15f;
-                    if (isWordNumber && clean.Length > 1)
-                    {
-                        spacingFactor = -0.30f;
-                    }
-
+                    float spacingFactor = -0.04f;
                     float wordFactor = cellFactorSum + (clean.Length - 1) * spacingFactor;
                     if (wordFactor > maxWordFactor)
                     {
@@ -1743,7 +1749,7 @@ namespace KidGame.Mechanics.Tracing
                     rowLe.preferredHeight = rowHeight;
                 }
 
-                // Size and scale the character cells inside this row with smart narrow-glyph and tight digit spacing
+                // Size and scale the character cells inside this row with precise narrow-glyph and natural digit spacing
                 int charCount = row.Count;
                 float totalWidthFactor = 0f;
                 List<float> cellWidthFactors = new List<float>();
@@ -1758,8 +1764,8 @@ namespace KidGame.Mechanics.Tracing
                     totalWidthFactor += factor;
                 }
 
-                // Tight negative spacing for multi-digit numbers so digits sit close together
-                float customSpacing = 10f;
+                // Gentle negative spacing to offset internal padding without digits touching (-0.04f for standard, -0.06f for narrow)
+                float customSpacing = 0f;
                 if (charCount > 1)
                 {
                     bool hasNarrowChar = false;
@@ -1769,7 +1775,7 @@ namespace KidGame.Mechanics.Tracing
                         char c = (tracer != null && tracer.ShapePrefab != null) ? tracer.ShapePrefab.name[0] : '0';
                         if (c == '1' || c == 'I' || c == 'l' || c == 'i') hasNarrowChar = true;
                     }
-                    customSpacing = hasNarrowChar ? -0.22f * rowHeight : -0.10f * rowHeight;
+                    customSpacing = hasNarrowChar ? -0.06f * rowHeight : -0.04f * rowHeight;
                 }
 
                 // Apply spacing to the HorizontalLayoutGroup inside tracerContainerRt

@@ -40,6 +40,7 @@ namespace KidGame.Interface
 
         private void Start()
         {
+            OrientationManager.LockToPortrait();
             InitializeLevelSelect();
         }
 
@@ -110,23 +111,28 @@ namespace KidGame.Interface
                 int levelsOnThisPage = Mathf.Min(levelsPerPage, totalLevels - spawnedLevels);
                 for (int i = 0; i < levelsOnThisPage; i++)
                 {
-                    LevelData data = levelDatabase.allLevels[spawnedLevels];
+                    int stepIndex = spawnedLevels + 1;
+                    int targetLevelNumber = (stepIndex <= LevelProgressionSequence.PlayOrder.Length)
+                        ? LevelProgressionSequence.PlayOrder[stepIndex - 1]
+                        : stepIndex;
+
+                    LevelData data = levelDatabase.allLevels.Find(l => l != null && l.levelNumber == targetLevelNumber);
                     spawnedLevels++;
 
-                    if (levelButtonPrefab != null)
+                    if (data != null && levelButtonPrefab != null)
                     {
                         GameObject btnGo = Instantiate(levelButtonPrefab, pageRt);
-                        btnGo.name = $"Level_{spawnedLevels} - {data.levelName}";
+                        btnGo.name = $"Step_{stepIndex} - Level_{data.levelNumber}";
 
-                        // 1. Update text label dynamically
+                        // 1. Update text label dynamically with sequential step index (1..261)
                         TMP_Text label = btnGo.GetComponentInChildren<TMP_Text>();
                         if (label != null)
                         {
-                            label.text = spawnedLevels.ToString();
+                            label.text = stepIndex.ToString();
                         }
 
-                        // 2. Setup progression state (unlocked state check using level number)
-                        bool isUnlocked = PlayerPrefs.GetInt($"Level_Unlocked_{data.levelNumber}", (data.isUnlockedByDefault || spawnedLevels == 1) ? 1 : 0) == 1;
+                        // 2. Setup progression state (unlocked state check using actual level number)
+                        bool isUnlocked = PlayerPrefs.GetInt($"Level_Unlocked_{data.levelNumber}", (data.isUnlockedByDefault || stepIndex == 1) ? 1 : 0) == 1;
 
                         // 3. Style level button and stars
                         var levelUI = btnGo.GetComponent<LevelButtonUI>();
@@ -196,8 +202,31 @@ namespace KidGame.Interface
             }
 
             Canvas.ForceUpdateCanvases();
-            _currentPage = 0;
-            scrollRect.horizontalNormalizedPosition = 0f;
+
+            // Auto-navigate to the page containing the current active/unlocked level step
+            int targetStepIndex = 1;
+            if (GameFlowManager.ActiveLevel != null)
+            {
+                targetStepIndex = LevelProgressionSequence.GetStepIndex(GameFlowManager.ActiveLevel.levelNumber);
+            }
+            else
+            {
+                // Find highest unlocked level step in the sequence
+                for (int sIdx = 1; sIdx <= totalLevels; sIdx++)
+                {
+                    int lvlNum = (sIdx <= LevelProgressionSequence.PlayOrder.Length) ? LevelProgressionSequence.PlayOrder[sIdx - 1] : sIdx;
+                    bool isUnlocked = PlayerPrefs.GetInt($"Level_Unlocked_{lvlNum}", (sIdx == 1) ? 1 : 0) == 1;
+                    if (isUnlocked)
+                    {
+                        targetStepIndex = sIdx;
+                    }
+                }
+            }
+
+            int targetPageIndex = (targetStepIndex - 1) / levelsPerPage;
+            _currentPage = Mathf.Clamp(targetPageIndex, 0, _totalPages - 1);
+            float normalizedPos = (_totalPages > 1) ? (float)_currentPage / (_totalPages - 1) : 0f;
+            scrollRect.horizontalNormalizedPosition = normalizedPos;
 
             UpdateNavigationUI();
             UpdatePageSizes();

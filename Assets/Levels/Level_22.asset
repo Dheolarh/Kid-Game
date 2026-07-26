@@ -15,7 +15,7 @@ MonoBehaviour:
   levelNumber: 22
   levelName: LESSON 22
   levelSubtitle: Curved Numbers
-  levelEndTip: Curvy numbers are fun!
+  levelEndTip: Drawing loops and straight lines makes a number!
   isUnlockedByDefault: 0
   themePresetName: Blue
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}

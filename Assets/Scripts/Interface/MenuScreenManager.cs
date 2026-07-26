@@ -44,6 +44,7 @@ namespace KidGame.Interface
 
         private void Awake()
         {
+            OrientationManager.LockToPortrait();
             if (profileScreenController == null)
             {
                 profileScreenController = FindComponentEvenInactive<ProfileScreenController>();

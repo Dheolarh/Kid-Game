@@ -1103,8 +1103,8 @@ namespace KidGame.Interface
                     PlayerPrefs.SetInt($"Level_Stars_{ActiveLevel.levelNumber}", starsEarned);
                 }
 
-                // Unlock the next level
-                int nextLevelNumber = ActiveLevel.levelNumber + 1;
+                // Unlock the next level in the interleaved curriculum sequence
+                int nextLevelNumber = LevelProgressionSequence.GetNextLevelNumber(ActiveLevel.levelNumber);
                 PlayerPrefs.SetInt($"Level_Unlocked_{nextLevelNumber}", 1);
                 PlayerPrefs.Save();
             }
@@ -1119,7 +1119,9 @@ namespace KidGame.Interface
 
         private IEnumerator PlayEndPanelSequence(int starsEarned)
         {
-            // ── Step 0: Pause all other sounds & play Victory sound based on stars won ─
+            // ── Step 0: Lock screen orientation strictly to Portrait mode for End Panel ─
+            OrientationManager.LockToPortrait();
+
             if (KidGame.Audio.AudioManager.Instance != null)
             {
                 KidGame.Audio.AudioManager.Instance.PauseAllSounds();
@@ -1312,7 +1314,7 @@ namespace KidGame.Interface
         private LevelData GetNextLevel()
         {
             if (ActiveLevel == null || levelDatabase == null) return null;
-            int nextNumber = ActiveLevel.levelNumber + 1;
+            int nextNumber = LevelProgressionSequence.GetNextLevelNumber(ActiveLevel.levelNumber);
             return levelDatabase.allLevels.Find(l => l != null && l.levelNumber == nextNumber);
         }
 

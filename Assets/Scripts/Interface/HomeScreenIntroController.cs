@@ -36,6 +36,7 @@ namespace KidGame.Interface
 
         private void Awake()
         {
+            OrientationManager.LockToPortrait();
             InitializeOriginalPositions();
         }
 
