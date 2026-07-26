@@ -199,6 +199,27 @@ namespace KidGame.Interface
         {
             if (loadingContentGroup == null) return;
 
+            // Safely complete any pending Lottie render jobs before disabling/enabling
+            var scripts = loadingContentGroup.GetComponentsInChildren<MonoBehaviour>(true);
+            foreach (var script in scripts)
+            {
+                if (script == null) continue;
+                if (script.GetType().Name.Contains("Lottie"))
+                {
+                    var type = script.GetType();
+                    var discardMethod = type.GetMethod("DiscardRenderJob", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    if (discardMethod != null)
+                    {
+                        try { discardMethod.Invoke(script, null); } catch { }
+                    }
+                    var completeMethod = type.GetMethod("CompleteRenderJob", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    if (completeMethod != null)
+                    {
+                        try { completeMethod.Invoke(script, null); } catch { }
+                    }
+                }
+            }
+
             // Deactivate and reactivate the loading content GameObject
             // so Unity's native OnDisable / OnEnable lifecycle triggers AutoPlay safely
             loadingContentGroup.gameObject.SetActive(false);

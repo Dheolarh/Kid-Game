@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Level_2
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 2
-  levelName: "LESSON 2"
-  levelSubtitle: "Practice Writing Zero"
-  levelEndTip: "Smooth circles make a great zero!"
+  levelName: LESSON 2
+  levelSubtitle: Practice Writing Zero
+  levelEndTip: Smooth circles make a great zero!
   isUnlockedByDefault: 0
   themePresetName: Pink
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
@@ -70,11 +70,11 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace:
     - 0
-    tracingCustomSpawnCount: 4
+    tracingCustomSpawnCount: 2
   - gameType: 5
     dialogueLines: []
     completionDialogueLines:
-    - text: "Nice and neat!"
+    - text: Nice and neat!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
