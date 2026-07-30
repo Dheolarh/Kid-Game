@@ -53,6 +53,10 @@ namespace KidGame.Mechanics.NumberRecall
         [Tooltip("If true, hints are displayed in empty answer slots (Learning Mode). If false, slots are empty (Normal Mode).")]
         [SerializeField] private bool isLearningMode = true;
 
+        [Header("Sequence Fill Mode Config")]
+        [Tooltip("If true, only 1 container grid spawns spanning minStartValue (Slot 1) to maxStartValue (Slot X), with all middle numbers missing.")]
+        [SerializeField] private bool isSequenceFillMode = false;
+
         private static readonly Color[] Palette =
         {
             new Color(0.91f, 0.30f, 0.24f),   // red
@@ -73,7 +77,7 @@ namespace KidGame.Mechanics.NumberRecall
 
         public Button NextButton => nextButton;
 
-        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true)
+        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true, bool isSequenceFillMode = false)
         {
             this.slotCount = slotCount;
             this.minSequenceLength = minSequenceLength;
@@ -87,6 +91,7 @@ namespace KidGame.Mechanics.NumberRecall
             this.minConsecutiveHidden = minConsecutiveHidden;
             this.maxConsecutiveHidden = maxConsecutiveHidden;
             this.isLearningMode = isLearningMode;
+            this.isSequenceFillMode = isSequenceFillMode;
 
             _slots.Clear();
             _cards.Clear();
@@ -164,56 +169,25 @@ namespace KidGame.Mechanics.NumberRecall
 
             var trayValues = new List<int>();
 
-            // Spawn configured number of slots
-            for (int sIdx = 0; sIdx < slotCount; sIdx++)
+            if (isSequenceFillMode)
             {
-                // Choose a random sequence length for this slot
-                int sequenceLength = Random.Range(minSequenceLength, maxSequenceLength + 1);
+                // Sequence Fill Mode: 1 container grid, Slot 1 = minStartValue (revealed), Slot X = maxStartValue (revealed), middle slots = missing hidden
+                int effectiveStep = step <= 0 ? 1 : step;
+                int actualStep = countBackwards ? -effectiveStep : effectiveStep;
 
-                // 1. Choose a random starting number for this sequence
-                int startValue;
-                int actualStep = countBackwards ? -step : step;
-                if (countBackwards)
-                {
-                    int minStartVal = minStartValue + (sequenceLength - 1) * step;
-                    int maxStartVal = Mathf.Max(minStartVal, maxStartValue);
-                    startValue = Random.Range(minStartVal, maxStartVal + 1);
-                }
-                else
-                {
-                    startValue = Random.Range(minStartValue, maxStartValue + 1);
-                }
+                int startValue = countBackwards ? Mathf.Max(minStartValue, maxStartValue) : Mathf.Min(minStartValue, maxStartValue);
+                int endValue = countBackwards ? Mathf.Min(minStartValue, maxStartValue) : Mathf.Max(minStartValue, maxStartValue);
 
-                // 2. Determine which indices to hide based on interval config
+                int sequenceLength = (Mathf.Abs(endValue - startValue) / effectiveStep) + 1;
+                sequenceLength = Mathf.Max(3, sequenceLength);
+
                 var hiddenIndices = new List<int>();
-                int minRev = Mathf.Max(1, minConsecutiveRevealed);
-                int maxRev = Mathf.Max(minRev, maxConsecutiveRevealed);
-                int minHid = Mathf.Max(1, minConsecutiveHidden);
-                int maxHid = Mathf.Max(minHid, maxConsecutiveHidden);
-
-                int currentIdx = 0;
-                bool currentlyHidden = false; // Start with revealed numbers
-                while (currentIdx < sequenceLength)
+                // Hide all middle indices from 1 to sequenceLength - 2
+                for (int i = 1; i < sequenceLength - 1; i++)
                 {
-                    if (currentlyHidden)
-                    {
-                        int count = Random.Range(minHid, maxHid + 1);
-                        for (int i = 0; i < count && currentIdx < sequenceLength; i++)
-                        {
-                            hiddenIndices.Add(currentIdx);
-                            currentIdx++;
-                        }
-                        currentlyHidden = false;
-                    }
-                    else
-                    {
-                        int count = Random.Range(minRev, maxRev + 1);
-                        currentIdx += count;
-                        currentlyHidden = true;
-                    }
+                    hiddenIndices.Add(i);
                 }
 
-                // 3. Spawns the sequence container slot
                 var slotGo = Instantiate(slotPrefab, slotsContainer);
                 var slot = slotGo.GetComponent<NumberRecallSlot>();
                 if (slot == null) slot = slotGo.AddComponent<NumberRecallSlot>();
@@ -221,12 +195,78 @@ namespace KidGame.Mechanics.NumberRecall
                 slot.Setup(startValue, sequenceLength, actualStep, hiddenIndices, Palette, OnSequenceCompleted, isLearningMode);
                 _slots.Add(slot);
 
-                // Collect missing values for answer tray
-                for (int i = 0; i < sequenceLength; i++)
+                // Collect missing values for answer tray (all middle numbers)
+                for (int i = 1; i < sequenceLength - 1; i++)
                 {
-                    if (hiddenIndices.Contains(i))
+                    trayValues.Add(startValue + i * actualStep);
+                }
+            }
+            else
+            {
+                // Normal Recall Mode: Spawn configured number of slots
+                for (int sIdx = 0; sIdx < slotCount; sIdx++)
+                {
+                    // Choose a random sequence length for this slot
+                    int sequenceLength = Random.Range(minSequenceLength, maxSequenceLength + 1);
+
+                    // 1. Choose a random starting number for this sequence
+                    int startValue;
+                    int actualStep = countBackwards ? -step : step;
+                    if (countBackwards)
                     {
-                        trayValues.Add(startValue + i * actualStep);
+                        int minStartVal = minStartValue + (sequenceLength - 1) * step;
+                        int maxStartVal = Mathf.Max(minStartVal, maxStartValue);
+                        startValue = Random.Range(minStartVal, maxStartVal + 1);
+                    }
+                    else
+                    {
+                        startValue = Random.Range(minStartValue, maxStartValue + 1);
+                    }
+
+                    // 2. Determine which indices to hide based on interval config
+                    var hiddenIndices = new List<int>();
+                    int minRev = Mathf.Max(1, minConsecutiveRevealed);
+                    int maxRev = Mathf.Max(minRev, maxConsecutiveRevealed);
+                    int minHid = Mathf.Max(1, minConsecutiveHidden);
+                    int maxHid = Mathf.Max(minHid, maxConsecutiveHidden);
+
+                    int currentIdx = 0;
+                    bool currentlyHidden = false; // Start with revealed numbers
+                    while (currentIdx < sequenceLength)
+                    {
+                        if (currentlyHidden)
+                        {
+                            int count = Random.Range(minHid, maxHid + 1);
+                            for (int i = 0; i < count && currentIdx < sequenceLength; i++)
+                            {
+                                hiddenIndices.Add(currentIdx);
+                                currentIdx++;
+                            }
+                            currentlyHidden = false;
+                        }
+                        else
+                        {
+                            int count = Random.Range(minRev, maxRev + 1);
+                            currentIdx += count;
+                            currentlyHidden = true;
+                        }
+                    }
+
+                    // 3. Spawns the sequence container slot
+                    var slotGo = Instantiate(slotPrefab, slotsContainer);
+                    var slot = slotGo.GetComponent<NumberRecallSlot>();
+                    if (slot == null) slot = slotGo.AddComponent<NumberRecallSlot>();
+
+                    slot.Setup(startValue, sequenceLength, actualStep, hiddenIndices, Palette, OnSequenceCompleted, isLearningMode);
+                    _slots.Add(slot);
+
+                    // Collect missing values for answer tray
+                    for (int i = 0; i < sequenceLength; i++)
+                    {
+                        if (hiddenIndices.Contains(i))
+                        {
+                            trayValues.Add(startValue + i * actualStep);
+                        }
                     }
                 }
             }

@@ -275,6 +275,8 @@ namespace KidGame.Editor
                         break;
 
                     case GameType.Recall:
+                        page.recallIsSequenceFillMode = EditorGUILayout.Toggle("Sequence Fill Mode (1 to X Fill)", page.recallIsSequenceFillMode);
+                        page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
                         page.recallSlotCount = EditorGUILayout.IntSlider("Slot Count", page.recallSlotCount, 1, 10);
                         page.recallMinSequenceLength = EditorGUILayout.IntField("Min Seq Length", page.recallMinSequenceLength);
                         page.recallMaxSequenceLength = EditorGUILayout.IntField("Max Seq Length", page.recallMaxSequenceLength);
@@ -489,6 +491,8 @@ namespace KidGame.Editor
                     recallMaxConsecutiveRevealed = page.recallMaxConsecutiveRevealed,
                     recallMinConsecutiveHidden = page.recallMinConsecutiveHidden,
                     recallMaxConsecutiveHidden = page.recallMaxConsecutiveHidden,
+                    recallIsLearningMode = page.recallIsLearningMode,
+                    recallIsSequenceFillMode = page.recallIsSequenceFillMode,
                     tracingSpellModeActive = page.tracingSpellModeActive,
                     tracingIsLearningMode = page.tracingIsLearningMode,
                     tracingCustomSpawnCount = page.tracingCustomSpawnCount,
