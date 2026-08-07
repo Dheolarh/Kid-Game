@@ -101,6 +101,7 @@ namespace KidGame.Interface
 
         // State variables
         private int _currentPageIndex = 0;
+        public int CurrentPageIndex => _currentPageIndex;
         private int _totalMistakes = 0;
         private int _totalCorrectRequired = 0;
         private int _consecutiveRightAnswers = 0;
@@ -1146,8 +1147,8 @@ namespace KidGame.Interface
                     PlayerPrefs.SetInt($"Level_Stars_{ActiveLevel.levelNumber}", starsEarned);
                 }
 
-                // Unlock the next level in the interleaved curriculum sequence
-                int nextLevelNumber = LevelProgressionSequence.GetNextLevelNumber(ActiveLevel.levelNumber);
+                // Unlock the next level in standard sequential order
+                int nextLevelNumber = ActiveLevel.levelNumber + 1;
                 PlayerPrefs.SetInt($"Level_Unlocked_{nextLevelNumber}", 1);
                 PlayerPrefs.Save();
             }
@@ -1357,7 +1358,7 @@ namespace KidGame.Interface
         private LevelData GetNextLevel()
         {
             if (ActiveLevel == null || levelDatabase == null) return null;
-            int nextNumber = LevelProgressionSequence.GetNextLevelNumber(ActiveLevel.levelNumber);
+            int nextNumber = ActiveLevel.levelNumber + 1;
             return levelDatabase.allLevels.Find(l => l != null && l.levelNumber == nextNumber);
         }
 

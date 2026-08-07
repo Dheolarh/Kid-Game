@@ -376,37 +376,39 @@ namespace KidGame.Mechanics.Counting
 
         // ── Generation Helpers ────────────────────────────────────────────────
 
-        private List<(List<int> itemValues, int totalSum)> GenerateCountingDiceOrFingerData(int count, int minItems, int maxItems, int maxValPerItem)
+        private List<(List<int> itemValues, int totalSum)> GenerateCountingDiceOrFingerData(int count, int minCount, int maxCount, int maxValPerItem)
         {
             var results = new List<(List<int>, int)>();
-            var usedSums = new HashSet<int>();
-            int maxTries = 1000;
+            var targetSums = UniqueRandomList(count, minCount, maxCount);
 
-            while (results.Count < count && maxTries-- > 0)
+            foreach (int targetSum in targetSums)
             {
-                int itemCount = Random.Range(minItems, maxItems + 1);
-                List<int> itemValues = new List<int>();
-                int totalSum = 0;
-                for (int d = 0; d < itemCount; d++)
-                {
-                    int val = Random.Range(1, maxValPerItem + 1);
-                    itemValues.Add(val);
-                    totalSum += val;
-                }
-
-                if (!usedSums.Contains(totalSum))
-                {
-                    results.Add((itemValues, totalSum));
-                    usedSums.Add(totalSum);
-                }
-            }
-
-            if (results.Count < count)
-            {
-                Debug.LogWarning($"[CountingGame] Could only generate {results.Count}/{count} unique sums. Consider widening minCount/maxCount.");
+                var itemValues = BreakDownTargetSumIntoItems(targetSum, maxValPerItem);
+                results.Add((itemValues, targetSum));
             }
 
             return results;
+        }
+
+        private List<int> BreakDownTargetSumIntoItems(int targetSum, int maxValPerItem)
+        {
+            var items = new List<int>();
+            int remaining = targetSum;
+
+            if (remaining <= maxValPerItem)
+            {
+                items.Add(remaining);
+                return items;
+            }
+
+            while (remaining > 0)
+            {
+                int chunk = Mathf.Min(maxValPerItem, remaining);
+                items.Add(chunk);
+                remaining -= chunk;
+            }
+
+            return items;
         }
 
         private GameObject[] GetActiveThemePrefabs()
@@ -424,9 +426,11 @@ namespace KidGame.Mechanics.Counting
 
         private List<int> UniqueRandomList(int count, int min, int max)
         {
-            var pool = Enumerable.Range(min, max - min + 1).ToList();
+            int rangeCount = Mathf.Max(1, max - min + 1);
+            int safeCount = Mathf.Min(count, rangeCount);
+            var pool = Enumerable.Range(min, rangeCount).ToList();
             Shuffle(pool);
-            return pool.Take(count).ToList();
+            return pool.Take(safeCount).ToList();
         }
 
         private void UpdateScrollLocking()

@@ -254,9 +254,50 @@ MonoBehaviour:
   - {fileID: 5649623561697560360, guid: fa0cddad888e1e245bc5b37029dabc25, type: 3}
   - {fileID: 2576838590016289760, guid: f422caa5dc3a3c549b29090ce2619604, type: 3}
   themes:
-  - themeName: 
+  - themeName: Animals
     isEnabled: 0
-    prefabs: []
+    prefabs:
+    - {fileID: 8910757150115945586, guid: 98b3938581d250f4cb40ca8bcc40d70e, type: 3}
+    - {fileID: 8910757150115945586, guid: 4f42eeeea9cfcc749a5bc241dd451394, type: 3}
+    - {fileID: 8910757150115945586, guid: 7b525bdaa416c4948985e4145a6eb065, type: 3}
+    - {fileID: 8910757150115945586, guid: a558367ae2c9a3043a6221760faeeab6, type: 3}
+    - {fileID: 8910757150115945586, guid: 75993a8a2264fc14f840ad758782108a, type: 3}
+    - {fileID: 8910757150115945586, guid: cc94475f63b0c9e41a9600aeef7d5ceb, type: 3}
+    - {fileID: 8910757150115945586, guid: 79375c6d0fc5f1849b83f3bbfcbdc182, type: 3}
+    - {fileID: 8910757150115945586, guid: 7c18bb56556814f4d863c1e575860993, type: 3}
+  - themeName: Vehicle
+    isEnabled: 0
+    prefabs:
+    - {fileID: 8910757150115945586, guid: a6e9bd0bf4b34c64984c6e8d0da8ed0a, type: 3}
+    - {fileID: 8910757150115945586, guid: d549244daf15d3c489be6254261f5933, type: 3}
+    - {fileID: 8910757150115945586, guid: bbd10c21940d65a4cace1f73627eebb5, type: 3}
+    - {fileID: 8910757150115945586, guid: 43c3b31eca393b5489a6a4ffb1fe189a, type: 3}
+    - {fileID: 8910757150115945586, guid: 5f8a50475c08e264e982436d6ba9fc1d, type: 3}
+    - {fileID: 8910757150115945586, guid: 6467235880b2d4449b320d6fce06e7db, type: 3}
+    - {fileID: 8910757150115945586, guid: 13aec6ff77124b04c83e0aae99b78607, type: 3}
+    - {fileID: 8910757150115945586, guid: c1f51237984d16046ae67fb2786ee849, type: 3}
+  - themeName: Ocean
+    isEnabled: 0
+    prefabs:
+    - {fileID: 8910757150115945586, guid: d2e5d0a68f16431409d74b1ade19460b, type: 3}
+    - {fileID: 8910757150115945586, guid: cb00c7e44f65e2849a928cdb1b83027b, type: 3}
+    - {fileID: 8910757150115945586, guid: 5f3887a9c06ba834f84a5ff05f4d4ad8, type: 3}
+    - {fileID: 8910757150115945586, guid: a9602583c8cf6dc4cba0567ef7aed62b, type: 3}
+    - {fileID: 8910757150115945586, guid: f52124aa6cad4d848b5ab23b10725b9f, type: 3}
+    - {fileID: 8910757150115945586, guid: 1067140403bb9d8419a07bb729f5a3a9, type: 3}
+    - {fileID: 8910757150115945586, guid: 02899011fe0d97e479ffea73b0e7047e, type: 3}
+    - {fileID: 8910757150115945586, guid: 33d7341c696be6a4d8942b6e33ce155a, type: 3}
+  - themeName: Kitchen
+    isEnabled: 0
+    prefabs:
+    - {fileID: 8910757150115945586, guid: 3eb3205b669d18f42a60ecd55e0c4263, type: 3}
+    - {fileID: 8910757150115945586, guid: 11f0cb522d5aac94cb4471aef951ca9f, type: 3}
+    - {fileID: 8910757150115945586, guid: e38aee690dce693478a7d711af230f7b, type: 3}
+    - {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
+    - {fileID: 8910757150115945586, guid: aa9edd730bb14814a9112144aa8728c2, type: 3}
+    - {fileID: 8910757150115945586, guid: d775c7155794eba4aae6150ba70fe71e, type: 3}
+    - {fileID: 8910757150115945586, guid: 3d56fce855d2f36419525a849f1846ad, type: 3}
+    - {fileID: 8910757150115945586, guid: b41f2eecc03755549bcf66d211bef4b1, type: 3}
 --- !u!114 &3497157194791432720
 MonoBehaviour:
   m_ObjectHideFlags: 0

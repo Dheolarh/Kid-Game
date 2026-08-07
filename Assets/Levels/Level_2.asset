@@ -13,75 +13,29 @@ MonoBehaviour:
   m_Name: Level_2
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 2
-  levelName: LESSON 2
-  levelSubtitle: Practice Writing Zero
-  levelEndTip: Smooth circles make a great zero!
+  levelName: Level_2
+  levelSubtitle: Learning Number 1
+  levelEndTip: Practice tracing 1 carefully!
   isUnlockedByDefault: 0
-  themePresetName: Pink
+  themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 0
-    tracingCustomSpawnCount: 2
-  - gameType: 5
-    dialogueLines: []
+    dialogueLines:
+    - text: Hi {playername}! Next up is the number 1!
+      mascotAnimationTrigger: isHi
+    - text: Number 1 is a straight line going straight down. Start at the top dot!
+      mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Nice and neat!
+    - text: Great job tracing 1!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: 
+    countingActiveThemeName: ''
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -93,13 +47,13 @@ MonoBehaviour:
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: 
+    additionActiveThemeName: ''
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
+    comparisonActiveThemeName: ''
     matchingLeftVariant: 0
     matchingRightVariant: 1
     matchingSlotCount: 5
@@ -118,10 +72,65 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 0
-    tracingCustomSpawnCount: 4
-  sceneToLoad: Game
-  levelIcon: {fileID: 0}
+    - '1'
+    tracingCustomSpawnCount: 1
+  - gameType: 5
+    dialogueLines:
+    - text: Let us practice tracing the number 1 two times!
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Super star! You mastered the number 1!
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: ''
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: ''
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 0
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: ''
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - '1'
+    - '1'
+    tracingCustomSpawnCount: 2

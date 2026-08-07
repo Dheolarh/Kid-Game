@@ -19,9 +19,15 @@ namespace KidGame.Interface
         /// Detects if the physical device is a Tablet or Large Screen device.
         /// Mobile phones return false (and will be locked to Portrait always).
         /// </summary>
+        /// <summary>
+        /// Detects if the physical device is a Tablet or Large Screen device.
+        /// Mobile phones return false (and will be locked to Portrait always).
+        /// </summary>
         public static bool IsTabletDevice()
         {
-#if UNITY_IOS
+#if UNITY_EDITOR
+            return true; // Always allow testing tablet & landscape mode in Unity Editor / Device Simulator
+#elif UNITY_IOS
             return UnityEngine.iOS.Device.generation.ToString().Contains("iPad");
 #else
             if (Screen.dpi <= 0) return false;
@@ -38,9 +44,26 @@ namespace KidGame.Interface
         public static void LockToPortrait()
         {
             IsPortrait = true;
+#if UNITY_EDITOR
+            EnableAutoRotation();
+#else
             IsLocked = true;
             Screen.orientation = ScreenOrientation.Portrait;
-            Debug.Log("[OrientationManager] Orientation locked strictly to PORTRAIT.");
+#endif
+            Debug.Log("[OrientationManager] Orientation set to PORTRAIT.");
+        }
+
+        /// <summary>
+        /// Enables AutoRotation for tablets and Editor simulator so Canvas resolution auto-adjusts.
+        /// </summary>
+        public static void EnableAutoRotation()
+        {
+            IsLocked = false;
+            Screen.autorotateToPortrait = true;
+            Screen.autorotateToPortraitUpsideDown = false;
+            Screen.autorotateToLandscapeLeft = true;
+            Screen.autorotateToLandscapeRight = true;
+            Screen.orientation = ScreenOrientation.AutoRotation;
         }
 
         /// <summary>
@@ -55,12 +78,7 @@ namespace KidGame.Interface
                 return;
             }
 
-            IsLocked = false;
-            Screen.orientation = ScreenOrientation.AutoRotation;
-            Screen.autorotateToPortrait = true;
-            Screen.autorotateToPortraitUpsideDown = false;
-            Screen.autorotateToLandscapeLeft = true;
-            Screen.autorotateToLandscapeRight = true;
+            EnableAutoRotation();
             Debug.Log("[OrientationManager] Grace period active (Tablet detected): AutoRotation enabled during transition.");
         }
 
@@ -70,6 +88,13 @@ namespace KidGame.Interface
         /// </summary>
         public static void LockGameplayOrientation()
         {
+#if UNITY_EDITOR
+            IsPortrait = Screen.height >= Screen.width;
+            EnableAutoRotation();
+            Debug.Log($"[OrientationManager] Editor Simulator mode: {(IsPortrait ? "PORTRAIT" : "LANDSCAPE")}");
+            return;
+#endif
+
             if (!IsTabletDevice())
             {
                 LockToPortrait();

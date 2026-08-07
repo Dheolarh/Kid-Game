@@ -13,77 +13,29 @@ MonoBehaviour:
   m_Name: Level_3
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 3
-  levelName: "LESSON 3"
-  levelSubtitle: "The Number One"
-  levelEndTip: "One is a straight line down!"
+  levelName: Level_3
+  levelSubtitle: Learning Number 2
+  levelEndTip: Practice tracing 2 carefully!
   isUnlockedByDefault: 0
-  themePresetName: TealGreen
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  themePresetName: Blue
+  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: "Let's trace One!"
+    - text: Hi {playername}! Today we are writing the number 2!
+      mascotAnimationTrigger: isHi
+    - text: Curve around the top and slide straight across the bottom!
       mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 1
-    tracingCustomSpawnCount: 1
-  - gameType: 5
-    dialogueLines: []
     completionDialogueLines:
-    - text: "Yay! One complete!"
+    - text: Wonderful job tracing 2!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: 
+    countingActiveThemeName: ''
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -95,13 +47,13 @@ MonoBehaviour:
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: 
+    additionActiveThemeName: ''
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
+    comparisonActiveThemeName: ''
     matchingLeftVariant: 0
     matchingRightVariant: 1
     matchingSlotCount: 5
@@ -120,10 +72,65 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 1
+    - '2'
+    tracingCustomSpawnCount: 1
+  - gameType: 5
+    dialogueLines:
+    - text: Now trace the number 2 two times!
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Brilliant! You mastered the number 2!
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: ''
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: ''
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 0
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: ''
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - '2'
+    - '2'
     tracingCustomSpawnCount: 2
-  sceneToLoad: Game
-  levelIcon: {fileID: 0}

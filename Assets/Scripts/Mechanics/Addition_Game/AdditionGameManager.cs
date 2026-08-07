@@ -414,45 +414,40 @@ namespace KidGame.Mechanics.Addition
             _cards.Clear();
         }
 
-        private List<(List<int> leftValues, List<int> rightValues, int leftSum, int rightSum)> GenerateDiceOrFingerPairs(int count, int minItems, int maxItems, int maxValPerItem)
+        private List<(List<int> leftValues, List<int> rightValues, int leftSum, int rightSum)> GenerateDiceOrFingerPairs(int count, int minPerGrid, int maxPerGrid, int maxValPerItem)
         {
             var results = new List<(List<int>, List<int>, int, int)>();
-            var usedSums = new HashSet<int>();
-            int maxTries = 1000;
+            var normalPairs = GenerateUniqueSumPairs(count, minPerGrid, maxPerGrid);
 
-            while (results.Count < count && maxTries-- > 0)
+            foreach (var pair in normalPairs)
             {
-                int leftCount = Random.Range(minItems, maxItems + 1);
-                int rightCount = Random.Range(minItems, maxItems + 1);
-
-                List<int> leftFaces = new List<int>();
-                int leftSum = 0;
-                for (int d = 0; d < leftCount; d++)
-                {
-                    int face = Random.Range(1, maxValPerItem + 1);
-                    leftFaces.Add(face);
-                    leftSum += face;
-                }
-
-                List<int> rightFaces = new List<int>();
-                int rightSum = 0;
-                for (int d = 0; d < rightCount; d++)
-                {
-                    int face = Random.Range(1, maxValPerItem + 1);
-                    rightFaces.Add(face);
-                    rightSum += face;
-                }
-
-                int totalSum = leftSum + rightSum;
-
-                if (!usedSums.Contains(totalSum))
-                {
-                    results.Add((leftFaces, rightFaces, leftSum, rightSum));
-                    usedSums.Add(totalSum);
-                }
+                var leftValues = BreakDownTargetSumIntoItems(pair.left, maxValPerItem);
+                var rightValues = BreakDownTargetSumIntoItems(pair.right, maxValPerItem);
+                results.Add((leftValues, rightValues, pair.left, pair.right));
             }
 
             return results;
+        }
+
+        private List<int> BreakDownTargetSumIntoItems(int targetSum, int maxValPerItem)
+        {
+            var items = new List<int>();
+            int remaining = targetSum;
+
+            if (remaining <= maxValPerItem)
+            {
+                items.Add(remaining);
+                return items;
+            }
+
+            while (remaining > 0)
+            {
+                int chunk = Mathf.Min(maxValPerItem, remaining);
+                items.Add(chunk);
+                remaining -= chunk;
+            }
+
+            return items;
         }
 
         // ── Generation Helpers ────────────────────────────────────────────────

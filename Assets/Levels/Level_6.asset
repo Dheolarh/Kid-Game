@@ -13,127 +13,29 @@ MonoBehaviour:
   m_Name: Level_6
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 6
-  levelName: "LESSON 6"
-  levelSubtitle: "Remembering 0, 1, 2"
-  levelEndTip: "Zero, One, Two, you know them!"
+  levelName: Level_6
+  levelSubtitle: Learning Number 5
+  levelEndTip: Practice tracing 5 carefully!
   isUnlockedByDefault: 0
-  themePresetName: Purple
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  themePresetName: TealGreen
+  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: "Let's remember our numbers!"
+    - text: Hi {playername}! High five! It is time for number 5!
+      mascotAnimationTrigger: isHi
+    - text: Go down, make a big round belly, then give it a hat on top!
       mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 0
-    tracingCustomSpawnCount: 4
-  - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 1
-    tracingCustomSpawnCount: 4
-  - gameType: 5
-    dialogueLines: []
     completionDialogueLines:
-    - text: "You remembered them all!"
+    - text: High five! Outstanding tracing on number 5!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: 
+    countingActiveThemeName: ''
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -145,13 +47,13 @@ MonoBehaviour:
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: 
+    additionActiveThemeName: ''
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
+    comparisonActiveThemeName: ''
     matchingLeftVariant: 0
     matchingRightVariant: 1
     matchingSlotCount: 5
@@ -170,10 +72,65 @@ MonoBehaviour:
     recallMinConsecutiveHidden: 1
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
-    tracingCustomSpawnCount: 4
-  sceneToLoad: Game
-  levelIcon: {fileID: 0}
+    - '5'
+    tracingCustomSpawnCount: 1
+  - gameType: 5
+    dialogueLines:
+    - text: Let us trace number 5 two times!
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Sensational! You mastered number 5!
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: ''
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: ''
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 0
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: ''
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - '5'
+    - '5'
+    tracingCustomSpawnCount: 2

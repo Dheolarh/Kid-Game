@@ -89,6 +89,7 @@ namespace KidGame.Mechanics.Tracing
 
         public Button ContinueButton => continueButton;
         public GameObject AnswerGrid => answerGrid;
+        public List<string> ValuesToTrace => valuesToTrace;
 
         public void Configure(bool spellModeActive, List<string> valuesToTrace, int customSpawnCount, bool isLearningMode = true)
         {

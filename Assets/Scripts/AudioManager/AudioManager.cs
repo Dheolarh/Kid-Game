@@ -346,6 +346,29 @@ namespace KidGame.Audio
         }
 
         /// <summary>
+        /// Plays the voice audio clip corresponding to a number string (e.g. "1".."50").
+        /// </summary>
+        public void PlayNumberVoice(string numberStr, AudioSource customSource = null)
+        {
+            if (string.IsNullOrEmpty(numberStr)) return;
+            string cleanNum = numberStr.Trim().Trim('\'', '"');
+
+            AudioClip voiceClip = Resources.Load<AudioClip>($"Audio/1 - 50/{cleanNum}");
+            if (voiceClip == null)
+            {
+                Debug.LogWarning($"[AudioManager] Voice audio clip for number '{cleanNum}' not found at Resources/Audio/1 - 50/{cleanNum}.");
+                return;
+            }
+
+            float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+            AudioSource src = customSource != null ? customSource : sfxSource;
+            if (src != null)
+            {
+                src.PlayOneShot(voiceClip, finalVol);
+            }
+        }
+
+        /// <summary>
         /// Pauses/stops background music and any active SFX when the end game panel shows up.
         /// </summary>
         public void PauseAllSounds()
