@@ -18,6 +18,8 @@ namespace KidGame.Mechanics.NumberRecall
 
         [Header("Containers")]
         [SerializeField] private Transform slotsContainer;
+        [Tooltip("Separate container transform configured specifically for Premade Recall Slots (Optional). If null, uses slotsContainer.")]
+        [SerializeField] private Transform premadeSlotsContainer;
         [SerializeField] private Transform answersContainer;
 
         [Header("Shared")]
@@ -57,6 +59,10 @@ namespace KidGame.Mechanics.NumberRecall
         [Tooltip("If true, only 1 container grid spawns spanning minStartValue (Slot 1) to maxStartValue (Slot X), with all middle numbers missing.")]
         [SerializeField] private bool isSequenceFillMode = false;
 
+        [Header("Premade Level Config")]
+        [Tooltip("Optional premade recall slot prefab. If assigned, spawns this pre-designed layout instead of procedural generation.")]
+        [SerializeField] private GameObject premadeSlotPrefab;
+
         private static readonly Color[] Palette =
         {
             new Color(0.91f, 0.30f, 0.24f),   // red
@@ -77,7 +83,7 @@ namespace KidGame.Mechanics.NumberRecall
 
         public Button NextButton => nextButton;
 
-        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true, bool isSequenceFillMode = false)
+        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true, bool isSequenceFillMode = false, GameObject premadeSlotPrefab = null)
         {
             this.slotCount = slotCount;
             this.minSequenceLength = minSequenceLength;
@@ -92,6 +98,7 @@ namespace KidGame.Mechanics.NumberRecall
             this.maxConsecutiveHidden = maxConsecutiveHidden;
             this.isLearningMode = isLearningMode;
             this.isSequenceFillMode = isSequenceFillMode;
+            this.premadeSlotPrefab = premadeSlotPrefab;
 
             _slots.Clear();
             _cards.Clear();
@@ -167,9 +174,29 @@ namespace KidGame.Mechanics.NumberRecall
             _answeredCount = 0;
             SetNextButtonInteractable(false);
 
+            Transform activeSlotsContainer = (premadeSlotPrefab != null && premadeSlotsContainer != null) 
+                ? premadeSlotsContainer 
+                : slotsContainer;
+
+            if (premadeSlotsContainer != null && premadeSlotsContainer != slotsContainer)
+            {
+                bool isPremade = (premadeSlotPrefab != null);
+                premadeSlotsContainer.gameObject.SetActive(isPremade);
+                slotsContainer.gameObject.SetActive(!isPremade);
+            }
+
             var trayValues = new List<int>();
 
-            if (isSequenceFillMode)
+            if (premadeSlotPrefab != null)
+            {
+                // Premade Slot Mode: Spawn pre-designed level layout prefab
+                var slotGo = Instantiate(premadeSlotPrefab, activeSlotsContainer);
+                var premadeSlot = slotGo.GetComponent<PremadeRecallSlot>();
+                if (premadeSlot == null) premadeSlot = slotGo.AddComponent<PremadeRecallSlot>();
+
+                trayValues = premadeSlot.Setup(OnSequenceCompleted, isLearningMode);
+            }
+            else if (isSequenceFillMode)
             {
                 // Sequence Fill Mode: 1 container grid, Slot 1 = minStartValue (revealed), Slot X = maxStartValue (revealed), middle slots = missing hidden
                 int effectiveStep = step <= 0 ? 1 : step;
@@ -305,7 +332,8 @@ namespace KidGame.Mechanics.NumberRecall
         private void OnSequenceCompleted()
         {
             _answeredCount++;
-            if (_answeredCount >= _slots.Count)
+            int targetCount = (premadeSlotPrefab != null) ? 1 : _slots.Count;
+            if (_answeredCount >= targetCount)
             {
                 SetNextButtonInteractable(true);
             }
@@ -314,28 +342,30 @@ namespace KidGame.Mechanics.NumberRecall
 
         private void ClearPrevious()
         {
-            if (slotsContainer != null)
+            ClearContainer(slotsContainer);
+            if (premadeSlotsContainer != null && premadeSlotsContainer != slotsContainer)
             {
-                for (int i = slotsContainer.childCount - 1; i >= 0; i--)
-                {
-                    var child = slotsContainer.GetChild(i);
-                    child.gameObject.SetActive(false);
-                    child.SetParent(null);
-                    if (Application.isPlaying) Destroy(child.gameObject);
-                    else DestroyImmediate(child.gameObject);
-                }
+                ClearContainer(premadeSlotsContainer);
             }
-            if (answersContainer != null)
+            ClearContainer(answersContainer);
+            ClearPreviousState();
+        }
+
+        private void ClearContainer(Transform container)
+        {
+            if (container == null) return;
+            for (int i = container.childCount - 1; i >= 0; i--)
             {
-                for (int i = answersContainer.childCount - 1; i >= 0; i--)
-                {
-                    var child = answersContainer.GetChild(i);
-                    child.gameObject.SetActive(false);
-                    child.SetParent(null);
-                    if (Application.isPlaying) Destroy(child.gameObject);
-                    else DestroyImmediate(child.gameObject);
-                }
+                var child = container.GetChild(i);
+                child.gameObject.SetActive(false);
+                child.SetParent(null);
+                if (Application.isPlaying) Destroy(child.gameObject);
+                else DestroyImmediate(child.gameObject);
             }
+        }
+
+        private void ClearPreviousState()
+        {
             _slots.Clear();
             _cards.Clear();
         }
@@ -424,6 +454,10 @@ namespace KidGame.Mechanics.NumberRecall
 
         public bool IsRoundCompleted()
         {
+            if (premadeSlotPrefab != null)
+            {
+                return _answeredCount >= 1;
+            }
             if (_slots == null || _slots.Count == 0) return false;
             return _answeredCount >= _slots.Count;
         }

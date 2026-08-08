@@ -49,11 +49,25 @@ namespace KidGame.Mechanics.Counting
         private bool        _isScrolling;
         private ScrollRect  _activeScrollRect;
 
+        private Vector3   _initialLocalScale = Vector3.one;
+        private bool      _scaleCached = false;
+
         // ── Lifecycle ─────────────────────────────────────────────────────────
 
         private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
+            CacheInitialScale();
+        }
+
+        private void CacheInitialScale()
+        {
+            if (!_scaleCached)
+            {
+                _initialLocalScale = transform.localScale;
+                if (_initialLocalScale == Vector3.zero) _initialLocalScale = Vector3.one;
+                _scaleCached = true;
+            }
         }
 
         private void OnDestroy()
@@ -67,6 +81,9 @@ namespace KidGame.Mechanics.Counting
         {
             Value            = value;
             CardColor        = color;
+            _isAccepted      = false;
+            
+            CacheInitialScale();
             
             if (!string.IsNullOrEmpty(displayText))
             {
@@ -84,7 +101,7 @@ namespace KidGame.Mechanics.Counting
 
             // Pop-in on spawn
             transform.localScale = Vector3.zero;
-            transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            transform.DOScale(_initialLocalScale, 0.3f).SetEase(Ease.OutBack);
         }
 
         // ── Drag Handlers ─────────────────────────────────────────────────────
@@ -141,7 +158,7 @@ namespace KidGame.Mechanics.Counting
             _canvasGroup.blocksRaycasts = false;
 
             // Slight scale-up: feels "picked up"
-            transform.DOScale(Vector3.one * 1.08f, 0.12f).SetEase(Ease.OutSine);
+            transform.DOScale(_initialLocalScale * 1.08f, 0.12f).SetEase(Ease.OutSine);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -185,7 +202,7 @@ namespace KidGame.Mechanics.Counting
                 return;
             }
 
-            transform.DOScale(Vector3.one, 0.12f).SetEase(Ease.OutSine);
+            transform.DOScale(_initialLocalScale, 0.12f).SetEase(Ease.OutSine);
 
             if (!_isAccepted)
             {
@@ -209,6 +226,7 @@ namespace KidGame.Mechanics.Counting
             DOTween.Kill(transform);
 
             transform.SetParent(zoneTransform, worldPositionStays: true);
+            transform.DOScale(_initialLocalScale, snapDuration).SetEase(Ease.OutQuad);
 
             transform.DOMove(zoneTransform.position, snapDuration)
                      .SetEase(Ease.OutBack)
@@ -223,7 +241,8 @@ namespace KidGame.Mechanics.Counting
                              rt.offsetMin = Vector2.zero;
                              rt.offsetMax = Vector2.zero;
                          }
-                         transform.DOPunchScale(Vector3.one * 0.2f, 0.35f, 6, 0.5f);
+                         transform.localScale = _initialLocalScale;
+                         transform.DOPunchScale(_initialLocalScale * 0.15f, 0.35f, 6, 0.5f);
                      });
         }
 
@@ -255,12 +274,14 @@ namespace KidGame.Mechanics.Counting
         private void ReturnHome()
         {
             // Animate card back to its tray position, then reparent so the layout group takes over
+            transform.DOScale(_initialLocalScale, returnDuration).SetEase(Ease.OutCubic);
             transform.DOMove(_homeWorldPosition, returnDuration)
                      .SetEase(Ease.OutCubic)
                      .OnComplete(() =>
                      {
                          transform.SetParent(_homeParent, worldPositionStays: false);
                          transform.SetSiblingIndex(_homeSiblingIndex);
+                         transform.localScale = _initialLocalScale;
                      });
         }
     }

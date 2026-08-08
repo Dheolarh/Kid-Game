@@ -72,6 +72,7 @@ namespace KidGame.Interface
         [SerializeField] private TMP_Text lessonCompleteText;           // "LESSON COMPLETE!" text
         [SerializeField] private RectTransform endSphere;                // White sphere/dome shape
         [SerializeField] private GameObject endMascotObject;            // End mascot object
+        [SerializeField] private GameObject endMascotVfxObject;         // End mascot VFX prefab (e.g. FX_Glimmer_Yellow)
         [SerializeField] private Animator endMascotAnimator;            // Mascot animator (isWinner loop)
         [SerializeField] private TMP_Text greatJobText;                 // "Great Job!" text
 
@@ -192,6 +193,7 @@ namespace KidGame.Interface
             }
 
             #if UNITY_EDITOR
+            testLevelIndex = testLevelIndex - 1;
             if (levelDatabase == null)
             {
                 string[] guids = UnityEditor.AssetDatabase.FindAssets("t:LevelDatabase");
@@ -787,7 +789,7 @@ namespace KidGame.Interface
                     var recall = _activeGameModeInstance?.GetComponent<NumberRecallGameManager>();
                     if (recall != null)
                     {
-                        recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden, page.recallIsLearningMode, page.recallIsSequenceFillMode);
+                        recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden, page.recallIsLearningMode, page.recallIsSequenceFillMode, page.recallPremadeSlotPrefab);
                         SetupNextButton(recall.NextButton);
                     }
                     break;
@@ -1199,6 +1201,8 @@ namespace KidGame.Interface
                 }
             }
 
+            if (endMascotObject != null) endMascotObject.SetActive(false);
+            if (endMascotVfxObject != null) endMascotVfxObject.SetActive(false);
             if (endConfettiAnimator != null) endConfettiAnimator.gameObject.SetActive(false);
             if (endTipsText != null) endTipsText.text = "";
             if (endHomeButton != null) endHomeButton.transform.localScale = Vector3.zero;
@@ -1221,11 +1225,23 @@ namespace KidGame.Interface
                 endSphere.DOAnchorPosY(sphereHomePos.y, 0.5f).SetEase(Ease.OutCubic);
             yield return new WaitForSeconds(0.35f);
 
-            // ── Step 4: Mascot isWinner trigger + "Great Job!" pop in ─────────────────
-            if (!disableMascotAnimations && endMascotAnimator != null)
+            // ── Step 4: Mascot isWinner trigger + VFX + "Great Job!" pop in ──────────
+            if (endMascotObject != null)
             {
                 endMascotObject.SetActive(true);
+            }
+            if (!disableMascotAnimations && endMascotAnimator != null)
+            {
                 endMascotAnimator.SetTrigger("isWinner");
+            }
+            if (endMascotVfxObject != null)
+            {
+                endMascotVfxObject.SetActive(true);
+                var psList = endMascotVfxObject.GetComponentsInChildren<ParticleSystem>(true);
+                foreach (var ps in psList)
+                {
+                    ps.Play();
+                }
             }
             if (greatJobText != null)
                 greatJobText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);

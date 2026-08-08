@@ -362,6 +362,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3369106276622606670}
+  - {fileID: 3880359507958787055}
   m_Father: {fileID: 8597260260170518182}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -553,8 +554,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.NumberRecall.NumberRecallGameManager
   slotPrefab: {fileID: 4339965875607818248, guid: 683ca48d8cd3a024d81302261cbf7ed9, type: 3}
-  answerCardPrefab: {fileID: 7026504693343592554, guid: 0182651f93afea3489412a78a9040cd4, type: 3}
+  answerCardPrefab: {fileID: 7026504693343592554, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
   slotsContainer: {fileID: 3369106276622606670}
+  premadeSlotsContainer: {fileID: 3880359507958787055}
   answersContainer: {fileID: 6422524477127055487}
   nextButton: {fileID: 6815038823787206291}
   slotCount: 10
@@ -569,6 +571,8 @@ MonoBehaviour:
   minConsecutiveHidden: 1
   maxConsecutiveHidden: 2
   isLearningMode: 1
+  isSequenceFillMode: 0
+  premadeSlotPrefab: {fileID: 0}
 --- !u!114 &3790638568743529102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1210,6 +1214,56 @@ MonoBehaviour:
   specificOutlines: []
   images:
   - {fileID: 5681103042153081095}
+--- !u!1 &7177458064560620246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3880359507958787055}
+  - component: {fileID: 6967806641329291595}
+  m_Layer: 5
+  m_Name: Premade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3880359507958787055
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7177458064560620246}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3955361989876647056}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6967806641329291595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7177458064560620246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 0
+  m_VerticalFit: 0
 --- !u!1 &7890054579104879500
 GameObject:
   m_ObjectHideFlags: 0

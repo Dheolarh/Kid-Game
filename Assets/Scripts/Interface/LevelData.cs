@@ -89,6 +89,7 @@ namespace KidGame.Interface
         public int recallMaxConsecutiveHidden = 2;
         public bool recallIsLearningMode = true;
         public bool recallIsSequenceFillMode = false;
+        public GameObject recallPremadeSlotPrefab;
 
         [Header("Tracing Game Settings")]
         public bool tracingSpellModeActive = false;
@@ -107,6 +108,7 @@ namespace KidGame.Interface
         [TextArea(2, 4)]
         public string levelEndTip;
         public bool isUnlockedByDefault = false;
+        public bool isPremadeLevel = false;
 
         [Header("Visual Theme")]
         [Tooltip("The preset theme name from ThemeDatabase. If selected, overrides theme color and background sprite.")]

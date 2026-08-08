@@ -13,6 +13,7 @@ namespace KidGame.Editor
         private string _levelSubtitle = "";
         private string _levelEndTip = "";
         private bool _isUnlockedByDefault = false;
+        private bool _isPremadeLevel = false;
         private string _themePresetName = "";
         private Color _levelThemeColor = Color.white;
         private Sprite _levelBackgroundSprite;
@@ -95,6 +96,7 @@ namespace KidGame.Editor
             _levelSubtitle = EditorGUILayout.TextField("Level Subtitle", _levelSubtitle);
             _levelEndTip = EditorGUILayout.TextField("Level End Tip", _levelEndTip);
             _isUnlockedByDefault = EditorGUILayout.Toggle("Unlocked by Default", _isUnlockedByDefault);
+            _isPremadeLevel = EditorGUILayout.Toggle("Is Premade Level", _isPremadeLevel);
 
             // Theme Preset Selection
             if (_cachedThemeDatabase != null && _cachedThemeDatabase.presets.Count > 0)
@@ -229,94 +231,102 @@ namespace KidGame.Editor
 
                 GUILayout.Space(5);
 
-                // Show context-aware fields depending on GameType
-                switch (page.gameType)
+                if (_isPremadeLevel)
                 {
-                    case GameType.Counting:
-                        page.countingSlotCount = EditorGUILayout.IntSlider("Slot Count", page.countingSlotCount, 1, 10);
-                        page.countingMinCount = EditorGUILayout.IntSlider("Min Objects", page.countingMinCount, 1, 12);
-                        page.countingMaxCount = EditorGUILayout.IntSlider("Max Objects", page.countingMaxCount, 1, 12);
-                        page.countingDiceMode = EditorGUILayout.Toggle("Dice Mode", page.countingDiceMode);
-                        page.countingFingerMode = EditorGUILayout.Toggle("Finger Mode", page.countingFingerMode);
-                        page.countingActiveThemeName = EditorGUILayout.TextField("Theme Name (Optional)", page.countingActiveThemeName);
-                        break;
+                    page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab", page.recallPremadeSlotPrefab, typeof(GameObject), false);
+                }
+                else
+                {
+                    // Show context-aware fields depending on GameType
+                    switch (page.gameType)
+                    {
+                        case GameType.Counting:
+                            page.countingSlotCount = EditorGUILayout.IntSlider("Slot Count", page.countingSlotCount, 1, 10);
+                            page.countingMinCount = EditorGUILayout.IntSlider("Min Objects", page.countingMinCount, 1, 12);
+                            page.countingMaxCount = EditorGUILayout.IntSlider("Max Objects", page.countingMaxCount, 1, 12);
+                            page.countingDiceMode = EditorGUILayout.Toggle("Dice Mode", page.countingDiceMode);
+                            page.countingFingerMode = EditorGUILayout.Toggle("Finger Mode", page.countingFingerMode);
+                            page.countingActiveThemeName = EditorGUILayout.TextField("Theme Name (Optional)", page.countingActiveThemeName);
+                            break;
 
-                    case GameType.Addition:
-                        page.additionSlotCount = EditorGUILayout.IntSlider("Slot Count", page.additionSlotCount, 1, 10);
-                        page.additionMinPerGrid = EditorGUILayout.IntSlider("Min Per Grid Side", page.additionMinPerGrid, 1, 12);
-                        page.additionMaxPerGrid = EditorGUILayout.IntSlider("Max Per Grid Side", page.additionMaxPerGrid, 1, 12);
-                        page.additionDiceMode = EditorGUILayout.Toggle("Dice Mode", page.additionDiceMode);
-                        page.additionFingerMode = EditorGUILayout.Toggle("Finger Mode", page.additionFingerMode);
-                        page.additionCountAddMode = EditorGUILayout.Toggle("Count-Add Mode", page.additionCountAddMode);
-                        page.additionNumbersOnlyMode = EditorGUILayout.Toggle("Numbers Only Mode", page.additionNumbersOnlyMode);
-                        page.additionMinOperandCount = EditorGUILayout.IntSlider("Min Operands", page.additionMinOperandCount, 2, 5);
-                        page.additionMaxOperandCount = EditorGUILayout.IntSlider("Max Operands", page.additionMaxOperandCount, 2, 5);
-                        page.additionMinNumberValue = EditorGUILayout.IntField("Min Operand Value", page.additionMinNumberValue);
-                        page.additionMaxNumberValue = EditorGUILayout.IntField("Max Operand Value", page.additionMaxNumberValue);
-                        page.additionActiveThemeName = EditorGUILayout.TextField("Theme Name (Optional)", page.additionActiveThemeName);
-                        break;
+                        case GameType.Addition:
+                            page.additionSlotCount = EditorGUILayout.IntSlider("Slot Count", page.additionSlotCount, 1, 10);
+                            page.additionMinPerGrid = EditorGUILayout.IntSlider("Min Per Grid Side", page.additionMinPerGrid, 1, 12);
+                            page.additionMaxPerGrid = EditorGUILayout.IntSlider("Max Per Grid Side", page.additionMaxPerGrid, 1, 12);
+                            page.additionDiceMode = EditorGUILayout.Toggle("Dice Mode", page.additionDiceMode);
+                            page.additionFingerMode = EditorGUILayout.Toggle("Finger Mode", page.additionFingerMode);
+                            page.additionCountAddMode = EditorGUILayout.Toggle("Count-Add Mode", page.additionCountAddMode);
+                            page.additionNumbersOnlyMode = EditorGUILayout.Toggle("Numbers Only Mode", page.additionNumbersOnlyMode);
+                            page.additionMinOperandCount = EditorGUILayout.IntSlider("Min Operands", page.additionMinOperandCount, 2, 5);
+                            page.additionMaxOperandCount = EditorGUILayout.IntSlider("Max Operands", page.additionMaxOperandCount, 2, 5);
+                            page.additionMinNumberValue = EditorGUILayout.IntField("Min Operand Value", page.additionMinNumberValue);
+                            page.additionMaxNumberValue = EditorGUILayout.IntField("Max Operand Value", page.additionMaxNumberValue);
+                            page.additionActiveThemeName = EditorGUILayout.TextField("Theme Name (Optional)", page.additionActiveThemeName);
+                            break;
 
-                    case GameType.Comparison:
-                        page.comparisonSlotCount = EditorGUILayout.IntSlider("Slot Count", page.comparisonSlotCount, 1, 10);
-                        page.comparisonMinVal = EditorGUILayout.IntField("Min Value", page.comparisonMinVal);
-                        page.comparisonMaxVal = EditorGUILayout.IntField("Max Value", page.comparisonMaxVal);
-                        page.comparisonMixAdditionEquations = EditorGUILayout.Toggle("Mix Addition", page.comparisonMixAdditionEquations);
-                        page.comparisonNumbersOnlyMode = EditorGUILayout.Toggle("Numbers Only Mode", page.comparisonNumbersOnlyMode);
-                        page.comparisonActiveThemeName = EditorGUILayout.TextField("Theme Name (Optional)", page.comparisonActiveThemeName);
-                        break;
+                        case GameType.Comparison:
+                            page.comparisonSlotCount = EditorGUILayout.IntSlider("Slot Count", page.comparisonSlotCount, 1, 10);
+                            page.comparisonMinVal = EditorGUILayout.IntField("Min Value", page.comparisonMinVal);
+                            page.comparisonMaxVal = EditorGUILayout.IntField("Max Value", page.comparisonMaxVal);
+                            page.comparisonMixAdditionEquations = EditorGUILayout.Toggle("Mix Addition", page.comparisonMixAdditionEquations);
+                            page.comparisonNumbersOnlyMode = EditorGUILayout.Toggle("Numbers Only Mode", page.comparisonNumbersOnlyMode);
+                            page.comparisonActiveThemeName = EditorGUILayout.TextField("Theme Name (Optional)", page.comparisonActiveThemeName);
+                            break;
 
-                    case GameType.Matching:
-                        page.matchingLeftVariant = (MatchVariant)EditorGUILayout.EnumPopup("Left Side Type", page.matchingLeftVariant);
-                        page.matchingRightVariant = (MatchVariant)EditorGUILayout.EnumPopup("Right Side Type", page.matchingRightVariant);
-                        page.matchingSlotCount = EditorGUILayout.IntSlider("Slot Count (Pairs)", page.matchingSlotCount, 3, 10);
-                        page.matchingMinVal = EditorGUILayout.IntField("Min Value", page.matchingMinVal);
-                        page.matchingMaxVal = EditorGUILayout.IntField("Max Value", page.matchingMaxVal);
-                        page.matchingShuffleLeftColumn = EditorGUILayout.Toggle("Shuffle Left Column", page.matchingShuffleLeftColumn);
-                        break;
+                        case GameType.Matching:
+                            page.matchingLeftVariant = (MatchVariant)EditorGUILayout.EnumPopup("Left Side Type", page.matchingLeftVariant);
+                            page.matchingRightVariant = (MatchVariant)EditorGUILayout.EnumPopup("Right Side Type", page.matchingRightVariant);
+                            page.matchingSlotCount = EditorGUILayout.IntSlider("Slot Count (Pairs)", page.matchingSlotCount, 3, 10);
+                            page.matchingMinVal = EditorGUILayout.IntField("Min Value", page.matchingMinVal);
+                            page.matchingMaxVal = EditorGUILayout.IntField("Max Value", page.matchingMaxVal);
+                            page.matchingShuffleLeftColumn = EditorGUILayout.Toggle("Shuffle Left Column", page.matchingShuffleLeftColumn);
+                            break;
 
-                    case GameType.Recall:
-                        page.recallIsSequenceFillMode = EditorGUILayout.Toggle("Sequence Fill Mode (1 to X Fill)", page.recallIsSequenceFillMode);
-                        page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
-                        page.recallSlotCount = EditorGUILayout.IntSlider("Slot Count", page.recallSlotCount, 1, 10);
-                        page.recallMinSequenceLength = EditorGUILayout.IntField("Min Seq Length", page.recallMinSequenceLength);
-                        page.recallMaxSequenceLength = EditorGUILayout.IntField("Max Seq Length", page.recallMaxSequenceLength);
-                        page.recallMinStartValue = EditorGUILayout.IntField("Min Start Val", page.recallMinStartValue);
-                        page.recallMaxStartValue = EditorGUILayout.IntField("Max Start Val", page.recallMaxStartValue);
-                        page.recallStep = EditorGUILayout.IntField("Step Count", page.recallStep);
-                        page.recallCountBackwards = EditorGUILayout.Toggle("Count Backwards", page.recallCountBackwards);
-                        page.recallMinConsecutiveRevealed = EditorGUILayout.IntSlider("Min Revealed", page.recallMinConsecutiveRevealed, 1, 5);
-                        page.recallMaxConsecutiveRevealed = EditorGUILayout.IntSlider("Max Revealed", page.recallMaxConsecutiveRevealed, 1, 5);
-                        page.recallMinConsecutiveHidden = EditorGUILayout.IntSlider("Min Hidden", page.recallMinConsecutiveHidden, 1, 5);
-                        page.recallMaxConsecutiveHidden = EditorGUILayout.IntSlider("Max Hidden", page.recallMaxConsecutiveHidden, 1, 5);
-                        break;
+                        case GameType.Recall:
+                            page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab (Optional)", page.recallPremadeSlotPrefab, typeof(GameObject), false);
+                            page.recallIsSequenceFillMode = EditorGUILayout.Toggle("Sequence Fill Mode (1 to X Fill)", page.recallIsSequenceFillMode);
+                            page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
+                            page.recallSlotCount = EditorGUILayout.IntSlider("Slot Count", page.recallSlotCount, 1, 10);
+                            page.recallMinSequenceLength = EditorGUILayout.IntField("Min Seq Length", page.recallMinSequenceLength);
+                            page.recallMaxSequenceLength = EditorGUILayout.IntField("Max Seq Length", page.recallMaxSequenceLength);
+                            page.recallMinStartValue = EditorGUILayout.IntField("Min Start Val", page.recallMinStartValue);
+                            page.recallMaxStartValue = EditorGUILayout.IntField("Max Start Val", page.recallMaxStartValue);
+                            page.recallStep = EditorGUILayout.IntField("Step Count", page.recallStep);
+                            page.recallCountBackwards = EditorGUILayout.Toggle("Count Backwards", page.recallCountBackwards);
+                            page.recallMinConsecutiveRevealed = EditorGUILayout.IntSlider("Min Revealed", page.recallMinConsecutiveRevealed, 1, 5);
+                            page.recallMaxConsecutiveRevealed = EditorGUILayout.IntSlider("Max Revealed", page.recallMaxConsecutiveRevealed, 1, 5);
+                            page.recallMinConsecutiveHidden = EditorGUILayout.IntSlider("Min Hidden", page.recallMinConsecutiveHidden, 1, 5);
+                            page.recallMaxConsecutiveHidden = EditorGUILayout.IntSlider("Max Hidden", page.recallMaxConsecutiveHidden, 1, 5);
+                            break;
 
-                    case GameType.Tracing:
-                        page.tracingSpellModeActive = EditorGUILayout.Toggle("Spell Mode Active", page.tracingSpellModeActive);
-                        if (page.tracingSpellModeActive)
-                        {
-                            page.tracingIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.tracingIsLearningMode);
-                        }
-                        page.tracingCustomSpawnCount = EditorGUILayout.IntSlider("Custom Spawn Count", page.tracingCustomSpawnCount, 1, 4);
-                        
-                        // List of values to trace
-                        GUILayout.Label("Values To Trace:", EditorStyles.boldLabel);
-                        if (page.tracingValuesToTrace == null) page.tracingValuesToTrace = new List<string>();
-                        for (int j = 0; j < page.tracingValuesToTrace.Count; j++)
-                        {
-                            GUILayout.BeginHorizontal();
-                            page.tracingValuesToTrace[j] = EditorGUILayout.TextField($"Element {j}", page.tracingValuesToTrace[j]);
-                            if (GUILayout.Button("X", GUILayout.Width(25)))
+                        case GameType.Tracing:
+                            page.tracingSpellModeActive = EditorGUILayout.Toggle("Spell Mode Active", page.tracingSpellModeActive);
+                            if (page.tracingSpellModeActive)
                             {
-                                page.tracingValuesToTrace.RemoveAt(j);
-                                break;
+                                page.tracingIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.tracingIsLearningMode);
                             }
-                            GUILayout.EndHorizontal();
-                        }
-                        if (GUILayout.Button("Add Value", GUILayout.Width(100)))
-                        {
-                            page.tracingValuesToTrace.Add("");
-                        }
-                        break;
+                            page.tracingCustomSpawnCount = EditorGUILayout.IntSlider("Custom Spawn Count", page.tracingCustomSpawnCount, 1, 4);
+                            
+                            // List of values to trace
+                            GUILayout.Label("Values To Trace:", EditorStyles.boldLabel);
+                            if (page.tracingValuesToTrace == null) page.tracingValuesToTrace = new List<string>();
+                            for (int j = 0; j < page.tracingValuesToTrace.Count; j++)
+                            {
+                                GUILayout.BeginHorizontal();
+                                page.tracingValuesToTrace[j] = EditorGUILayout.TextField($"Element {j}", page.tracingValuesToTrace[j]);
+                                if (GUILayout.Button("X", GUILayout.Width(25)))
+                                {
+                                    page.tracingValuesToTrace.RemoveAt(j);
+                                    break;
+                                }
+                                GUILayout.EndHorizontal();
+                            }
+                            if (GUILayout.Button("Add Value", GUILayout.Width(100)))
+                            {
+                                page.tracingValuesToTrace.Add("");
+                            }
+                            break;
+                    }
                 }
 
                 GUILayout.EndVertical();
@@ -438,6 +448,7 @@ namespace KidGame.Editor
             _levelSubtitle = source.levelSubtitle;
             _levelEndTip = source.levelEndTip;
             _isUnlockedByDefault = source.isUnlockedByDefault;
+            _isPremadeLevel = source.isPremadeLevel;
             _themePresetName = source.themePresetName;
             _levelThemeColor = source.levelThemeColor;
             _levelBackgroundSprite = source.levelBackgroundSprite;
@@ -543,6 +554,7 @@ namespace KidGame.Editor
             asset.levelSubtitle = _levelSubtitle;
             asset.levelEndTip = _levelEndTip;
             asset.isUnlockedByDefault = _isUnlockedByDefault;
+            asset.isPremadeLevel = _isPremadeLevel;
             asset.themePresetName = _themePresetName;
             asset.levelThemeColor = _levelThemeColor;
             asset.levelBackgroundSprite = _levelBackgroundSprite;

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1035838958682017194}
   - component: {fileID: 2965294576621929843}
   - component: {fileID: 1962414619087162882}
+  - component: {fileID: -1654441904367855168}
   m_Layer: 5
   m_Name: answer
   m_TagString: Untagged
@@ -92,7 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
-  m_EffectColor: {r: 0.9960785, g: 0.454902, b: 0, a: 1}
+  m_EffectColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 1}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
 --- !u!114 &1035838958682017194
@@ -107,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
-  m_EffectColor: {r: 0.9960785, g: 0.454902, b: 0, a: 1}
+  m_EffectColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 1}
   m_EffectDistance: {x: -3, y: -3}
   m_UseGraphicAlpha: 1
 --- !u!114 &2965294576621929843
@@ -140,6 +141,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.NumberRecall.NumberRecallHintDisplay
   hintText: {fileID: 4803180884252516226}
   hintColor: {r: 0.25, g: 0.25, b: 0.25, a: 0.45}
+--- !u!114 &-1654441904367855168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148728844723303194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22cf4b0b89188464dbfa93ba1ff754bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.ColorRandomizer
+  outlineHolders:
+  - {fileID: 148728844723303194}
+  specificOutlines: []
+  images: []
+  colorPresets:
+  - {r: 0.988, g: 0.455, b: 0, a: 1}
+  - {r: 0.584, g: 0.337, b: 1, a: 1}
+  - {r: 0.231, g: 0.719, b: 1, a: 1}
+  - {r: 0.322, g: 0.839, b: 0.463, a: 1}
+  - {r: 0.868, g: 0.143, b: 0.636, a: 1}
+  - {r: 0.067, g: 0.804, b: 0.737, a: 1}
+  - {r: 0.95, g: 0.3, b: 0.25, a: 1}
+  - {r: 0.96, g: 0.72, b: 0.1, a: 1}
+  randomizeOnEnable: 1
+  overrideThemeBinder: 1
 --- !u!1 &5226208028004002442
 GameObject:
   m_ObjectHideFlags: 0

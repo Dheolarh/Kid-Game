@@ -129,6 +129,9 @@ namespace KidGame.Mechanics.Counting
             // Play correct answer card drop SFX
             KidGame.Audio.AudioManager.Instance?.PlayAnswerDropSfx();
 
+            // Play number voice audio for the correct number dropped
+            KidGame.Audio.AudioManager.Instance?.PlayNumberVoice(card.Value.ToString());
+
             if (KidGame.Interface.GameFlowManager.Instance != null)
             {
                 KidGame.Interface.GameFlowManager.Instance.RegisterCorrectAnswer();

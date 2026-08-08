@@ -13,29 +13,36 @@ MonoBehaviour:
   m_Name: Level_12
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 12
-  levelName: Level_12
-  levelSubtitle: Counting Objects 1 to 5
-  levelEndTip: Count each item carefully!
-  isUnlockedByDefault: 0
-  themePresetName: TealGreen
-  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
-  levelBackgroundSprite: {fileID: 0}
+  levelName: LESSON 12
+  levelSubtitle: Know your numbers
+  levelEndTip: 1,2 Buckle my shoes!
+  isUnlockedByDefault: 1
+  isPremadeLevel: 1
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 0
+  - gameType: 4
     dialogueLines:
-    - text: Hi {playername}! Today let us practice counting fun objects from 1 to 5!
-      mascotAnimationTrigger: isHi
-    - text: Count each object 1 by 1, then drag the matching number card to the target box!
+    - text: Now Let's see how much you know!
+      mascotAnimationTrigger: isIdle
+    - text: Let's write 1 - 10
+      mascotAnimationTrigger: isIdle
+    - text: Drag the correct numbers from the answers into their correct slot
+      mascotAnimationTrigger: isIdle
+    - text: We have hints for you already
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Fantastic counting {playername}! You counted all the objects!
+    - text: That's solid!
       mascotAnimationTrigger: isHappy
-    countingSlotCount: 6
+    - text: Now let's see you do this without hints
+      mascotAnimationTrigger: isIdle
+    countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 5
+    countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: ''
+    countingActiveThemeName: 
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -47,13 +54,13 @@ MonoBehaviour:
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: ''
+    additionActiveThemeName: 
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
+    comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: ''
+    comparisonActiveThemeName: 
     matchingLeftVariant: 0
     matchingRightVariant: 1
     matchingSlotCount: 5
@@ -73,7 +80,63 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: f8d5859b879f8fb4185ec20ba0409df7, type: 3}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
+  - gameType: 4
+    dialogueLines: []
+    completionDialogueLines:
+    - text: You little genius!
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 990855f866578604f8f0485f661cbf64, type: 3}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  sceneToLoad: Game
+  levelIcon: {fileID: 0}
