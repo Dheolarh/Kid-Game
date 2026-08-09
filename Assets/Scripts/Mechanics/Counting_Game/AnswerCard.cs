@@ -22,6 +22,8 @@ namespace KidGame.Mechanics.Counting
         [SerializeField] private float snapDuration  = 0.2f;
         [Tooltip("Duration of the return-to-tray tween.")]
         [SerializeField] private float returnDuration = 0.18f;
+        [Tooltip("Scale multiplier applied when card is dropped into an answer box.")]
+        [SerializeField] private float acceptedScaleMultiplier = 1.5f;
 
         // ── Public state ──────────────────────────────────────────────────────
 
@@ -225,8 +227,10 @@ namespace KidGame.Mechanics.Counting
             _isAccepted = true;
             DOTween.Kill(transform);
 
+            Vector3 targetAcceptedScale = _initialLocalScale * acceptedScaleMultiplier;
+
             transform.SetParent(zoneTransform, worldPositionStays: true);
-            transform.DOScale(_initialLocalScale, snapDuration).SetEase(Ease.OutQuad);
+            transform.DOScale(targetAcceptedScale, snapDuration).SetEase(Ease.OutQuad);
 
             transform.DOMove(zoneTransform.position, snapDuration)
                      .SetEase(Ease.OutBack)
@@ -241,8 +245,8 @@ namespace KidGame.Mechanics.Counting
                              rt.offsetMin = Vector2.zero;
                              rt.offsetMax = Vector2.zero;
                          }
-                         transform.localScale = _initialLocalScale;
-                         transform.DOPunchScale(_initialLocalScale * 0.15f, 0.35f, 6, 0.5f);
+                         transform.localScale = targetAcceptedScale;
+                         transform.DOPunchScale(targetAcceptedScale * 0.15f, 0.35f, 6, 0.5f);
                      });
         }
 

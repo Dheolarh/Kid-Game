@@ -14,23 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 9
   levelName: LESSON 9
-  levelSubtitle: Learning Number 8
-  levelEndTip: Practice tracing 8 carefully!
+  levelSubtitle: Two circles makes 8
+  levelEndTip: 8 arms of an OCTOpus
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Blue
-  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}! Here comes number 8!
+    - text: A new number 8!
       mascotAnimationTrigger: isHi
-    - text: Make an S shape and curve back up to join the top!
+    - text: 8 is just a circle sitting on another
       mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Awesome tracing on number 8!
-      mascotAnimationTrigger: isHappy
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -81,11 +79,9 @@ MonoBehaviour:
     - 8
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines:
-    - text: Let us practice writing number 8 two times!
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines:
-    - text: Incredible! You mastered number 8!
+    - text: Good work {playername}!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -135,7 +131,6 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace:
     - 8
-    - 8
-    tracingCustomSpawnCount: 2
+    tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

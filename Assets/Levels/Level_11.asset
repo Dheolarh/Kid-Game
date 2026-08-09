@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 11
   levelName: LESSON 11
-  levelSubtitle: Learning Number 10
-  levelEndTip: Practice tracing 10 carefully!
+  levelSubtitle: The first double digit 10
+  levelEndTip: Ten toes on my feet
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Pink
@@ -29,7 +29,7 @@ MonoBehaviour:
     - text: Write a number 1 first, and then write a number 0 right next to it!
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Spectacular job tracing 10!
+    - text: 10 is just a 1 sitting beside a 0!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -82,10 +82,10 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Let us practice writing number 10 two times!
+    - text: That was easy right? let's try it once more
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Congratulations {playername}! You mastered number 10!
+    - text: Look at me I have ten fingers!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -135,7 +135,6 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace:
     - 10
-    - 10
-    tracingCustomSpawnCount: 2
+    tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

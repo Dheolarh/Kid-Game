@@ -15,7 +15,7 @@ MonoBehaviour:
   levelNumber: 10
   levelName: LESSON 10
   levelSubtitle: Learning Number 9
-  levelEndTip: Practice tracing 9 carefully!
+  levelEndTip: A stitch in time saves nine
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Green
@@ -81,11 +81,9 @@ MonoBehaviour:
     - 9
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines:
-    - text: Practice writing number 9 two times!
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines:
-    - text: Superb! You mastered number 9!
+    - text: You amaze me {playername}!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -135,7 +133,6 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace:
     - 9
-    - 9
-    tracingCustomSpawnCount: 2
+    tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -15,7 +15,7 @@ MonoBehaviour:
   levelNumber: 5
   levelName: LESSON 5
   levelSubtitle: Learning Number 4
-  levelEndTip: Practice tracing 4 carefully!
+  levelEndTip: 3, 4 Knock at the door!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Pink
@@ -24,8 +24,8 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}! Let us learn the number 4!
-      mascotAnimationTrigger: isHi
+    - text: Let's learn a new number, the number 4
+      mascotAnimationTrigger: isIdle
     - text: Down and across, then a long line straight down!
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
@@ -82,10 +82,10 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Now practice writing 4 two times!
+    - text: Now practice makes perfect
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Fantastic! You mastered number 4!
+    - text: Fantastic! You know number 4!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -135,7 +135,6 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace:
     - 4
-    - 4
-    tracingCustomSpawnCount: 2
+    tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

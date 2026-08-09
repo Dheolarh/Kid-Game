@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 6
   levelName: LESSON 6
-  levelSubtitle: Learning Number 5
-  levelEndTip: Practice tracing 5 carefully!
+  levelSubtitle: The popular number 5
+  levelEndTip: 5 fingers on your hand!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: TealGreen
@@ -24,12 +24,12 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}! High five! It is time for number 5!
+    - text: Hi {playername}! High 5! It is time for number 5!
       mascotAnimationTrigger: isHi
-    - text: Go down, make a big round belly, then give it a hat on top!
+    - text: A line to the left, another down, then a curve that's 5!
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: High five! Outstanding tracing on number 5!
+    - text: High 5! Outstanding tracing on number 5!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -82,7 +82,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Let us trace number 5 two times!
+    - text: Let us trace 5 again
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
     - text: Sensational! You mastered number 5!
@@ -135,7 +135,6 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace:
     - 5
-    - 5
-    tracingCustomSpawnCount: 2
+    tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}
