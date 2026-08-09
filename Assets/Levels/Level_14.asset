@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_3
+  m_Name: Level_14
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 3
-  levelName: LESSON 3
-  levelSubtitle: The number 2
-  levelEndTip: Shoes come in 2s.
+  levelNumber: 14
+  levelName: LESSON 14
+  levelSubtitle: Simple number 11
+  levelEndTip: Hold 2 straws side by side and say 11
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Blue
-  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: 'Here is number 2, it looks like a duck neck '
-      mascotAnimationTrigger: isIdle
-    - text: Curve around the top and slide straight across the bottom.
+    - text: Hi {playername}. Let's learn how to write 11.
+      mascotAnimationTrigger: isHi
+    - text: 11 is super easy, it's just a number 1 sitting right next to another
+        1!
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Nice.
+    - text: Fantastic. You traced your very first 11.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -78,13 +79,15 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
+    - 11
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Now trace the number 2 2 more times.
+    - text: Let's trace 11 again. Start at the top dot for both 1s.
       mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
+    completionDialogueLines:
+    - text: Super work {playername}. 2 1s side by side make 11.
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -132,11 +135,15 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
+    - 11
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
+    dialogueLines:
+    - text: 1 final time to master the number 11.
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Hooray. You are a number 11 master.
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -158,7 +165,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -184,7 +191,7 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
+    - 11
     tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

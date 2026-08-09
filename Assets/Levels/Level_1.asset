@@ -15,7 +15,7 @@ MonoBehaviour:
   levelNumber: 1
   levelName: LESSON 1
   levelSubtitle: Meet 0, the empty number
-  levelEndTip: Zero means nothing at all!
+  levelEndTip: 0 means nothing at all!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Purple
@@ -33,7 +33,7 @@ MonoBehaviour:
     - text: Hold the green dot and draw a circle to the red dot to write 0
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: You drew that just perfect!
+    - text: You drew that just perfect.
       mascotAnimationTrigger: isHappy
     - text: Now let's try that again
       mascotAnimationTrigger: isIdle
@@ -91,7 +91,7 @@ MonoBehaviour:
     - text: Remember draw a circle from the green dot to the red dot
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Perfect! now a last try
+    - text: Perfect. now a last try
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1

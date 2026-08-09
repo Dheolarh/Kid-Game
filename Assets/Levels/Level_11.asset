@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 11
   levelName: LESSON 11
-  levelSubtitle: The first double digit 10
-  levelEndTip: Ten toes on my feet
+  levelSubtitle: Tracing number 10
+  levelEndTip: 10 toes on my feet
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Pink
@@ -24,12 +24,12 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}! Wow, welcome to double digits! Today we write 10!
+    - text: Hi {playername}. Wow, today we write 10.
       mascotAnimationTrigger: isHi
-    - text: Write a number 1 first, and then write a number 0 right next to it!
+    - text: Write a number 1 first, and then write a number 0 right next to it.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: 10 is just a 1 sitting beside a 0!
+    - text: 10 is just a 1 sitting beside a 0.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -82,10 +82,10 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: That was easy right? let's try it once more
+    - text: That was easy right. let's try it once more
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Look at me I have ten fingers!
+    - text: Look at me I have 10 fingers.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1

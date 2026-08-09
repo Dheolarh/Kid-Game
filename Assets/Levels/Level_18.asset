@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_3
+  m_Name: Level_18
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 3
-  levelName: LESSON 3
-  levelSubtitle: The number 2
-  levelEndTip: Shoes come in 2s.
+  levelNumber: 18
+  levelName: LESSON 18
+  levelSubtitle: High 5 with 15
+  levelEndTip: 15 is 10 plus 5.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Blue
-  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
+  themePresetName: Green
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: 'Here is number 2, it looks like a duck neck '
-      mascotAnimationTrigger: isIdle
-    - text: Curve around the top and slide straight across the bottom.
+    - text: Hi {playername}. High 5. Today we write 15.
+      mascotAnimationTrigger: isHi
+    - text: Trace a 1 first, then left, down, and curve for 5.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Nice.
+    - text: High 5. You traced 15 perfectly.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -78,13 +78,15 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
+    - 15
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Now trace the number 2 2 more times.
+    - text: Let's trace 15 again.
       mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
+    completionDialogueLines:
+    - text: Terrific job {playername}. 15 is looking great.
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -132,11 +134,15 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
+    - 15
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
+    dialogueLines:
+    - text: 1 last practice for 15.
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Sensational. You have mastered 15.
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -158,7 +164,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -184,7 +190,7 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
+    - 15
     tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -23,7 +23,13 @@ namespace KidGame.Mechanics.Counting
         [Tooltip("Duration of the return-to-tray tween.")]
         [SerializeField] private float returnDuration = 0.18f;
         [Tooltip("Scale multiplier applied when card is dropped into an answer box.")]
-        [SerializeField] private float acceptedScaleMultiplier = 1.5f;
+        [SerializeField] private float acceptedScaleMultiplier = 1.1f;
+
+        public float AcceptedScaleMultiplier
+        {
+            get => acceptedScaleMultiplier;
+            set => acceptedScaleMultiplier = value;
+        }
 
         // ── Public state ──────────────────────────────────────────────────────
 
@@ -79,11 +85,16 @@ namespace KidGame.Mechanics.Counting
 
         // ── Setup ─────────────────────────────────────────────────────────────
 
-        public void Setup(int value, Color color, string displayText = null)
+        public void Setup(int value, Color color, string displayText = null, float customAcceptedScaleMultiplier = -1f)
         {
             Value            = value;
             CardColor        = color;
             _isAccepted      = false;
+
+            if (customAcceptedScaleMultiplier > 0f)
+            {
+                acceptedScaleMultiplier = customAcceptedScaleMultiplier;
+            }
             
             CacheInitialScale();
             

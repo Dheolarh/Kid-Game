@@ -24,12 +24,12 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}! High 5! It is time for number 5!
+    - text: Hi {playername}. High 5. It is time for number 5.
       mascotAnimationTrigger: isHi
-    - text: A line to the left, another down, then a curve that's 5!
+    - text: A line to the left, another down, then a curve that's 5.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: High 5! Outstanding tracing on number 5!
+    - text: High 5. Outstanding tracing on number 5.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -85,7 +85,7 @@ MonoBehaviour:
     - text: Let us trace 5 again
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Sensational! You mastered number 5!
+    - text: Sensational. You mastered number 5.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 4
   levelName: LESSON 4
-  levelSubtitle: Two curves makes 3
+  levelSubtitle: 2 curves makes 3
   levelEndTip: Draw a curve up, draw a curve down then you have 3!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
@@ -24,12 +24,12 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}! time to trace number 3!
+    - text: Hi {playername}. time to trace number 3.
       mascotAnimationTrigger: isHi
-    - text: Curve around once, then curve around again!
+    - text: Curve around once, then curve around again.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: You're acing this!
+    - text: You're acing this.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -82,7 +82,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Let us write number 3 two more times!
+    - text: Let us write number 3 2 more times.
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5

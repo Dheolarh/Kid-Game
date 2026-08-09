@@ -340,7 +340,7 @@ namespace KidGame.Mechanics.Counting
             {
                 var go   = Instantiate(answerCardPrefab, answersContainer);
                 var card = go.GetComponent<AnswerCard>();
-                card.Setup(answerValues[i], colors[i]);
+                card.Setup(answerValues[i], colors[i], customAcceptedScaleMultiplier: 1.4f);
                 _cards.Add(card);
             }
             UpdateScrollLocking();
@@ -427,10 +427,22 @@ namespace KidGame.Mechanics.Counting
         private List<int> UniqueRandomList(int count, int min, int max)
         {
             int rangeCount = Mathf.Max(1, max - min + 1);
-            int safeCount = Mathf.Min(count, rangeCount);
             var pool = Enumerable.Range(min, rangeCount).ToList();
             Shuffle(pool);
-            return pool.Take(safeCount).ToList();
+
+            var result = new List<int>();
+            for (int i = 0; i < count; i++)
+            {
+                if (i < pool.Count)
+                {
+                    result.Add(pool[i]);
+                }
+                else
+                {
+                    result.Add(Random.Range(min, max + 1));
+                }
+            }
+            return result;
         }
 
         private void UpdateScrollLocking()

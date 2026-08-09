@@ -316,7 +316,7 @@ namespace KidGame.Mechanics.NumberRecall
                 int valIdx = shuffledIndices[i];
                 var cardGo = Instantiate(answerCardPrefab, answersContainer);
                 var card = cardGo.GetComponent<AnswerCard>();
-                card.Setup(trayValues[valIdx], colors[i]);
+                card.Setup(trayValues[valIdx], colors[i], customAcceptedScaleMultiplier: 1.1f);
                 _cards.Add(card);
             }
 

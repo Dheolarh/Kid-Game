@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   levelNumber: 8
   levelName: LESSON 8
-  levelSubtitle: Two straight line makes 7
+  levelSubtitle: 2 straight line makes 7
   levelEndTip: 7 days in a week!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
@@ -24,12 +24,12 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}! Today we trace number 7!
+    - text: Hi {playername}. Today we trace number 7.
       mascotAnimationTrigger: isHi
-    - text: Slide across the top and slant straight down!
+    - text: Slide across the top and slant straight down.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great Job!
+    - text: Great Job.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -85,7 +85,7 @@ MonoBehaviour:
     - text: Let's try that once more
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Brilliant work! You mastered number 7!
+    - text: Brilliant work. You mastered number 7.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1

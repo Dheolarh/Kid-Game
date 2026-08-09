@@ -1381,6 +1381,7 @@ namespace KidGame.Interface
         private void OnEndHomeClicked()
         {
             Debug.Log("[GameFlowManager] Home button clicked on Game End Panel.");
+            KidGame.Audio.AudioManager.Instance?.PlayMainMenuBgm();
             if (SceneTransitionManager.Instance != null)
             {
                 // "Level" is the Level Select scene
@@ -1767,6 +1768,7 @@ namespace KidGame.Interface
         public void QuitCurrentLevelAndGoHome()
         {
             Debug.Log("[GameFlowManager] Quitting to Home...");
+            KidGame.Audio.AudioManager.Instance?.PlayMainMenuBgm();
             if (SceneTransitionManager.Instance != null)
             {
                 SceneTransitionManager.Instance.LoadSceneWithTransition("Level");

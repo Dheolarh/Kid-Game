@@ -381,7 +381,7 @@ namespace KidGame.Mechanics.Addition
             {
                 var go   = Instantiate(answerCardPrefab, answersContainer);
                 var card = go.GetComponent<AnswerCard>();
-                card.Setup(answerValues[i], colors[i]);
+                card.Setup(answerValues[i], colors[i], customAcceptedScaleMultiplier: 1.4f);
                 _cards.Add(card);
             }
             UpdateScrollLocking();

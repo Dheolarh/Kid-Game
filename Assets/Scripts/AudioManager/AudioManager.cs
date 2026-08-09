@@ -119,6 +119,24 @@ namespace KidGame.Audio
             UpdateActiveBgmVolume();
         }
 
+        private void OnEnable()
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            if (scene.name == "Main" || scene.name == "Level")
+            {
+                PlayMainMenuBgm();
+            }
+        }
+
         // ── Settings API ──────────────────────────────────────────────────────────
 
         public void SetMusicVolumeSetting(int val)

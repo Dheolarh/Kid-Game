@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_3
+  m_Name: Level_20
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 3
-  levelName: LESSON 3
-  levelSubtitle: The number 2
-  levelEndTip: Shoes come in 2s.
+  levelNumber: 20
+  levelName: LESSON 20
+  levelSubtitle: Lucky teen number 17
+  levelEndTip: 17 is a prime and lucky number!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Blue
-  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
+  themePresetName: Yellow
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     dialogueLines:
-    - text: 'Here is number 2, it looks like a duck neck '
-      mascotAnimationTrigger: isIdle
-    - text: Curve around the top and slide straight across the bottom.
+    - text: Hi {playername}. Time for number 17.
+      mascotAnimationTrigger: isHi
+    - text: Trace a 1, then slide across and slant down for 7.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Nice.
+    - text: Great job. That's number 17.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -78,13 +78,15 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
+    - 17
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Now trace the number 2 2 more times.
+    - text: Let's practice tracing 17 again.
       mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
+    completionDialogueLines:
+    - text: Super clear tracing {playername}. 17 is looking sharp.
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -132,11 +134,15 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
+    - 17
     tracingCustomSpawnCount: 1
   - gameType: 5
-    dialogueLines: []
-    completionDialogueLines: []
+    dialogueLines:
+    - text: 1 final try for number 17.
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Brilliant. You conquered number 17.
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -158,7 +164,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -184,7 +190,7 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 2
+    - 17
     tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

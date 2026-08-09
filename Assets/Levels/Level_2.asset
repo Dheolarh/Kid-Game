@@ -15,7 +15,7 @@ MonoBehaviour:
   levelNumber: 2
   levelName: LESSON 2
   levelSubtitle: 'The smallest counting number '
-  levelEndTip: Raise your pinky and say one!
+  levelEndTip: Raise your pinky and say 1!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Orange
@@ -24,14 +24,14 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}! Next up is the number 1!
+    - text: Hi {playername}. Next up is the number 1.
       mascotAnimationTrigger: isHi
-    - text: Number 1 is a straight line going straight down. Start at the top dot!
+    - text: Number 1 is a straight line going straight down. Start at the top dot.
       mascotAnimationTrigger: isIdle
     - text: Remember drag from the green dot to the red dot
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: That was simple right?
+    - text: That was simple right.
       mascotAnimationTrigger: isHappy
     - text: Let's trace 1 again
       mascotAnimationTrigger: isIdle

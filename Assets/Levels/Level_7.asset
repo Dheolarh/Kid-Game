@@ -24,12 +24,12 @@ MonoBehaviour:
   pages:
   - gameType: 5
     dialogueLines:
-    - text: Hi {playername}! Welcome to number 6!
+    - text: Hi {playername}. Welcome to number 6.
       mascotAnimationTrigger: isHi
-    - text: Curve down and loop around into a little circle at the bottom!
+    - text: Curve down and loop around into a little circle at the bottom.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great job tracing 6!
+    - text: Great job tracing 6.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -82,7 +82,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
   - gameType: 5
     dialogueLines:
-    - text: Practice writing number 6 two more times!
+    - text: Practice writing number 6 2 more times.
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5

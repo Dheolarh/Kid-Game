@@ -246,6 +246,8 @@ namespace KidGame.Mechanics.Tracing
                 activePathFillImage.color = traceColor;
             }
 
+            targetQuarter = 90f;
+
             // Hide the tracing hand guide while the player is drawing
             shape.CancelInvoke();
             shape.DisableTracingHand();

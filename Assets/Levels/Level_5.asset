@@ -26,10 +26,10 @@ MonoBehaviour:
     dialogueLines:
     - text: Let's learn a new number, the number 4
       mascotAnimationTrigger: isIdle
-    - text: Down and across, then a long line straight down!
+    - text: Down and across, then a long line straight down.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great work tracing 4!
+    - text: Great work tracing 4.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -85,7 +85,7 @@ MonoBehaviour:
     - text: Now practice makes perfect
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Fantastic! You know number 4!
+    - text: Fantastic. You know number 4.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1

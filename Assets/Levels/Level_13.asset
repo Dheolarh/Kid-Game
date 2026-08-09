@@ -24,14 +24,14 @@ MonoBehaviour:
   pages:
   - gameType: 0
     dialogueLines:
-    - text: Hi {playername}! Today let us practice counting fun objects from 1 to
+    - text: Hi {playername}. Today let us practice counting fun objects from 1 to
         5!
       mascotAnimationTrigger: isHi
     - text: Count each object 1 by 1, then drag the matching number card to the target
         box!
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Fantastic counting {playername}! You counted all the objects!
+    - text: Fantastic counting {playername}. You counted all the objects.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 6
     countingMinCount: 1
