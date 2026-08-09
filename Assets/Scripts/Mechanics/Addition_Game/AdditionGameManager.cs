@@ -248,7 +248,7 @@ namespace KidGame.Mechanics.Addition
             SetNextButtonInteractable(false);
 
             List<int> sums = new List<int>();
-            var slotData = new List<(List<GameObject> leftPrefabs, List<GameObject> rightPrefabs, int leftSum, int rightSum)>();
+            var slotData = new List<(List<GameObject> leftPrefabs, List<GameObject> rightPrefabs, List<int> leftValues, List<int> rightValues, int leftSum, int rightSum)>();
             List<(int left, int right)> normalPairs = null;
             var equations = new List<List<int>>();
 
@@ -277,6 +277,7 @@ namespace KidGame.Mechanics.Addition
                 var rawPairs = GenerateDiceOrFingerPairs(slotCount, minPerGrid, maxPerGrid, maxVal);
                 sums = rawPairs.Select(p => p.leftSum + p.rightSum).ToList();
 
+                slotData = new List<(List<GameObject> leftPrefabs, List<GameObject> rightPrefabs, List<int> leftValues, List<int> rightValues, int leftSum, int rightSum)>();
                 foreach (var pair in rawPairs)
                 {
                     var leftPrefabs = new List<GameObject>();
@@ -287,7 +288,7 @@ namespace KidGame.Mechanics.Addition
                     foreach (var val in pair.rightValues)
                         rightPrefabs.Add(diceMode ? dicePrefabs[val - 1] : fingerPrefabs[val - 1]);
 
-                    slotData.Add((leftPrefabs, rightPrefabs, pair.leftSum, pair.rightSum));
+                    slotData.Add((leftPrefabs, rightPrefabs, pair.leftValues, pair.rightValues, pair.leftSum, pair.rightSum));
                 }
             }
             else
@@ -351,7 +352,7 @@ namespace KidGame.Mechanics.Addition
                     if (diceMode || fingerMode)
                     {
                         var data = slotData[i];
-                        slot.Setup(data.leftPrefabs, data.rightPrefabs, data.leftSum, data.rightSum, this);
+                        slot.Setup(data.leftPrefabs, data.rightPrefabs, data.leftValues, data.rightValues, data.leftSum, data.rightSum, this);
                     }
                     else
                     {

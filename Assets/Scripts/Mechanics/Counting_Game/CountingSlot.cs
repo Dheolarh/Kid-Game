@@ -21,8 +21,9 @@ namespace KidGame.Mechanics.Counting
             {
                 var obj = Instantiate(objectPrefab, objectGrid);
 
-                if (obj.GetComponent<CountingObject>() == null)
-                    obj.AddComponent<CountingObject>();
+                var countingObj = obj.GetComponent<CountingObject>();
+                if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
+                countingObj.SetCountValue(i + 1);
             }
 
             // Pass a lambda so AnswerDropZone doesn't need to reference CountingSlot/Manager directly
@@ -34,14 +35,30 @@ namespace KidGame.Mechanics.Counting
 
         public void Setup(System.Collections.Generic.List<GameObject> itemPrefabs, int totalSum, CountingGameManager manager)
         {
+            Setup(itemPrefabs, null, totalSum, manager);
+        }
+
+        public void Setup(System.Collections.Generic.List<GameObject> itemPrefabs, System.Collections.Generic.List<int> itemValues, int totalSum, CountingGameManager manager)
+        {
             CorrectCount = totalSum;
+            int seqCount = 1;
 
-            foreach (var prefab in itemPrefabs)
+            for (int i = 0; i < itemPrefabs.Count; i++)
             {
-                var obj = Instantiate(prefab, objectGrid);
+                var obj = Instantiate(itemPrefabs[i], objectGrid);
 
-                if (obj.GetComponent<CountingObject>() == null)
-                    obj.AddComponent<CountingObject>();
+                var countingObj = obj.GetComponent<CountingObject>();
+                if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
+
+                if (itemValues != null && i < itemValues.Count && itemValues[i] > 0)
+                {
+                    countingObj.SetCountValue(itemValues[i]);
+                }
+                else
+                {
+                    countingObj.SetCountValue(seqCount);
+                    seqCount++;
+                }
             }
 
             dropZone.Setup(totalSum, () => manager.OnSlotAnswered(this));

@@ -37,9 +37,25 @@ namespace KidGame.Mechanics.Addition
                           AdditionGameManager manager)
         {
             CorrectSum = leftCount + rightCount;
+            int counter = 1;
 
-            SpawnObjects(leftPrefab,  leftCount,  ActualLeftGrid);
-            SpawnObjects(rightPrefab, rightCount, ActualRightGrid);
+            for (int i = 0; i < leftCount; i++)
+            {
+                var obj = Instantiate(leftPrefab, ActualLeftGrid);
+                var countingObj = obj.GetComponent<CountingObject>();
+                if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
+                countingObj.SetCountValue(counter);
+                counter++;
+            }
+
+            for (int i = 0; i < rightCount; i++)
+            {
+                var obj = Instantiate(rightPrefab, ActualRightGrid);
+                var countingObj = obj.GetComponent<CountingObject>();
+                if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
+                countingObj.SetCountValue(counter);
+                counter++;
+            }
 
             bool countAddMode = manager.CountAddMode && leftDropZone != null && rightDropZone != null;
             if (countAddMode)
@@ -73,13 +89,35 @@ namespace KidGame.Mechanics.Addition
                           int leftSum, int rightSum,
                           AdditionGameManager manager)
         {
+            Setup(leftDicePrefabs, rightDicePrefabs, null, null, leftSum, rightSum, manager);
+        }
+
+        public void Setup(List<GameObject> leftDicePrefabs,
+                          List<GameObject> rightDicePrefabs,
+                          List<int> leftValues,
+                          List<int> rightValues,
+                          int leftSum, int rightSum,
+                          AdditionGameManager manager)
+        {
             CorrectSum = leftSum + rightSum;
 
-            foreach (var prefab in leftDicePrefabs)
-                SpawnObject(prefab, ActualLeftGrid);
+            for (int i = 0; i < leftDicePrefabs.Count; i++)
+            {
+                var obj = Instantiate(leftDicePrefabs[i], ActualLeftGrid);
+                var countingObj = obj.GetComponent<CountingObject>();
+                if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
+                int val = (leftValues != null && i < leftValues.Count) ? leftValues[i] : 0;
+                countingObj.SetCountValue(val);
+            }
 
-            foreach (var prefab in rightDicePrefabs)
-                SpawnObject(prefab, ActualRightGrid);
+            for (int i = 0; i < rightDicePrefabs.Count; i++)
+            {
+                var obj = Instantiate(rightDicePrefabs[i], ActualRightGrid);
+                var countingObj = obj.GetComponent<CountingObject>();
+                if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
+                int val = (rightValues != null && i < rightValues.Count) ? rightValues[i] : 0;
+                countingObj.SetCountValue(val);
+            }
 
             bool countAddMode = manager.CountAddMode && leftDropZone != null && rightDropZone != null;
             if (countAddMode)

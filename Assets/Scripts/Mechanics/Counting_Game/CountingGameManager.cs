@@ -203,7 +203,7 @@ namespace KidGame.Mechanics.Counting
             SetNextButtonInteractable(false);
 
             List<int> counts;
-            List<(List<GameObject> prefabs, int totalSum)> slotData = null;
+            List<(List<GameObject> prefabs, List<int> itemValues, int totalSum)> slotData = null;
             List<int> normalCounts = null;
             List<int> catOrder = null;
 
@@ -281,14 +281,14 @@ namespace KidGame.Mechanics.Counting
                 var rawData = GenerateCountingDiceOrFingerData(slotCount, minCount, maxCount, maxVal);
                 counts = rawData.Select(d => d.totalSum).ToList();
 
-                slotData = new List<(List<GameObject>, int)>();
+                slotData = new List<(List<GameObject> prefabs, List<int> itemValues, int totalSum)>();
                 foreach (var data in rawData)
                 {
                     var prefabs = new List<GameObject>();
                     foreach (var val in data.itemValues)
                         prefabs.Add(diceMode ? dicePrefabs[val - 1] : fingerPrefabs[val - 1]);
 
-                    slotData.Add((prefabs, data.totalSum));
+                    slotData.Add((prefabs, data.itemValues, data.totalSum));
                 }
             }
             else
@@ -321,7 +321,7 @@ namespace KidGame.Mechanics.Counting
 
                 if (diceMode || fingerMode)
                 {
-                    slot.Setup(slotData[i].prefabs, slotData[i].totalSum, this);
+                    slot.Setup(slotData[i].prefabs, slotData[i].itemValues, slotData[i].totalSum, this);
                 }
                 else
                 {

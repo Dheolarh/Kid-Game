@@ -19,6 +19,20 @@ namespace KidGame.Mechanics.Counting
         [Tooltip("Oscillation count during punch.")]
         [SerializeField] private int   punchVibrato  = 6;
 
+        [Header("Counting Voice Config")]
+        [Tooltip("The specific number value spoken when tapped. If 0 or negative, spoken audio is skipped.")]
+        [SerializeField] private int countValue = 0;
+
+        public int CountValue => countValue;
+
+        /// <summary>
+        /// Configures the number value spoken when this object is tapped.
+        /// </summary>
+        public void SetCountValue(int value)
+        {
+            countValue = value;
+        }
+
         private void OnDestroy() => DOTween.Kill(transform);
 
         public void OnPointerDown(PointerEventData eventData)
@@ -29,6 +43,12 @@ namespace KidGame.Mechanics.Counting
 
             // Play counting object tap SFX
             KidGame.Audio.AudioManager.Instance?.PlayCountObjectSfx();
+
+            // Play spoken number voice if assigned
+            if (countValue > 0)
+            {
+                KidGame.Audio.AudioManager.Instance?.PlayNumberVoice(countValue.ToString());
+            }
         }
 
     }
