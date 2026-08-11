@@ -118,7 +118,17 @@ namespace KidGame.Mechanics.Counting
 
         private void AcceptCard(AnswerCard card)
         {
-            _isAnswered       = true;
+            _isAnswered = true;
+
+            var recallSlot = GetComponent<NumberRecall.RecallAnswerSlot>();
+            if (recallSlot == null) recallSlot = GetComponentInParent<NumberRecall.RecallAnswerSlot>();
+
+            if (recallSlot != null)
+            {
+                recallSlot.OnCorrectAnswerDropped(card, _onCorrect);
+                return;
+            }
+
             _background.color = card.CardColor;
             if (hintText != null)
             {

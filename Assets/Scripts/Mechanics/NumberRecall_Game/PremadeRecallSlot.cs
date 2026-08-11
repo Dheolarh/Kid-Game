@@ -91,27 +91,45 @@ namespace KidGame.Mechanics.NumberRecall
                         _totalAnswerBoxesCount++;
                         requiredAnswers.Add(entry.value);
 
-                        // Ensure AnswerDropZone component exists on answer box
-                        var dropZone = boxGo.GetComponent<AnswerDropZone>();
-                        if (dropZone == null) dropZone = boxGo.AddComponent<AnswerDropZone>();
-
                         int expectedVal = entry.value;
                         bool boxShowHint = entry.showHint && isLearningMode;
-                        dropZone.Setup(expectedVal, () =>
-                        {
-                            _solvedAnswerBoxesCount++;
-                            if (_solvedAnswerBoxesCount >= _totalAnswerBoxesCount)
-                            {
-                                _onCompleted?.Invoke();
-                            }
-                        }, showHint: boxShowHint);
 
-                        if (!boxShowHint)
+                        var recallSlot = boxGo.GetComponent<RecallAnswerSlot>();
+                        if (recallSlot == null) recallSlot = boxGo.GetComponentInChildren<RecallAnswerSlot>(true);
+
+                        if (recallSlot != null)
                         {
-                            var textComponents = boxGo.GetComponentsInChildren<TMP_Text>(true);
-                            foreach (var txt in textComponents)
+                            recallSlot.SetupSlot(expectedVal, true, boxShowHint, () =>
                             {
-                                txt.gameObject.SetActive(false);
+                                _solvedAnswerBoxesCount++;
+                                if (_solvedAnswerBoxesCount >= _totalAnswerBoxesCount)
+                                {
+                                    _onCompleted?.Invoke();
+                                }
+                            });
+                        }
+                        else
+                        {
+                            // Standard drop zone setup if RecallAnswerSlot component is not present
+                            var dropZone = boxGo.GetComponent<AnswerDropZone>();
+                            if (dropZone == null) dropZone = boxGo.AddComponent<AnswerDropZone>();
+
+                            dropZone.Setup(expectedVal, () =>
+                            {
+                                _solvedAnswerBoxesCount++;
+                                if (_solvedAnswerBoxesCount >= _totalAnswerBoxesCount)
+                                {
+                                    _onCompleted?.Invoke();
+                                }
+                            }, showHint: boxShowHint);
+
+                            if (!boxShowHint)
+                            {
+                                var textComponents = boxGo.GetComponentsInChildren<TMP_Text>(true);
+                                foreach (var txt in textComponents)
+                                {
+                                    txt.gameObject.SetActive(false);
+                                }
                             }
                         }
                     }
@@ -136,6 +154,55 @@ namespace KidGame.Mechanics.NumberRecall
                         {
                             Destroy(card);
                         }
+                    }
+                }
+            }
+
+            // Also check for any standalone RecallAnswerSlot components attached directly in hierarchy
+            var standaloneRecallSlots = GetComponentsInChildren<RecallAnswerSlot>(true);
+            foreach (var slot in standaloneRecallSlots)
+            {
+                if (slot == null) continue;
+
+                // Check if already processed via rows
+                bool alreadyProcessed = false;
+                if (rows != null)
+                {
+                    foreach (var r in rows)
+                    {
+                        if (r == null || r.boxes == null) continue;
+                        foreach (var b in r.boxes)
+                        {
+                            if (b != null && b.boxObject != null && (b.boxObject == slot.gameObject || slot.transform.IsChildOf(b.boxObject.transform)))
+                            {
+                                alreadyProcessed = true;
+                                break;
+                            }
+                        }
+                        if (alreadyProcessed) break;
+                    }
+                }
+
+                if (!alreadyProcessed)
+                {
+                    if (slot.IsAnswer)
+                    {
+                        _totalAnswerBoxesCount++;
+                        requiredAnswers.Add(slot.ExpectedAnswer);
+
+                        bool boxShowHint = slot.ShowHint && isLearningMode;
+                        slot.SetupSlot(slot.ExpectedAnswer, true, boxShowHint, () =>
+                        {
+                            _solvedAnswerBoxesCount++;
+                            if (_solvedAnswerBoxesCount >= _totalAnswerBoxesCount)
+                            {
+                                _onCompleted?.Invoke();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        slot.InitSlotState();
                     }
                 }
             }
@@ -183,9 +250,16 @@ namespace KidGame.Mechanics.NumberRecall
             entry.boxObject = go;
             entry.boxName = go.name;
 
-            // Check if object has PremadeRecallBox helper
+            var recallSlot = go.GetComponent<RecallAnswerSlot>();
             var premadeBox = go.GetComponent<PremadeRecallBox>();
-            if (premadeBox != null)
+
+            if (recallSlot != null)
+            {
+                entry.isAnswerBox = recallSlot.IsAnswer;
+                entry.value = recallSlot.ExpectedAnswer;
+                entry.showHint = recallSlot.ShowHint;
+            }
+            else if (premadeBox != null)
             {
                 entry.isAnswerBox = premadeBox.isAnswerBox;
                 entry.value = premadeBox.numberValue;

@@ -233,6 +233,20 @@ namespace KidGame.Mechanics.Counting
 
         // ── Public API (called by AnswerDropZone) ─────────────────────────────
 
+        public void Disappear(float duration = 0.2f)
+        {
+            _isAccepted = true;
+            DOTween.Kill(transform);
+            if (_canvasGroup != null) _canvasGroup.blocksRaycasts = false;
+
+            transform.DOScale(Vector3.zero, duration)
+                     .SetEase(Ease.InBack)
+                     .OnComplete(() =>
+                     {
+                         gameObject.SetActive(false);
+                     });
+        }
+
         public void AcceptedByZone(Transform zoneTransform)
         {
             _isAccepted = true;

@@ -10,29 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_24
+  m_Name: Level_39
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 24
-  levelName: LESSON 24
-  levelSubtitle: Practicing 1 to 20
-  levelEndTip: 1,2,3....19,20 you know it all!
+  levelNumber: 39
+  levelName: LESSON 39
+  levelSubtitle: Tracing 32 step by step
+  levelEndTip: 'I have 32 teeth! '
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  isPremadeLevel: 0
+  themePresetName: Orange
+  levelThemeColor: {r: 0.9, g: 0.49, b: 0.13, a: 0}
+  levelBackgroundSprite: {fileID: 0}
   pages:
-  - gameType: 4
+  - gameType: 5
     dialogueLines:
-    - text: Let's practice 1 - 20
-      mascotAnimationTrigger: isIdle
-    - text: I have hints for you
+    - text: Hi {playername}. Let us practice writing 32.
+      mascotAnimationTrigger: isHi
+    - text: Trace 3 on the left, then write 2 on the right.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great work!
+    - text: Nice work. You traced 32 correctly.
       mascotAnimationTrigger: isHappy
-    - text: Now let's see if you really know your numbers
-      mascotAnimationTrigger: isIdle
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -54,7 +52,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -76,17 +74,18 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 6744952a9bd6d7e499f858e23073714c, type: 3}
+    recallPremadeSlotPrefab: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
-    tracingValuesToTrace: []
+    tracingValuesToTrace:
+    - 32
     tracingCustomSpawnCount: 1
-  - gameType: 4
+  - gameType: 5
     dialogueLines:
-    - text: Now try that without hints
+    - text: Trace 32 again. Keep your finger on the line.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: You amaze me {playername}!
+    - text: Wonderful {playername}. 3 and 2 make 32.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -109,7 +108,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -131,10 +130,67 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 3fdde46cb93b0794f92a5b3906219a29, type: 3}
+    recallPremadeSlotPrefab: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
-    tracingValuesToTrace: []
+    tracingValuesToTrace:
+    - 32
+    tracingCustomSpawnCount: 1
+  - gameType: 5
+    dialogueLines:
+    - text: One more time to complete number 32.
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Brilliant. You mastered writing 32.
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 0
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallPremadeSlotPrefab: {fileID: 0}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 32
     tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}

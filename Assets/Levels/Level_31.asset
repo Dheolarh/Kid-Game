@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_24
+  m_Name: Level_31
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 24
-  levelName: LESSON 24
-  levelSubtitle: Practicing 1 to 20
-  levelEndTip: 1,2,3....19,20 you know it all!
+  levelNumber: 31
+  levelName: LESSON 31
+  levelSubtitle: Counting school bus windows
+  levelEndTip: How many windows are on your school bus?
   isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Green
@@ -24,69 +24,10 @@ MonoBehaviour:
   pages:
   - gameType: 4
     dialogueLines:
-    - text: Let's practice 1 - 20
-      mascotAnimationTrigger: isIdle
-    - text: I have hints for you
+    - text: Let's count how many windows are on this buses
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great work!
-      mascotAnimationTrigger: isHappy
-    - text: Now let's see if you really know your numbers
-      mascotAnimationTrigger: isIdle
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 6744952a9bd6d7e499f858e23073714c, type: 3}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-  - gameType: 4
-    dialogueLines:
-    - text: Now try that without hints
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: You amaze me {playername}!
+    - text: Great work! you still remember your numbers 1 to 10
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -131,7 +72,7 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 3fdde46cb93b0794f92a5b3906219a29, type: 3}
+    recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: 1509b3475e39e1b4298b2bfd82ac00e3, type: 3}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
