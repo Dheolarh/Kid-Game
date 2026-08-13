@@ -20,6 +20,8 @@ namespace KidGame.Mechanics.Counting
 
         [Header("Containers")]
         [SerializeField] private Transform slotsContainer;
+        [Tooltip("Separate container transform configured specifically for Premade Counting Slots (Optional). If null, uses slotsContainer.")]
+        [SerializeField] private Transform premadeSlotsContainer;
         [SerializeField] private Transform answersContainer;
 
         [Header("Shared")]
@@ -47,6 +49,11 @@ namespace KidGame.Mechanics.Counting
         [Tooltip("Define themed collections of object prefabs (e.g., Ocean, Animals). Enable one to restrict spawning to that collection.")]
         [SerializeField] private List<ObjectCategoryTheme> themes;
 
+        private GameObject premadeSlotPrefab;
+
+        public GameObject PremadeSlotPrefab { get => premadeSlotPrefab; set => premadeSlotPrefab = value; }
+        public Transform PremadeSlotsContainer { get => premadeSlotsContainer; set => premadeSlotsContainer = value; }
+
         private static readonly Color[] Palette =
         {
             new Color(0.91f, 0.30f, 0.24f),   // red
@@ -64,13 +71,14 @@ namespace KidGame.Mechanics.Counting
         private int _answeredCount;
         public Button NextButton => nextButton;
 
-        public void Configure(int slotCount, int minCount, int maxCount, bool diceMode, bool fingerMode, string activeThemeName)
+        public void Configure(int slotCount, int minCount, int maxCount, bool diceMode, bool fingerMode, string activeThemeName, GameObject premadeSlotPrefab = null)
         {
             this.slotCount = slotCount;
             this.minCount = minCount;
             this.maxCount = maxCount;
             this.diceMode = diceMode;
             this.fingerMode = fingerMode;
+            this.premadeSlotPrefab = premadeSlotPrefab;
 
             if (themes != null)
             {
@@ -131,88 +139,101 @@ namespace KidGame.Mechanics.Counting
             GameFlowManager.Instance?.NotifyRoundStateChanged();
         }
 
+        private void OnPremadeRoundCompleted()
+        {
+            SetNextButtonInteractable(true);
+            GameFlowManager.Instance?.NotifyRoundStateChanged();
+        }
+
         // ── Round Management ──────────────────────────────────────────────────
 
         public void GenerateRound()
         {
-            // ── Validate required Inspector references ────────────────────────
-            if (diceMode)
-            {
-                if (dicePrefabs == null || dicePrefabs.Length != 6)
-                {
-                    Debug.LogError("[CountingGame] Dice Mode is enabled, but Dice Prefabs array does not have exactly 6 elements.");
-                    return;
-                }
-                for (int i = 0; i < 6; i++)
-                {
-                    if (dicePrefabs[i] == null)
-                    {
-                        Debug.LogError($"[CountingGame] Dice Prefab at index {i} is not assigned.");
-                        return;
-                    }
-                }
-            }
-            else if (fingerMode)
-            {
-                if (fingerPrefabs == null || fingerPrefabs.Length != 5)
-                {
-                    Debug.LogError("[CountingGame] Finger Mode is enabled, but Finger Prefabs array does not have exactly 5 elements.");
-                    return;
-                }
-                for (int i = 0; i < 5; i++)
-                {
-                    if (fingerPrefabs[i] == null)
-                    {
-                        Debug.LogError($"[CountingGame] Finger Prefab at index {i} is not assigned.");
-                        return;
-                    }
-                }
-            }
-            else
-            {
-                if (objectCategoryPrefabs == null || objectCategoryPrefabs.Length == 0)
-                {
-                    Debug.LogError("[CountingGame] Object Category Prefabs array is empty.");
-                    return;
-                }
-            }
-            if (slotPrefab == null)
-            {
-                Debug.LogError("[CountingGame] Slot Prefab is not assigned in the Inspector.");
-                return;
-            }
-            if (answerCardPrefab == null)
-            {
-                Debug.LogError("[CountingGame] Answer Card Prefab is not assigned in the Inspector.");
-                return;
-            }
-            if (slotsContainer == null)
-            {
-                Debug.LogError("[CountingGame] Slots Container is not assigned.");
-                return;
-            }
-            if (answersContainer == null)
-            {
-                Debug.LogError("[CountingGame] Answers Container is not assigned.");
-                return;
-            }
-            // ─────────────────────────────────────────────────────────────────
-
             ClearPrevious();
             _answeredCount = 0;
             SetNextButtonInteractable(false);
 
-            List<int> counts;
-            List<(List<GameObject> prefabs, List<int> itemValues, int totalSum)> slotData = null;
-            List<int> normalCounts = null;
-            List<int> catOrder = null;
+            Transform activeSlotsContainer = (premadeSlotPrefab != null && premadeSlotsContainer != null) 
+                ? premadeSlotsContainer 
+                : slotsContainer;
 
-            var activePrefabs = GetActiveThemePrefabs();
-            if (activePrefabs == null || activePrefabs.Length == 0)
+            if (premadeSlotsContainer != null && premadeSlotsContainer != slotsContainer)
             {
-                activePrefabs = objectCategoryPrefabs;
+                bool isPremade = (premadeSlotPrefab != null);
+                premadeSlotsContainer.gameObject.SetActive(isPremade);
+                slotsContainer.gameObject.SetActive(!isPremade);
             }
 
+            if (premadeSlotPrefab != null)
+            {
+                // Premade Content / Slot Mode: Spawn pre-designed level layout prefab
+                var slotGo = Instantiate(premadeSlotPrefab, activeSlotsContainer);
+
+                List<int> numberAnswers = new List<int>();
+                List<string> stringAnswers = new List<string>();
+
+                var premadeCounting = slotGo.GetComponent<PremadeCountingSlot>();
+                var premadeRecall = slotGo.GetComponent<KidGame.Mechanics.NumberRecall.PremadeRecallSlot>();
+
+                if (premadeCounting != null)
+                {
+                    var res = premadeCounting.Setup(OnPremadeRoundCompleted, true);
+                    numberAnswers = res.numberAnswers;
+                    stringAnswers = res.stringAnswers;
+                }
+                else if (premadeRecall != null)
+                {
+                    numberAnswers = premadeRecall.Setup(OnPremadeRoundCompleted, true);
+                }
+                else
+                {
+                    premadeCounting = slotGo.AddComponent<PremadeCountingSlot>();
+                    var res = premadeCounting.Setup(OnPremadeRoundCompleted, true);
+                    numberAnswers = res.numberAnswers;
+                    stringAnswers = res.stringAnswers;
+                }
+
+                if (stringAnswers != null && stringAnswers.Count > 0)
+                {
+                    var premadeColors = new List<Color>();
+                    for (int i = 0; i < stringAnswers.Count; i++) premadeColors.Add(Palette[i % Palette.Length]);
+                    Shuffle(premadeColors);
+
+                    var shuffled = new List<string>(stringAnswers);
+                    Shuffle(shuffled);
+
+                    for (int i = 0; i < shuffled.Count; i++)
+                    {
+                        var go = Instantiate(answerCardPrefab, answersContainer);
+                        var card = go.GetComponent<AnswerCard>();
+                        char c = !string.IsNullOrEmpty(shuffled[i]) ? shuffled[i][0] : ' ';
+                        card.Setup((int)c, premadeColors[i], shuffled[i], customAcceptedScaleMultiplier: 1.4f);
+                        _cards.Add(card);
+                    }
+                }
+                else if (numberAnswers != null && numberAnswers.Count > 0)
+                {
+                    var premadeColors = new List<Color>();
+                    for (int i = 0; i < numberAnswers.Count; i++) premadeColors.Add(Palette[i % Palette.Length]);
+                    Shuffle(premadeColors);
+
+                    var shuffled = new List<int>(numberAnswers);
+                    Shuffle(shuffled);
+
+                    for (int i = 0; i < shuffled.Count; i++)
+                    {
+                        var go = Instantiate(answerCardPrefab, answersContainer);
+                        var card = go.GetComponent<AnswerCard>();
+                        card.Setup(shuffled[i], premadeColors[i], customAcceptedScaleMultiplier: 1.4f);
+                        _cards.Add(card);
+                    }
+                }
+
+                UpdateScrollLocking();
+                return;
+            }
+
+            // ── Validate required Inspector references for procedural generation ──────
             if (diceMode)
             {
                 if (dicePrefabs == null || dicePrefabs.Length != 6)
@@ -247,6 +268,11 @@ namespace KidGame.Mechanics.Counting
             }
             else
             {
+                var activePrefabs = GetActiveThemePrefabs();
+                if (activePrefabs == null || activePrefabs.Length == 0)
+                {
+                    activePrefabs = objectCategoryPrefabs;
+                }
                 if (activePrefabs == null || activePrefabs.Length == 0)
                 {
                     Debug.LogError("[CountingGame] No object prefabs available. Assign default category prefabs or enable an object category theme.");
@@ -275,6 +301,17 @@ namespace KidGame.Mechanics.Counting
             }
             // ─────────────────────────────────────────────────────────────────
 
+            List<int> counts;
+            List<(List<GameObject> prefabs, List<int> itemValues, int totalSum)> slotData = null;
+            List<int> normalCounts = null;
+            List<int> catOrder = null;
+
+            var categoryPrefabs = GetActiveThemePrefabs();
+            if (categoryPrefabs == null || categoryPrefabs.Length == 0)
+            {
+                categoryPrefabs = objectCategoryPrefabs;
+            }
+
             if (diceMode || fingerMode)
             {
                 int maxVal = diceMode ? 6 : 5;
@@ -296,7 +333,7 @@ namespace KidGame.Mechanics.Counting
                 normalCounts = UniqueRandomList(slotCount, minCount, maxCount);
                 counts = normalCounts;
 
-                catOrder = Enumerable.Range(0, activePrefabs.Length).ToList();
+                catOrder = Enumerable.Range(0, categoryPrefabs.Length).ToList();
                 Shuffle(catOrder);
             }
 
@@ -325,7 +362,7 @@ namespace KidGame.Mechanics.Counting
                 }
                 else
                 {
-                    var cat  = activePrefabs[catOrder[i % catOrder.Count]];
+                    var cat  = categoryPrefabs[catOrder[i % catOrder.Count]];
                     slot.Setup(cat, normalCounts[i], this);
                 }
                 _slots.Add(slot);
@@ -353,6 +390,17 @@ namespace KidGame.Mechanics.Counting
                 for (int i = slotsContainer.childCount - 1; i >= 0; i--)
                 {
                     var child = slotsContainer.GetChild(i);
+                    child.gameObject.SetActive(false);
+                    child.SetParent(null);
+                    if (Application.isPlaying) Destroy(child.gameObject);
+                    else DestroyImmediate(child.gameObject);
+                }
+            }
+            if (premadeSlotsContainer != null && premadeSlotsContainer != slotsContainer)
+            {
+                for (int i = premadeSlotsContainer.childCount - 1; i >= 0; i--)
+                {
+                    var child = premadeSlotsContainer.GetChild(i);
                     child.gameObject.SetActive(false);
                     child.SetParent(null);
                     if (Application.isPlaying) Destroy(child.gameObject);
@@ -528,6 +576,10 @@ namespace KidGame.Mechanics.Counting
 
         public bool IsRoundCompleted()
         {
+            if (premadeSlotPrefab != null)
+            {
+                return nextButton != null && nextButton.interactable;
+            }
             if (_slots == null || _slots.Count == 0) return false;
             return _answeredCount >= _slots.Count;
         }

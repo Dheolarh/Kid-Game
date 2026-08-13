@@ -311,9 +311,10 @@ namespace KidGame.Interface
             SetCurtainColor(themeColor);
 
             // 0. Update text values and ensure loading content starts hidden
-            if (lessonNumberText != null) lessonNumberText.text = lessonNumber;
-            if (lessonTitleText != null) lessonTitleText.text = lessonTitle;
-            if (lessonSubtitleText != null) lessonSubtitleText.text = lessonSubtitle;
+            string playerName = PlayerPrefs.GetString("PlayerName", "Kid");
+            if (lessonNumberText != null) lessonNumberText.text = ProcessPlayerName(lessonNumber, playerName);
+            if (lessonTitleText != null) lessonTitleText.text = ProcessPlayerName(lessonTitle, playerName);
+            if (lessonSubtitleText != null) lessonSubtitleText.text = ProcessPlayerName(lessonSubtitle, playerName);
             if (loadingContentGroup != null)
             {
                 loadingContentGroup.transform.SetAsLastSibling(); // Render on top of the curtains
@@ -393,6 +394,12 @@ namespace KidGame.Interface
             yield return new WaitUntil(() => isOpened);
 
             _isTransitioning = false;
+        }
+
+        private string ProcessPlayerName(string input, string playerName)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+            return input.Replace("{PLAYERNAME}", playerName).Replace("{playername}", playerName);
         }
 
         private void OnDestroy()

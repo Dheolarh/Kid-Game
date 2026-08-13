@@ -472,10 +472,14 @@ namespace KidGame.Mechanics.Addition
                 }
             }
 
-            // If we somehow couldn't fill all slots (very unlikely), log a warning
-            if (pairs.Count < count)
-                Debug.LogWarning($"[AdditionGame] Could only generate {pairs.Count}/{count} unique-sum pairs. " +
-                                 "Consider widening minPerGrid/maxPerGrid.");
+            // If unique sums ran out (e.g. requested count > total unique sums), fill remaining slots with random picks from range
+            maxTries = 500;
+            while (pairs.Count < count && maxTries-- > 0)
+            {
+                int left  = Random.Range(min, max + 1);
+                int right = Random.Range(min, max + 1);
+                pairs.Add((left, right));
+            }
 
             return pairs;
         }

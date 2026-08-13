@@ -753,7 +753,7 @@ namespace KidGame.Interface
                     var counting = _activeGameModeInstance?.GetComponent<CountingGameManager>();
                     if (counting != null)
                     {
-                        counting.Configure(page.countingSlotCount, page.countingMinCount, page.countingMaxCount, page.countingDiceMode, page.countingFingerMode, page.countingActiveThemeName);
+                        counting.Configure(page.countingSlotCount, page.countingMinCount, page.countingMaxCount, page.countingDiceMode, page.countingFingerMode, page.countingActiveThemeName, page.countingPremadeSlotPrefab);
                         SetupNextButton(counting.NextButton);
                     }
                     break;

@@ -37,11 +37,18 @@ namespace KidGame.Mechanics.Addition
                           AdditionGameManager manager)
         {
             CorrectSum = leftCount + rightCount;
+            var leftGridComp = ActualLeftGrid != null ? ActualLeftGrid.GetComponent<GridLayoutGroup>() : null;
+            if (leftGridComp != null) leftGridComp.cellSize = new Vector2(100f, 100f);
+
+            var rightGridComp = ActualRightGrid != null ? ActualRightGrid.GetComponent<GridLayoutGroup>() : null;
+            if (rightGridComp != null) rightGridComp.cellSize = new Vector2(100f, 100f);
+
             int counter = 1;
 
             for (int i = 0; i < leftCount; i++)
             {
                 var obj = Instantiate(leftPrefab, ActualLeftGrid);
+                ForceSize100(obj);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 countingObj.SetCountValue(counter);
@@ -51,6 +58,7 @@ namespace KidGame.Mechanics.Addition
             for (int i = 0; i < rightCount; i++)
             {
                 var obj = Instantiate(rightPrefab, ActualRightGrid);
+                ForceSize100(obj);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 countingObj.SetCountValue(counter);
@@ -398,9 +406,33 @@ namespace KidGame.Mechanics.Addition
         {
             var obj = Object.Instantiate(prefab, parent);
 
+            var grid = parent != null ? parent.GetComponent<GridLayoutGroup>() : null;
+            if (grid != null)
+            {
+                grid.cellSize = new Vector2(100f, 100f);
+            }
+
+            ForceSize100(obj);
+
             // Tap animation — added automatically, no prefab changes needed
             if (obj.GetComponent<CountingObject>() == null)
                 obj.AddComponent<CountingObject>();
+        }
+
+        private static void ForceSize100(GameObject obj)
+        {
+            if (obj == null) return;
+            var rt = obj.GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                rt.sizeDelta = new Vector2(100f, 100f);
+            }
+            var le = obj.GetComponent<LayoutElement>();
+            if (le != null)
+            {
+                le.preferredWidth = 100f;
+                le.preferredHeight = 100f;
+            }
         }
     }
 }

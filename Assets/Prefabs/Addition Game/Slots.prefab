@@ -305,7 +305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
   m_Padding:
     m_Left: 0
-    m_Right: 20
+    m_Right: 50
     m_Top: 0
     m_Bottom: 90
   m_ChildAlignment: 3
@@ -488,9 +488,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 428708344384418557}
     m_Modifications:
+    - target: {fileID: 2883904579695202947, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
+      propertyPath: m_EffectColor.a
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2883904579695202947, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
+      propertyPath: m_EffectColor.b
+      value: 0.654902
+      objectReference: {fileID: 0}
+    - target: {fileID: 2883904579695202947, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
+      propertyPath: m_EffectColor.g
+      value: 0.06666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 2883904579695202947, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
+      propertyPath: m_EffectColor.r
+      value: 0.76470596
+      objectReference: {fileID: 0}
     - target: {fileID: 6987366134334932249, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
       propertyPath: m_Name
       value: Answer box
+      objectReference: {fileID: 0}
+    - target: {fileID: 7418766824604907020, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
+      propertyPath: m_EffectColor.a
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7418766824604907020, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
+      propertyPath: m_EffectColor.b
+      value: 0.654902
+      objectReference: {fileID: 0}
+    - target: {fileID: 7418766824604907020, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
+      propertyPath: m_EffectColor.g
+      value: 0.06666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 7418766824604907020, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
+      propertyPath: m_EffectColor.r
+      value: 0.76470596
       objectReference: {fileID: 0}
     - target: {fileID: 9073633629061812412, guid: 32134818e99a2024cb91b07273a0d1b3, type: 3}
       propertyPath: m_Pivot.x

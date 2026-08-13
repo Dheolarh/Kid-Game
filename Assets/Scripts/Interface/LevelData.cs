@@ -42,6 +42,7 @@ namespace KidGame.Interface
         public bool countingFingerMode = false;
         [Tooltip("The active theme name to restrict object spawning. Leave empty to use all themes.")]
         public string countingActiveThemeName;
+        public GameObject countingPremadeSlotPrefab;
 
         [Header("Addition Game Settings")]
         public int additionSlotCount = 5;

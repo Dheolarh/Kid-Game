@@ -247,6 +247,7 @@ namespace KidGame.Editor
                             page.countingDiceMode = EditorGUILayout.Toggle("Dice Mode", page.countingDiceMode);
                             page.countingFingerMode = EditorGUILayout.Toggle("Finger Mode", page.countingFingerMode);
                             page.countingActiveThemeName = EditorGUILayout.TextField("Theme Name (Optional)", page.countingActiveThemeName);
+                            page.countingPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Content Prefab (Optional)", page.countingPremadeSlotPrefab, typeof(GameObject), false);
                             break;
 
                         case GameType.Addition:

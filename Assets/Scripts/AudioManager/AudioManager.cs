@@ -364,17 +364,49 @@ namespace KidGame.Audio
         }
 
         /// <summary>
-        /// Plays the voice audio clip corresponding to a number string (e.g. "1".."50").
+        /// Plays the voice audio clip corresponding to a number string (e.g. "1".."50") or letter string (e.g. "A".."Z").
         /// </summary>
         public void PlayNumberVoice(string numberStr, AudioSource customSource = null)
         {
             if (string.IsNullOrEmpty(numberStr)) return;
             string cleanNum = numberStr.Trim().Trim('\'', '"');
 
+            if (!int.TryParse(cleanNum, out _))
+            {
+                PlayLetterVoice(cleanNum, customSource);
+                return;
+            }
+
             AudioClip voiceClip = Resources.Load<AudioClip>($"Audio/1 - 50/{cleanNum}");
             if (voiceClip == null)
             {
-                Debug.LogWarning($"[AudioManager] Voice audio clip for number '{cleanNum}' not found at Resources/Audio/1 - 50/{cleanNum}.");
+                PlayLetterVoice(cleanNum, customSource);
+                return;
+            }
+
+            float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
+            AudioSource src = customSource != null ? customSource : sfxSource;
+            if (src != null)
+            {
+                src.PlayOneShot(voiceClip, finalVol);
+            }
+        }
+
+        /// <summary>
+        /// Plays the voice audio clip corresponding to a letter string (e.g. "A".."Z" or "a".."z").
+        /// </summary>
+        public void PlayLetterVoice(string letterStr, AudioSource customSource = null)
+        {
+            if (string.IsNullOrEmpty(letterStr)) return;
+            string cleanLetter = letterStr.Trim().Trim('\'', '"');
+
+            AudioClip voiceClip = Resources.Load<AudioClip>($"Audio/A - Z/{cleanLetter.ToLower()}");
+            if (voiceClip == null) voiceClip = Resources.Load<AudioClip>($"Audio/A - Z/{cleanLetter.ToUpper()}");
+            if (voiceClip == null) voiceClip = Resources.Load<AudioClip>($"Audio/A - Z/{cleanLetter}");
+
+            if (voiceClip == null)
+            {
+                Debug.LogWarning($"[AudioManager] Voice audio clip for letter '{cleanLetter}' not found at Resources/Audio/A - Z/{cleanLetter}.");
                 return;
             }
 

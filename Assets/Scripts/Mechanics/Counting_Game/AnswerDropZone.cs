@@ -129,6 +129,15 @@ namespace KidGame.Mechanics.Counting
                 return;
             }
 
+            var letterSlot = GetComponent<LetterAnswerSlot>();
+            if (letterSlot == null) letterSlot = GetComponentInParent<LetterAnswerSlot>();
+
+            if (letterSlot != null)
+            {
+                letterSlot.OnCorrectAnswerDropped(card, _onCorrect);
+                return;
+            }
+
             _background.color = card.CardColor;
             if (hintText != null)
             {
