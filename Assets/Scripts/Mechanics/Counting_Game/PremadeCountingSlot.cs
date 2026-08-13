@@ -225,17 +225,6 @@ namespace KidGame.Mechanics.Counting
             if (rowState != null)
             {
                 rowState.solvedAnswers++;
-
-                // When the last remaining answer box in this row is solved, play the row's number sound!
-                if (rowState.totalAnswers > 0 && rowState.solvedAnswers >= rowState.totalAnswers)
-                {
-                    int numberToPlay = rowState.numberValue;
-                    Debug.Log($"[PremadeCountingSlot] Row finished! Playing number sound '{numberToPlay}'.");
-                    DOVirtual.DelayedCall(0.5f, () =>
-                    {
-                        AudioManager.Instance?.PlayNumberVoice(numberToPlay.ToString());
-                    });
-                }
             }
 
             if (_solvedAnswerBoxesCount >= _totalAnswerBoxesCount)
