@@ -753,7 +753,7 @@ namespace KidGame.Interface
                     var counting = _activeGameModeInstance?.GetComponent<CountingGameManager>();
                     if (counting != null)
                     {
-                        counting.Configure(page.countingSlotCount, page.countingMinCount, page.countingMaxCount, page.countingDiceMode, page.countingFingerMode, page.countingActiveThemeName, page.countingPremadeSlotPrefab);
+                        counting.Configure(page.countingSlotCount, page.countingMinCount, page.countingMaxCount, page.countingDiceMode, page.countingFingerMode, page.countingActiveThemeName, page.countingPremadeSlotPrefab, page.countingPremadeSlotData);
                         SetupNextButton(counting.NextButton);
                     }
                     break;
@@ -789,7 +789,7 @@ namespace KidGame.Interface
                     var recall = _activeGameModeInstance?.GetComponent<NumberRecallGameManager>();
                     if (recall != null)
                     {
-                        recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden, page.recallIsLearningMode, page.recallIsSequenceFillMode, page.recallPremadeSlotPrefab);
+                        recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden, page.recallIsLearningMode, page.recallIsSequenceFillMode, page.recallPremadeSlotPrefab, page.recallPremadeSlotData);
                         SetupNextButton(recall.NextButton);
                     }
                     break;

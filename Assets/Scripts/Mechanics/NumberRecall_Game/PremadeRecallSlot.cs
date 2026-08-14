@@ -63,6 +63,62 @@ namespace KidGame.Mechanics.NumberRecall
         };
 
         /// <summary>
+        /// Applies runtime configuration data from a PremadeSlotData ScriptableObject.
+        /// Configures box values, answer states, hints, and toggles active status for extra boxes/rows.
+        /// </summary>
+        public void ApplySlotData(KidGame.Interface.PremadeSlotData slotData)
+        {
+            if (slotData == null || slotData.rows == null || slotData.rows.Count == 0) return;
+
+            if (rows == null || rows.Count == 0)
+            {
+                AutoScanChildren();
+            }
+
+            for (int r = 0; r < rows.Count; r++)
+            {
+                var physicalRow = rows[r];
+                if (physicalRow == null) continue;
+
+                if (r < slotData.rows.Count)
+                {
+                    var dataRow = slotData.rows[r];
+                    if (physicalRow.rowObject != null)
+                    {
+                        physicalRow.rowObject.SetActive(true);
+                    }
+
+                    for (int b = 0; b < physicalRow.boxes.Count; b++)
+                    {
+                        var physicalBox = physicalRow.boxes[b];
+                        if (physicalBox == null || physicalBox.boxObject == null) continue;
+
+                        if (b < dataRow.boxes.Count)
+                        {
+                            var dataBox = dataRow.boxes[b];
+                            physicalBox.boxObject.SetActive(true);
+                            int.TryParse(dataBox.value, out int parsedVal);
+                            physicalBox.value = parsedVal;
+                            physicalBox.isAnswerBox = dataBox.isAnswerBox;
+                            physicalBox.showHint = dataBox.showHint;
+                        }
+                        else
+                        {
+                            physicalBox.boxObject.SetActive(false);
+                        }
+                    }
+                }
+                else
+                {
+                    if (physicalRow.rowObject != null)
+                    {
+                        physicalRow.rowObject.SetActive(false);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Initializes the premade recall slot, configures boxes, and returns all required answer values for the answer tray.
         /// </summary>
         public List<int> Setup(System.Action onCompleted, bool isLearningMode = true)

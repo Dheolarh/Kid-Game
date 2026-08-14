@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
+  m_Name: Level_70
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  levelNumber: 70
+  levelName: LESSON 70
+  levelSubtitle: Re-introducing 51 to 60
+  levelEndTip: 60 seconds make 1 minute
+  isUnlockedByDefault: 0
+  isPremadeLevel: 1
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
+  pages:
+  - gameType: 4
+    dialogueLines:
+    - text: Hi, let's count 51 t0 60
+      mascotAnimationTrigger: isHi
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 1
+    recallMinSequenceLength: 1
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 51
+    recallMaxStartValue: 60
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 1
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 1
+    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: da0f464772d8e5343bbd5673d4c3896f, type: 3}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  sceneToLoad: Game
+  levelIcon: {fileID: 0}

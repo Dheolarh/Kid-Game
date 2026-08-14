@@ -62,6 +62,10 @@ namespace KidGame.Mechanics.NumberRecall
         [Header("Premade Level Config")]
         [Tooltip("Optional premade recall slot prefab. If assigned, spawns this pre-designed layout instead of procedural generation.")]
         [SerializeField] private GameObject premadeSlotPrefab;
+        [SerializeField] private KidGame.Interface.PremadeSlotData premadeSlotData;
+
+        public GameObject PremadeSlotPrefab { get => premadeSlotPrefab; set => premadeSlotPrefab = value; }
+        public KidGame.Interface.PremadeSlotData PremadeSlotData { get => premadeSlotData; set => premadeSlotData = value; }
 
         private static readonly Color[] Palette =
         {
@@ -83,7 +87,7 @@ namespace KidGame.Mechanics.NumberRecall
 
         public Button NextButton => nextButton;
 
-        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true, bool isSequenceFillMode = false, GameObject premadeSlotPrefab = null)
+        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true, bool isSequenceFillMode = false, GameObject premadeSlotPrefab = null, KidGame.Interface.PremadeSlotData premadeSlotData = null)
         {
             this.slotCount = slotCount;
             this.minSequenceLength = minSequenceLength;
@@ -99,6 +103,7 @@ namespace KidGame.Mechanics.NumberRecall
             this.isLearningMode = isLearningMode;
             this.isSequenceFillMode = isSequenceFillMode;
             this.premadeSlotPrefab = premadeSlotPrefab;
+            this.premadeSlotData = premadeSlotData;
 
             _slots.Clear();
             _cards.Clear();
@@ -174,26 +179,52 @@ namespace KidGame.Mechanics.NumberRecall
             _answeredCount = 0;
             SetNextButtonInteractable(false);
 
-            Transform activeSlotsContainer = (premadeSlotPrefab != null && premadeSlotsContainer != null) 
+            bool isPremade = (premadeSlotPrefab != null || premadeSlotData != null);
+
+            Transform activeSlotsContainer = (isPremade && premadeSlotsContainer != null) 
                 ? premadeSlotsContainer 
                 : slotsContainer;
 
             if (premadeSlotsContainer != null && premadeSlotsContainer != slotsContainer)
             {
-                bool isPremade = (premadeSlotPrefab != null);
                 premadeSlotsContainer.gameObject.SetActive(isPremade);
                 slotsContainer.gameObject.SetActive(!isPremade);
             }
 
             var trayValues = new List<int>();
 
-            if (premadeSlotPrefab != null)
+            if (isPremade)
             {
-                // Premade Slot Mode: Spawn pre-designed level layout prefab
-                var slotGo = Instantiate(premadeSlotPrefab, activeSlotsContainer);
+                // Premade Slot Mode: Spawn pre-designed level layout prefab or template from ScriptableObject
+                GameObject targetPrefab = premadeSlotPrefab;
+                if (targetPrefab == null && premadeSlotData != null)
+                {
+                    targetPrefab = premadeSlotData.templatePrefab;
+                }
+
+                if (targetPrefab == null)
+                {
+                    targetPrefab = Resources.Load<GameObject>("PremadeTemplate");
+                }
+
+#if UNITY_EDITOR
+                if (targetPrefab == null)
+                {
+                    targetPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Levels/Levels Object/SharedLevels/1 - 20.prefab");
+                }
+#endif
+
+                if (targetPrefab == null)
+                {
+                    Debug.LogError("[NumberRecallGameManager] No premade slot prefab or template assigned!");
+                    return;
+                }
+
+                var slotGo = Instantiate(targetPrefab, activeSlotsContainer);
                 var premadeSlot = slotGo.GetComponent<PremadeRecallSlot>();
                 if (premadeSlot == null) premadeSlot = slotGo.AddComponent<PremadeRecallSlot>();
 
+                if (premadeSlotData != null) premadeSlot.ApplySlotData(premadeSlotData);
                 trayValues = premadeSlot.Setup(OnSequenceCompleted, isLearningMode);
             }
             else if (isSequenceFillMode)
@@ -332,7 +363,7 @@ namespace KidGame.Mechanics.NumberRecall
         private void OnSequenceCompleted()
         {
             _answeredCount++;
-            int targetCount = (premadeSlotPrefab != null) ? 1 : _slots.Count;
+            int targetCount = (premadeSlotPrefab != null || premadeSlotData != null) ? 1 : _slots.Count;
             if (_answeredCount >= targetCount)
             {
                 SetNextButtonInteractable(true);
@@ -454,7 +485,7 @@ namespace KidGame.Mechanics.NumberRecall
 
         public bool IsRoundCompleted()
         {
-            if (premadeSlotPrefab != null)
+            if (premadeSlotPrefab != null || premadeSlotData != null)
             {
                 return _answeredCount >= 1;
             }

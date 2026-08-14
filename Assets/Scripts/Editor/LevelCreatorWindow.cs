@@ -234,6 +234,11 @@ namespace KidGame.Editor
                 if (_isPremadeLevel)
                 {
                     page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab", page.recallPremadeSlotPrefab, typeof(GameObject), false);
+                    page.recallPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (ScriptableObject)", page.recallPremadeSlotData, typeof(PremadeSlotData), false);
+                    if (GUILayout.Button("🛠️ Open Premade Slot Data Generator", GUILayout.Height(25)))
+                    {
+                        PremadeSlotDataGeneratorWindow.OpenWindow();
+                    }
                 }
                 else
                 {
@@ -248,6 +253,11 @@ namespace KidGame.Editor
                             page.countingFingerMode = EditorGUILayout.Toggle("Finger Mode", page.countingFingerMode);
                             page.countingActiveThemeName = EditorGUILayout.TextField("Theme Name (Optional)", page.countingActiveThemeName);
                             page.countingPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Content Prefab (Optional)", page.countingPremadeSlotPrefab, typeof(GameObject), false);
+                            page.countingPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (Optional)", page.countingPremadeSlotData, typeof(PremadeSlotData), false);
+                            if (GUILayout.Button("🛠️ Open Premade Slot Data Generator", GUILayout.Height(22)))
+                            {
+                                PremadeSlotDataGeneratorWindow.OpenWindow();
+                            }
                             break;
 
                         case GameType.Addition:
@@ -285,6 +295,11 @@ namespace KidGame.Editor
 
                         case GameType.Recall:
                             page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab (Optional)", page.recallPremadeSlotPrefab, typeof(GameObject), false);
+                            page.recallPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (Optional)", page.recallPremadeSlotData, typeof(PremadeSlotData), false);
+                            if (GUILayout.Button("🛠️ Open Premade Slot Data Generator", GUILayout.Height(22)))
+                            {
+                                PremadeSlotDataGeneratorWindow.OpenWindow();
+                            }
                             page.recallIsSequenceFillMode = EditorGUILayout.Toggle("Sequence Fill Mode (1 to X Fill)", page.recallIsSequenceFillMode);
                             page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
                             page.recallSlotCount = EditorGUILayout.IntSlider("Slot Count", page.recallSlotCount, 1, 10);

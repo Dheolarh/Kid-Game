@@ -50,8 +50,10 @@ namespace KidGame.Mechanics.Counting
         [SerializeField] private List<ObjectCategoryTheme> themes;
 
         private GameObject premadeSlotPrefab;
+        private KidGame.Interface.PremadeSlotData premadeSlotData;
 
         public GameObject PremadeSlotPrefab { get => premadeSlotPrefab; set => premadeSlotPrefab = value; }
+        public KidGame.Interface.PremadeSlotData PremadeSlotData { get => premadeSlotData; set => premadeSlotData = value; }
         public Transform PremadeSlotsContainer { get => premadeSlotsContainer; set => premadeSlotsContainer = value; }
 
         private static readonly Color[] Palette =
@@ -71,7 +73,7 @@ namespace KidGame.Mechanics.Counting
         private int _answeredCount;
         public Button NextButton => nextButton;
 
-        public void Configure(int slotCount, int minCount, int maxCount, bool diceMode, bool fingerMode, string activeThemeName, GameObject premadeSlotPrefab = null)
+        public void Configure(int slotCount, int minCount, int maxCount, bool diceMode, bool fingerMode, string activeThemeName, GameObject premadeSlotPrefab = null, KidGame.Interface.PremadeSlotData premadeSlotData = null)
         {
             this.slotCount = slotCount;
             this.minCount = minCount;
@@ -79,6 +81,7 @@ namespace KidGame.Mechanics.Counting
             this.diceMode = diceMode;
             this.fingerMode = fingerMode;
             this.premadeSlotPrefab = premadeSlotPrefab;
+            this.premadeSlotData = premadeSlotData;
 
             if (themes != null)
             {
@@ -107,6 +110,11 @@ namespace KidGame.Mechanics.Counting
                 if (nextButton != null) nextButton.onClick.AddListener(GenerateRound);
             }
 
+            GenerateRound();
+        }
+
+        public void StartGame()
+        {
             GenerateRound();
         }
 
@@ -153,21 +161,46 @@ namespace KidGame.Mechanics.Counting
             _answeredCount = 0;
             SetNextButtonInteractable(false);
 
-            Transform activeSlotsContainer = (premadeSlotPrefab != null && premadeSlotsContainer != null) 
+            bool isPremade = (premadeSlotPrefab != null || premadeSlotData != null);
+
+            Transform activeSlotsContainer = (isPremade && premadeSlotsContainer != null) 
                 ? premadeSlotsContainer 
                 : slotsContainer;
 
             if (premadeSlotsContainer != null && premadeSlotsContainer != slotsContainer)
             {
-                bool isPremade = (premadeSlotPrefab != null);
                 premadeSlotsContainer.gameObject.SetActive(isPremade);
                 slotsContainer.gameObject.SetActive(!isPremade);
             }
 
-            if (premadeSlotPrefab != null)
+            if (isPremade)
             {
-                // Premade Content / Slot Mode: Spawn pre-designed level layout prefab
-                var slotGo = Instantiate(premadeSlotPrefab, activeSlotsContainer);
+                // Premade Content / Slot Mode: Spawn pre-designed level layout prefab or template from ScriptableObject
+                GameObject targetPrefab = premadeSlotPrefab;
+                if (targetPrefab == null && premadeSlotData != null)
+                {
+                    targetPrefab = premadeSlotData.templatePrefab;
+                }
+
+                if (targetPrefab == null)
+                {
+                    targetPrefab = Resources.Load<GameObject>("PremadeTemplate");
+                }
+
+#if UNITY_EDITOR
+                if (targetPrefab == null)
+                {
+                    targetPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Levels/Levels Object/SharedLevels/1 - 20.prefab");
+                }
+#endif
+
+                if (targetPrefab == null)
+                {
+                    Debug.LogError("[CountingGameManager] No premade slot prefab or template assigned!");
+                    return;
+                }
+
+                var slotGo = Instantiate(targetPrefab, activeSlotsContainer);
 
                 List<int> numberAnswers = new List<int>();
                 List<string> stringAnswers = new List<string>();
@@ -177,12 +210,14 @@ namespace KidGame.Mechanics.Counting
 
                 if (premadeCounting != null)
                 {
+                    if (premadeSlotData != null) premadeCounting.ApplySlotData(premadeSlotData);
                     var res = premadeCounting.Setup(OnPremadeRoundCompleted, true);
                     numberAnswers = res.numberAnswers;
                     stringAnswers = res.stringAnswers;
                 }
                 else if (premadeRecall != null)
                 {
+                    if (premadeSlotData != null) premadeRecall.ApplySlotData(premadeSlotData);
                     numberAnswers = premadeRecall.Setup(OnPremadeRoundCompleted, true);
                 }
                 else
@@ -576,7 +611,7 @@ namespace KidGame.Mechanics.Counting
 
         public bool IsRoundCompleted()
         {
-            if (premadeSlotPrefab != null)
+            if (premadeSlotPrefab != null || premadeSlotData != null)
             {
                 return nextButton != null && nextButton.interactable;
             }

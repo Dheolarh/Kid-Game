@@ -31,6 +31,7 @@ namespace KidGame.Mechanics.Counting
         public event Action<int, GameObject, int> OnObjectTapped;
 
         private readonly Dictionary<GameObject, Vector3> _originalScales = new Dictionary<GameObject, Vector3>();
+        private readonly List<CountableItemHandler> _handlers = new List<CountableItemHandler>();
 
         private void Awake()
         {
