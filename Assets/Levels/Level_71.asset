@@ -24,7 +24,7 @@ MonoBehaviour:
   pages:
   - gameType: 4
     dialogueLines:
-    - text: Hello {playername}, can you fill out the missing numbers
+    - text: Hello {playername}, can you fill out the missing numbers?
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5

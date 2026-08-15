@@ -9,6 +9,7 @@ namespace KidGame.Editor
 {
     public class PremadeSlotDataGeneratorWindow : EditorWindow
     {
+        private PremadeSlotData _slotDataToImport;
         private string _assetName = "Premade_1_to_20_Data";
         private string _saveFolderPath = "Assets/Levels/PremadeSlotData";
         private GameObject _templatePrefab;
@@ -88,6 +89,19 @@ namespace KidGame.Editor
             EditorGUILayout.Space(10);
             GUILayout.Label("🛠️ Premade Slot Data Generator", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Create ScriptableObject sequence layout data for Premade levels without creating separate prefabs for every level sequence.", MessageType.Info);
+
+            EditorGUILayout.Space(5);
+
+            // ── Import Existing Slot Data ───────────────────────────────────────
+            EditorGUILayout.BeginHorizontal();
+            _slotDataToImport = (PremadeSlotData)EditorGUILayout.ObjectField("Import Existing Data", _slotDataToImport, typeof(PremadeSlotData), false);
+            if (GUILayout.Button("Import", GUILayout.Width(80)))
+            {
+                ImportPremadeSlotData(_slotDataToImport);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space(10);
 
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
 
@@ -192,6 +206,60 @@ namespace KidGame.Editor
             EditorGUILayout.Space(10);
         }
 
+        private void ImportPremadeSlotData(PremadeSlotData source)
+        {
+            if (source == null)
+            {
+                EditorUtility.DisplayDialog("Import Error", "Please assign a valid PremadeSlotData asset to import.", "OK");
+                return;
+            }
+
+            _assetName = source.name;
+            _templatePrefab = source.templatePrefab;
+
+            if (source.rows != null && source.rows.Count > 0)
+            {
+                _rowCount = source.rows.Count;
+                int maxBoxes = 1;
+                foreach (var r in source.rows)
+                {
+                    if (r != null && r.boxes != null && r.boxes.Count > maxBoxes)
+                    {
+                        maxBoxes = r.boxes.Count;
+                    }
+                }
+                _maxBoxesPerRow = maxBoxes;
+
+                _workingRows = new List<PremadeRowData>();
+                for (int r = 0; r < source.rows.Count; r++)
+                {
+                    var srcRow = source.rows[r];
+                    PremadeRowData newRow = new PremadeRowData
+                    {
+                        rowName = !string.IsNullOrEmpty(srcRow.rowName) ? srcRow.rowName : $"Row {r + 1}",
+                        boxes = new List<PremadeBoxData>()
+                    };
+
+                    if (srcRow.boxes != null)
+                    {
+                        foreach (var srcBox in srcRow.boxes)
+                        {
+                            newRow.boxes.Add(new PremadeBoxData
+                            {
+                                value = srcBox.value,
+                                isAnswerBox = srcBox.isAnswerBox,
+                                showHint = srcBox.showHint
+                            });
+                        }
+                    }
+                    _workingRows.Add(newRow);
+                }
+            }
+
+            Repaint();
+            Debug.Log($"[PremadeSlotDataGenerator] Imported '{source.name}' successfully.");
+        }
+
         private void AdjustWorkingDataDimensions()
         {
             while (_workingRows.Count < _rowCount)
@@ -275,7 +343,7 @@ namespace KidGame.Editor
                 Directory.CreateDirectory(folder);
             }
 
-            string fullPath = Path.Combine(folder, _assetName.EndsWith(".asset") ? _assetName : _assetName + ".asset").Replace("\\", "/");
+            string fullPath = Path.Combine(folder, _assetName.EndsWith(".asset") ? _assetName : _assetName + ".asset").Replace('\\', '/');
 
             PremadeSlotData asset = ScriptableObject.CreateInstance<PremadeSlotData>();
             asset.layoutName = _assetName;
@@ -310,7 +378,7 @@ namespace KidGame.Editor
             EditorGUIUtility.PingObject(asset);
 
             Debug.Log($"[PremadeSlotDataGenerator] Saved PremadeSlotData asset at '{fullPath}'.");
-            EditorUtility.DisplayDialog("Success", $"Created PremadeSlotData asset at:\n{fullPath}", "OK");
+            EditorUtility.DisplayDialog("Success", "Created PremadeSlotData asset at:\n" + fullPath, "OK");
         }
     }
 }

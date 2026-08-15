@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_74
+  m_Name: Level_75
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 74
-  levelName: LESSON 74
-  levelSubtitle: Fill out the missing numbers
-  levelEndTip: 71, 72, 73, 74, 75, 76, 77, 78, 79, 80
+  levelNumber: 75
+  levelName: LESSON 75
+  levelSubtitle: Counting Vehicles
+  levelEndTip: 1 car, 2 cars, 3 cars.... A traffic!
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
+  isPremadeLevel: 0
   themePresetName: Blue
   levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
   levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 0
     dialogueLines:
-    - text: Hello {playername}, can you fill out the missing numbers?
+    - text: Let's count vehicles
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
+    countingSlotCount: 8
+    countingMinCount: 6
     countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: 
+    countingActiveThemeName: Vehicle
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
@@ -73,61 +73,7 @@ MonoBehaviour:
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 14c5ea899e7afaf47a4db3bdc315a1fe, type: 2}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-  - gameType: 4
-    dialogueLines: []
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: a359e21ae4ec2da478dc889c20e61787, type: 2}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
