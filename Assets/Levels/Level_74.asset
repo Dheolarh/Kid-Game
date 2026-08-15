@@ -10,140 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_1
+  m_Name: Level_74
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 1
-  levelName: LESSON 1
-  levelSubtitle: Meet 0, the empty number
-  levelEndTip: 0 means nothing at all!
+  levelNumber: 74
+  levelName: LESSON 74
+  levelSubtitle: Fill out the missing numbers
+  levelEndTip: 71, 72, 73, 74, 75, 76, 77, 78, 79, 80
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: Purple
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
+  isPremadeLevel: 1
+  themePresetName: Blue
+  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
   pages:
-  - gameType: 5
+  - gameType: 4
     dialogueLines:
-    - text: Welcome to your first lesson {playername}.
-      mascotAnimationTrigger: isHi
-    - text: Let's learn how to write 0
+    - text: Hello {playername}, can you fill out the missing numbers
       mascotAnimationTrigger: isIdle
-    - text: 0 is just a big round circle number
-      mascotAnimationTrigger: isIdle
-    - text: Hold the green dot and draw a circle to the red dot to write 0
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: You drew that just perfect.
-      mascotAnimationTrigger: isHappy
-    - text: Now let's try that again
-      mascotAnimationTrigger: isIdle
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 0
-    tracingCustomSpawnCount: 1
-  - gameType: 5
-    dialogueLines:
-    - text: Remember draw a circle from the green dot to the red dot
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Perfect. now a last try
-      mascotAnimationTrigger: isHappy
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 0
-    tracingCustomSpawnCount: 1
-  - gameType: 5
-    dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -151,6 +33,8 @@ MonoBehaviour:
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -189,11 +73,64 @@ MonoBehaviour:
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
     recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: 14c5ea899e7afaf47a4db3bdc315a1fe, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 0
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  - gameType: 4
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: a359e21ae4ec2da478dc889c20e61787, type: 2}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
   sceneToLoad: Game
   levelIcon: {fileID: 0}
-  

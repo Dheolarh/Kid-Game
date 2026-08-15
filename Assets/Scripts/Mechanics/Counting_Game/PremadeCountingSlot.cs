@@ -82,16 +82,16 @@ namespace KidGame.Mechanics.Counting
 
         /// <summary>
         /// Applies runtime configuration data from a PremadeSlotData ScriptableObject.
-        /// Configures box values, answer states, hints, and toggles active status for extra boxes/rows.
+        /// Rebuilds row/box structures dynamically from current hierarchy and slotData.
         /// </summary>
         public void ApplySlotData(KidGame.Interface.PremadeSlotData slotData)
         {
             if (slotData == null || slotData.rows == null || slotData.rows.Count == 0) return;
 
-            if (rows == null || rows.Count == 0)
-            {
-                AutoScanChildSlots();
-            }
+            // 1. Rescan physical hierarchy to get clean physical row containers
+            AutoScanChildSlots();
+
+            List<PremadeCountingRow> configuredRows = new List<PremadeCountingRow>();
 
             for (int r = 0; r < rows.Count; r++)
             {
@@ -106,6 +106,14 @@ namespace KidGame.Mechanics.Counting
                         physicalRow.rowObject.SetActive(true);
                     }
 
+                    PremadeCountingRow newRow = new PremadeCountingRow
+                    {
+                        rowName = physicalRow.rowName,
+                        rowObject = physicalRow.rowObject,
+                        rowNumberValue = physicalRow.rowNumberValue > 0 ? physicalRow.rowNumberValue : (r + 1),
+                        boxes = new List<PremadeCountingBoxEntry>()
+                    };
+
                     for (int b = 0; b < physicalRow.boxes.Count; b++)
                     {
                         var physicalBox = physicalRow.boxes[b];
@@ -115,15 +123,24 @@ namespace KidGame.Mechanics.Counting
                         {
                             var dataBox = dataRow.boxes[b];
                             physicalBox.boxObject.SetActive(true);
-                            physicalBox.value = dataBox.value;
-                            physicalBox.isAnswerBox = dataBox.isAnswerBox;
-                            physicalBox.showHint = dataBox.showHint;
+
+                            PremadeCountingBoxEntry newEntry = new PremadeCountingBoxEntry
+                            {
+                                boxName = physicalBox.boxObject.name,
+                                boxObject = physicalBox.boxObject,
+                                value = dataBox.value,
+                                isAnswerBox = dataBox.isAnswerBox,
+                                showHint = dataBox.showHint
+                            };
+                            newRow.boxes.Add(newEntry);
                         }
                         else
                         {
                             physicalBox.boxObject.SetActive(false);
                         }
                     }
+
+                    configuredRows.Add(newRow);
                 }
                 else
                 {
@@ -133,6 +150,8 @@ namespace KidGame.Mechanics.Counting
                     }
                 }
             }
+
+            rows = configuredRows;
         }
 
         public (List<int> numberAnswers, List<string> stringAnswers) Setup(Action onCompleted, bool isLearningMode = true)

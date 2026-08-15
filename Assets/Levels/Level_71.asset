@@ -24,7 +24,7 @@ MonoBehaviour:
   pages:
   - gameType: 4
     dialogueLines:
-    - text: Hello {playername}, can you fill out the missig numbers
+    - text: Hello {playername}, can you fill out the missing numbers
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -73,7 +73,61 @@ MonoBehaviour:
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 0ee44666d4e648a4c9c7b85cf5f8d672, type: 2}
+    recallPremadeSlotData: {fileID: 11400000, guid: 179e3ef714dd3af4fba9043f76c267ca, type: 2}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+  - gameType: 4
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: 2e6399fc8d244f548b3acaae6c284c9e, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []

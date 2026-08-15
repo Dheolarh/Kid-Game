@@ -10,72 +10,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc57d2cf74e79e3408ae6d1b31612711, type: 3}
-  m_Name: Level 71
+  m_Name: Data 74B
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.PremadeSlotData
-  layoutName: Premade_1_to_20_Data
+  layoutName: Data 74B
   templatePrefab: {fileID: 0}
   rows:
   - rowName: Row 1
     boxes:
-    - value: 51
+    - value: 61
       isAnswerBox: 1
       showHint: 1
-    - value: 52
+    - value: 62
       isAnswerBox: 1
       showHint: 0
-    - value: 53
+    - value: 63
       isAnswerBox: 1
       showHint: 1
-    - value: 54
+    - value: 64
       isAnswerBox: 1
       showHint: 0
-    - value: 55
+    - value: 65
       isAnswerBox: 1
       showHint: 1
-    - value: 56
-      isAnswerBox: 1
-      showHint: 0
-    - value: 57
-      isAnswerBox: 1
-      showHint: 1
-    - value: 58
-      isAnswerBox: 1
-      showHint: 0
-    - value: 59
-      isAnswerBox: 1
-      showHint: 1
-    - value: 60
-      isAnswerBox: 1
-      showHint: 0
   - rowName: Row 2
     boxes:
-    - value: 51
+    - value: 66
       isAnswerBox: 1
       showHint: 0
-    - value: 52
+    - value: 67
       isAnswerBox: 1
       showHint: 1
-    - value: 53
+    - value: 68
       isAnswerBox: 1
       showHint: 0
-    - value: 54
+    - value: 69
       isAnswerBox: 1
       showHint: 1
-    - value: 55
+    - value: 70
       isAnswerBox: 1
       showHint: 0
-    - value: 56
-      isAnswerBox: 1
-      showHint: 1
-    - value: 57
-      isAnswerBox: 1
-      showHint: 0
-    - value: 58
-      isAnswerBox: 1
-      showHint: 1
-    - value: 59
-      isAnswerBox: 1
-      showHint: 0
-    - value: 60
-      isAnswerBox: 1
-      showHint: 1

@@ -64,16 +64,16 @@ namespace KidGame.Mechanics.NumberRecall
 
         /// <summary>
         /// Applies runtime configuration data from a PremadeSlotData ScriptableObject.
-        /// Configures box values, answer states, hints, and toggles active status for extra boxes/rows.
+        /// Rebuilds row/box structures dynamically from current hierarchy and slotData.
         /// </summary>
         public void ApplySlotData(KidGame.Interface.PremadeSlotData slotData)
         {
             if (slotData == null || slotData.rows == null || slotData.rows.Count == 0) return;
 
-            if (rows == null || rows.Count == 0)
-            {
-                AutoScanChildren();
-            }
+            // 1. Rescan physical hierarchy to get clean physical row containers
+            AutoScanChildren();
+
+            List<PremadeRecallRow> configuredRows = new List<PremadeRecallRow>();
 
             for (int r = 0; r < rows.Count; r++)
             {
@@ -88,6 +88,13 @@ namespace KidGame.Mechanics.NumberRecall
                         physicalRow.rowObject.SetActive(true);
                     }
 
+                    PremadeRecallRow newRow = new PremadeRecallRow
+                    {
+                        rowName = physicalRow.rowName,
+                        rowObject = physicalRow.rowObject,
+                        boxes = new List<PremadeRecallBoxEntry>()
+                    };
+
                     for (int b = 0; b < physicalRow.boxes.Count; b++)
                     {
                         var physicalBox = physicalRow.boxes[b];
@@ -97,16 +104,26 @@ namespace KidGame.Mechanics.NumberRecall
                         {
                             var dataBox = dataRow.boxes[b];
                             physicalBox.boxObject.SetActive(true);
+
                             int.TryParse(dataBox.value, out int parsedVal);
-                            physicalBox.value = parsedVal;
-                            physicalBox.isAnswerBox = dataBox.isAnswerBox;
-                            physicalBox.showHint = dataBox.showHint;
+
+                            PremadeRecallBoxEntry newEntry = new PremadeRecallBoxEntry
+                            {
+                                boxName = physicalBox.boxObject.name,
+                                boxObject = physicalBox.boxObject,
+                                value = parsedVal,
+                                isAnswerBox = dataBox.isAnswerBox,
+                                showHint = dataBox.showHint
+                            };
+                            newRow.boxes.Add(newEntry);
                         }
                         else
                         {
                             physicalBox.boxObject.SetActive(false);
                         }
                     }
+
+                    configuredRows.Add(newRow);
                 }
                 else
                 {
@@ -116,6 +133,8 @@ namespace KidGame.Mechanics.NumberRecall
                     }
                 }
             }
+
+            rows = configuredRows;
         }
 
         /// <summary>

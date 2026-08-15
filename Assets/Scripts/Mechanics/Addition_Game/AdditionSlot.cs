@@ -32,16 +32,25 @@ namespace KidGame.Mechanics.Addition
         /// <param name="rightPrefab">Object icon for the right grid.</param>
         /// <param name="rightCount">How many right objects to spawn (1–12).</param>
         /// <param name="manager">Owning manager — notified on correct answer.</param>
+        private void ConfigureGrid(Transform gridTransform)
+        {
+            if (gridTransform == null) return;
+            var gridComp = gridTransform.GetComponent<GridLayoutGroup>();
+            if (gridComp != null)
+            {
+                gridComp.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                gridComp.constraintCount = 2; // Max 2 objects per row
+                gridComp.cellSize = new Vector2(115f, 115f); // Larger objects
+            }
+        }
+
         public void Setup(GameObject leftPrefab,  int leftCount,
                           GameObject rightPrefab, int rightCount,
                           AdditionGameManager manager)
         {
             CorrectSum = leftCount + rightCount;
-            var leftGridComp = ActualLeftGrid != null ? ActualLeftGrid.GetComponent<GridLayoutGroup>() : null;
-            if (leftGridComp != null) leftGridComp.cellSize = new Vector2(100f, 100f);
-
-            var rightGridComp = ActualRightGrid != null ? ActualRightGrid.GetComponent<GridLayoutGroup>() : null;
-            if (rightGridComp != null) rightGridComp.cellSize = new Vector2(100f, 100f);
+            ConfigureGrid(ActualLeftGrid);
+            ConfigureGrid(ActualRightGrid);
 
             int counter = 1;
 
@@ -108,10 +117,13 @@ namespace KidGame.Mechanics.Addition
                           AdditionGameManager manager)
         {
             CorrectSum = leftSum + rightSum;
+            ConfigureGrid(ActualLeftGrid);
+            ConfigureGrid(ActualRightGrid);
 
             for (int i = 0; i < leftDicePrefabs.Count; i++)
             {
                 var obj = Instantiate(leftDicePrefabs[i], ActualLeftGrid);
+                ForceSize100(obj);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 int val = (leftValues != null && i < leftValues.Count) ? leftValues[i] : 0;
@@ -121,6 +133,7 @@ namespace KidGame.Mechanics.Addition
             for (int i = 0; i < rightDicePrefabs.Count; i++)
             {
                 var obj = Instantiate(rightDicePrefabs[i], ActualRightGrid);
+                ForceSize100(obj);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 int val = (rightValues != null && i < rightValues.Count) ? rightValues[i] : 0;
@@ -409,7 +422,9 @@ namespace KidGame.Mechanics.Addition
             var grid = parent != null ? parent.GetComponent<GridLayoutGroup>() : null;
             if (grid != null)
             {
-                grid.cellSize = new Vector2(100f, 100f);
+                grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                grid.constraintCount = 2;
+                grid.cellSize = new Vector2(115f, 115f);
             }
 
             ForceSize100(obj);
@@ -425,13 +440,13 @@ namespace KidGame.Mechanics.Addition
             var rt = obj.GetComponent<RectTransform>();
             if (rt != null)
             {
-                rt.sizeDelta = new Vector2(100f, 100f);
+                rt.sizeDelta = new Vector2(115f, 115f);
             }
             var le = obj.GetComponent<LayoutElement>();
             if (le != null)
             {
-                le.preferredWidth = 100f;
-                le.preferredHeight = 100f;
+                le.preferredWidth = 115f;
+                le.preferredHeight = 115f;
             }
         }
     }
