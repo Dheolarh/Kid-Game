@@ -357,5 +357,16 @@ namespace KidGame.Mechanics.NumberRecall
 
             return entry;
         }
+
+        /// <summary>
+        /// Returns true if all answer boxes in this slot have been correctly solved.
+        /// </summary>
+        public bool IsCompleted()
+        {
+            if (_totalAnswerBoxesCount == 0) return true;
+            return _solvedAnswerBoxesCount >= _totalAnswerBoxesCount;
+        }
+
+        public bool IsRoundCompleted() => IsCompleted();
     }
 }

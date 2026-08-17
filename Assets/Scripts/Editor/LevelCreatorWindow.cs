@@ -342,6 +342,10 @@ namespace KidGame.Editor
                                 page.tracingValuesToTrace.Add("");
                             }
                             break;
+
+                        case GameType.Map:
+                            page.customGamePrefab = (GameObject)EditorGUILayout.ObjectField("Map Game Prefab", page.customGamePrefab, typeof(GameObject), false);
+                            break;
                     }
                 }
 

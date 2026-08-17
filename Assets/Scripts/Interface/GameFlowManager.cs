@@ -403,6 +403,9 @@ namespace KidGame.Interface
                             _totalCorrectRequired += GetSpellingLettersCount(page);
                         }
                         break;
+                    case GameType.Map:
+                        _totalCorrectRequired += 1;
+                        break;
                 }
             }
 
@@ -717,8 +720,13 @@ namespace KidGame.Interface
             }
         }
 
-        private GameObject GetGameObjectForType(GameType type)
+        private GameObject GetGameObjectForType(GameType type, PageData page = null)
         {
+            if (page != null && page.customGamePrefab != null)
+            {
+                return page.customGamePrefab;
+            }
+
             bool portrait = OrientationManager.IsPortrait;
             switch (type)
             {
@@ -728,7 +736,8 @@ namespace KidGame.Interface
                 case GameType.Matching:   return portrait ? matchingPortraitGo   : matchingLandscapeGo;
                 case GameType.Recall:     return portrait ? recallPortraitGo     : recallLandscapeGo;
                 case GameType.Tracing:    return portrait ? tracingPortraitGo    : tracingLandscapeGo;
-                default:                  return null;
+                case GameType.Map:        return page != null ? page.customGamePrefab : null;
+                default:                  return page != null ? page.customGamePrefab : null;
             }
         }
 
@@ -736,15 +745,36 @@ namespace KidGame.Interface
         {
             DeactivateAllGameModes();
 
-            GameObject prefab = GetGameObjectForType(page.gameType);
+            GameObject prefab = GetGameObjectForType(page.gameType, page);
             if (prefab != null)
             {
-                _activeGameModeInstance = Instantiate(prefab, prefab.transform.parent);
+                Transform parentTransform = prefab.transform.parent;
+                if (parentTransform == null && countingPortraitGo != null)
+                {
+                    parentTransform = countingPortraitGo.transform.parent;
+                }
+                if (parentTransform == null) parentTransform = transform;
+
+                _activeGameModeInstance = Instantiate(prefab, parentTransform);
                 _activeGameModeInstance.name = prefab.name; // Keep name matching
+
+                RectTransform rt = _activeGameModeInstance.GetComponent<RectTransform>();
+                if (rt != null)
+                {
+                    rt.anchoredPosition = Vector2.zero;
+                    rt.localScale = Vector3.one;
+                }
+
                 _activeGameModeInstance.SetActive(false); // Keep inactive until StartActiveGameMode is called
 
                 // Dynamically apply visual themes to the newly instantiated prefab
                 ApplyThemeToInstantiatedGameMode(_activeGameModeInstance, GetActiveThemeColor());
+            }
+
+            if (page.gameType == GameType.Map || (page.customGamePrefab != null && page.customGamePrefab == prefab))
+            {
+                Button nextBtn = FindNextButtonInCustomPrefab(_activeGameModeInstance);
+                SetupNextButton(nextBtn);
             }
 
             switch (page.gameType)
@@ -804,6 +834,10 @@ namespace KidGame.Interface
                     // Set answer grid visibility based on spell mode
                     float alphaVal = page.tracingSpellModeActive ? 1f : 0f;
                     SetAnswerGridOpacity(tracing?.AnswerGrid, alphaVal);
+                    break;
+
+                case GameType.Map:
+                    // Custom Map Game prefab instantiated directly into scene
                     break;
             }
         }
@@ -975,6 +1009,15 @@ namespace KidGame.Interface
                     "You have a great memory, {playername}! Finish this one!",
                     "Look carefully and recall, {playername}!",
                     "Where did that number go, {playername}?"
+                }
+            },
+            {
+                GameType.Map, new string[]
+                {
+                    "Follow the map path to the end, {playername}!",
+                    "Wait, {playername}! Finish the map task first!",
+                    "Hold on, {playername}! Keep moving along the map!",
+                    "You're on the map, {playername}! Complete this step first!"
                 }
             }
         };
@@ -1523,6 +1566,58 @@ namespace KidGame.Interface
             return words.Trim();
         }
 
+        private Button FindNextButtonInCustomPrefab(GameObject go)
+        {
+            if (go == null) return null;
+
+            var components = go.GetComponents<MonoBehaviour>();
+            foreach (var comp in components)
+            {
+                if (comp == null) continue;
+                var prop = comp.GetType().GetProperty("NextButton") ?? comp.GetType().GetProperty("ContinueButton");
+                if (prop != null && prop.PropertyType == typeof(Button))
+                {
+                    return (Button)prop.GetValue(comp);
+                }
+                var field = comp.GetType().GetField("NextButton") ?? comp.GetType().GetField("ContinueButton");
+                if (field != null && field.FieldType == typeof(Button))
+                {
+                    return (Button)field.GetValue(comp);
+                }
+            }
+
+            var buttons = go.GetComponentsInChildren<Button>(true);
+            foreach (var b in buttons)
+            {
+                if (b == null) continue;
+                string n = b.name.ToLower();
+                if (n.Contains("next") || n.Contains("continue") || n.Contains("finish") || n.Contains("submit"))
+                {
+                    return b;
+                }
+            }
+
+            if (buttons.Length == 1) return buttons[0];
+            return null;
+        }
+
+        private bool CheckCustomGameRoundCompleted(GameObject instance)
+        {
+            if (instance == null) return true;
+
+            var components = instance.GetComponents<MonoBehaviour>();
+            foreach (var comp in components)
+            {
+                if (comp == null) continue;
+                var method = comp.GetType().GetMethod("IsRoundCompleted", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (method != null && method.ReturnType == typeof(bool))
+                {
+                    return (bool)method.Invoke(comp, null);
+                }
+            }
+            return true;
+        }
+
         private bool IsCurrentRoundCompleted()
         {
             if (ActiveLevel == null || _currentPageIndex >= ActiveLevel.pages.Count) return true;
@@ -1555,7 +1650,16 @@ namespace KidGame.Interface
                 case GameType.Tracing:
                     var tracing = _activeGameModeInstance.GetComponent<TracingModeManager>();
                     return tracing != null && tracing.IsRoundCompleted();
+
+                case GameType.Map:
+                    return CheckCustomGameRoundCompleted(_activeGameModeInstance);
             }
+
+            if (page.customGamePrefab != null)
+            {
+                return CheckCustomGameRoundCompleted(_activeGameModeInstance);
+            }
+
             return true;
         }
 

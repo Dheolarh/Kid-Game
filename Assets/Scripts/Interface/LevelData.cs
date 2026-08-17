@@ -10,7 +10,8 @@ namespace KidGame.Interface
         Comparison,
         Matching,
         Recall,
-        Tracing
+        Tracing,
+        Map
     }
 
     [System.Serializable]
@@ -99,6 +100,10 @@ namespace KidGame.Interface
         public bool tracingIsLearningMode = true;
         public List<string> tracingValuesToTrace = new List<string>();
         public int tracingCustomSpawnCount = 1;
+
+        [Header("Map / Custom Game Settings")]
+        [Tooltip("Custom / Map game mode prefab. Spawns directly into the scene as an independent game mode without using slots.")]
+        public GameObject customGamePrefab;
     }
 
     [CreateAssetMenu(fileName = "NewLevelData", menuName = "Level Select/Level Data")]
