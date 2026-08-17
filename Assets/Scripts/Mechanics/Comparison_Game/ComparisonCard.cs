@@ -118,7 +118,9 @@ namespace KidGame.Mechanics.Comparison
         {
             transform.DOScale(Vector3.one, 0.12f).SetEase(Ease.OutSine);
 
-            if (!_isAccepted)
+            float dragDistance = Vector2.Distance(eventData.position, eventData.pressPosition);
+
+            if (!_isAccepted && dragDistance >= 20f)
             {
                 var zone = FindDropZoneAtCardCenter();
                 if (zone != null)

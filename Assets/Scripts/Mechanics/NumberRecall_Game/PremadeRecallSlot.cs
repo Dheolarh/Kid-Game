@@ -52,6 +52,8 @@ namespace KidGame.Mechanics.NumberRecall
         private int _solvedAnswerBoxesCount = 0;
         private System.Action _onCompleted;
 
+        public int TotalAnswerBoxesCount => _totalAnswerBoxesCount;
+
         private static readonly Color[] Palette =
         {
             new Color(0.91f, 0.30f, 0.24f),   // red
@@ -75,62 +77,97 @@ namespace KidGame.Mechanics.NumberRecall
 
             List<PremadeRecallRow> configuredRows = new List<PremadeRecallRow>();
 
-            for (int r = 0; r < rows.Count; r++)
+            for (int r = 0; r < slotData.rows.Count; r++)
             {
-                var physicalRow = rows[r];
-                if (physicalRow == null) continue;
+                PremadeRecallRow physicalRow = (r < rows.Count) ? rows[r] : null;
+                GameObject rowGo = null;
 
-                if (r < slotData.rows.Count)
+                if (physicalRow != null && physicalRow.rowObject != null)
                 {
-                    var dataRow = slotData.rows[r];
-                    if (physicalRow.rowObject != null)
-                    {
-                        physicalRow.rowObject.SetActive(true);
-                    }
-
-                    PremadeRecallRow newRow = new PremadeRecallRow
-                    {
-                        rowName = physicalRow.rowName,
-                        rowObject = physicalRow.rowObject,
-                        boxes = new List<PremadeRecallBoxEntry>()
-                    };
-
-                    for (int b = 0; b < physicalRow.boxes.Count; b++)
-                    {
-                        var physicalBox = physicalRow.boxes[b];
-                        if (physicalBox == null || physicalBox.boxObject == null) continue;
-
-                        if (b < dataRow.boxes.Count)
-                        {
-                            var dataBox = dataRow.boxes[b];
-                            physicalBox.boxObject.SetActive(true);
-
-                            int.TryParse(dataBox.value, out int parsedVal);
-
-                            PremadeRecallBoxEntry newEntry = new PremadeRecallBoxEntry
-                            {
-                                boxName = physicalBox.boxObject.name,
-                                boxObject = physicalBox.boxObject,
-                                value = parsedVal,
-                                isAnswerBox = dataBox.isAnswerBox,
-                                showHint = dataBox.showHint
-                            };
-                            newRow.boxes.Add(newEntry);
-                        }
-                        else
-                        {
-                            physicalBox.boxObject.SetActive(false);
-                        }
-                    }
-
-                    configuredRows.Add(newRow);
+                    rowGo = physicalRow.rowObject;
                 }
-                else
+                else if (rows.Count > 0 && rows[0] != null && rows[0].rowObject != null)
                 {
-                    if (physicalRow.rowObject != null)
+                    // Dynamically instantiate extra row container if slotData specifies more rows than template prefab
+                    rowGo = Instantiate(rows[0].rowObject, transform);
+                    rowGo.name = $"Row {r + 1}";
+                }
+
+                if (rowGo == null) continue;
+                rowGo.SetActive(true);
+
+                var dataRow = slotData.rows[r];
+                PremadeRecallRow newRow = new PremadeRecallRow
+                {
+                    rowName = rowGo.name,
+                    rowObject = rowGo,
+                    boxes = new List<PremadeRecallBoxEntry>()
+                };
+
+                // Get physical boxes in this row (if any)
+                var existingPhysicalBoxes = new List<PremadeRecallBoxEntry>();
+                if (physicalRow != null && physicalRow.boxes != null)
+                {
+                    existingPhysicalBoxes.AddRange(physicalRow.boxes);
+                }
+                if (existingPhysicalBoxes.Count == 0 && rowGo != transform.gameObject)
+                {
+                    foreach (Transform child in rowGo.transform)
                     {
-                        physicalRow.rowObject.SetActive(false);
+                        existingPhysicalBoxes.Add(CreateBoxEntry(child.gameObject));
                     }
+                }
+
+                for (int b = 0; b < dataRow.boxes.Count; b++)
+                {
+                    GameObject boxGo = null;
+                    if (b < existingPhysicalBoxes.Count && existingPhysicalBoxes[b] != null)
+                    {
+                        boxGo = existingPhysicalBoxes[b].boxObject;
+                    }
+                    else if (existingPhysicalBoxes.Count > 0 && existingPhysicalBoxes[0] != null && existingPhysicalBoxes[0].boxObject != null)
+                    {
+                        // Dynamically instantiate extra box GameObject to support up to 20 boxes per row!
+                        var templateBox = existingPhysicalBoxes[0].boxObject;
+                        boxGo = Instantiate(templateBox, templateBox.transform.parent);
+                        boxGo.name = $"answer ({b})";
+                    }
+
+                    if (boxGo == null) continue;
+                    boxGo.SetActive(true);
+
+                    var dataBox = dataRow.boxes[b];
+                    int.TryParse(dataBox.value, out int parsedVal);
+
+                    PremadeRecallBoxEntry newEntry = new PremadeRecallBoxEntry
+                    {
+                        boxName = boxGo.name,
+                        boxObject = boxGo,
+                        value = parsedVal,
+                        isAnswerBox = dataBox.isAnswerBox,
+                        showHint = dataBox.showHint
+                    };
+                    newRow.boxes.Add(newEntry);
+                }
+
+                // Disable any unused physical boxes in this row
+                for (int b = dataRow.boxes.Count; b < existingPhysicalBoxes.Count; b++)
+                {
+                    if (existingPhysicalBoxes[b] != null && existingPhysicalBoxes[b].boxObject != null)
+                    {
+                        existingPhysicalBoxes[b].boxObject.SetActive(false);
+                    }
+                }
+
+                configuredRows.Add(newRow);
+            }
+
+            // Disable any unused physical rows beyond slotData.rows.Count
+            for (int r = slotData.rows.Count; r < rows.Count; r++)
+            {
+                if (rows[r] != null && rows[r].rowObject != null)
+                {
+                    rows[r].rowObject.SetActive(false);
                 }
             }
 

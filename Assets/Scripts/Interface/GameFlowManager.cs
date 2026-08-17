@@ -404,7 +404,25 @@ namespace KidGame.Interface
                         }
                         break;
                     case GameType.Map:
-                        _totalCorrectRequired += 1;
+                        if (page.recallPremadeSlotData != null && page.recallPremadeSlotData.rows != null)
+                        {
+                            int count = 0;
+                            foreach (var r in page.recallPremadeSlotData.rows)
+                            {
+                                if (r != null && r.boxes != null)
+                                {
+                                    foreach (var b in r.boxes)
+                                    {
+                                        if (b != null && b.isAnswerBox) count++;
+                                    }
+                                }
+                            }
+                            _totalCorrectRequired += count > 0 ? count : 20;
+                        }
+                        else
+                        {
+                            _totalCorrectRequired += 20;
+                        }
                         break;
                 }
             }
@@ -840,6 +858,16 @@ namespace KidGame.Interface
                     // Custom Map Game prefab instantiated directly into scene
                     break;
             }
+
+            // Dynamically sync total required correct answers if instantiated prefab contains a PremadeRecallSlot
+            if (_activeGameModeInstance != null)
+            {
+                var premadeSlot = _activeGameModeInstance.GetComponentInChildren<KidGame.Mechanics.NumberRecall.PremadeRecallSlot>(true);
+                if (premadeSlot != null && premadeSlot.TotalAnswerBoxesCount > 0)
+                {
+                    _totalCorrectRequired = premadeSlot.TotalAnswerBoxesCount;
+                }
+            }
         }
 
         private void SetupNextButton(Button btn)
@@ -1172,8 +1200,8 @@ namespace KidGame.Interface
             }
 
             int starsEarned = 1;
-            if (percent >= 80f) starsEarned = 3;
-            else if (percent >= 50f) starsEarned = 2;
+            if (percent >= 70f) starsEarned = 3;
+            else if (percent >= 45f) starsEarned = 2;
 
             Debug.Log($"[GameFlowManager] Level Completed! Score: {percent:F1}%, Mistakes: {_totalMistakes}, Stars: {starsEarned}");
 

@@ -117,8 +117,14 @@ namespace KidGame.Editor
             EditorGUILayout.Space(5);
             EditorGUI.BeginChangeCheck();
             _rowCount = EditorGUILayout.IntSlider("Number of Rows", _rowCount, 1, 4);
-            _maxBoxesPerRow = EditorGUILayout.IntSlider("Max Boxes Per Row", _maxBoxesPerRow, 1, 10);
+            _maxBoxesPerRow = EditorGUILayout.IntSlider("Max Boxes Per Row", _maxBoxesPerRow, 1, 20);
             if (EditorGUI.EndChangeCheck())
+            {
+                AdjustWorkingDataDimensions();
+            }
+
+            EditorGUILayout.Space(2);
+            if (GUILayout.Button("🔄 Expand / Sync Rows to Max Boxes Per Row"))
             {
                 AdjustWorkingDataDimensions();
             }
@@ -157,7 +163,7 @@ namespace KidGame.Editor
                 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label($"Row {r + 1} ({row.boxes.Count} boxes)", EditorStyles.boldLabel);
-                if (GUILayout.Button("+ Add Box", GUILayout.Width(80)) && row.boxes.Count < 10)
+                if (GUILayout.Button("+ Add Box", GUILayout.Width(80)) && row.boxes.Count < 20)
                 {
                     row.boxes.Add(new PremadeBoxData { value = (row.boxes.Count + 1).ToString(), isAnswerBox = true, showHint = true });
                 }
@@ -288,6 +294,7 @@ namespace KidGame.Editor
 
         private void ExecuteQuickFill()
         {
+            AdjustWorkingDataDimensions();
             int currentNum = _quickFillStartVal;
             int globalIndex = 0;
 

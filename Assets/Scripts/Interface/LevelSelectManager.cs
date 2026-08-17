@@ -409,7 +409,14 @@ namespace KidGame.Interface
 
         private void OnLevelSelected(LevelData data, int levelIndex)
         {
-            Debug.Log($"[LevelSelectManager] Loading scriptable Level: {data.levelName} (Lesson {levelIndex})");
+            if (data == null) return;
+
+            int actualLevelNumber = data.levelNumber > 0 ? data.levelNumber : levelIndex;
+            string lessonHeaderText = $"LESSON {actualLevelNumber}";
+            string lessonTitleText = !string.IsNullOrEmpty(data.levelName) ? data.levelName : lessonHeaderText;
+            string lessonSubtitleText = data.levelSubtitle;
+
+            Debug.Log($"[LevelSelectManager] Loading scriptable Level: {data.levelName} (Lesson {actualLevelNumber})");
             
             // Assign active level details so GameFlowManager can access it
             KidGame.Interface.GameFlowManager.ActiveLevel = data;
@@ -432,9 +439,9 @@ namespace KidGame.Interface
 
                 SceneTransitionManager.Instance.LoadLevelWithTransition(
                     sceneToLoad,
-                    "LESSON " + levelIndex,
-                    data.levelName,
-                    data.levelSubtitle,
+                    lessonHeaderText,
+                    lessonTitleText,
+                    lessonSubtitleText,
                     themeColor
                 );
             }

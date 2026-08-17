@@ -464,6 +464,7 @@ namespace KidGame.Editor
 
         private void LoadLevelDetailsInternal(LevelData source)
         {
+            _levelNumber = source.levelNumber;
             _levelName = source.levelName;
             _levelSubtitle = source.levelSubtitle;
             _levelEndTip = source.levelEndTip;
@@ -527,7 +528,12 @@ namespace KidGame.Editor
                     tracingSpellModeActive = page.tracingSpellModeActive,
                     tracingIsLearningMode = page.tracingIsLearningMode,
                     tracingCustomSpawnCount = page.tracingCustomSpawnCount,
-                    tracingValuesToTrace = page.tracingValuesToTrace != null ? new List<string>(page.tracingValuesToTrace) : new List<string>()
+                    tracingValuesToTrace = page.tracingValuesToTrace != null ? new List<string>(page.tracingValuesToTrace) : new List<string>(),
+                    customGamePrefab = page.customGamePrefab,
+                    countingPremadeSlotPrefab = page.countingPremadeSlotPrefab,
+                    countingPremadeSlotData = page.countingPremadeSlotData,
+                    recallPremadeSlotPrefab = page.recallPremadeSlotPrefab,
+                    recallPremadeSlotData = page.recallPremadeSlotData
                 };
                 _pages.Add(copy);
             }

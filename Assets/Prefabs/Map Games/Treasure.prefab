@@ -508,7 +508,6 @@ GameObject:
   - component: {fileID: 5291292211026566130}
   - component: {fileID: 4442914702421325085}
   - component: {fileID: 7452255793632404541}
-  - component: {fileID: 7215781911003598062}
   m_Layer: 5
   m_Name: End
   m_TagString: Untagged
@@ -573,34 +572,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7215781911003598062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 67421589586518842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c15059a44ba5824eb92e00c75b05b97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.NumberRecall.RecallAnswerSlot
-  slotText: {fileID: 0}
-  slotImage: {fileID: 7452255793632404541}
-  expectedAnswer: 1
-  isAnswer: 1
-  showHint: 1
-  presetColors:
-  - {r: 0.91, g: 0.3, b: 0.24, a: 1}
-  - {r: 0.2, g: 0.6, b: 0.86, a: 1}
-  - {r: 0.95, g: 0.61, b: 0.07, a: 1}
-  - {r: 0.15, g: 0.68, b: 0.38, a: 1}
-  - {r: 0.61, g: 0.35, b: 0.71, a: 1}
-  - {r: 0.1, g: 0.74, b: 0.61, a: 1}
-  - {r: 0.9, g: 0.49, b: 0.13, a: 1}
-  - {r: 0.15, g: 0.55, b: 0.82, a: 1}
-  popDuration: 0.45
-  popScaleMultiplier: 1.45
 --- !u!1 &583505235912128155
 GameObject:
   m_ObjectHideFlags: 0
@@ -3225,7 +3196,6 @@ GameObject:
   - component: {fileID: 9187490492461353632}
   - component: {fileID: 2575890708052615575}
   - component: {fileID: 8277891715082869598}
-  - component: {fileID: 5114310746337777623}
   m_Layer: 5
   m_Name: Start Text
   m_TagString: Untagged
@@ -3291,34 +3261,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5114310746337777623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2849953570666769009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c15059a44ba5824eb92e00c75b05b97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.NumberRecall.RecallAnswerSlot
-  slotText: {fileID: 0}
-  slotImage: {fileID: 8277891715082869598}
-  expectedAnswer: 1
-  isAnswer: 1
-  showHint: 1
-  presetColors:
-  - {r: 0.91, g: 0.3, b: 0.24, a: 1}
-  - {r: 0.2, g: 0.6, b: 0.86, a: 1}
-  - {r: 0.95, g: 0.61, b: 0.07, a: 1}
-  - {r: 0.15, g: 0.68, b: 0.38, a: 1}
-  - {r: 0.61, g: 0.35, b: 0.71, a: 1}
-  - {r: 0.1, g: 0.74, b: 0.61, a: 1}
-  - {r: 0.9, g: 0.49, b: 0.13, a: 1}
-  - {r: 0.15, g: 0.55, b: 0.82, a: 1}
-  popDuration: 0.45
-  popScaleMultiplier: 1.45
 --- !u!1 &2895285829483640112
 GameObject:
   m_ObjectHideFlags: 0
@@ -3921,7 +3863,6 @@ GameObject:
   - component: {fileID: 389701769794945000}
   - component: {fileID: 520411240761452525}
   - component: {fileID: 6946663325106453030}
-  - component: {fileID: 8842537475625520079}
   m_Layer: 5
   m_Name: Start
   m_TagString: Untagged
@@ -3986,34 +3927,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8842537475625520079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3434417626733305163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c15059a44ba5824eb92e00c75b05b97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.NumberRecall.RecallAnswerSlot
-  slotText: {fileID: 0}
-  slotImage: {fileID: 6946663325106453030}
-  expectedAnswer: 1
-  isAnswer: 1
-  showHint: 1
-  presetColors:
-  - {r: 0.91, g: 0.3, b: 0.24, a: 1}
-  - {r: 0.2, g: 0.6, b: 0.86, a: 1}
-  - {r: 0.95, g: 0.61, b: 0.07, a: 1}
-  - {r: 0.15, g: 0.68, b: 0.38, a: 1}
-  - {r: 0.61, g: 0.35, b: 0.71, a: 1}
-  - {r: 0.1, g: 0.74, b: 0.61, a: 1}
-  - {r: 0.9, g: 0.49, b: 0.13, a: 1}
-  - {r: 0.15, g: 0.55, b: 0.82, a: 1}
-  popDuration: 0.45
-  popScaleMultiplier: 1.45
 --- !u!1 &3455708474034781969
 GameObject:
   m_ObjectHideFlags: 0
@@ -4995,7 +4908,6 @@ GameObject:
   - component: {fileID: 4648673987537558902}
   - component: {fileID: 6752851506024288775}
   - component: {fileID: 9083847732537888827}
-  - component: {fileID: 135420554865683543}
   m_Layer: 5
   m_Name: End Text
   m_TagString: Untagged
@@ -5061,34 +4973,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &135420554865683543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5388022134968262564}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c15059a44ba5824eb92e00c75b05b97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.NumberRecall.RecallAnswerSlot
-  slotText: {fileID: 0}
-  slotImage: {fileID: 9083847732537888827}
-  expectedAnswer: 1
-  isAnswer: 1
-  showHint: 1
-  presetColors:
-  - {r: 0.91, g: 0.3, b: 0.24, a: 1}
-  - {r: 0.2, g: 0.6, b: 0.86, a: 1}
-  - {r: 0.95, g: 0.61, b: 0.07, a: 1}
-  - {r: 0.15, g: 0.68, b: 0.38, a: 1}
-  - {r: 0.61, g: 0.35, b: 0.71, a: 1}
-  - {r: 0.1, g: 0.74, b: 0.61, a: 1}
-  - {r: 0.9, g: 0.49, b: 0.13, a: 1}
-  - {r: 0.15, g: 0.55, b: 0.82, a: 1}
-  popDuration: 0.45
-  popScaleMultiplier: 1.45
 --- !u!1 &5623733951218070140
 GameObject:
   m_ObjectHideFlags: 0

@@ -217,7 +217,9 @@ namespace KidGame.Mechanics.Counting
 
             transform.DOScale(_initialLocalScale, 0.12f).SetEase(Ease.OutSine);
 
-            if (!_isAccepted)
+            float dragDistance = Vector2.Distance(eventData.position, eventData.pressPosition);
+
+            if (!_isAccepted && dragDistance >= 20f)
             {
                 // Raycast from the card's VISUAL CENTER (not the thumb position).
                 // blocksRaycasts is still false here, so the card doesn't block its own raycast.
