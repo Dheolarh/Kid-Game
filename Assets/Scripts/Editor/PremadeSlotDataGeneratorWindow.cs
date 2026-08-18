@@ -18,7 +18,9 @@ namespace KidGame.Editor
 
         // Quick fill generator settings
         private int _quickFillStartVal = 1;
+        private int _quickFillEndVal = 0;
         private int _quickFillStep = 1;
+        private bool _countBackwards = false;
         private QuickFillMode _quickFillMode = QuickFillMode.Numbers;
         private AnswerPattern _answerPattern = AnswerPattern.Alternate;
         private bool _quickFillShowHint = true;
@@ -140,7 +142,9 @@ namespace KidGame.Editor
             if (_quickFillMode == QuickFillMode.Numbers)
             {
                 _quickFillStartVal = EditorGUILayout.IntField("Start Number Value", _quickFillStartVal);
+                _quickFillEndVal = EditorGUILayout.IntField("End Number Value (Optional)", _quickFillEndVal);
                 _quickFillStep = EditorGUILayout.IntField("Step Value", _quickFillStep);
+                _countBackwards = EditorGUILayout.Toggle("Count Backwards", _countBackwards);
             }
             _answerPattern = (AnswerPattern)EditorGUILayout.EnumPopup("Answer Pattern", _answerPattern);
             _quickFillShowHint = EditorGUILayout.Toggle("Show Hints on Answer Boxes", _quickFillShowHint);
@@ -296,6 +300,15 @@ namespace KidGame.Editor
         {
             AdjustWorkingDataDimensions();
             int currentNum = _quickFillStartVal;
+            int step = Mathf.Abs(_quickFillStep);
+            if (step == 0) step = 1;
+
+            bool isCountingBackwards = _countBackwards || (_quickFillEndVal != 0 && _quickFillEndVal < _quickFillStartVal);
+            if (isCountingBackwards)
+            {
+                step = -step;
+            }
+
             int globalIndex = 0;
 
             for (int r = 0; r < _workingRows.Count; r++)
@@ -308,15 +321,31 @@ namespace KidGame.Editor
                     if (_quickFillMode == QuickFillMode.Numbers)
                     {
                         box.value = currentNum.ToString();
-                        currentNum += _quickFillStep;
+                        int filledVal = currentNum;
+
+                        currentNum += step;
+
+                        if (_quickFillEndVal != 0)
+                        {
+                            if (!isCountingBackwards && currentNum > _quickFillEndVal)
+                            {
+                                currentNum = _quickFillEndVal;
+                            }
+                            else if (isCountingBackwards && currentNum < _quickFillEndVal)
+                            {
+                                currentNum = _quickFillEndVal;
+                            }
+                        }
+
+                        box.isAnswerBox = DetermineIsAnswer(globalIndex, filledVal);
                     }
                     else
                     {
                         char c = (char)('A' + (globalIndex % 26));
                         box.value = c.ToString();
+                        box.isAnswerBox = DetermineIsAnswer(globalIndex, globalIndex + 1);
                     }
 
-                    box.isAnswerBox = DetermineIsAnswer(globalIndex, currentNum);
                     box.showHint = _quickFillShowHint;
                     globalIndex++;
                 }

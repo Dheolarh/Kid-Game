@@ -291,6 +291,7 @@ namespace KidGame.Editor
                             page.matchingMinVal = EditorGUILayout.IntField("Min Value", page.matchingMinVal);
                             page.matchingMaxVal = EditorGUILayout.IntField("Max Value", page.matchingMaxVal);
                             page.matchingShuffleLeftColumn = EditorGUILayout.Toggle("Shuffle Left Column", page.matchingShuffleLeftColumn);
+                            page.matchingObjectSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Custom Object Slot Row Prefab (Optional)", page.matchingObjectSlotPrefab, typeof(GameObject), false);
                             break;
 
                         case GameType.Recall:
@@ -512,6 +513,7 @@ namespace KidGame.Editor
                     matchingMinVal = page.matchingMinVal,
                     matchingMaxVal = page.matchingMaxVal,
                     matchingShuffleLeftColumn = page.matchingShuffleLeftColumn,
+                    matchingObjectSlotPrefab = page.matchingObjectSlotPrefab,
                     recallSlotCount = page.recallSlotCount,
                     recallMinSequenceLength = page.recallMinSequenceLength,
                     recallMaxSequenceLength = page.recallMaxSequenceLength,

@@ -72,6 +72,17 @@ namespace KidGame.Mechanics.NumberRecall
         {
             if (slotData == null || slotData.rows == null || slotData.rows.Count == 0) return;
 
+            // Clean up any previously cloned rows/boxes to prevent runaway GameObject memory leaks
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                Transform child = transform.GetChild(i);
+                if (child.name.Contains("(Clone)"))
+                {
+                    if (Application.isPlaying) Destroy(child.gameObject);
+                    else DestroyImmediate(child.gameObject);
+                }
+            }
+
             // 1. Rescan physical hierarchy to get clean physical row containers
             AutoScanChildren();
 

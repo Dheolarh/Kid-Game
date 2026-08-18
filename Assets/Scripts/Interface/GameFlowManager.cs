@@ -828,7 +828,7 @@ namespace KidGame.Interface
                     var matching = _activeGameModeInstance?.GetComponent<MatchGameManager>();
                     if (matching != null)
                     {
-                        matching.Configure(page.matchingLeftVariant, page.matchingRightVariant, page.matchingSlotCount, page.matchingMinVal, page.matchingMaxVal, page.matchingShuffleLeftColumn);
+                        matching.Configure(page.matchingLeftVariant, page.matchingRightVariant, page.matchingSlotCount, page.matchingMinVal, page.matchingMaxVal, page.matchingShuffleLeftColumn, page.matchingObjectSlotPrefab);
                         SetupNextButton(matching.NextButton);
                     }
                     break;

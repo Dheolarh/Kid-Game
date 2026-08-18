@@ -11,7 +11,8 @@ namespace KidGame.Mechanics.Matching
         Number,
         Word,
         Dice,
-        Finger
+        Finger,
+        Objects
     }
 
     public class MatchGameManager : MonoBehaviour
@@ -28,6 +29,8 @@ namespace KidGame.Mechanics.Matching
         [Header("Prefabs & Templates")]
         [Tooltip("The horizontal Slot row prefab containing [left] [space] [right] children.")]
         [SerializeField] private GameObject slotRowPrefab;
+        [Tooltip("Custom slot row prefab for Objects matching mode.")]
+        [SerializeField] private GameObject objectSlotRowPrefab;
         [Tooltip("Prefab for Number Card items.")]
         [SerializeField] private GameObject baseNumberPrefab;
         [Tooltip("Prefab for Word Card items.")]
@@ -36,6 +39,8 @@ namespace KidGame.Mechanics.Matching
         [SerializeField] private GameObject[] dicePrefabs;
         [Tooltip("Finger prefabs for values 1 to 5 (index 0 = 1 finger).")]
         [SerializeField] private GameObject[] fingerPrefabs;
+        [Tooltip("Object prefabs for Objects matching mode (e.g. ball, cake, flower, animals, fruit).")]
+        [SerializeField] private GameObject[] objectPrefabs;
 
         [Header("Game Mode Configuration")]
         [SerializeField] private MatchVariant leftVariant = MatchVariant.Number;
@@ -92,7 +97,7 @@ namespace KidGame.Mechanics.Matching
 
                         public Button NextButton => nextButton;
 
-        public void Configure(MatchVariant leftVariant, MatchVariant rightVariant, int slotCount, int minVal, int maxVal, bool shuffleLeftColumn)
+        public void Configure(MatchVariant leftVariant, MatchVariant rightVariant, int slotCount, int minVal, int maxVal, bool shuffleLeftColumn, GameObject objectSlotRowPrefab = null)
         {
             this.leftVariant = leftVariant;
             this.rightVariant = rightVariant;
@@ -100,6 +105,10 @@ namespace KidGame.Mechanics.Matching
             this.minVal = minVal;
             this.maxVal = maxVal;
             this.shuffleLeftColumn = shuffleLeftColumn;
+            if (objectSlotRowPrefab != null)
+            {
+                this.objectSlotRowPrefab = objectSlotRowPrefab;
+            }
 
             _slots.Clear();
             _connections.Clear();
@@ -238,9 +247,15 @@ namespace KidGame.Mechanics.Matching
             Shuffle(rightValues);
 
             // Spawn rows
+            GameObject rowPrefabToUse = slotRowPrefab;
+            if (objectSlotRowPrefab != null && (leftVariant == MatchVariant.Objects || rightVariant == MatchVariant.Objects))
+            {
+                rowPrefabToUse = objectSlotRowPrefab;
+            }
+
             for (int i = 0; i < count; i++)
             {
-                var rowGo = Instantiate(slotRowPrefab, content);
+                var rowGo = Instantiate(rowPrefabToUse, content);
                 rowGo.name = $"SlotRow_{i}";
 
                 Transform leftAnchor = rowGo.transform.Find("left");
@@ -253,30 +268,43 @@ namespace KidGame.Mechanics.Matching
                     continue;
                 }
 
-                // Clear design-time placeholder editor templates from the anchors
-                ClearChildren(leftAnchor);
-                ClearChildren(rightAnchor);
-
-                // Spawn Left Item
                 int leftVal = leftValues[i];
-                GameObject leftItem = SpawnItem(leftAnchor, leftVariant, leftVal, isLeft: true);
-                if (leftItem != null)
+                int rightVal = rightValues[i];
+
+                // Spawn / Setup Left Item
+                if (leftVariant == MatchVariant.Objects && leftAnchor.childCount > 0 && rowPrefabToUse == objectSlotRowPrefab)
                 {
-                    var card = leftItem.GetComponent<MatchGameCard>();
-                    if (card == null) card = leftItem.AddComponent<MatchGameCard>();
-                    card.Setup(leftVal, true, this);
-                    _allCards.Add(card);
+                    SetupPrebuiltObjectAnchor(leftAnchor, leftVal, isLeft: true);
+                }
+                else
+                {
+                    ClearChildren(leftAnchor);
+                    GameObject leftItem = SpawnItem(leftAnchor, leftVariant, leftVal, isLeft: true);
+                    if (leftItem != null)
+                    {
+                        var card = leftItem.GetComponent<MatchGameCard>();
+                        if (card == null) card = leftItem.AddComponent<MatchGameCard>();
+                        card.Setup(leftVal, true, this);
+                        _allCards.Add(card);
+                    }
                 }
 
-                // Spawn Right Item
-                int rightVal = rightValues[i];
-                GameObject rightItem = SpawnItem(rightAnchor, rightVariant, rightVal, isLeft: false);
-                if (rightItem != null)
+                // Spawn / Setup Right Item
+                if (rightVariant == MatchVariant.Objects && rightAnchor.childCount > 0 && rowPrefabToUse == objectSlotRowPrefab)
                 {
-                    var card = rightItem.GetComponent<MatchGameCard>();
-                    if (card == null) card = rightItem.AddComponent<MatchGameCard>();
-                    card.Setup(rightVal, false, this);
-                    _allCards.Add(card);
+                    SetupPrebuiltObjectAnchor(rightAnchor, rightVal, isLeft: false);
+                }
+                else
+                {
+                    ClearChildren(rightAnchor);
+                    GameObject rightItem = SpawnItem(rightAnchor, rightVariant, rightVal, isLeft: false);
+                    if (rightItem != null)
+                    {
+                        var card = rightItem.GetComponent<MatchGameCard>();
+                        if (card == null) card = rightItem.AddComponent<MatchGameCard>();
+                        card.Setup(rightVal, false, this);
+                        _allCards.Add(card);
+                    }
                 }
 
                 _slots.Add(rowGo);
@@ -287,6 +315,37 @@ namespace KidGame.Mechanics.Matching
             if (rt) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
 
             UpdateScrollLocking();
+        }
+
+        private void SetupPrebuiltObjectAnchor(Transform anchor, int value, bool isLeft)
+        {
+            int childCount = anchor.childCount;
+            for (int k = 0; k < childCount; k++)
+            {
+                Transform child = anchor.GetChild(k);
+                bool shouldBeActive = (k < value);
+                child.gameObject.SetActive(shouldBeActive);
+
+                if (shouldBeActive)
+                {
+                    var graphics = child.GetComponentsInChildren<Graphic>(true);
+                    foreach (var g in graphics) g.raycastTarget = false;
+                }
+            }
+
+            var card = anchor.GetComponent<MatchGameCard>();
+            if (card == null) card = anchor.gameObject.AddComponent<MatchGameCard>();
+
+            var anchorImg = anchor.GetComponent<Image>();
+            if (anchorImg == null)
+            {
+                anchorImg = anchor.gameObject.AddComponent<Image>();
+                anchorImg.color = new Color(1f, 1f, 1f, 0.001f); // Transparent raycast target
+            }
+            anchorImg.raycastTarget = true;
+
+            card.Setup(value, isLeft, this);
+            _allCards.Add(card);
         }
 
         private GameObject SpawnItem(Transform parent, MatchVariant variant, int value, bool isLeft)
@@ -378,6 +437,88 @@ namespace KidGame.Mechanics.Matching
                         }
                     }
                     break;
+
+                case MatchVariant.Objects:
+                    // Spawn objects DIRECTLY into parent (the right or left slot container) without creating any number(Clone) wrapper!
+                    instantiated = parent.gameObject;
+
+                    // Ensure parent container has a Graphic/Image component with raycastTarget=true for tap detection
+                    var parentImg = parent.GetComponent<Image>();
+                    if (parentImg == null)
+                    {
+                        parentImg = parent.gameObject.AddComponent<Image>();
+                        parentImg.color = new Color(1f, 1f, 1f, 0.001f); // Transparent raycast target
+                    }
+                    parentImg.raycastTarget = true;
+
+                    // Ensure parent has a GridLayoutGroup configured with max 2 objects per row and 120x120 cell size
+                    GridLayoutGroup grid = parent.GetComponent<GridLayoutGroup>();
+                    if (grid == null)
+                    {
+                        grid = parent.gameObject.AddComponent<GridLayoutGroup>();
+                        grid.cellSize = new Vector2(120f, 120f);
+                        grid.spacing = new Vector2(8f, 8f);
+                        grid.startCorner = GridLayoutGroup.Corner.UpperLeft;
+                        grid.startAxis = GridLayoutGroup.Axis.Horizontal;
+                        grid.childAlignment = TextAnchor.MiddleCenter;
+                        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                        grid.constraintCount = 2; // 2 objects max per row!
+                    }
+
+                    // Check if parent ALREADY has pre-existing object children (e.g. 10 Crab GameObjects)
+                    if (parent.childCount >= value && parent.childCount > 0)
+                    {
+                        for (int k = 0; k < parent.childCount; k++)
+                        {
+                            Transform child = parent.GetChild(k);
+                            bool shouldBeActive = (k < value);
+                            child.gameObject.SetActive(shouldBeActive);
+
+                            if (shouldBeActive)
+                            {
+                                var graphics = child.GetComponentsInChildren<Graphic>(true);
+                                foreach (var g in graphics) g.raycastTarget = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Clear design-time placeholder children if any
+                        ClearChildren(parent);
+
+                        GameObject objTemplate = GetObjectTemplatePrefab(value);
+
+                        for (int k = 0; k < value; k++)
+                        {
+                            GameObject itemObj = null;
+                            if (objTemplate != null)
+                            {
+                                itemObj = Instantiate(objTemplate, parent);
+                            }
+                            else
+                            {
+                                itemObj = new GameObject($"Obj_{k + 1}", typeof(RectTransform), typeof(Image));
+                                itemObj.transform.SetParent(parent, false);
+                                var img = itemObj.GetComponent<Image>();
+                                img.color = isLeft ? GetLeftColorForValue(value) : GetRightColorForValue(value);
+                            }
+
+                            // Ensure raycasts fall through to parent container so tapping anywhere hits the card
+                            var graphics = itemObj.GetComponentsInChildren<Graphic>(true);
+                            foreach (var g in graphics) g.raycastTarget = false;
+
+                            var itemRt = itemObj.GetComponent<RectTransform>();
+                            if (itemRt != null)
+                            {
+                                itemRt.sizeDelta = new Vector2(120f, 120f);
+                            }
+                            var le = itemObj.GetComponent<LayoutElement>();
+                            if (le == null) le = itemObj.AddComponent<LayoutElement>();
+                            le.preferredWidth = 120f;
+                            le.preferredHeight = 120f;
+                        }
+                    }
+                    break;
             }
             if (instantiated != null)
             {
@@ -390,6 +531,47 @@ namespace KidGame.Mechanics.Matching
                 }
             }
             return instantiated;
+        }
+
+        private GameObject GetObjectTemplatePrefab(int value)
+        {
+#if UNITY_EDITOR
+            if (objectPrefabs == null || objectPrefabs.Length == 0)
+            {
+                var guids = UnityEditor.AssetDatabase.FindAssets("t:Prefab", new[] { "Assets/Prefabs/Objects" });
+                if (guids != null && guids.Length > 0)
+                {
+                    var list = new List<GameObject>();
+                    foreach (var g in guids)
+                    {
+                        string p = UnityEditor.AssetDatabase.GUIDToAssetPath(g);
+                        var prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(p);
+                        if (prefab != null && !prefab.name.ToLower().Contains("template") && !prefab.name.ToLower().Contains("number") && !prefab.name.ToLower().Contains("word") && !prefab.name.ToLower().Contains("age"))
+                        {
+                            list.Add(prefab);
+                        }
+                    }
+                    if (list.Count > 0) objectPrefabs = list.ToArray();
+                }
+            }
+#endif
+
+            if (objectPrefabs == null || objectPrefabs.Length == 0)
+            {
+                var loaded = Resources.LoadAll<GameObject>("Objects");
+                if (loaded != null && loaded.Length > 0)
+                {
+                    objectPrefabs = loaded;
+                }
+            }
+
+            if (objectPrefabs != null && objectPrefabs.Length > 0)
+            {
+                int idx = Mathf.Abs(value - 1) % objectPrefabs.Length;
+                return objectPrefabs[idx];
+            }
+
+            return null;
         }
 
         private void ClearPrevious()
@@ -550,6 +732,10 @@ namespace KidGame.Mechanics.Matching
 
             _dragLine = lineGo.GetComponent<MatchGameLine>();
             if (_dragLine == null) _dragLine = lineGo.AddComponent<MatchGameLine>();
+
+            // Ensure the temporary drag line NEVER blocks UI pointer raycasts
+            var lineGraphics = lineGo.GetComponentsInChildren<Graphic>(true);
+            foreach (var g in lineGraphics) g.raycastTarget = false;
             
             // Set dynamic color based on the left card's assigned color!
             Color lineCol = GetLeftColorForValue(card.MatchId);
@@ -577,6 +763,42 @@ namespace KidGame.Mechanics.Matching
             {
                 // Can be on the card component itself or its children
                 targetCard = hitGo.GetComponentInParent<MatchGameCard>();
+            }
+
+            // Fallback 1: RaycastAll at pointer position ignoring temporary drag line
+            if (targetCard == null && EventSystem.current != null)
+            {
+                List<RaycastResult> results = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(eventData, results);
+                foreach (var res in results)
+                {
+                    if (res.gameObject != null)
+                    {
+                        var cardComp = res.gameObject.GetComponentInParent<MatchGameCard>();
+                        if (cardComp != null && cardComp != _dragStartCard && !cardComp.IsMatched && cardComp.IsLeftCard != _dragStartCard.IsLeftCard)
+                        {
+                            targetCard = cardComp;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Fallback 2: Check screen point rectangle bounds for all opponent cards
+            if (targetCard == null)
+            {
+                Vector2 pointerPos = eventData.position;
+                foreach (var c in _allCards)
+                {
+                    if (c != null && c != _dragStartCard && !c.IsMatched && c.IsLeftCard != _dragStartCard.IsLeftCard)
+                    {
+                        if (RectTransformUtility.RectangleContainsScreenPoint(c.RectTransform, pointerPos, eventData.pressEventCamera))
+                        {
+                            targetCard = c;
+                            break;
+                        }
+                    }
+                }
             }
 
             if (targetCard != null && targetCard.IsLeftCard != _dragStartCard.IsLeftCard && !targetCard.IsMatched)

@@ -77,6 +77,7 @@ namespace KidGame.Interface
         public int matchingMinVal = 1;
         public int matchingMaxVal = 10;
         public bool matchingShuffleLeftColumn = false;
+        public GameObject matchingObjectSlotPrefab;
 
         [Header("Recall Game Settings")]
         public int recallSlotCount = 4;
