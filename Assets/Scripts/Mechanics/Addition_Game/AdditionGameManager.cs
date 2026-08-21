@@ -34,9 +34,9 @@ namespace KidGame.Mechanics.Addition
         [Tooltip("Number of slot rows per round.")]
         [SerializeField] private int slotCount = 5;
         [Tooltip("Minimum number of objects per grid side.")]
-        [SerializeField, Range(1, 12)] private int minPerGrid = 1;
+        [SerializeField] private int minPerGrid = 1;
         [Tooltip("Maximum number of objects per grid side.")]
-        [SerializeField, Range(1, 12)] private int maxPerGrid = 12;
+        [SerializeField] private int maxPerGrid = 12;
 
         [Header("Dice Mode")]
         [Tooltip("If true, spawns dice prefabs for counting instead of regular prefabs.")]

@@ -215,8 +215,6 @@ namespace KidGame.Mechanics.Counting
                 return;
             }
 
-            transform.DOScale(_initialLocalScale, 0.12f).SetEase(Ease.OutSine);
-
             float dragDistance = Vector2.Distance(eventData.position, eventData.pressPosition);
 
             if (!_isAccepted && dragDistance >= 20f)
@@ -230,7 +228,11 @@ namespace KidGame.Mechanics.Counting
             // Re-enable after drop detection
             _canvasGroup.blocksRaycasts = true;
 
-            if (!_isAccepted) ReturnHome();
+            if (!_isAccepted)
+            {
+                transform.DOScale(_initialLocalScale, 0.12f).SetEase(Ease.OutSine);
+                ReturnHome();
+            }
         }
 
         // ── Public API (called by AnswerDropZone) ─────────────────────────────
@@ -239,6 +241,8 @@ namespace KidGame.Mechanics.Counting
         {
             _isAccepted = true;
             DOTween.Kill(transform);
+            var outlines = GetComponentsInChildren<Outline>(true);
+            foreach (var o in outlines) if (o != null) o.enabled = false;
             if (_canvasGroup != null) _canvasGroup.blocksRaycasts = false;
 
             transform.DOScale(Vector3.zero, duration)
@@ -254,17 +258,27 @@ namespace KidGame.Mechanics.Counting
             _isAccepted = true;
             DOTween.Kill(transform);
 
-            Vector3 targetAcceptedScale = _initialLocalScale * acceptedScaleMultiplier;
+            var outlines = GetComponentsInChildren<Outline>(true);
+            foreach (var o in outlines) if (o != null) o.enabled = false;
 
             transform.SetParent(zoneTransform, worldPositionStays: true);
-            transform.DOScale(targetAcceptedScale, snapDuration).SetEase(Ease.OutQuad);
 
+            var rt = GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                rt.anchorMin = Vector2.zero;
+                rt.anchorMax = Vector2.one;
+                rt.offsetMin = Vector2.zero;
+                rt.offsetMax = Vector2.zero;
+            }
+
+            Vector3 targetAcceptedScale = Vector3.one * acceptedScaleMultiplier;
+
+            transform.DOScale(targetAcceptedScale, snapDuration).SetEase(Ease.OutBack);
             transform.DOMove(zoneTransform.position, snapDuration)
                      .SetEase(Ease.OutBack)
                      .OnComplete(() =>
                      {
-                         // Stretch to fill the drop zone exactly — no overflow
-                         var rt = GetComponent<RectTransform>();
                          if (rt != null)
                          {
                              rt.anchorMin = Vector2.zero;

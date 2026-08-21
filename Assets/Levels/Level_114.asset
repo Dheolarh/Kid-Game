@@ -10,40 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_89
+  m_Name: Level_114
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 89
-  levelName: LESSON 89
-  levelSubtitle: Matching Objects
-  levelEndTip: 2 Balls is to number 2
+  levelNumber: 114
+  levelName: LESSON 114
+  levelSubtitle: Fingers Matching
+  levelEndTip: You can count then match
   isUnlockedByDefault: 1
   isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
   - gameType: 3
-    dialogueLines:
-    - text: Let's matching numbers
-      mascotAnimationTrigger: isHappy
-    - text: 'Step 1: Count an object on the right'
-      mascotAnimationTrigger: isIdle
-    - text: 'Step 2: look for it''s number on the left'
-      mascotAnimationTrigger: isIdle
-    - text: 'Step 3: Tap it''s number on the left'
-      mascotAnimationTrigger: isIdle
-    - text: 'Step 4: Tap the object again on the right.'
-      mascotAnimationTrigger: isIdle
-    - text: And that's all, you have succesfully made a match!
-      mascotAnimationTrigger: isHappy
-    completionDialogueLines:
-    - text: 'Welldone! '
-      mascotAnimationTrigger: isHappy
-    - text: That didn't take much effort did it?
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 12
+    countingMaxCount: 20
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
@@ -67,11 +51,11 @@ MonoBehaviour:
     comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 4
-    matchingSlotCount: 7
-    matchingMinVal: 1
-    matchingMaxVal: 8
+    matchingLeftVariant: 3
+    matchingRightVariant: 0
+    matchingSlotCount: 5
+    matchingMinVal: 5
+    matchingMaxVal: 10
     matchingShuffleLeftColumn: 1
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4

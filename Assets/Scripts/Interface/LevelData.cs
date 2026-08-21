@@ -38,7 +38,7 @@ namespace KidGame.Interface
         [Header("Counting Game Settings")]
         public int countingSlotCount = 5;
         public int countingMinCount = 1;
-        public int countingMaxCount = 12;
+        public int countingMaxCount = 20;
         public bool countingDiceMode = false;
         public bool countingFingerMode = false;
         [Tooltip("The active theme name to restrict object spawning. Leave empty to use all themes.")]

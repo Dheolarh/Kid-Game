@@ -174,38 +174,17 @@ namespace KidGame.Mechanics.Counting
             if (_isSolved) return;
             _isSolved = true;
 
-            // 1. Answer card is accepted by zone (drops into slot with 1.4 scale)
+            // 1. Answer card is accepted by zone and fills the slot box completely (Image 1 style)
             if (card != null)
             {
                 card.AcceptedScaleMultiplier = 1.4f;
                 card.AcceptedByZone(transform);
             }
 
-            // 2. Slot background matches the dropped answer card's color
-            if (slotImage != null)
-            {
-                Color targetColor = (card != null) ? card.CardColor : Color.white;
-                slotImage.DOColor(targetColor, 0.25f);
-            }
-
-            // 3. Reveal letter text with pop up and down animation
+            // 2. Hide slot hint text so the card's text and colored background fill the slot box cleanly
             if (slotText != null)
             {
-                slotText.text = expectedLetter;
-                slotText.color = Color.white;
-                slotText.gameObject.SetActive(true);
-
-                DOTween.Kill(slotText.transform);
-                slotText.transform.localScale = Vector3.zero;
-
-                // Pop up to popScaleMultiplier, then pop down to 1.0
-                slotText.transform.DOScale(Vector3.one * popScaleMultiplier, popDuration * 0.5f)
-                    .SetEase(Ease.OutBack)
-                    .OnComplete(() =>
-                    {
-                        slotText.transform.DOScale(Vector3.one, popDuration * 0.5f)
-                            .SetEase(Ease.InOutQuad);
-                    });
+                slotText.gameObject.SetActive(false);
             }
 
             // Play SFX & letter voice

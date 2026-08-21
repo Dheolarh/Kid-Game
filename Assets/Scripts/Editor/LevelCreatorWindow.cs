@@ -247,8 +247,8 @@ namespace KidGame.Editor
                     {
                         case GameType.Counting:
                             page.countingSlotCount = EditorGUILayout.IntSlider("Slot Count", page.countingSlotCount, 1, 10);
-                            page.countingMinCount = EditorGUILayout.IntSlider("Min Objects", page.countingMinCount, 1, 12);
-                            page.countingMaxCount = EditorGUILayout.IntSlider("Max Objects", page.countingMaxCount, 1, 12);
+                            page.countingMinCount = EditorGUILayout.IntField("Min Objects", page.countingMinCount);
+                            page.countingMaxCount = EditorGUILayout.IntField("Max Objects", page.countingMaxCount);
                             page.countingDiceMode = EditorGUILayout.Toggle("Dice Mode", page.countingDiceMode);
                             page.countingFingerMode = EditorGUILayout.Toggle("Finger Mode", page.countingFingerMode);
                             page.countingActiveThemeName = EditorGUILayout.TextField("Theme Name (Optional)", page.countingActiveThemeName);
@@ -262,8 +262,8 @@ namespace KidGame.Editor
 
                         case GameType.Addition:
                             page.additionSlotCount = EditorGUILayout.IntSlider("Slot Count", page.additionSlotCount, 1, 10);
-                            page.additionMinPerGrid = EditorGUILayout.IntSlider("Min Per Grid Side", page.additionMinPerGrid, 1, 12);
-                            page.additionMaxPerGrid = EditorGUILayout.IntSlider("Max Per Grid Side", page.additionMaxPerGrid, 1, 12);
+                            page.additionMinPerGrid = EditorGUILayout.IntField("Min Per Grid Side", page.additionMinPerGrid);
+                            page.additionMaxPerGrid = EditorGUILayout.IntField("Max Per Grid Side", page.additionMaxPerGrid);
                             page.additionDiceMode = EditorGUILayout.Toggle("Dice Mode", page.additionDiceMode);
                             page.additionFingerMode = EditorGUILayout.Toggle("Finger Mode", page.additionFingerMode);
                             page.additionCountAddMode = EditorGUILayout.Toggle("Count-Add Mode", page.additionCountAddMode);

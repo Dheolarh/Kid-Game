@@ -15,6 +15,28 @@ namespace KidGame.Mechanics.Matching
         Objects
     }
 
+    public class CardPointerForwarder : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    {
+        public MatchGameCard targetCard;
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (targetCard != null) targetCard.OnPointerDown(eventData);
+        }
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (targetCard != null) targetCard.OnBeginDrag(eventData);
+        }
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (targetCard != null) targetCard.OnDrag(eventData);
+        }
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (targetCard != null) targetCard.OnEndDrag(eventData);
+        }
+    }
+
     public class MatchGameManager : MonoBehaviour
     {
         // ── Inspector ────────────────────────────────────────────────────────
@@ -193,20 +215,17 @@ namespace KidGame.Mechanics.Matching
             ClearPrevious();
             SetNextButtonInteractable(false);
 
-            // Determine upper limit bounds based on selected variants (Dice max 6, Finger max 5)
-            int maxAllowedValue = maxVal;
-            if (leftVariant == MatchVariant.Dice || rightVariant == MatchVariant.Dice)
-            {
-                maxAllowedValue = Mathf.Min(maxAllowedValue, 6);
-            }
-            if (leftVariant == MatchVariant.Finger || rightVariant == MatchVariant.Finger)
-            {
-                maxAllowedValue = Mathf.Min(maxAllowedValue, 5);
-            }
-            int minAllowedValue = Mathf.Clamp(minVal, 1, maxAllowedValue);
+            int minAllowedValue = Mathf.Max(1, minVal);
+            int maxAllowedValue = Mathf.Max(minAllowedValue, maxVal);
 
-            // Generate unique numbers
-            int count = Mathf.Min(slotCount, (maxAllowedValue - minAllowedValue + 1));
+            // If the range (maxAllowedValue - minAllowedValue + 1) is smaller than slotCount,
+            // expand maxAllowedValue so we can always generate the full requested slotCount!
+            if ((maxAllowedValue - minAllowedValue + 1) < slotCount)
+            {
+                maxAllowedValue = minAllowedValue + slotCount - 1;
+            }
+
+            int count = slotCount;
             List<int> matchIds = new List<int>();
             var pool = Enumerable.Range(minAllowedValue, maxAllowedValue - minAllowedValue + 1).ToList();
             Shuffle(pool);
@@ -390,50 +409,133 @@ namespace KidGame.Mechanics.Matching
                     break;
 
                 case MatchVariant.Dice:
-                    int diceIdx = Mathf.Clamp(value - 1, 0, dicePrefabs.Length - 1);
-                    if (dicePrefabs[diceIdx] != null)
+                    instantiated = parent.gameObject;
+
+                    var parentDiceCard = parent.GetComponent<MatchGameCard>();
+                    if (parentDiceCard == null) parentDiceCard = parent.gameObject.AddComponent<MatchGameCard>();
+
+                    var parentDiceImg = parent.GetComponent<Image>();
+                    if (parentDiceImg == null)
                     {
-                        instantiated = Instantiate(dicePrefabs[diceIdx], parent);
+                        parentDiceImg = parent.gameObject.AddComponent<Image>();
+                        parentDiceImg.color = new Color(1f, 1f, 1f, 0.001f);
+                    }
+                    parentDiceImg.raycastTarget = true;
+
+                    ClearChildren(parent);
+
+                    List<int> diceParts = PartitionValueForDice(value);
+
+                    HorizontalLayoutGroup diceLayout = parent.GetComponent<HorizontalLayoutGroup>();
+                    if (diceLayout == null)
+                    {
+                        diceLayout = parent.gameObject.AddComponent<HorizontalLayoutGroup>();
+                    }
+                    diceLayout.childAlignment = TextAnchor.MiddleCenter;
+                    diceLayout.childControlWidth = false;
+                    diceLayout.childControlHeight = false;
+                    diceLayout.childForceExpandWidth = false;
+                    diceLayout.childForceExpandHeight = false;
+                    diceLayout.spacing = 8f;
+
+                    float diceSize = 160f;
+                    float totalDiceWidth = diceParts.Count * diceSize + (diceParts.Count - 1) * 8f;
+
+                    var parentDiceRt = parent.GetComponent<RectTransform>();
+                    if (parentDiceRt != null)
+                    {
+                        parentDiceRt.sizeDelta = new Vector2(totalDiceWidth, diceSize);
+                    }
+
+                    foreach (int dVal in diceParts)
+                    {
+                        int diceIdx = Mathf.Clamp(dVal - 1, 0, dicePrefabs.Length - 1);
+                        if (dicePrefabs[diceIdx] != null)
+                        {
+                            GameObject dieGo = Instantiate(dicePrefabs[diceIdx], parent);
+
+                            var forwarder = dieGo.GetComponent<CardPointerForwarder>();
+                            if (forwarder == null) forwarder = dieGo.AddComponent<CardPointerForwarder>();
+                            forwarder.targetCard = parentDiceCard;
+
+                            var graphics = dieGo.GetComponentsInChildren<Graphic>(true);
+                            foreach (var g in graphics) g.raycastTarget = true;
+
+                            var dieRt = dieGo.GetComponent<RectTransform>();
+                            if (dieRt != null) dieRt.sizeDelta = new Vector2(diceSize, diceSize);
+
+                            var le = dieGo.GetComponent<LayoutElement>();
+                            if (le == null) le = dieGo.AddComponent<LayoutElement>();
+                            le.preferredWidth = diceSize;
+                            le.preferredHeight = diceSize;
+                            le.minWidth = diceSize;
+                            le.minHeight = diceSize;
+                        }
                     }
                     break;
 
                 case MatchVariant.Finger:
-                    int fingerIdx = Mathf.Clamp(value - 1, 0, fingerPrefabs.Length - 1);
-                    if (fingerPrefabs[fingerIdx] != null)
+                    instantiated = parent.gameObject;
+
+                    var parentFingerCard = parent.GetComponent<MatchGameCard>();
+                    if (parentFingerCard == null) parentFingerCard = parent.gameObject.AddComponent<MatchGameCard>();
+
+                    var parentFingerImg = parent.GetComponent<Image>();
+                    if (parentFingerImg == null)
                     {
-                        // Wrap the finger hand drawing inside the baseNumberPrefab card container to provide
-                        // a solid card background. This ensures visual consistency and prevents the Outline
-                        // component from duplicate-rendering the thin hand stroke lines (eliminating the double-stroke effect).
-                        if (baseNumberPrefab != null)
+                        parentFingerImg = parent.gameObject.AddComponent<Image>();
+                        parentFingerImg.color = new Color(1f, 1f, 1f, 0.001f);
+                    }
+                    parentFingerImg.raycastTarget = true;
+
+                    ClearChildren(parent);
+
+                    List<int> fingerParts = PartitionValueForFingers(value);
+
+                    HorizontalLayoutGroup fingerLayout = parent.GetComponent<HorizontalLayoutGroup>();
+                    if (fingerLayout == null)
+                    {
+                        fingerLayout = parent.gameObject.AddComponent<HorizontalLayoutGroup>();
+                    }
+                    fingerLayout.childAlignment = TextAnchor.MiddleCenter;
+                    fingerLayout.childControlWidth = false;
+                    fingerLayout.childControlHeight = false;
+                    fingerLayout.childForceExpandWidth = false;
+                    fingerLayout.childForceExpandHeight = false;
+                    fingerLayout.spacing = 8f;
+
+                    float handSize = 160f;
+                    float totalHandWidth = fingerParts.Count * handSize + (fingerParts.Count - 1) * 8f;
+
+                    var parentFingerRt = parent.GetComponent<RectTransform>();
+                    if (parentFingerRt != null)
+                    {
+                        parentFingerRt.sizeDelta = new Vector2(totalHandWidth, handSize);
+                    }
+
+                    foreach (int fVal in fingerParts)
+                    {
+                        int fingerIdx = Mathf.Clamp(fVal - 1, 0, fingerPrefabs.Length - 1);
+                        if (fingerPrefabs[fingerIdx] != null)
                         {
-                            instantiated = Instantiate(baseNumberPrefab, parent);
-                            
-                            var textComp = instantiated.GetComponentInChildren<TMPro.TMP_Text>();
-                            if (textComp != null) textComp.gameObject.SetActive(false);
+                            GameObject handGo = Instantiate(fingerPrefabs[fingerIdx], parent);
 
-                            var img = instantiated.GetComponent<Image>();
-                            if (img != null) img.color = Color.white;
+                            var forwarder = handGo.GetComponent<CardPointerForwarder>();
+                            if (forwarder == null) forwarder = handGo.AddComponent<CardPointerForwarder>();
+                            forwarder.targetCard = parentFingerCard;
 
-                            GameObject handGo = Instantiate(fingerPrefabs[fingerIdx], instantiated.transform);
-                            var handImg = handGo.GetComponent<Image>();
-                            if (handImg != null) handImg.raycastTarget = false;
+                            var graphics = handGo.GetComponentsInChildren<Graphic>(true);
+                            foreach (var g in graphics) g.raycastTarget = true;
 
                             var handRt = handGo.GetComponent<RectTransform>();
-                            if (handRt != null)
-                            {
-                                handRt.anchoredPosition = Vector2.zero;
-                                handRt.localPosition = Vector3.zero;
-                                handRt.localScale = Vector3.one;
-                                // Center and stretch with padding inside the card background
-                                handRt.anchorMin = new Vector2(0.15f, 0.15f);
-                                handRt.anchorMax = new Vector2(0.85f, 0.85f);
-                                handRt.offsetMin = Vector2.zero;
-                                handRt.offsetMax = Vector2.zero;
-                            }
-                        }
-                        else
-                        {
-                            instantiated = Instantiate(fingerPrefabs[fingerIdx], parent);
+                            if (handRt != null) handRt.sizeDelta = new Vector2(handSize, handSize);
+
+                            var le = handGo.GetComponent<LayoutElement>();
+                            if (le == null) le = handGo.AddComponent<LayoutElement>();
+                            le.preferredWidth = handSize;
+                            le.preferredHeight = handSize;
+                            le.minWidth = handSize;
+                            le.minHeight = handSize;
                         }
                     }
                     break;
@@ -441,6 +543,9 @@ namespace KidGame.Mechanics.Matching
                 case MatchVariant.Objects:
                     // Spawn objects DIRECTLY into parent (the right or left slot container) without creating any number(Clone) wrapper!
                     instantiated = parent.gameObject;
+
+                    var parentObjCard = parent.GetComponent<MatchGameCard>();
+                    if (parentObjCard == null) parentObjCard = parent.gameObject.AddComponent<MatchGameCard>();
 
                     // Ensure parent container has a Graphic/Image component with raycastTarget=true for tap detection
                     var parentImg = parent.GetComponent<Image>();
@@ -451,18 +556,24 @@ namespace KidGame.Mechanics.Matching
                     }
                     parentImg.raycastTarget = true;
 
-                    // Ensure parent has a GridLayoutGroup configured with max 2 objects per row and 120x120 cell size
+                    float targetObjSize = (value == 1) ? 160f : 140f;
+
+                    // Ensure parent has a GridLayoutGroup configured with max 2 objects per row
                     GridLayoutGroup grid = parent.GetComponent<GridLayoutGroup>();
                     if (grid == null)
                     {
                         grid = parent.gameObject.AddComponent<GridLayoutGroup>();
-                        grid.cellSize = new Vector2(120f, 120f);
-                        grid.spacing = new Vector2(8f, 8f);
+                        grid.cellSize = new Vector2(targetObjSize, targetObjSize);
+                        grid.spacing = new Vector2(10f, 10f);
                         grid.startCorner = GridLayoutGroup.Corner.UpperLeft;
                         grid.startAxis = GridLayoutGroup.Axis.Horizontal;
                         grid.childAlignment = TextAnchor.MiddleCenter;
                         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
                         grid.constraintCount = 2; // 2 objects max per row!
+                    }
+                    else
+                    {
+                        grid.cellSize = new Vector2(targetObjSize, targetObjSize);
                     }
 
                     // Check if parent ALREADY has pre-existing object children (e.g. 10 Crab GameObjects)
@@ -476,8 +587,12 @@ namespace KidGame.Mechanics.Matching
 
                             if (shouldBeActive)
                             {
+                                var forwarder = child.GetComponent<CardPointerForwarder>();
+                                if (forwarder == null) forwarder = child.gameObject.AddComponent<CardPointerForwarder>();
+                                forwarder.targetCard = parentObjCard;
+
                                 var graphics = child.GetComponentsInChildren<Graphic>(true);
-                                foreach (var g in graphics) g.raycastTarget = false;
+                                foreach (var g in graphics) g.raycastTarget = true;
                             }
                         }
                     }
@@ -503,19 +618,22 @@ namespace KidGame.Mechanics.Matching
                                 img.color = isLeft ? GetLeftColorForValue(value) : GetRightColorForValue(value);
                             }
 
-                            // Ensure raycasts fall through to parent container so tapping anywhere hits the card
+                            var forwarder = itemObj.GetComponent<CardPointerForwarder>();
+                            if (forwarder == null) forwarder = itemObj.AddComponent<CardPointerForwarder>();
+                            forwarder.targetCard = parentObjCard;
+
                             var graphics = itemObj.GetComponentsInChildren<Graphic>(true);
-                            foreach (var g in graphics) g.raycastTarget = false;
+                            foreach (var g in graphics) g.raycastTarget = true;
 
                             var itemRt = itemObj.GetComponent<RectTransform>();
                             if (itemRt != null)
                             {
-                                itemRt.sizeDelta = new Vector2(120f, 120f);
+                                itemRt.sizeDelta = new Vector2(targetObjSize, targetObjSize);
                             }
                             var le = itemObj.GetComponent<LayoutElement>();
                             if (le == null) le = itemObj.AddComponent<LayoutElement>();
-                            le.preferredWidth = 120f;
-                            le.preferredHeight = 120f;
+                            le.preferredWidth = targetObjSize;
+                            le.preferredHeight = targetObjSize;
                         }
                     }
                     break;
@@ -531,6 +649,48 @@ namespace KidGame.Mechanics.Matching
                 }
             }
             return instantiated;
+        }
+
+        private List<int> PartitionValueForFingers(int totalValue)
+        {
+            List<int> parts = new List<int>();
+            if (totalValue <= 0) return parts;
+
+            int numHands = Mathf.CeilToInt((float)totalValue / 5f);
+            int remaining = totalValue;
+
+            for (int i = 0; i < numHands; i++)
+            {
+                int handsLeft = numHands - 1 - i;
+                int minForThisHand = Mathf.Max(1, remaining - (handsLeft * 5));
+                int maxForThisHand = Mathf.Min(5, remaining - handsLeft);
+
+                int handVal = UnityEngine.Random.Range(minForThisHand, maxForThisHand + 1);
+                parts.Add(handVal);
+                remaining -= handVal;
+            }
+            return parts;
+        }
+
+        private List<int> PartitionValueForDice(int totalValue)
+        {
+            List<int> parts = new List<int>();
+            if (totalValue <= 0) return parts;
+
+            int numDice = Mathf.CeilToInt((float)totalValue / 6f);
+            int remaining = totalValue;
+
+            for (int i = 0; i < numDice; i++)
+            {
+                int diceLeft = numDice - 1 - i;
+                int minForThisDie = Mathf.Max(1, remaining - (diceLeft * 6));
+                int maxForThisDie = Mathf.Min(6, remaining - diceLeft);
+
+                int dieVal = UnityEngine.Random.Range(minForThisDie, maxForThisDie + 1);
+                parts.Add(dieVal);
+                remaining -= dieVal;
+            }
+            return parts;
         }
 
         private GameObject GetObjectTemplatePrefab(int value)

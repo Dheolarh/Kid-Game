@@ -10,40 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_89
+  m_Name: Level_118
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 89
-  levelName: LESSON 89
-  levelSubtitle: Matching Objects
-  levelEndTip: 2 Balls is to number 2
+  levelNumber: 118
+  levelName: LESSON 118
+  levelSubtitle: Matching numbers to words
+  levelEndTip: 8 is spelled Eight
   isUnlockedByDefault: 1
   isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
   - gameType: 3
-    dialogueLines:
-    - text: Let's matching numbers
-      mascotAnimationTrigger: isHappy
-    - text: 'Step 1: Count an object on the right'
-      mascotAnimationTrigger: isIdle
-    - text: 'Step 2: look for it''s number on the left'
-      mascotAnimationTrigger: isIdle
-    - text: 'Step 3: Tap it''s number on the left'
-      mascotAnimationTrigger: isIdle
-    - text: 'Step 4: Tap the object again on the right.'
-      mascotAnimationTrigger: isIdle
-    - text: And that's all, you have succesfully made a match!
-      mascotAnimationTrigger: isHappy
-    completionDialogueLines:
-    - text: 'Welldone! '
-      mascotAnimationTrigger: isHappy
-    - text: That didn't take much effort did it?
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 12
+    countingMaxCount: 20
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
@@ -68,10 +52,10 @@ MonoBehaviour:
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
-    matchingRightVariant: 4
-    matchingSlotCount: 7
+    matchingRightVariant: 1
+    matchingSlotCount: 10
     matchingMinVal: 1
-    matchingMaxVal: 8
+    matchingMaxVal: 10
     matchingShuffleLeftColumn: 1
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4

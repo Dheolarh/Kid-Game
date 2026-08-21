@@ -30,8 +30,8 @@ namespace KidGame.Mechanics.Counting
         [Header("Config")]
         [Tooltip("Number of slot rows per round (always 5 per design).")]
         [SerializeField] private int slotCount = 5;
-        [SerializeField, Range(1, 12)] private int minCount = 1;
-        [SerializeField, Range(1, 12)] private int maxCount = 12;
+        [SerializeField] private int minCount = 1;
+        [SerializeField] private int maxCount = 20;
 
         [Header("Dice Mode")]
         [Tooltip("If true, spawns dice prefabs for counting instead of regular prefabs.")]

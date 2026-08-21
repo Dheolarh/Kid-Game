@@ -116,8 +116,6 @@ namespace KidGame.Mechanics.Comparison
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            transform.DOScale(Vector3.one, 0.12f).SetEase(Ease.OutSine);
-
             float dragDistance = Vector2.Distance(eventData.position, eventData.pressPosition);
 
             if (!_isAccepted && dragDistance >= 20f)
