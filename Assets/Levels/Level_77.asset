@@ -69,6 +69,7 @@ MonoBehaviour:
     matchingMinVal: 1
     matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
     recallMaxSequenceLength: 10
@@ -88,6 +89,7 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
   - gameType: 4
     dialogueLines: []
     completionDialogueLines:
@@ -125,6 +127,7 @@ MonoBehaviour:
     matchingMinVal: 1
     matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
     recallMaxSequenceLength: 10
@@ -144,6 +147,7 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
   - gameType: 4
     dialogueLines: []
     completionDialogueLines: []
@@ -179,6 +183,7 @@ MonoBehaviour:
     matchingMinVal: 1
     matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
     recallMaxSequenceLength: 10
@@ -198,6 +203,7 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
   - gameType: 4
     dialogueLines: []
     completionDialogueLines: []
@@ -233,6 +239,7 @@ MonoBehaviour:
     matchingMinVal: 1
     matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
     recallMaxSequenceLength: 10
@@ -252,5 +259,6 @@ MonoBehaviour:
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
   sceneToLoad: Game
   levelIcon: {fileID: 0}

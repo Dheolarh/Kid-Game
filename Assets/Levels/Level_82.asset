@@ -29,7 +29,7 @@ MonoBehaviour:
     - text: We will be counting backwards from 10 to 1
       mascotAnimationTrigger: isIdle
     - text: Alright let's go! 10, 9, 8, ........ 1
-      mascotAnimationTrigger: 
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -63,6 +63,7 @@ MonoBehaviour:
     matchingMinVal: 1
     matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
     recallMaxSequenceLength: 10

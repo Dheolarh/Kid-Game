@@ -34,6 +34,7 @@ MonoBehaviour:
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -58,6 +59,7 @@ MonoBehaviour:
     matchingMinVal: 1
     matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 1
     recallMinSequenceLength: 1
     recallMaxSequenceLength: 10
@@ -72,9 +74,11 @@ MonoBehaviour:
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 1
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: da0f464772d8e5343bbd5673d4c3896f, type: 3}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
   sceneToLoad: Game
   levelIcon: {fileID: 0}

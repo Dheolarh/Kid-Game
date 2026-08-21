@@ -24,7 +24,7 @@ MonoBehaviour:
   pages:
   - gameType: 0
     dialogueLines:
-    - text: Count each object in the row and spell their total number
+    - text: Can you spell thew numbers you see?
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 7
@@ -34,6 +34,7 @@ MonoBehaviour:
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 0fd9ddd5e6b7f7840beafb5cca8d7e83, type: 3}
+    countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -58,6 +59,7 @@ MonoBehaviour:
     matchingMinVal: 1
     matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
     recallMaxSequenceLength: 10
@@ -71,10 +73,12 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 0fd9ddd5e6b7f7840beafb5cca8d7e83, type: 3}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
   sceneToLoad: Game
   levelIcon: {fileID: 0}
