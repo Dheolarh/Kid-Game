@@ -235,6 +235,8 @@ namespace KidGame.Editor
                 {
                     page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab", page.recallPremadeSlotPrefab, typeof(GameObject), false);
                     page.recallPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (ScriptableObject)", page.recallPremadeSlotData, typeof(PremadeSlotData), false);
+                    page.recallColorizeTextInsteadOfBox = EditorGUILayout.Toggle("Colorize Text Instead Of Box", page.recallColorizeTextInsteadOfBox);
+                    page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
                     if (GUILayout.Button("🛠️ Open Premade Slot Data Generator", GUILayout.Height(25)))
                     {
                         PremadeSlotDataGeneratorWindow.OpenWindow();
@@ -297,12 +299,13 @@ namespace KidGame.Editor
                         case GameType.Recall:
                             page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab (Optional)", page.recallPremadeSlotPrefab, typeof(GameObject), false);
                             page.recallPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (Optional)", page.recallPremadeSlotData, typeof(PremadeSlotData), false);
+                            page.recallColorizeTextInsteadOfBox = EditorGUILayout.Toggle("Colorize Text Instead Of Box", page.recallColorizeTextInsteadOfBox);
+                            page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
                             if (GUILayout.Button("🛠️ Open Premade Slot Data Generator", GUILayout.Height(22)))
                             {
                                 PremadeSlotDataGeneratorWindow.OpenWindow();
                             }
                             page.recallIsSequenceFillMode = EditorGUILayout.Toggle("Sequence Fill Mode (1 to X Fill)", page.recallIsSequenceFillMode);
-                            page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
                             page.recallSlotCount = EditorGUILayout.IntSlider("Slot Count", page.recallSlotCount, 1, 10);
                             page.recallMinSequenceLength = EditorGUILayout.IntField("Min Seq Length", page.recallMinSequenceLength);
                             page.recallMaxSequenceLength = EditorGUILayout.IntField("Max Seq Length", page.recallMaxSequenceLength);

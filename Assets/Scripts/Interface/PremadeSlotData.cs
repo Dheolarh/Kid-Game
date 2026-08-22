@@ -39,6 +39,9 @@ namespace KidGame.Interface
         [Tooltip("Optional custom base template prefab to spawn. If unassigned, uses the default template prefab.")]
         public GameObject templatePrefab;
 
+        [Tooltip("If true, colorize the number text instead of the box background image on answer drop.")]
+        public bool colorizeTextInsteadOfBox = false;
+
         [Tooltip("Configured rows (e.g. Row 1 and Row 2, up to 10 boxes per row).")]
         public List<PremadeRowData> rows = new List<PremadeRowData>();
     }

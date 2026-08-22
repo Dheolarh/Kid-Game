@@ -48,6 +48,9 @@ namespace KidGame.Mechanics.NumberRecall
         [Tooltip("Configure rows and their boxes directly in Inspector.")]
         public List<PremadeRecallRow> rows = new List<PremadeRecallRow>();
 
+        [Tooltip("If true, colorize the number text instead of the box background image on answer drop.")]
+        public bool colorizeTextInsteadOfBox = false;
+
         private int _totalAnswerBoxesCount = 0;
         private int _solvedAnswerBoxesCount = 0;
         private System.Action _onCompleted;
@@ -71,6 +74,8 @@ namespace KidGame.Mechanics.NumberRecall
         public void ApplySlotData(KidGame.Interface.PremadeSlotData slotData)
         {
             if (slotData == null || slotData.rows == null || slotData.rows.Count == 0) return;
+
+            colorizeTextInsteadOfBox = slotData.colorizeTextInsteadOfBox;
 
             // Clean up any previously cloned rows/boxes to prevent runaway GameObject memory leaks
             for (int i = transform.childCount - 1; i >= 0; i--)
@@ -219,9 +224,11 @@ namespace KidGame.Mechanics.NumberRecall
 
                         var recallSlot = boxGo.GetComponent<RecallAnswerSlot>();
                         if (recallSlot == null) recallSlot = boxGo.GetComponentInChildren<RecallAnswerSlot>(true);
+                        if (recallSlot == null) recallSlot = boxGo.AddComponent<RecallAnswerSlot>();
 
                         if (recallSlot != null)
                         {
+                            recallSlot.ColorizeTextInsteadOfBox = colorizeTextInsteadOfBox;
                             recallSlot.SetupSlot(expectedVal, true, boxShowHint, () =>
                             {
                                 _solvedAnswerBoxesCount++;
@@ -314,6 +321,7 @@ namespace KidGame.Mechanics.NumberRecall
                         requiredAnswers.Add(slot.ExpectedAnswer);
 
                         bool boxShowHint = slot.ShowHint && isLearningMode;
+                        slot.ColorizeTextInsteadOfBox = colorizeTextInsteadOfBox;
                         slot.SetupSlot(slot.ExpectedAnswer, true, boxShowHint, () =>
                         {
                             _solvedAnswerBoxesCount++;

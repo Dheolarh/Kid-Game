@@ -701,6 +701,15 @@ MonoBehaviour:
     - {fileID: 8910757150115945586, guid: 1067140403bb9d8419a07bb729f5a3a9, type: 3}
     - {fileID: 8910757150115945586, guid: 02899011fe0d97e479ffea73b0e7047e, type: 3}
     - {fileID: 8910757150115945586, guid: 33d7341c696be6a4d8942b6e33ce155a, type: 3}
+  - themeName: Shapes
+    isEnabled: 0
+    prefabs:
+    - {fileID: 8910757150115945586, guid: f70584757ea8d99458ecb86402f71ea8, type: 3}
+    - {fileID: 8910757150115945586, guid: 76310ddf003c3fc4ab19c9472c430aca, type: 3}
+    - {fileID: 8910757150115945586, guid: bff136f3883cc0945a36e06283c8362f, type: 3}
+    - {fileID: 8910757150115945586, guid: 30d691c65c070224296d029835e93bc7, type: 3}
+    - {fileID: 8910757150115945586, guid: 8337430d55a63f3489e85bc304f18d90, type: 3}
+    - {fileID: 8910757150115945586, guid: 96c61e610007fb24da8441ce3d1e0427, type: 3}
 --- !u!114 &7063102546891878916
 MonoBehaviour:
   m_ObjectHideFlags: 0

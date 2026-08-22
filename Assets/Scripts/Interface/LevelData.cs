@@ -93,6 +93,7 @@ namespace KidGame.Interface
         public int recallMaxConsecutiveHidden = 2;
         public bool recallIsLearningMode = true;
         public bool recallIsSequenceFillMode = false;
+        public bool recallColorizeTextInsteadOfBox = false;
         public GameObject recallPremadeSlotPrefab;
         public PremadeSlotData recallPremadeSlotData;
 

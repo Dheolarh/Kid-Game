@@ -24,6 +24,7 @@ namespace KidGame.Editor
         private QuickFillMode _quickFillMode = QuickFillMode.Numbers;
         private AnswerPattern _answerPattern = AnswerPattern.Alternate;
         private bool _quickFillShowHint = true;
+        private bool _colorizeTextInsteadOfBox = false;
 
         // Working data for the editor
         private List<PremadeRowData> _workingRows = new List<PremadeRowData>();
@@ -115,6 +116,7 @@ namespace KidGame.Editor
             _assetName = EditorGUILayout.TextField("Asset Name", _assetName);
             _saveFolderPath = EditorGUILayout.TextField("Save Folder Path", _saveFolderPath);
             _templatePrefab = (GameObject)EditorGUILayout.ObjectField("Template Prefab (Optional)", _templatePrefab, typeof(GameObject), false);
+            _colorizeTextInsteadOfBox = EditorGUILayout.Toggle("Colorize Text Instead Of Box", _colorizeTextInsteadOfBox);
 
             EditorGUILayout.Space(5);
             EditorGUI.BeginChangeCheck();
@@ -226,6 +228,7 @@ namespace KidGame.Editor
 
             _assetName = source.name;
             _templatePrefab = source.templatePrefab;
+            _colorizeTextInsteadOfBox = source.colorizeTextInsteadOfBox;
 
             if (source.rows != null && source.rows.Count > 0)
             {
@@ -384,6 +387,7 @@ namespace KidGame.Editor
             PremadeSlotData asset = ScriptableObject.CreateInstance<PremadeSlotData>();
             asset.layoutName = _assetName;
             asset.templatePrefab = _templatePrefab;
+            asset.colorizeTextInsteadOfBox = _colorizeTextInsteadOfBox;
             asset.rows = new List<PremadeRowData>();
 
             foreach (var r in _workingRows)

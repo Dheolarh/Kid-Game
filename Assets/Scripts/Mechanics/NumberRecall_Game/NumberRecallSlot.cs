@@ -17,7 +17,7 @@ namespace KidGame.Mechanics.NumberRecall
         private System.Action _onCompleted;
         private int _sequenceLength;
 
-        public void Setup(int startValue, int length, int step, List<int> hiddenIndices, Color[] palette, System.Action onCompleted, bool isLearningMode = true)
+        public void Setup(int startValue, int length, int step, List<int> hiddenIndices, Color[] palette, System.Action onCompleted, bool isLearningMode = true, bool colorizeTextInsteadOfBox = false)
         {
             _sequenceLength = length;
             _onCompleted = onCompleted;
@@ -46,16 +46,33 @@ namespace KidGame.Mechanics.NumberRecall
                     var answerGo = Instantiate(answerPrefab, transform);
                     answerGo.name = $"answer_{val}";
                     
-                    var dropZone = answerGo.GetComponent<AnswerDropZone>();
-                    if (dropZone == null) dropZone = answerGo.AddComponent<AnswerDropZone>();
+                    var recallSlot = answerGo.GetComponent<RecallAnswerSlot>();
+                    if (recallSlot == null) recallSlot = answerGo.GetComponentInChildren<RecallAnswerSlot>(true);
 
-                    dropZone.Setup(val, () => {
-                        _unsolvedCount--;
-                        if (_unsolvedCount <= 0)
-                        {
-                            _onCompleted?.Invoke();
-                        }
-                    }, showHint: isLearningMode);
+                    if (recallSlot != null)
+                    {
+                        recallSlot.ColorizeTextInsteadOfBox = colorizeTextInsteadOfBox;
+                        recallSlot.SetupSlot(val, true, isLearningMode, () => {
+                            _unsolvedCount--;
+                            if (_unsolvedCount <= 0)
+                            {
+                                _onCompleted?.Invoke();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        var dropZone = answerGo.GetComponent<AnswerDropZone>();
+                        if (dropZone == null) dropZone = answerGo.AddComponent<AnswerDropZone>();
+
+                        dropZone.Setup(val, () => {
+                            _unsolvedCount--;
+                            if (_unsolvedCount <= 0)
+                            {
+                                _onCompleted?.Invoke();
+                            }
+                        }, showHint: isLearningMode);
+                    }
                 }
                 else
                 {

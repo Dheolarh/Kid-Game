@@ -837,7 +837,7 @@ namespace KidGame.Interface
                     var recall = _activeGameModeInstance?.GetComponent<NumberRecallGameManager>();
                     if (recall != null)
                     {
-                        recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden, page.recallIsLearningMode, page.recallIsSequenceFillMode, page.recallPremadeSlotPrefab, page.recallPremadeSlotData);
+                        recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden, page.recallIsLearningMode, page.recallIsSequenceFillMode, page.recallPremadeSlotPrefab, page.recallPremadeSlotData, page.recallColorizeTextInsteadOfBox);
                         SetupNextButton(recall.NextButton);
                     }
                     break;

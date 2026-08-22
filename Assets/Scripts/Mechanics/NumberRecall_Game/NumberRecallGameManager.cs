@@ -54,6 +54,7 @@ namespace KidGame.Mechanics.NumberRecall
         [Header("Learning Mode Config")]
         [Tooltip("If true, hints are displayed in empty answer slots (Learning Mode). If false, slots are empty (Normal Mode).")]
         [SerializeField] private bool isLearningMode = true;
+        [SerializeField] private bool colorizeTextInsteadOfBox = false;
 
         [Header("Sequence Fill Mode Config")]
         [Tooltip("If true, only 1 container grid spawns spanning minStartValue (Slot 1) to maxStartValue (Slot X), with all middle numbers missing.")]
@@ -87,7 +88,7 @@ namespace KidGame.Mechanics.NumberRecall
 
         public Button NextButton => nextButton;
 
-        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true, bool isSequenceFillMode = false, GameObject premadeSlotPrefab = null, KidGame.Interface.PremadeSlotData premadeSlotData = null)
+        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true, bool isSequenceFillMode = false, GameObject premadeSlotPrefab = null, KidGame.Interface.PremadeSlotData premadeSlotData = null, bool colorizeTextInsteadOfBox = false)
         {
             this.slotCount = slotCount;
             this.minSequenceLength = minSequenceLength;
@@ -104,6 +105,7 @@ namespace KidGame.Mechanics.NumberRecall
             this.isSequenceFillMode = isSequenceFillMode;
             this.premadeSlotPrefab = premadeSlotPrefab;
             this.premadeSlotData = premadeSlotData;
+            this.colorizeTextInsteadOfBox = colorizeTextInsteadOfBox;
 
             _slots.Clear();
             _cards.Clear();
@@ -225,6 +227,7 @@ namespace KidGame.Mechanics.NumberRecall
                 if (premadeSlot == null) premadeSlot = slotGo.AddComponent<PremadeRecallSlot>();
 
                 if (premadeSlotData != null) premadeSlot.ApplySlotData(premadeSlotData);
+                premadeSlot.colorizeTextInsteadOfBox = colorizeTextInsteadOfBox;
                 trayValues = premadeSlot.Setup(OnSequenceCompleted, isLearningMode);
             }
             else if (isSequenceFillMode)
@@ -250,7 +253,7 @@ namespace KidGame.Mechanics.NumberRecall
                 var slot = slotGo.GetComponent<NumberRecallSlot>();
                 if (slot == null) slot = slotGo.AddComponent<NumberRecallSlot>();
 
-                slot.Setup(startValue, sequenceLength, actualStep, hiddenIndices, Palette, OnSequenceCompleted, isLearningMode);
+                slot.Setup(startValue, sequenceLength, actualStep, hiddenIndices, Palette, OnSequenceCompleted, isLearningMode, colorizeTextInsteadOfBox);
                 _slots.Add(slot);
 
                 // Collect missing values for answer tray (all middle numbers)
@@ -315,7 +318,7 @@ namespace KidGame.Mechanics.NumberRecall
                     var slot = slotGo.GetComponent<NumberRecallSlot>();
                     if (slot == null) slot = slotGo.AddComponent<NumberRecallSlot>();
 
-                    slot.Setup(startValue, sequenceLength, actualStep, hiddenIndices, Palette, OnSequenceCompleted, isLearningMode);
+                    slot.Setup(startValue, sequenceLength, actualStep, hiddenIndices, Palette, OnSequenceCompleted, isLearningMode, colorizeTextInsteadOfBox);
                     _slots.Add(slot);
 
                     // Collect missing values for answer tray

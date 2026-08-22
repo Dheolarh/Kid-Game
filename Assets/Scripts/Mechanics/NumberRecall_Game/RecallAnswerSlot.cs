@@ -32,6 +32,9 @@ namespace KidGame.Mechanics.NumberRecall
         [Tooltip("Should this slot display a faint hint number before being answered?")]
         [SerializeField] private bool showHint = true;
 
+        [Tooltip("If true, colorize the number text instead of the box background image on answer drop.")]
+        [SerializeField] private bool colorizeTextInsteadOfBox = false;
+
         [Header("Preset Random Colors")]
         [Tooltip("Preset colors to pick a random color from when revealed.")]
         [SerializeField] private Color[] presetColors = new Color[]
@@ -60,6 +63,7 @@ namespace KidGame.Mechanics.NumberRecall
         public int ExpectedAnswer { get => expectedAnswer; set => expectedAnswer = value; }
         public bool IsAnswer { get => isAnswer; set => isAnswer = value; }
         public bool ShowHint { get => showHint; set => showHint = value; }
+        public bool ColorizeTextInsteadOfBox { get => colorizeTextInsteadOfBox; set => colorizeTextInsteadOfBox = value; }
 
         // ── Private State ─────────────────────────────────────────────────────
 
@@ -138,16 +142,35 @@ namespace KidGame.Mechanics.NumberRecall
             }
             else
             {
-                if (slotText != null)
+                if (colorizeTextInsteadOfBox)
                 {
-                    slotText.text = expectedAnswer.ToString();
-                    slotText.color = Color.white;
-                    slotText.gameObject.SetActive(true);
+                    if (slotText != null)
+                    {
+                        slotText.text = expectedAnswer.ToString();
+                        if (presetColors != null && presetColors.Length > 0)
+                        {
+                            slotText.color = presetColors[Random.Range(0, presetColors.Length)];
+                        }
+                        else
+                        {
+                            slotText.color = Color.white;
+                        }
+                        slotText.gameObject.SetActive(true);
+                    }
                 }
-
-                if (slotImage != null && presetColors != null && presetColors.Length > 0)
+                else
                 {
-                    slotImage.color = presetColors[Random.Range(0, presetColors.Length)];
+                    if (slotText != null)
+                    {
+                        slotText.text = expectedAnswer.ToString();
+                        slotText.color = Color.white;
+                        slotText.gameObject.SetActive(true);
+                    }
+
+                    if (slotImage != null && presetColors != null && presetColors.Length > 0)
+                    {
+                        slotImage.color = presetColors[Random.Range(0, presetColors.Length)];
+                    }
                 }
             }
         }
@@ -165,31 +188,56 @@ namespace KidGame.Mechanics.NumberRecall
                 card.Disappear(0.2f);
             }
 
-            // 2. Slot matches the dropped answer card's color
-            if (slotImage != null)
+            Color targetColor = (card != null) ? card.CardColor : Color.white;
+
+            if (colorizeTextInsteadOfBox)
             {
-                Color targetColor = (card != null) ? card.CardColor : Color.white;
-                slotImage.DOColor(targetColor, 0.25f);
+                // Box background remains untouched; colorize text & trigger pop up/down animation
+                if (slotText != null)
+                {
+                    slotText.text = (card != null) ? card.Value.ToString() : expectedAnswer.ToString();
+                    slotText.color = targetColor; // Text gets the card's color!
+                    slotText.gameObject.SetActive(true);
+
+                    DOTween.Kill(slotText.transform);
+                    slotText.transform.localScale = Vector3.zero;
+
+                    // Pop up to popScaleMultiplier, then pop down to 1.0
+                    slotText.transform.DOScale(Vector3.one * popScaleMultiplier, popDuration * 0.5f)
+                        .SetEase(Ease.OutBack)
+                        .OnComplete(() =>
+                        {
+                            slotText.transform.DOScale(Vector3.one, popDuration * 0.5f)
+                                .SetEase(Ease.InOutQuad);
+                        });
+                }
             }
-
-            // 3. Reveal text with pop up and down animation
-            if (slotText != null)
+            else
             {
-                slotText.text = (card != null) ? card.Value.ToString() : expectedAnswer.ToString();
-                slotText.color = Color.white;
-                slotText.gameObject.SetActive(true);
+                // Standard: Box background matches dropped card's color, text is white
+                if (slotImage != null)
+                {
+                    slotImage.DOColor(targetColor, 0.25f);
+                }
 
-                DOTween.Kill(slotText.transform);
-                slotText.transform.localScale = Vector3.zero;
+                if (slotText != null)
+                {
+                    slotText.text = (card != null) ? card.Value.ToString() : expectedAnswer.ToString();
+                    slotText.color = Color.white;
+                    slotText.gameObject.SetActive(true);
 
-                // Pop up to popScaleMultiplier, then pop down to 1.0
-                slotText.transform.DOScale(Vector3.one * popScaleMultiplier, popDuration * 0.5f)
-                    .SetEase(Ease.OutBack)
-                    .OnComplete(() =>
-                    {
-                        slotText.transform.DOScale(Vector3.one, popDuration * 0.5f)
-                            .SetEase(Ease.InOutQuad);
-                    });
+                    DOTween.Kill(slotText.transform);
+                    slotText.transform.localScale = Vector3.zero;
+
+                    // Pop up to popScaleMultiplier, then pop down to 1.0
+                    slotText.transform.DOScale(Vector3.one * popScaleMultiplier, popDuration * 0.5f)
+                        .SetEase(Ease.OutBack)
+                        .OnComplete(() =>
+                        {
+                            slotText.transform.DOScale(Vector3.one, popDuration * 0.5f)
+                                .SetEase(Ease.InOutQuad);
+                        });
+                }
             }
 
             // Play SFX & voice

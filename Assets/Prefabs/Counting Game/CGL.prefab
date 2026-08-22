@@ -233,6 +233,7 @@ MonoBehaviour:
   slotPrefab: {fileID: 1059160391153392395, guid: 02148c601de0d044a89b10bff65ee302, type: 3}
   answerCardPrefab: {fileID: 7026504693343592554, guid: 0182651f93afea3489412a78a9040cd4, type: 3}
   slotsContainer: {fileID: 8950477692733085829}
+  premadeSlotsContainer: {fileID: 0}
   answersContainer: {fileID: 6066648517586807316}
   nextButton: {fileID: 4700573525613224304}
   slotCount: 10
@@ -298,6 +299,15 @@ MonoBehaviour:
     - {fileID: 8910757150115945586, guid: d775c7155794eba4aae6150ba70fe71e, type: 3}
     - {fileID: 8910757150115945586, guid: 3d56fce855d2f36419525a849f1846ad, type: 3}
     - {fileID: 8910757150115945586, guid: b41f2eecc03755549bcf66d211bef4b1, type: 3}
+  - themeName: Shapes
+    isEnabled: 0
+    prefabs:
+    - {fileID: 8910757150115945586, guid: f70584757ea8d99458ecb86402f71ea8, type: 3}
+    - {fileID: 8910757150115945586, guid: 76310ddf003c3fc4ab19c9472c430aca, type: 3}
+    - {fileID: 8910757150115945586, guid: bff136f3883cc0945a36e06283c8362f, type: 3}
+    - {fileID: 8910757150115945586, guid: 30d691c65c070224296d029835e93bc7, type: 3}
+    - {fileID: 8910757150115945586, guid: 8337430d55a63f3489e85bc304f18d90, type: 3}
+    - {fileID: 8910757150115945586, guid: 96c61e610007fb24da8441ce3d1e0427, type: 3}
 --- !u!114 &3497157194791432720
 MonoBehaviour:
   m_ObjectHideFlags: 0
