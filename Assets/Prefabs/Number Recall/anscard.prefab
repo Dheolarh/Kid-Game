@@ -124,6 +124,7 @@ MonoBehaviour:
   snapDuration: 0.2
   returnDuration: 0.18
   acceptedScaleMultiplier: 1.5
+  dragScaleMultiplier: 1.08
 --- !u!1 &7329187035570733339
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,12 +217,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
+  m_fontSize: 45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 60
+  m_fontSizeMax: 45
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

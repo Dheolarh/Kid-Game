@@ -214,29 +214,16 @@ namespace KidGame.Mechanics.NumberRecall
             }
             else
             {
-                // Standard: Box background matches dropped card's color, text is white
-                if (slotImage != null)
+                // Standard mode: Card sits over the answer box scaled 1.4x (Image 2 style)
+                if (card != null)
                 {
-                    slotImage.DOColor(targetColor, 0.25f);
+                    card.AcceptedScaleMultiplier = 1.7f;
+                    card.AcceptedByZone(transform);
                 }
 
                 if (slotText != null)
                 {
-                    slotText.text = (card != null) ? card.Value.ToString() : expectedAnswer.ToString();
-                    slotText.color = Color.white;
-                    slotText.gameObject.SetActive(true);
-
-                    DOTween.Kill(slotText.transform);
-                    slotText.transform.localScale = Vector3.zero;
-
-                    // Pop up to popScaleMultiplier, then pop down to 1.0
-                    slotText.transform.DOScale(Vector3.one * popScaleMultiplier, popDuration * 0.5f)
-                        .SetEase(Ease.OutBack)
-                        .OnComplete(() =>
-                        {
-                            slotText.transform.DOScale(Vector3.one, popDuration * 0.5f)
-                                .SetEase(Ease.InOutQuad);
-                        });
+                    slotText.gameObject.SetActive(false);
                 }
             }
 

@@ -553,6 +553,15 @@ MonoBehaviour:
     - {fileID: 8910757150115945586, guid: 30d691c65c070224296d029835e93bc7, type: 3}
     - {fileID: 8910757150115945586, guid: 8337430d55a63f3489e85bc304f18d90, type: 3}
     - {fileID: 8910757150115945586, guid: 96c61e610007fb24da8441ce3d1e0427, type: 3}
+  - themeName: Clothes
+    isEnabled: 0
+    prefabs:
+    - {fileID: 8910757150115945586, guid: 1b2bff99719974b4984d066cc0fc63ec, type: 3}
+    - {fileID: 8910757150115945586, guid: 0e80f67e96fa2724fb7e31cb67d51757, type: 3}
+    - {fileID: 8910757150115945586, guid: 5de97eabc7dfc6249a9bda8e9c2cb4f6, type: 3}
+    - {fileID: 8910757150115945586, guid: 13585580a30fee94ba88c5d658b277e0, type: 3}
+    - {fileID: 8910757150115945586, guid: a66b7c1b35b41dd46b4c79f877ed5efd, type: 3}
+    - {fileID: 8910757150115945586, guid: 5e25b73ca8b7b4c47821e574d2e3850b, type: 3}
   lessThanColor: {r: 0.8679245, g: 0.045033824, b: 0.22084568, a: 1}
   equalToColor: {r: 0.8679245, g: 0.8133007, b: 0.036845837, a: 1}
   greaterThanColor: {r: 0.13793145, g: 0.8113208, b: 0.057404764, a: 1}

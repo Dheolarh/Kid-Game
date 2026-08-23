@@ -17,9 +17,25 @@ namespace KidGame.Mechanics.Counting
         {
             CorrectCount = count;
 
+            var grid = objectGrid != null ? objectGrid.GetComponent<UnityEngine.UI.GridLayoutGroup>() : null;
+            if (grid != null)
+            {
+                grid.cellSize = new Vector2(120f, 120f);
+            }
+
             for (int i = 0; i < count; i++)
             {
                 var obj = Instantiate(objectPrefab, objectGrid);
+
+                var rt = obj.GetComponent<RectTransform>();
+                if (rt != null) rt.sizeDelta = new Vector2(120f, 120f);
+
+                var le = obj.GetComponent<UnityEngine.UI.LayoutElement>();
+                if (le == null) le = obj.AddComponent<UnityEngine.UI.LayoutElement>();
+                le.preferredWidth = 120f;
+                le.preferredHeight = 120f;
+                le.minWidth = 120f;
+                le.minHeight = 120f;
 
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
@@ -43,9 +59,25 @@ namespace KidGame.Mechanics.Counting
             CorrectCount = totalSum;
             int seqCount = 1;
 
+            var grid = objectGrid != null ? objectGrid.GetComponent<UnityEngine.UI.GridLayoutGroup>() : null;
+            if (grid != null)
+            {
+                grid.cellSize = new Vector2(160f, 160f);
+            }
+
             for (int i = 0; i < itemPrefabs.Count; i++)
             {
                 var obj = Instantiate(itemPrefabs[i], objectGrid);
+
+                var rt = obj.GetComponent<RectTransform>();
+                if (rt != null) rt.sizeDelta = new Vector2(160f, 160f);
+
+                var le = obj.GetComponent<UnityEngine.UI.LayoutElement>();
+                if (le == null) le = obj.AddComponent<UnityEngine.UI.LayoutElement>();
+                le.preferredWidth = 160f;
+                le.preferredHeight = 160f;
+                le.minWidth = 160f;
+                le.minHeight = 160f;
 
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();

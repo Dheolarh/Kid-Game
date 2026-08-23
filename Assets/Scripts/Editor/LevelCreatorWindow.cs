@@ -233,6 +233,13 @@ namespace KidGame.Editor
 
                 if (_isPremadeLevel)
                 {
+                    page.overrideLevelPremade = EditorGUILayout.Toggle("Override Premade (Use Procedural)", page.overrideLevelPremade);
+                }
+
+                bool showAsPremade = _isPremadeLevel && !page.overrideLevelPremade;
+
+                if (showAsPremade)
+                {
                     page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab", page.recallPremadeSlotPrefab, typeof(GameObject), false);
                     page.recallPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (ScriptableObject)", page.recallPremadeSlotData, typeof(PremadeSlotData), false);
                     page.recallColorizeTextInsteadOfBox = EditorGUILayout.Toggle("Colorize Text Instead Of Box", page.recallColorizeTextInsteadOfBox);

@@ -32,7 +32,7 @@ namespace KidGame.Mechanics.Addition
         /// <param name="rightPrefab">Object icon for the right grid.</param>
         /// <param name="rightCount">How many right objects to spawn (1–12).</param>
         /// <param name="manager">Owning manager — notified on correct answer.</param>
-        private void ConfigureGrid(Transform gridTransform)
+        private void ConfigureGrid(Transform gridTransform, float cellSize = 120f)
         {
             if (gridTransform == null) return;
             var gridComp = gridTransform.GetComponent<GridLayoutGroup>();
@@ -40,7 +40,7 @@ namespace KidGame.Mechanics.Addition
             {
                 gridComp.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
                 gridComp.constraintCount = 2; // Max 2 objects per row
-                gridComp.cellSize = new Vector2(115f, 115f); // Larger objects
+                gridComp.cellSize = new Vector2(cellSize, cellSize);
             }
         }
 
@@ -424,7 +424,7 @@ namespace KidGame.Mechanics.Addition
             {
                 grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
                 grid.constraintCount = 2;
-                grid.cellSize = new Vector2(115f, 115f);
+                grid.cellSize = new Vector2(150f, 150f);
             }
 
             ForceSize100(obj);
@@ -440,13 +440,13 @@ namespace KidGame.Mechanics.Addition
             var rt = obj.GetComponent<RectTransform>();
             if (rt != null)
             {
-                rt.sizeDelta = new Vector2(115f, 115f);
+                rt.sizeDelta = new Vector2(150f, 150f);
             }
             var le = obj.GetComponent<LayoutElement>();
             if (le != null)
             {
-                le.preferredWidth = 115f;
-                le.preferredHeight = 115f;
+                le.preferredWidth = 150f;
+                le.preferredHeight = 150f;
             }
         }
     }

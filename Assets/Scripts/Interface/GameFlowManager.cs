@@ -801,7 +801,8 @@ namespace KidGame.Interface
                     var counting = _activeGameModeInstance?.GetComponent<CountingGameManager>();
                     if (counting != null)
                     {
-                        counting.Configure(page.countingSlotCount, page.countingMinCount, page.countingMaxCount, page.countingDiceMode, page.countingFingerMode, page.countingActiveThemeName, page.countingPremadeSlotPrefab, page.countingPremadeSlotData);
+                        bool isPremadeCounting = (ActiveLevel != null && ActiveLevel.isPremadeLevel && !page.overrideLevelPremade);
+                        counting.Configure(page.countingSlotCount, page.countingMinCount, page.countingMaxCount, page.countingDiceMode, page.countingFingerMode, page.countingActiveThemeName, isPremadeCounting ? page.countingPremadeSlotPrefab : null, isPremadeCounting ? page.countingPremadeSlotData : null);
                         SetupNextButton(counting.NextButton);
                     }
                     break;
@@ -837,7 +838,8 @@ namespace KidGame.Interface
                     var recall = _activeGameModeInstance?.GetComponent<NumberRecallGameManager>();
                     if (recall != null)
                     {
-                        recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden, page.recallIsLearningMode, page.recallIsSequenceFillMode, page.recallPremadeSlotPrefab, page.recallPremadeSlotData, page.recallColorizeTextInsteadOfBox, page.recallScaleDownCardOnDrag);
+                        bool isPremadeRecall = (ActiveLevel != null && ActiveLevel.isPremadeLevel && !page.overrideLevelPremade);
+                        recall.Configure(page.recallSlotCount, page.recallMinSequenceLength, page.recallMaxSequenceLength, page.recallMinStartValue, page.recallMaxStartValue, page.recallStep, page.recallCountBackwards, page.recallMinConsecutiveRevealed, page.recallMaxConsecutiveRevealed, page.recallMinConsecutiveHidden, page.recallMaxConsecutiveHidden, page.recallIsLearningMode, page.recallIsSequenceFillMode, isPremadeRecall ? page.recallPremadeSlotPrefab : null, isPremadeRecall ? page.recallPremadeSlotData : null, page.recallColorizeTextInsteadOfBox, page.recallScaleDownCardOnDrag);
                         SetupNextButton(recall.NextButton);
                     }
                     break;

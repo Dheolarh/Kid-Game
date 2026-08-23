@@ -29,6 +29,9 @@ namespace KidGame.Interface
         [Tooltip("The game mode/type to play on this page.")]
         public GameType gameType = GameType.Counting;
 
+        [Tooltip("If true, overrides the level-wide Is Premade Level toggle for this page so it uses procedural mode.")]
+        public bool overrideLevelPremade = false;
+
         [Tooltip("Optional list of dialogue popup speech lines at the start of this page.")]
         public List<DialogueLine> dialogueLines = new List<DialogueLine>();
 

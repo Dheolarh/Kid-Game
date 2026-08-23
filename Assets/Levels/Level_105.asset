@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 105
   levelSubtitle: The big 100
   levelEndTip: That was long, wasn't it?
-  isUnlockedByDefault: 0
+  isUnlockedByDefault: 1
   isPremadeLevel: 1
   themePresetName: TealGreen
   levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
@@ -79,6 +79,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 5b578b7779a1bc642a3bf1187514a921, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
@@ -137,6 +139,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: a30b5de95e5a71c438178cf2b27a5aea, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
@@ -195,6 +199,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 0331318ecbb2a62449ff27f2208a6f39, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
@@ -253,6 +259,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 9b8e005024e064c40936e0839fac4c49, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
@@ -311,6 +319,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 6d8188a605ac6c743ab416616467d247, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

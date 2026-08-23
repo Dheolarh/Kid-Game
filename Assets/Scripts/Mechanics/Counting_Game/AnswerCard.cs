@@ -274,10 +274,10 @@ namespace KidGame.Mechanics.Counting
             var rt = GetComponent<RectTransform>();
             if (rt != null)
             {
-                rt.anchorMin = Vector2.zero;
-                rt.anchorMax = Vector2.one;
-                rt.offsetMin = Vector2.zero;
-                rt.offsetMax = Vector2.zero;
+                rt.anchorMin = new Vector2(0.5f, 0.5f);
+                rt.anchorMax = new Vector2(0.5f, 0.5f);
+                rt.pivot = new Vector2(0.5f, 0.5f);
+                rt.anchoredPosition = Vector2.zero;
             }
 
             Vector3 targetAcceptedScale = Vector3.one * acceptedScaleMultiplier;
@@ -289,10 +289,10 @@ namespace KidGame.Mechanics.Counting
                      {
                          if (rt != null)
                          {
-                             rt.anchorMin = Vector2.zero;
-                             rt.anchorMax = Vector2.one;
-                             rt.offsetMin = Vector2.zero;
-                             rt.offsetMax = Vector2.zero;
+                             rt.anchorMin = new Vector2(0.5f, 0.5f);
+                             rt.anchorMax = new Vector2(0.5f, 0.5f);
+                             rt.pivot = new Vector2(0.5f, 0.5f);
+                             rt.anchoredPosition = Vector2.zero;
                          }
                          transform.localScale = targetAcceptedScale;
                          transform.DOPunchScale(targetAcceptedScale * 0.15f, 0.35f, 6, 0.5f);
