@@ -236,6 +236,7 @@ namespace KidGame.Editor
                     page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab", page.recallPremadeSlotPrefab, typeof(GameObject), false);
                     page.recallPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (ScriptableObject)", page.recallPremadeSlotData, typeof(PremadeSlotData), false);
                     page.recallColorizeTextInsteadOfBox = EditorGUILayout.Toggle("Colorize Text Instead Of Box", page.recallColorizeTextInsteadOfBox);
+                    page.recallScaleDownCardOnDrag = EditorGUILayout.Toggle("Scale Down Card On Drag (0.5x)", page.recallScaleDownCardOnDrag);
                     page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
                     if (GUILayout.Button("🛠️ Open Premade Slot Data Generator", GUILayout.Height(25)))
                     {
@@ -300,6 +301,7 @@ namespace KidGame.Editor
                             page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab (Optional)", page.recallPremadeSlotPrefab, typeof(GameObject), false);
                             page.recallPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (Optional)", page.recallPremadeSlotData, typeof(PremadeSlotData), false);
                             page.recallColorizeTextInsteadOfBox = EditorGUILayout.Toggle("Colorize Text Instead Of Box", page.recallColorizeTextInsteadOfBox);
+                    page.recallScaleDownCardOnDrag = EditorGUILayout.Toggle("Scale Down Card On Drag (0.5x)", page.recallScaleDownCardOnDrag);
                             page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
                             if (GUILayout.Button("🛠️ Open Premade Slot Data Generator", GUILayout.Height(22)))
                             {

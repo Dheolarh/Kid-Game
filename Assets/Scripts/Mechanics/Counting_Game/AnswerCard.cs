@@ -24,11 +24,19 @@ namespace KidGame.Mechanics.Counting
         [SerializeField] private float returnDuration = 0.18f;
         [Tooltip("Scale multiplier applied when card is dropped into an answer box.")]
         [SerializeField] private float acceptedScaleMultiplier = 1.1f;
+        [Tooltip("Scale multiplier applied while dragging the card (default 1.08f).")]
+        [SerializeField] private float dragScaleMultiplier = 1.08f;
 
         public float AcceptedScaleMultiplier
         {
             get => acceptedScaleMultiplier;
             set => acceptedScaleMultiplier = value;
+        }
+
+        public float DragScaleMultiplier
+        {
+            get => dragScaleMultiplier;
+            set => dragScaleMultiplier = value;
         }
 
         // ── Public state ──────────────────────────────────────────────────────
@@ -170,8 +178,8 @@ namespace KidGame.Mechanics.Counting
             // Disable raycasts through card so underlying drop zones stay hit-testable
             _canvasGroup.blocksRaycasts = false;
 
-            // Slight scale-up: feels "picked up"
-            transform.DOScale(_initialLocalScale * 1.08f, 0.12f).SetEase(Ease.OutSine);
+            // Apply drag scale (e.g. 0.5x if scaleDownCardOnDrag enabled, or 1.08x default)
+            transform.DOScale(_initialLocalScale * dragScaleMultiplier, 0.12f).SetEase(Ease.OutSine);
         }
 
         public void OnDrag(PointerEventData eventData)

@@ -80,6 +80,7 @@ MonoBehaviour:
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 1
+    recallScaleDownCardOnDrag: 1
     recallPremadeSlotPrefab: {fileID: 6486484259667216724, guid: a742d371ffd0603498353f1a799509d1, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

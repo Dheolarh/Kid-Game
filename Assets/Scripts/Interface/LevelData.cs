@@ -94,6 +94,7 @@ namespace KidGame.Interface
         public bool recallIsLearningMode = true;
         public bool recallIsSequenceFillMode = false;
         public bool recallColorizeTextInsteadOfBox = false;
+        public bool recallScaleDownCardOnDrag = false;
         public GameObject recallPremadeSlotPrefab;
         public PremadeSlotData recallPremadeSlotData;
 

@@ -55,6 +55,7 @@ namespace KidGame.Mechanics.NumberRecall
         [Tooltip("If true, hints are displayed in empty answer slots (Learning Mode). If false, slots are empty (Normal Mode).")]
         [SerializeField] private bool isLearningMode = true;
         [SerializeField] private bool colorizeTextInsteadOfBox = false;
+        [SerializeField] private bool scaleDownCardOnDrag = false;
 
         [Header("Sequence Fill Mode Config")]
         [Tooltip("If true, only 1 container grid spawns spanning minStartValue (Slot 1) to maxStartValue (Slot X), with all middle numbers missing.")]
@@ -67,6 +68,7 @@ namespace KidGame.Mechanics.NumberRecall
 
         public GameObject PremadeSlotPrefab { get => premadeSlotPrefab; set => premadeSlotPrefab = value; }
         public KidGame.Interface.PremadeSlotData PremadeSlotData { get => premadeSlotData; set => premadeSlotData = value; }
+        public bool ScaleDownCardOnDrag { get => scaleDownCardOnDrag; set => scaleDownCardOnDrag = value; }
 
         private static readonly Color[] Palette =
         {
@@ -88,7 +90,7 @@ namespace KidGame.Mechanics.NumberRecall
 
         public Button NextButton => nextButton;
 
-        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true, bool isSequenceFillMode = false, GameObject premadeSlotPrefab = null, KidGame.Interface.PremadeSlotData premadeSlotData = null, bool colorizeTextInsteadOfBox = false)
+        public void Configure(int slotCount, int minSequenceLength, int maxSequenceLength, int minStartValue, int maxStartValue, int step, bool countBackwards, int minConsecutiveRevealed, int maxConsecutiveRevealed, int minConsecutiveHidden, int maxConsecutiveHidden, bool isLearningMode = true, bool isSequenceFillMode = false, GameObject premadeSlotPrefab = null, KidGame.Interface.PremadeSlotData premadeSlotData = null, bool colorizeTextInsteadOfBox = false, bool scaleDownCardOnDrag = false)
         {
             this.slotCount = slotCount;
             this.minSequenceLength = minSequenceLength;
@@ -106,6 +108,7 @@ namespace KidGame.Mechanics.NumberRecall
             this.premadeSlotPrefab = premadeSlotPrefab;
             this.premadeSlotData = premadeSlotData;
             this.colorizeTextInsteadOfBox = colorizeTextInsteadOfBox;
+            this.scaleDownCardOnDrag = scaleDownCardOnDrag;
 
             _slots.Clear();
             _cards.Clear();
@@ -351,6 +354,7 @@ namespace KidGame.Mechanics.NumberRecall
                 var cardGo = Instantiate(answerCardPrefab, answersContainer);
                 var card = cardGo.GetComponent<AnswerCard>();
                 card.Setup(trayValues[valIdx], colors[i], customAcceptedScaleMultiplier: 1.1f);
+                if (scaleDownCardOnDrag) card.DragScaleMultiplier = 0.5f;
                 _cards.Add(card);
             }
 
