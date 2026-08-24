@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: We are doing something different now {playername}
       mascotAnimationTrigger: isIsdle
@@ -77,6 +78,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 1
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: 6f0a95f4a9aab6f4a909d7a6d430e2f2, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
@@ -85,6 +88,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Next 10 to 1
       mascotAnimationTrigger: isIdle
@@ -135,6 +139,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 1
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: f18e9afe6e7af9945989dbb3f2573443, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

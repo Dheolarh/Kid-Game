@@ -16,13 +16,14 @@ MonoBehaviour:
   levelName: LESSON 93
   levelSubtitle: Counting Backwards
   levelEndTip: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
-  isUnlockedByDefault: 0
+  isUnlockedByDefault: 1
   isPremadeLevel: 1
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: We are doing something different now {playername}
       mascotAnimationTrigger: isIsdle
@@ -77,6 +78,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 1
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: f18e9afe6e7af9945989dbb3f2573443, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

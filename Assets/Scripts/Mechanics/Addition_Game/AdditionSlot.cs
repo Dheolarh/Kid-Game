@@ -32,7 +32,7 @@ namespace KidGame.Mechanics.Addition
         /// <param name="rightPrefab">Object icon for the right grid.</param>
         /// <param name="rightCount">How many right objects to spawn (1–12).</param>
         /// <param name="manager">Owning manager — notified on correct answer.</param>
-        private void ConfigureGrid(Transform gridTransform, float cellSize = 120f)
+        private void ConfigureGrid(Transform gridTransform, float cellSize = 100f)
         {
             if (gridTransform == null) return;
             var gridComp = gridTransform.GetComponent<GridLayoutGroup>();
@@ -49,15 +49,15 @@ namespace KidGame.Mechanics.Addition
                           AdditionGameManager manager)
         {
             CorrectSum = leftCount + rightCount;
-            ConfigureGrid(ActualLeftGrid);
-            ConfigureGrid(ActualRightGrid);
+            ConfigureGrid(ActualLeftGrid, 100f);
+            ConfigureGrid(ActualRightGrid, 100f);
 
             int counter = 1;
 
             for (int i = 0; i < leftCount; i++)
             {
                 var obj = Instantiate(leftPrefab, ActualLeftGrid);
-                ForceSize100(obj);
+                ForceSize(obj, 100f);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 countingObj.SetCountValue(counter);
@@ -67,7 +67,7 @@ namespace KidGame.Mechanics.Addition
             for (int i = 0; i < rightCount; i++)
             {
                 var obj = Instantiate(rightPrefab, ActualRightGrid);
-                ForceSize100(obj);
+                ForceSize(obj, 100f);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 countingObj.SetCountValue(counter);
@@ -117,13 +117,13 @@ namespace KidGame.Mechanics.Addition
                           AdditionGameManager manager)
         {
             CorrectSum = leftSum + rightSum;
-            ConfigureGrid(ActualLeftGrid);
-            ConfigureGrid(ActualRightGrid);
+            ConfigureGrid(ActualLeftGrid, 160f);
+            ConfigureGrid(ActualRightGrid, 160f);
 
             for (int i = 0; i < leftDicePrefabs.Count; i++)
             {
                 var obj = Instantiate(leftDicePrefabs[i], ActualLeftGrid);
-                ForceSize100(obj);
+                ForceSize(obj, 160f);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 int val = (leftValues != null && i < leftValues.Count) ? leftValues[i] : 0;
@@ -133,7 +133,7 @@ namespace KidGame.Mechanics.Addition
             for (int i = 0; i < rightDicePrefabs.Count; i++)
             {
                 var obj = Instantiate(rightDicePrefabs[i], ActualRightGrid);
-                ForceSize100(obj);
+                ForceSize(obj, 160f);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 int val = (rightValues != null && i < rightValues.Count) ? rightValues[i] : 0;
@@ -434,20 +434,25 @@ namespace KidGame.Mechanics.Addition
                 obj.AddComponent<CountingObject>();
         }
 
-        private static void ForceSize100(GameObject obj)
+        private static void ForceSize(GameObject obj, float size = 100f)
         {
             if (obj == null) return;
             var rt = obj.GetComponent<RectTransform>();
             if (rt != null)
             {
-                rt.sizeDelta = new Vector2(150f, 150f);
+                rt.sizeDelta = new Vector2(size, size);
             }
             var le = obj.GetComponent<LayoutElement>();
-            if (le != null)
-            {
-                le.preferredWidth = 150f;
-                le.preferredHeight = 150f;
-            }
+            if (le == null) le = obj.AddComponent<LayoutElement>();
+            le.preferredWidth = size;
+            le.preferredHeight = size;
+            le.minWidth = size;
+            le.minHeight = size;
+        }
+
+        private static void ForceSize100(GameObject obj)
+        {
+            ForceSize(obj, 100f);
         }
     }
 }

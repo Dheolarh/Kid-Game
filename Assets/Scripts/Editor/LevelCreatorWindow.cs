@@ -358,6 +358,8 @@ namespace KidGame.Editor
 
                         case GameType.Map:
                             page.customGamePrefab = (GameObject)EditorGUILayout.ObjectField("Map Game Prefab", page.customGamePrefab, typeof(GameObject), false);
+                            page.recallColorizeTextInsteadOfBox = EditorGUILayout.Toggle("Colorize Text Instead Of Box", page.recallColorizeTextInsteadOfBox);
+                            page.recallScaleDownCardOnDrag = EditorGUILayout.Toggle("Scale Down Card On Drag (0.5x)", page.recallScaleDownCardOnDrag);
                             break;
                     }
                 }

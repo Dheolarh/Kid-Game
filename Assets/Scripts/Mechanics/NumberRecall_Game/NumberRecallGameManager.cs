@@ -68,6 +68,7 @@ namespace KidGame.Mechanics.NumberRecall
 
         public GameObject PremadeSlotPrefab { get => premadeSlotPrefab; set => premadeSlotPrefab = value; }
         public KidGame.Interface.PremadeSlotData PremadeSlotData { get => premadeSlotData; set => premadeSlotData = value; }
+        public bool ColorizeTextInsteadOfBox { get => colorizeTextInsteadOfBox; set => colorizeTextInsteadOfBox = value; }
         public bool ScaleDownCardOnDrag { get => scaleDownCardOnDrag; set => scaleDownCardOnDrag = value; }
 
         private static readonly Color[] Palette =

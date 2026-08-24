@@ -858,6 +858,45 @@ namespace KidGame.Interface
 
                 case GameType.Map:
                     // Custom Map Game prefab instantiated directly into scene
+                    if (_activeGameModeInstance != null)
+                    {
+                        var mapRecallManager = _activeGameModeInstance.GetComponentInChildren<NumberRecallGameManager>(true);
+                        if (mapRecallManager != null)
+                        {
+                            mapRecallManager.ColorizeTextInsteadOfBox = page.recallColorizeTextInsteadOfBox;
+                            mapRecallManager.ScaleDownCardOnDrag = page.recallScaleDownCardOnDrag;
+                        }
+
+                        var mapPremadeSlots = _activeGameModeInstance.GetComponentsInChildren<KidGame.Mechanics.NumberRecall.PremadeRecallSlot>(true);
+                        foreach (var pSlot in mapPremadeSlots)
+                        {
+                            if (pSlot != null)
+                            {
+                                pSlot.colorizeTextInsteadOfBox = page.recallColorizeTextInsteadOfBox;
+                            }
+                        }
+
+                        var mapRecallSlots = _activeGameModeInstance.GetComponentsInChildren<KidGame.Mechanics.NumberRecall.RecallAnswerSlot>(true);
+                        foreach (var rSlot in mapRecallSlots)
+                        {
+                            if (rSlot != null)
+                            {
+                                rSlot.ColorizeTextInsteadOfBox = page.recallColorizeTextInsteadOfBox;
+                            }
+                        }
+
+                        if (page.recallScaleDownCardOnDrag)
+                        {
+                            var mapCards = _activeGameModeInstance.GetComponentsInChildren<KidGame.Mechanics.Counting.AnswerCard>(true);
+                            foreach (var card in mapCards)
+                            {
+                                if (card != null)
+                                {
+                                    card.DragScaleMultiplier = 0.5f;
+                                }
+                            }
+                        }
+                    }
                     break;
             }
 
