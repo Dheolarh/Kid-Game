@@ -107,11 +107,25 @@ namespace KidGame.Mechanics.Comparison
         {
             if (_isAccepted) return;
 
-            transform.position = new Vector3(
-                eventData.position.x,
-                eventData.position.y + dragOffsetY,
-                transform.position.z
-            );
+            if (_cachedCanvas == null)
+            {
+                _cachedCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
+            }
+
+            Camera cam = (_cachedCanvas != null && _cachedCanvas.renderMode == RenderMode.ScreenSpaceCamera)
+                ? _cachedCanvas.worldCamera : null;
+
+            Vector3 worldPos;
+            Vector2 screenPoint = new Vector2(eventData.position.x, eventData.position.y + dragOffsetY);
+
+            if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
+                transform.parent as RectTransform,
+                screenPoint,
+                cam,
+                out worldPos))
+            {
+                transform.position = new Vector3(worldPos.x, worldPos.y, transform.position.z);
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -143,21 +157,32 @@ namespace KidGame.Mechanics.Comparison
             _isAccepted = true;
             DOTween.Kill(transform);
 
+            // Play dialogue pop sound immediately when dropped into answer box
+            if (KidGame.Audio.AudioManager.Instance != null)
+            {
+                KidGame.Audio.AudioManager.Instance.PlayDialoguePopSfx();
+            }
+
             transform.SetParent(zoneTransform, worldPositionStays: true);
 
-            transform.DOMove(zoneTransform.position, snapDuration)
+            var rt = GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                rt.anchorMin = new Vector2(0.5f, 0.5f);
+                rt.anchorMax = new Vector2(0.5f, 0.5f);
+                rt.pivot = new Vector2(0.5f, 0.5f);
+            }
+
+            transform.DOMove(zoneTransform.position, snapDuration).SetEase(Ease.OutBack);
+            transform.DOScale(Vector3.one * 1.2f, snapDuration)
                      .SetEase(Ease.OutBack)
                      .OnComplete(() =>
                      {
-                         var rt = GetComponent<RectTransform>();
                          if (rt != null)
                          {
-                             rt.anchorMin = Vector2.zero;
-                             rt.anchorMax = Vector2.one;
-                             rt.offsetMin = Vector2.zero;
-                             rt.offsetMax = Vector2.zero;
+                             rt.anchoredPosition = Vector2.zero;
                          }
-                         transform.DOPunchScale(Vector3.one * 0.2f, 0.35f, 6, 0.5f);
+                         transform.DOPunchScale(Vector3.one * 0.25f, 0.35f, 6, 0.5f);
                      });
         }
 

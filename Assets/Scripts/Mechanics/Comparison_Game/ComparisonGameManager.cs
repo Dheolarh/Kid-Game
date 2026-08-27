@@ -338,8 +338,9 @@ namespace KidGame.Mechanics.Comparison
                 // Populate left
                 if (useAdditionLeft)
                 {
-                    int a = Random.Range(minVal, targetSum - minVal + 1);
-                    int b = targetSum - a;
+                    int maxA = Mathf.Max(minVal, targetSum - minVal);
+                    int a = (maxA > minVal) ? Random.Range(minVal, maxA + 1) : minVal;
+                    int b = Mathf.Max(1, targetSum - a);
                     leftNumbers.Add(a);
                     leftNumbers.Add(b);
                 }
@@ -351,8 +352,9 @@ namespace KidGame.Mechanics.Comparison
                 // Populate right
                 if (useAdditionRight)
                 {
-                    int c = Random.Range(minVal, targetSum - minVal + 1);
-                    int d = targetSum - c;
+                    int maxC = Mathf.Max(minVal, targetSum - minVal);
+                    int c = (maxC > minVal) ? Random.Range(minVal, maxC + 1) : minVal;
+                    int d = Mathf.Max(1, targetSum - c);
                     rightNumbers.Add(c);
                     rightNumbers.Add(d);
                 }
@@ -397,6 +399,18 @@ namespace KidGame.Mechanics.Comparison
 
                     tries++;
                 } while (tries < 100);
+
+                // Fallback guarantee if tries exhausted
+                int lSum = GetSum(leftNumbers);
+                int rSum = GetSum(rightNumbers);
+                if (relation == 0 && lSum >= rSum)
+                {
+                    rightNumbers[rightNumbers.Count - 1] += (lSum - rSum + 1);
+                }
+                else if (relation == 2 && lSum <= rSum)
+                {
+                    leftNumbers[leftNumbers.Count - 1] += (rSum - lSum + 1);
+                }
             }
         }
 

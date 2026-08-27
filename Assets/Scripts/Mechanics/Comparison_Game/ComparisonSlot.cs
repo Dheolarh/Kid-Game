@@ -123,14 +123,17 @@ namespace KidGame.Mechanics.Comparison
                 else
                 {
                     // Spawn objects directly under leftContainer (object mode)
+                    int leftCountVal = 1;
                     for (int j = 0; j < leftNumbers[i]; j++)
                     {
                         var prefabToUse = leftObjectPrefab != null ? leftObjectPrefab : manager.LeftObjectPrefab;
                         var obj = Instantiate(prefabToUse, leftContainer);
-                        if (obj.GetComponent<CountingObject>() == null)
+                        var countingObj = obj.GetComponent<CountingObject>();
+                        if (countingObj == null)
                         {
-                            obj.AddComponent<CountingObject>();
+                            countingObj = obj.AddComponent<CountingObject>();
                         }
+                        countingObj.SetCountValue(leftCountVal++);
                     }
                 }
             }
@@ -187,14 +190,17 @@ namespace KidGame.Mechanics.Comparison
                 else
                 {
                     // Spawn objects directly under rightContainer (object mode)
+                    int rightCountVal = 1;
                     for (int j = 0; j < rightNumbers[i]; j++)
                     {
                         var prefabToUse = rightObjectPrefab != null ? rightObjectPrefab : manager.RightObjectPrefab;
                         var obj = Instantiate(prefabToUse, rightContainer);
-                        if (obj.GetComponent<CountingObject>() == null)
+                        var countingObj = obj.GetComponent<CountingObject>();
+                        if (countingObj == null)
                         {
-                            obj.AddComponent<CountingObject>();
+                            countingObj = obj.AddComponent<CountingObject>();
                         }
+                        countingObj.SetCountValue(rightCountVal++);
                     }
                 }
             }
