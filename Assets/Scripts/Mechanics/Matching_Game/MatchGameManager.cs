@@ -277,6 +277,12 @@ namespace KidGame.Mechanics.Matching
                 var rowGo = Instantiate(rowPrefabToUse, content);
                 rowGo.name = $"SlotRow_{i}";
 
+                var rowHlg = rowGo.GetComponent<HorizontalLayoutGroup>();
+                if (rowHlg != null)
+                {
+                    rowHlg.childAlignment = TextAnchor.MiddleCenter;
+                }
+
                 Transform leftAnchor = rowGo.transform.Find("left");
                 Transform rightAnchor = rowGo.transform.Find("right");
 
@@ -329,6 +335,16 @@ namespace KidGame.Mechanics.Matching
                 _slots.Add(rowGo);
             }
 
+            // Ensure content has a VerticalLayoutGroup with proper spacing between slot rows
+            if (content != null)
+            {
+                var vlg = content.GetComponent<UnityEngine.UI.VerticalLayoutGroup>();
+                if (vlg == null) vlg = content.gameObject.AddComponent<UnityEngine.UI.VerticalLayoutGroup>();
+                vlg.spacing = 25f;
+                vlg.childControlHeight = false;
+                vlg.childForceExpandHeight = false;
+            }
+
             // Rebuild active layout
             var rt = content.GetComponent<RectTransform>();
             if (rt) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
@@ -376,14 +392,52 @@ namespace KidGame.Mechanics.Matching
                     if (baseNumberPrefab != null)
                     {
                         instantiated = Instantiate(baseNumberPrefab, parent);
+                        Vector3 origScale = baseNumberPrefab.transform.localScale;
+                        instantiated.transform.localScale = origScale;
+
+                        float width = 150f;
+                        float height = 150f;
+
+                        var parentGrid = parent.GetComponent<GridLayoutGroup>();
+                        if (parentGrid != null)
+                        {
+                            parentGrid.cellSize = new Vector2(width, height);
+                            parentGrid.childAlignment = TextAnchor.MiddleCenter;
+                        }
+
+                        var pRtNum = parent.GetComponent<RectTransform>();
+                        if (pRtNum != null) pRtNum.sizeDelta = new Vector2(width, height);
+                        var pLeNum = parent.GetComponent<UnityEngine.UI.LayoutElement>();
+                        if (pLeNum == null) pLeNum = parent.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                        pLeNum.preferredWidth = width;
+                        pLeNum.preferredHeight = height;
+
                         var textComp = instantiated.GetComponentInChildren<TMPro.TMP_Text>();
-                        if (textComp != null) textComp.text = value.ToString();
+                        if (textComp != null)
+                        {
+                            textComp.text = value.ToString();
+                            textComp.fontSizeMin = 28f;
+                            textComp.fontSizeMax = 52f;
+                            textComp.enableAutoSizing = true;
+                        }
 
                         var img = instantiated.GetComponent<Image>();
                         if (img != null)
                         {
                             img.color = isLeft ? GetLeftColorForValue(value) : GetRightColorForValue(value);
                         }
+
+                        var cardRt = instantiated.GetComponent<RectTransform>();
+                        if (cardRt != null)
+                        {
+                            cardRt.sizeDelta = new Vector2(width, height);
+                        }
+                        var leCard = instantiated.GetComponent<UnityEngine.UI.LayoutElement>();
+                        if (leCard == null) leCard = instantiated.AddComponent<UnityEngine.UI.LayoutElement>();
+                        leCard.preferredWidth = width;
+                        leCard.preferredHeight = height;
+                        leCard.minWidth = width;
+                        leCard.minHeight = height;
                     }
                     break;
 
@@ -391,6 +445,26 @@ namespace KidGame.Mechanics.Matching
                     if (baseWordPrefab != null)
                     {
                         instantiated = Instantiate(baseWordPrefab, parent);
+                        Vector3 origScale = baseWordPrefab.transform.localScale;
+                        instantiated.transform.localScale = origScale;
+
+                        float width = 150f;
+                        float height = 150f;
+
+                        var parentGrid = parent.GetComponent<GridLayoutGroup>();
+                        if (parentGrid != null)
+                        {
+                            parentGrid.cellSize = new Vector2(width, height);
+                            parentGrid.childAlignment = TextAnchor.MiddleCenter;
+                        }
+
+                        var pRtWord = parent.GetComponent<RectTransform>();
+                        if (pRtWord != null) pRtWord.sizeDelta = new Vector2(width, height);
+                        var pLeWord = parent.GetComponent<UnityEngine.UI.LayoutElement>();
+                        if (pLeWord == null) pLeWord = parent.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                        pLeWord.preferredWidth = width;
+                        pLeWord.preferredHeight = height;
+
                         var textComp = instantiated.GetComponentInChildren<TMPro.TMP_Text>();
                         if (textComp != null)
                         {
@@ -398,6 +472,9 @@ namespace KidGame.Mechanics.Matching
                                 textComp.text = NumberWords[value];
                             else
                                 textComp.text = value.ToString();
+                            textComp.fontSizeMin = 24f;
+                            textComp.fontSizeMax = 44f;
+                            textComp.enableAutoSizing = true;
                         }
 
                         var img = instantiated.GetComponent<Image>();
@@ -405,6 +482,18 @@ namespace KidGame.Mechanics.Matching
                         {
                             img.color = isLeft ? GetLeftColorForValue(value) : GetRightColorForValue(value);
                         }
+
+                        var cardRt = instantiated.GetComponent<RectTransform>();
+                        if (cardRt != null)
+                        {
+                            cardRt.sizeDelta = new Vector2(width, height);
+                        }
+                        var leCard = instantiated.GetComponent<UnityEngine.UI.LayoutElement>();
+                        if (leCard == null) leCard = instantiated.AddComponent<UnityEngine.UI.LayoutElement>();
+                        leCard.preferredWidth = width;
+                        leCard.preferredHeight = height;
+                        leCard.minWidth = width;
+                        leCard.minHeight = height;
                     }
                     break;
 
@@ -556,9 +645,13 @@ namespace KidGame.Mechanics.Matching
                     }
                     parentImg.raycastTarget = true;
 
-                    float targetObjSize = (value == 1) ? 160f : 140f;
+                    float targetObjSize = (value <= 3) ? 125f : (value <= 6 ? 115f : 110f);
+                    int maxPerRow = 3; // Max 3 per row as requested!
+                    int numObjRows = Mathf.CeilToInt((float)value / (float)maxPerRow);
+                    float gridHeight = numObjRows * targetObjSize + (numObjRows - 1) * 10f + 16f;
+                    float gridWidth = maxPerRow * targetObjSize + (maxPerRow - 1) * 10f;
 
-                    // Ensure parent has a GridLayoutGroup configured with max 2 objects per row
+                    // Ensure parent has a GridLayoutGroup configured with max 3 objects per row
                     GridLayoutGroup grid = parent.GetComponent<GridLayoutGroup>();
                     if (grid == null)
                     {
@@ -569,11 +662,34 @@ namespace KidGame.Mechanics.Matching
                         grid.startAxis = GridLayoutGroup.Axis.Horizontal;
                         grid.childAlignment = TextAnchor.MiddleCenter;
                         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-                        grid.constraintCount = 2; // 2 objects max per row!
+                        grid.constraintCount = maxPerRow;
                     }
                     else
                     {
                         grid.cellSize = new Vector2(targetObjSize, targetObjSize);
+                        grid.spacing = new Vector2(10f, 10f);
+                        grid.childAlignment = TextAnchor.MiddleCenter;
+                        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                        grid.constraintCount = maxPerRow;
+                    }
+
+                    // Dynamically set container size and preferred dimensions so grid centers cleanly without lopsided space
+                    var parentRt = parent.GetComponent<RectTransform>();
+                    if (parentRt != null) parentRt.sizeDelta = new Vector2(gridWidth, gridHeight);
+                    var parentLe = parent.GetComponent<UnityEngine.UI.LayoutElement>();
+                    if (parentLe == null) parentLe = parent.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                    parentLe.preferredWidth = gridWidth;
+                    parentLe.preferredHeight = gridHeight;
+
+                    // Expand row container height as well
+                    Transform rowContainer = parent.parent;
+                    if (rowContainer != null)
+                    {
+                        var rowRt = rowContainer.GetComponent<RectTransform>();
+                        if (rowRt != null) rowRt.sizeDelta = new Vector2(rowRt.sizeDelta.x, Mathf.Max(130f, gridHeight + 20f));
+                        var rowLe = rowContainer.GetComponent<UnityEngine.UI.LayoutElement>();
+                        if (rowLe == null) rowLe = rowContainer.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                        rowLe.preferredHeight = Mathf.Max(130f, gridHeight + 20f);
                     }
 
                     // Check if parent ALREADY has pre-existing object children (e.g. 10 Crab GameObjects)
@@ -645,7 +761,6 @@ namespace KidGame.Mechanics.Matching
                 {
                     rt.anchoredPosition = Vector2.zero;
                     rt.localPosition = Vector3.zero;
-                    rt.localScale = Vector3.one;
                 }
             }
             return instantiated;

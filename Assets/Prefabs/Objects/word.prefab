@@ -28,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 3157781072587494705}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2201150648754802643}
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Five
+  m_text: Seventeen
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 31e7b093c0da2264eaeb9144b3c450fd, type: 2}
   m_sharedMaterial: {fileID: -7078012581861834715, guid: 31e7b093c0da2264eaeb9144b3c450fd, type: 2}
@@ -184,13 +184,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 62.35
+  m_fontSize: 20.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
