@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 157
   levelSubtitle: Between 116 and 120
   levelEndTip: Comes 117, 118, 119
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Green
   levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}

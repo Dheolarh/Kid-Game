@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
@@ -71,6 +72,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 11400000, guid: 659651b5f8585a246b4b9499a5e43cee, type: 2}
     tracingSpellModeActive: 0

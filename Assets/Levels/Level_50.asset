@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
   pages:
   - gameType: 1
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Hi {playername}. Let us add animals from 1 to 3.
       mascotAnimationTrigger: isHi
@@ -77,6 +78,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

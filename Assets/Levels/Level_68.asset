@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
   - gameType: 0
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Can you spell thew numbers you see?
       mascotAnimationTrigger: isIdle
@@ -73,6 +74,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 0fd9ddd5e6b7f7840beafb5cca8d7e83, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

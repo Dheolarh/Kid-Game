@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 150
   levelSubtitle: 101 to 160
   levelEndTip: Almost to 150
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}

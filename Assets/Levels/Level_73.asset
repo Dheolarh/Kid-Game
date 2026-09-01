@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Can you count 1 - 60 {playername}?
       mascotAnimationTrigger: isIdle
@@ -77,6 +78,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 5b578b7779a1bc642a3bf1187514a921, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
@@ -85,6 +88,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Alright, next up 21 to 40
       mascotAnimationTrigger: isIdle
@@ -135,6 +139,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: a30b5de95e5a71c438178cf2b27a5aea, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
@@ -143,6 +149,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: The final twenty, 41 - 60
       mascotAnimationTrigger: isIdle
@@ -195,6 +202,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 0331318ecbb2a62449ff27f2208a6f39, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

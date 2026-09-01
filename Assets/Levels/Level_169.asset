@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 169
   levelSubtitle: Addition of numbers
   levelEndTip: Getting  familiar with your numbers
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Green
   levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}

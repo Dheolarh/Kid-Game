@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 138
   levelSubtitle: Big Fingers
   levelEndTip: Close your eyes and count your fingers
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}

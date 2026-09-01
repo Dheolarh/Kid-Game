@@ -16,13 +16,14 @@ MonoBehaviour:
   levelName: LESSON 128
   levelSubtitle: Above a century
   levelEndTip: 101 comes after 100 ^_^
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: What comes after 100?
       mascotAnimationTrigger: isIdle
@@ -87,6 +88,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines:
     - text: Perfect!

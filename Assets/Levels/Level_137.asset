@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 137
   levelSubtitle: 121 to 130
   levelEndTip: Counting Counting Counting
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Pink
   levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}

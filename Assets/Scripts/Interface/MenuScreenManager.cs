@@ -222,15 +222,30 @@ namespace KidGame.Interface
             // Play Registration BGM now that the splash screen curtains are fully open and registration screen shows
             KidGame.Audio.AudioManager.Instance?.PlayRegistrationBgm();
 
-            // Trigger the progressive intro setup animations on the profile screen
-            if (profileScreenController != null)
+            // Check Privacy Policy acceptance before starting profile setup intro
+            var policyController = PrivacyPolicyPanelController.Instance;
+            if (policyController == null)
             {
-                Debug.Log("[MenuScreenManager] Invoking profileScreenController.PlaySetupIntro().");
-                profileScreenController.PlaySetupIntro();
+                policyController = FindComponentEvenInactive<PrivacyPolicyPanelController>();
+            }
+
+            if (policyController != null && !policyController.HasAcceptedPolicy)
+            {
+                Debug.Log("[MenuScreenManager] Opening Privacy Policy Panel immediately after splash screen curtain closes.");
+                policyController.OpenPanel();
             }
             else
             {
-                Debug.LogError("[MenuScreenManager] profileScreenController is null inside OnSplashToAgeSelectComplete!");
+                // Trigger the progressive intro setup animations on the profile screen directly if policy already accepted
+                if (profileScreenController != null)
+                {
+                    Debug.Log("[MenuScreenManager] Invoking profileScreenController.PlaySetupIntro().");
+                    profileScreenController.PlaySetupIntro();
+                }
+                else
+                {
+                    Debug.LogError("[MenuScreenManager] profileScreenController is null inside OnSplashToAgeSelectComplete!");
+                }
             }
         }
 

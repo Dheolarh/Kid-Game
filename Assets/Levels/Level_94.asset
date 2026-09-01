@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Finally you got to 100!
       mascotAnimationTrigger: isHappy
@@ -73,6 +74,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 11400000, guid: b0fd67e3a6389b84ea0ecbd9e7806d84, type: 2}
     tracingSpellModeActive: 0
@@ -81,6 +84,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: 
       mascotAnimationTrigger: Let's try that once more
@@ -131,6 +135,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 11400000, guid: 9ab0710fc2076fb4284c08cd322c3f9b, type: 2}
     tracingSpellModeActive: 0

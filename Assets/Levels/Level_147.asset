@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 147
   levelSubtitle: Practice 141 to 150
   levelEndTip: One and a half century
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Green
   levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}

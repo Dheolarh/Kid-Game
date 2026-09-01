@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Now Let's see how much you know.
       mascotAnimationTrigger: isIdle
@@ -83,6 +84,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: f8d5859b879f8fb4185ec20ba0409df7, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
@@ -91,6 +94,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines:
     - text: You little genius.
@@ -141,6 +145,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 990855f866578604f8f0485f661cbf64, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

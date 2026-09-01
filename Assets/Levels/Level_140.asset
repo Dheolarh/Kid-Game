@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 140
   levelSubtitle: Addition again
   levelEndTip: 20 men and 20 women = 40 Adults
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Green
   levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}

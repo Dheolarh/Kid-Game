@@ -16,13 +16,14 @@ MonoBehaviour:
   levelName: LESSON 105
   levelSubtitle: The big 100
   levelEndTip: That was long, wasn't it?
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: TealGreen
   levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: These will be a long count {playername}
       mascotAnimationTrigger: isIdle
@@ -89,6 +90,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines:
     - text: Are you ready 41 to 60
@@ -149,6 +151,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines:
     - text: Keep going!, 61 to 80
@@ -209,6 +212,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines:
     - text: And finally the last 20, 81 to 100
@@ -269,6 +273,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines:
     - text: Great work {playername}!, that was AWESOME!

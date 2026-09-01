@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 0
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Hi {playername}. Let's count fun objects from 1 to 5.
       mascotAnimationTrigger: isHi
@@ -77,6 +78,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

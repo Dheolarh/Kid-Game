@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Let's practice 1 - 20
       mascotAnimationTrigger: isIdle
@@ -79,6 +80,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 6744952a9bd6d7e499f858e23073714c, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
@@ -87,6 +90,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Now try that without hints
       mascotAnimationTrigger: isIdle
@@ -139,6 +143,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 3fdde46cb93b0794f92a5b3906219a29, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

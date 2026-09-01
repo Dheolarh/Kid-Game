@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Hello {playername} let's count backwards from number 40 to number 1
       mascotAnimationTrigger: isIdle
@@ -81,6 +82,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 11400000, guid: b31d2ddce8e1a744daf78465e980c69c, type: 2}
     tracingSpellModeActive: 0
@@ -89,6 +92,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
@@ -137,6 +141,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 11400000, guid: d785aebe168bb694f9e9430adba8a7d0, type: 2}
     tracingSpellModeActive: 0

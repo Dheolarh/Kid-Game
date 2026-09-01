@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 142
   levelSubtitle: Practice to 140 again
   levelEndTip: Almost to 150....... again
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: TealGreen
   levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}

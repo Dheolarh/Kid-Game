@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 168
   levelSubtitle: Compare Kitchen objects
   levelEndTip: 2 spoons is greater than 1 cup
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Blue
   levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}

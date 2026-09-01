@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: You're almost at 100 {playername}
       mascotAnimationTrigger: isIdle
@@ -75,6 +76,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 11400000, guid: e5786960cf82e8a4f952b4d8f93219b3, type: 2}
     tracingSpellModeActive: 0
@@ -83,6 +86,7 @@ MonoBehaviour:
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Can you try that again without hints
       mascotAnimationTrigger: 
@@ -133,6 +137,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 11400000, guid: ff20e1631bad8d54d89fcf38ef0c3501, type: 2}
     tracingSpellModeActive: 0

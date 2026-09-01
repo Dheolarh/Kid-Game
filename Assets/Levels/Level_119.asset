@@ -16,13 +16,14 @@ MonoBehaviour:
   levelName: LESSON 119
   levelSubtitle: Ocean Addtion
   levelEndTip: A school of fish
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Green
   levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
   - gameType: 1
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Let's add this ocean animals quickly
       mascotAnimationTrigger: isIdle
@@ -73,6 +74,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

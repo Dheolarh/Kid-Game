@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 175
   levelSubtitle: The Little Genius
   levelEndTip: Congratutions! you made it to the end
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}

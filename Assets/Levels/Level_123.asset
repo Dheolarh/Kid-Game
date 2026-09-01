@@ -16,13 +16,14 @@ MonoBehaviour:
   levelName: LESSON 123
   levelSubtitle: Counting Shapes
   levelEndTip: 1 star, 2 stars, 3 stars
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
   - gameType: 0
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
@@ -71,6 +72,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

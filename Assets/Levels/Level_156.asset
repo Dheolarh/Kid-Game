@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 156
   levelSubtitle: 161 to 170
   levelEndTip: 20 past a century and half!
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Blue
   levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}

@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 155
   levelSubtitle: Next big step is 170
   levelEndTip: We are almost to 2 decades!
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}

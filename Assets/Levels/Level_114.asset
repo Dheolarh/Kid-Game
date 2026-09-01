@@ -16,13 +16,14 @@ MonoBehaviour:
   levelName: LESSON 114
   levelSubtitle: Fingers Matching
   levelEndTip: You can count then match
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Pink
   levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
   - gameType: 3
+    overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
@@ -71,6 +72,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

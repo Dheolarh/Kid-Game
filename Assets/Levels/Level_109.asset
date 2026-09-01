@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Hey {playername} do you know what number comes before and after?
       mascotAnimationTrigger: isIdle
@@ -75,6 +76,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 8317775043155575551, guid: 81a3a183bfa60734fa95db97c32aa23f, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

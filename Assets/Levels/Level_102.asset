@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 102
   levelSubtitle: Counting 15 to 1
   levelEndTip: 15, .., 14, ......., 2, 1
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}

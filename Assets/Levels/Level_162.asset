@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 162
   levelSubtitle: More trucks to count
   levelEndTip: How many trucks have you counted in total {playername}
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Blue
   levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}

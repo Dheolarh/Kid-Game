@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 143
   levelSubtitle: Fingers Addition Part IV
   levelEndTip: 5 + 5 Fingers = ???
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Blue
   levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}

@@ -23,6 +23,7 @@ MonoBehaviour:
   levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
   - gameType: 4
+    overrideLevelPremade: 0
     dialogueLines:
     - text: Hi, let's count 51 t0 60
       mascotAnimationTrigger: isHi
@@ -73,6 +74,8 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 1
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: da0f464772d8e5343bbd5673d4c3896f, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0

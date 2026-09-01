@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 154
   levelSubtitle: How many finger do you have?
   levelEndTip: How many fingers could you count?
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: TealGreen
   levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}

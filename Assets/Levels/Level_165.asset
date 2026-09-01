@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: LESSON 165
   levelSubtitle: Addition of numbers
   levelEndTip: 'The journey of a century '
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
