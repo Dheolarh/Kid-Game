@@ -52,8 +52,8 @@ namespace KidGame.Interface
             "<b>Welcome to Numeracy!</b>\n" +
             "Before we begin, we need a little information to personalize your child's experience.\n" +
             "We will ask for your child's name and age. This information is stored <b>only on your device</b> and is <b>never shared or sent anywhere</b>.\n" +
-            "By tapping <b>"Accept"</b>, you confirm that you are the parent or guardian of the child using this app and that you consent to this.\n\n" +
-            "<color=#007AFF><link="https://osirisxstudios.xyz/privacy/numeracy"><u>Read full Privacy Policy</u></link></color>";
+            "By tapping <b>\"Accept\"</b>, you confirm that you are the parent or guardian of the child using this app and that you consent to this.\n\n" +
+            "<color=#007AFF><link=\"https://osirisxstudios.xyz/privacy/numeracy\"><u>Read full Privacy Policy</u></link></color>";
 
         private void Awake()
         {
