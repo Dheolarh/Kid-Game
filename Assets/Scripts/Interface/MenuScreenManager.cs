@@ -118,7 +118,14 @@ namespace KidGame.Interface
                 if (tapped)
                 {
                     StopAllCoroutines();
-                    TriggerSplashToAgeSelectTransition();
+                    if (_hasCompletedIntro || PlayerPrefs.GetInt("HasCompletedProfile", 0) == 1)
+                    {
+                        TriggerReturningUserSplashTransition();
+                    }
+                    else
+                    {
+                        TriggerSplashToAgeSelectTransition();
+                    }
                 }
             }
         }
@@ -130,16 +137,27 @@ namespace KidGame.Interface
         {
             _isTransitioning = false;
 
-            // Skip Splash and Profile screens if intro was already completed (static session check or saved Prefs check)
+            // If intro was already completed, display Splash screen for autoTransitionDelay before opening curtains to Home screen
             if (_hasCompletedIntro || PlayerPrefs.GetInt("HasCompletedProfile", 0) == 1)
             {
                 _hasCompletedIntro = true;
-                if (splashScreen != null) splashScreen.SetActive(false);
+                if (splashScreen != null) splashScreen.SetActive(true);
                 if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
-                if (homeScreen != null) homeScreen.SetActive(true);
+                if (homeScreen != null) homeScreen.SetActive(false);
 
-                // Play Main Menu BGM immediately if intro is skipped
-                KidGame.Audio.AudioManager.Instance?.PlayMainMenuBgm();
+                if (curtainTransition != null)
+                {
+                    curtainTransition.ResetTransitionState();
+                }
+
+                if (autoTransition && splashScreen != null)
+                {
+                    StartCoroutine(ReturningUserSplashCoroutine());
+                }
+                else
+                {
+                    TriggerReturningUserSplashTransition();
+                }
                 return;
             }
 
@@ -206,6 +224,46 @@ namespace KidGame.Interface
 
             // 2. Play the curtain draw animation
             curtainTransition.PlayTransition(OnSplashToAgeSelectComplete);
+        }
+
+        private IEnumerator ReturningUserSplashCoroutine()
+        {
+            yield return new WaitForSeconds(autoTransitionDelay);
+            TriggerReturningUserSplashTransition();
+        }
+
+        public void TriggerReturningUserSplashTransition()
+        {
+            if (_isTransitioning) return;
+            _isTransitioning = true;
+
+            if (homeScreen != null) homeScreen.SetActive(true);
+
+            if (curtainTransition == null)
+            {
+                OnReturningUserSplashComplete();
+                return;
+            }
+
+            curtainTransition.PlayTransition(OnReturningUserSplashComplete);
+        }
+
+        private void OnReturningUserSplashComplete()
+        {
+            if (splashScreen != null) splashScreen.SetActive(false);
+            _isTransitioning = false;
+            KidGame.Audio.AudioManager.Instance?.PlayMainMenuBgm();
+
+            var controller = StreakPanelController.Instance;
+            if (controller == null)
+            {
+                controller = FindObjectOfType<StreakPanelController>(true);
+            }
+            if (controller != null)
+            {
+                controller.gameObject.SetActive(true);
+                controller.CheckAndShowStreak();
+            }
         }
 
         private void OnSplashToAgeSelectComplete()

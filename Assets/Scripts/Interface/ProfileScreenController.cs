@@ -294,9 +294,16 @@ namespace KidGame.Interface
 
         private void OnNameInputEndEdit(string value)
         {
-            if (!string.IsNullOrEmpty(value.Trim()))
+            // Do not navigate when tapping outside the input field.
+            // Only advance if Enter/Return key was explicitly pressed on keyboard.
+            if (UnityEngine.InputSystem.Keyboard.current != null &&
+               (UnityEngine.InputSystem.Keyboard.current.enterKey.wasPressedThisFrame ||
+                UnityEngine.InputSystem.Keyboard.current.numpadEnterKey.wasPressedThisFrame))
             {
-                OnNameNextClicked();
+                if (!string.IsNullOrEmpty(value.Trim()))
+                {
+                    OnNameNextClicked();
+                }
             }
         }
 
@@ -380,6 +387,7 @@ namespace KidGame.Interface
         private void PlayAgeIntro()
         {
             string firstName = PlayerPrefs.GetString("SingleWordName", "Buddy");
+            StartCoroutine(EnsureHorizontalScrollAtStartCoroutine(ageButtonsContainer));
 
             // Animate age page components in
             if (ageMascotGreetings != null)
@@ -503,6 +511,7 @@ namespace KidGame.Interface
         private void PlayAvatarIntro()
         {
             string firstName = PlayerPrefs.GetString("SingleWordName", "Buddy");
+            StartCoroutine(EnsureHorizontalScrollAtStartCoroutine(avatarButtonsContainer));
 
             if (topRightPlayerNameText != null)
             {
@@ -694,26 +703,10 @@ namespace KidGame.Interface
         {
             if (page == agePage)
             {
-                // Reset age scroll position immediately
                 if (ageButtonsContainer != null)
                 {
-                    // Force Left anchors to prevent stretch issues
-                    ageButtonsContainer.anchorMin = new Vector2(0f, 0f);
-                    ageButtonsContainer.anchorMax = new Vector2(0f, 1f);
-                    ageButtonsContainer.pivot = new Vector2(0f, 0.5f);
-                    ageButtonsContainer.anchoredPosition = new Vector2(0f, ageButtonsContainer.anchoredPosition.y);
-
-                    ScrollRect scrollRect = ageButtonsContainer.GetComponentInParent<ScrollRect>();
-                    if (scrollRect != null)
-                    {
-                        scrollRect.velocity = Vector2.zero;
-                        scrollRect.StopMovement();
-                        scrollRect.horizontalNormalizedPosition = 0f;
-                        if (scrollRect.horizontalScrollbar != null)
-                        {
-                            scrollRect.horizontalScrollbar.value = 0f;
-                        }
-                    }
+                    ResetHorizontalScrollContainer(ageButtonsContainer);
+                    StartCoroutine(EnsureHorizontalScrollAtStartCoroutine(ageButtonsContainer));
                 }
 
                 if (ageNextButton != null)
@@ -743,26 +736,10 @@ namespace KidGame.Interface
             }
             else if (page == avatarPage)
             {
-                // Reset avatar scroll position immediately
                 if (avatarButtonsContainer != null)
                 {
-                    // Force Left anchors to prevent stretch issues
-                    avatarButtonsContainer.anchorMin = new Vector2(0f, 0f);
-                    avatarButtonsContainer.anchorMax = new Vector2(0f, 1f);
-                    avatarButtonsContainer.pivot = new Vector2(0f, 0.5f);
-                    avatarButtonsContainer.anchoredPosition = new Vector2(0f, avatarButtonsContainer.anchoredPosition.y);
-
-                    ScrollRect scrollRect = avatarButtonsContainer.GetComponentInParent<ScrollRect>();
-                    if (scrollRect != null)
-                    {
-                        scrollRect.velocity = Vector2.zero;
-                        scrollRect.StopMovement();
-                        scrollRect.horizontalNormalizedPosition = 0f;
-                        if (scrollRect.horizontalScrollbar != null)
-                        {
-                            scrollRect.horizontalScrollbar.value = 0f;
-                        }
-                    }
+                    ResetHorizontalScrollContainer(avatarButtonsContainer);
+                    StartCoroutine(EnsureHorizontalScrollAtStartCoroutine(avatarButtonsContainer));
                 }
 
                 if (avatarPreviousButton != null)
@@ -793,6 +770,51 @@ namespace KidGame.Interface
                     }
                 }
             }
+        }
+
+        private void ResetHorizontalScrollContainer(RectTransform container)
+        {
+            if (container == null) return;
+
+            container.anchorMin = new Vector2(0f, 0f);
+            container.anchorMax = new Vector2(0f, 1f);
+            container.pivot = new Vector2(0f, 0.5f);
+
+            ScrollRect scrollRect = container.GetComponentInParent<ScrollRect>();
+            if (scrollRect != null)
+            {
+                scrollRect.velocity = Vector2.zero;
+                scrollRect.StopMovement();
+                scrollRect.horizontalNormalizedPosition = 0f;
+                if (scrollRect.horizontalScrollbar != null)
+                {
+                    scrollRect.horizontalScrollbar.value = 0f;
+                }
+            }
+
+            container.anchoredPosition = new Vector2(0f, container.anchoredPosition.y);
+            Canvas.ForceUpdateCanvases();
+
+            if (scrollRect != null)
+            {
+                scrollRect.horizontalNormalizedPosition = 0f;
+            }
+            container.anchoredPosition = new Vector2(0f, container.anchoredPosition.y);
+        }
+
+        private IEnumerator EnsureHorizontalScrollAtStartCoroutine(RectTransform container)
+        {
+            if (container == null) yield break;
+
+            ResetHorizontalScrollContainer(container);
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForSecondsRealtime(0.05f);
+            ResetHorizontalScrollContainer(container);
+
+            yield return new WaitForSecondsRealtime(0.4f);
+            ResetHorizontalScrollContainer(container);
+            yield return new WaitForSecondsRealtime(0.2f);
+            ResetHorizontalScrollContainer(container);
         }
 
         private void PreparePageElements(GameObject page)
@@ -934,10 +956,16 @@ namespace KidGame.Interface
             PlayerPrefs.SetInt("HasCompletedProfile", 1);
             PlayerPrefs.Save();
 
-            // Disable button interaction immediately so they can't double-click next
+            // Immediately hide and deactivate next button completely
             if (avatarNextButton != null)
             {
                 avatarNextButton.interactable = false;
+                var feedback = avatarNextButton.GetComponent<Animations.UIButtonPopFeedback>();
+                if (feedback != null) feedback.enabled = false;
+
+                avatarNextButton.transform.DOKill();
+                avatarNextButton.transform.localScale = Vector3.zero;
+                avatarNextButton.gameObject.SetActive(false);
             }
 
             // Show final typewriter text: "Alright!\nLet's start learning"
@@ -958,6 +986,18 @@ namespace KidGame.Interface
         {
             Debug.Log("[ProfileScreenController] FinalTransitionCoroutine started. Waiting 2s.");
             yield return new WaitForSeconds(2.0f);
+
+            // Trigger Streak Panel 1s after registration transitions to home screen
+            var streakController = StreakPanelController.Instance;
+            if (streakController == null)
+            {
+                streakController = FindObjectOfType<StreakPanelController>(true);
+            }
+            if (streakController != null)
+            {
+                streakController.gameObject.SetActive(true);
+                streakController.TriggerFirstTimeRegistrationStreak();
+            }
 
             Debug.Log($"[ProfileScreenController] Transitioning. SceneTransitionManager.Instance is null? {SceneTransitionManager.Instance == null}");
 

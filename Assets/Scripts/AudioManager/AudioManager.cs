@@ -133,7 +133,12 @@ namespace KidGame.Audio
         {
             if (scene.name == "Main" || scene.name == "Level")
             {
-                PlayMainMenuBgm();
+                // Only auto-play main menu BGM on scene load if profile/intro is already completed.
+                // Otherwise, MenuScreenManager controls playing Registration BGM when transitioning out of Splash screen.
+                if (PlayerPrefs.GetInt("HasCompletedProfile", 0) == 1)
+                {
+                    PlayMainMenuBgm();
+                }
             }
         }
 

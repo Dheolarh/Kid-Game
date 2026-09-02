@@ -26,6 +26,7 @@ namespace KidGame.Interface
 
         [Header("Text & Link Elements")]
         [SerializeField] private TMP_Text policyBodyText;
+        [SerializeField] private ScrollRect policyScrollRect;
         [SerializeField] private Button readFullPolicyButton;
         [SerializeField] private string policyUrl = "https://osirisxstudios.xyz/privacy/numeracy";
 
@@ -48,12 +49,16 @@ namespace KidGame.Interface
 
         public bool HasAcceptedPolicy => PlayerPrefs.GetInt("HasAcceptedPrivacyPolicy", 0) == 1;
 
-        public const string DefaultRichText = 
-            "<b>Welcome to Numeracy!</b>\n" +
-            "Before we begin, we need a little information to personalize your child's experience.\n" +
-            "We will ask for your child's name and age. This information is stored <b>only on your device</b> and is <b>never shared or sent anywhere</b>.\n" +
-            "By tapping <b>\"Accept\"</b>, you confirm that you are the parent or guardian of the child using this app and that you consent to this.\n\n" +
-            "<color=#007AFF><link=\"https://osirisxstudios.xyz/privacy/numeracy\"><u>Read full Privacy Policy</u></link></color>";
+        public string GetFormattedPolicyText()
+        {
+            string urlToUse = string.IsNullOrEmpty(policyUrl) ? "https://osirisxstudios.xyz/privacy/numeracy" : policyUrl;
+            return 
+                "<b>Welcome to Numeracy!</b>\n" +
+                "Before we begin, we need a little information to personalize your child's experience.\n" +
+                "We will ask for your child's name and age. This information is stored <b>only on your device</b> and is <b>never shared or sent anywhere</b>.\n" +
+                "By tapping <b>\"Accept\"</b>, you confirm that you are the parent or guardian of the child using this app and that you consent to this.\n\n" +
+                $"<color=#007AFF><link=\"{urlToUse}\"><u>Read full Privacy Policy</u></link></color>";
+        }
 
         private void Awake()
         {
@@ -74,7 +79,7 @@ namespace KidGame.Interface
             // Always apply clean rich text formatting
             if (policyBodyText != null)
             {
-                policyBodyText.text = DefaultRichText;
+                policyBodyText.text = GetFormattedPolicyText();
             }
 
             if (readFullPolicyButton != null)
@@ -110,7 +115,7 @@ namespace KidGame.Interface
 
             if (policyBodyText != null)
             {
-                policyBodyText.text = DefaultRichText;
+                policyBodyText.text = GetFormattedPolicyText();
             }
 
             if (AudioManager.Instance != null)
@@ -120,13 +125,62 @@ namespace KidGame.Interface
 
             policyPanelObject.SetActive(true);
 
+            ResetScrollToTop();
+            StartCoroutine(EnsureScrollAtTopCoroutine());
+
             contentPanel.DOKill();
             contentPanel.localScale = Vector3.zero;
 
             contentPanel.DOScale(_contentOriginalScale, 0.4f)
                 .SetEase(Ease.OutBack)
                 .SetUpdate(true)
-                .OnComplete(() => _isTransitioning = false);
+                .OnComplete(() =>
+                {
+                    ResetScrollToTop();
+                    _isTransitioning = false;
+                });
+        }
+
+        private System.Collections.IEnumerator EnsureScrollAtTopCoroutine()
+        {
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForSecondsRealtime(0.05f);
+            ResetScrollToTop();
+
+            yield return new WaitForSecondsRealtime(0.35f);
+            ResetScrollToTop();
+        }
+
+        private void ResetScrollToTop()
+        {
+            if (policyScrollRect == null && policyBodyText != null)
+            {
+                policyScrollRect = policyBodyText.GetComponentInParent<ScrollRect>();
+            }
+
+            if (policyScrollRect != null)
+            {
+                policyScrollRect.velocity = Vector2.zero;
+                policyScrollRect.StopMovement();
+
+                if (policyScrollRect.content != null)
+                {
+                    policyScrollRect.content.anchoredPosition = new Vector2(policyScrollRect.content.anchoredPosition.x, 0f);
+                }
+
+                policyScrollRect.verticalNormalizedPosition = 1.0f;
+            }
+
+            Canvas.ForceUpdateCanvases();
+
+            if (policyScrollRect != null)
+            {
+                if (policyScrollRect.content != null)
+                {
+                    policyScrollRect.content.anchoredPosition = new Vector2(policyScrollRect.content.anchoredPosition.x, 0f);
+                }
+                policyScrollRect.verticalNormalizedPosition = 1.0f;
+            }
         }
 
         public void ClosePanel()

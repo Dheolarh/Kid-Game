@@ -46,15 +46,20 @@ namespace KidGame.Interface.Animations
         /// </summary>
         public void PlayPopAnimation()
         {
+            if (!enabled || !gameObject.activeInHierarchy || (_button != null && !_button.interactable)) return;
+
             transform.DOKill();
             transform.DOScale(_originalScale * pressScale, durationDown)
                 .SetEase(easeDown)
                 .SetUpdate(true) // Ensure it animates even if the game is paused
                 .OnComplete(() =>
                 {
-                    transform.DOScale(_originalScale, durationUp)
-                        .SetEase(easeUp)
-                        .SetUpdate(true);
+                    if (gameObject.activeInHierarchy && enabled)
+                    {
+                        transform.DOScale(_originalScale, durationUp)
+                            .SetEase(easeUp)
+                            .SetUpdate(true);
+                    }
                 });
         }
 
