@@ -301,6 +301,9 @@ namespace KidGame.Interface
             Transform todaySlot = AddOrUpdateGridSlot(currentDay, isNewClaim: true);
             if (todaySlot != null)
             {
+                ScrollToSlot(todaySlot as RectTransform);
+                yield return new WaitForSeconds(0.15f);
+
                 todaySlot.localScale = Vector3.zero;
                 todaySlot.DOScale(Vector3.one, 0.4f).SetEase(Ease.OutBack);
 
@@ -394,6 +397,44 @@ namespace KidGame.Interface
             }
 
             return existingSlot;
+        }
+
+        private void ScrollToSlot(RectTransform targetSlot)
+        {
+            if (targetSlot == null || panelAGridContent == null) return;
+
+            ScrollRect scrollRect = panelAGridContent.GetComponentInParent<ScrollRect>();
+            if (scrollRect == null) return;
+
+            Canvas.ForceUpdateCanvases();
+
+            RectTransform gridRt = panelAGridContent as RectTransform;
+            RectTransform viewport = scrollRect.viewport;
+            if (viewport == null) viewport = scrollRect.transform as RectTransform;
+
+            float contentHeight = gridRt.rect.height;
+            float viewportHeight = viewport.rect.height;
+
+            if (contentHeight <= viewportHeight)
+            {
+                scrollRect.verticalNormalizedPosition = 1.0f;
+                return;
+            }
+
+            // Get target slot position in grid content local space
+            Vector3 localPos = gridRt.InverseTransformPoint(targetSlot.position);
+            float targetY = Mathf.Abs(localPos.y);
+
+            float scrollableRange = contentHeight - viewportHeight;
+            float targetCenterY = targetY - (viewportHeight * 0.5f);
+
+            float normalizedY = 1.0f - Mathf.Clamp01(targetCenterY / scrollableRange);
+
+            scrollRect.velocity = Vector2.zero;
+            scrollRect.StopMovement();
+
+            // Smoothly scroll to target row
+            scrollRect.DOVerticalNormalizedPos(normalizedY, 0.4f).SetEase(Ease.OutQuad);
         }
 
         private Sprite GetRewardSpriteForDay(int dayNumber)

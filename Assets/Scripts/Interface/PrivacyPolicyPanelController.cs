@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using DG.Tweening;
 using KidGame.Audio;
+using KidGame.Permissions;
 
 namespace KidGame.Interface
 {
@@ -248,6 +249,9 @@ namespace KidGame.Interface
             PlayerPrefs.Save();
 
             if (AudioManager.Instance != null) AudioManager.Instance.PlayButtonClickSfx();
+
+            // Request Notification Permissions (Android & iOS) via DevicePermissionManager
+            DevicePermissionManager.RequestNotificationPermission();
 
             // Close panel with animation and start profile setup intro
             ClosePanel();
