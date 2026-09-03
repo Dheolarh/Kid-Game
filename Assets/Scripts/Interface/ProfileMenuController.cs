@@ -299,7 +299,7 @@ namespace KidGame.Interface
             }
 
             // 2. User Age
-            int playerAge = PlayerPrefs.GetInt("PlayerAge", 7);
+            int playerAge = PlayerPrefs.GetInt("PlayerAge", 5);
             if (ageText != null)
             {
                 ageText.text = $"AGE: {playerAge}";

@@ -305,7 +305,7 @@ namespace KidGame.Interface
             _isTransitioning = true;
 
             // Enable transition rotation grace period while curtain is closed
-            OrientationManager.AllowTransitionRotationGracePeriod();
+            OrientationManager.LockToPortrait();
 
             // Apply theme color to curtains
             SetCurtainColor(themeColor);
@@ -386,7 +386,7 @@ namespace KidGame.Interface
             }
 
             // 6. Lock screen orientation right before opening curtains to reveal game
-            OrientationManager.LockGameplayOrientation();
+            OrientationManager.LockToPortrait();
 
             // 7. Open curtains to reveal the newly loaded level
             bool isOpened = false;

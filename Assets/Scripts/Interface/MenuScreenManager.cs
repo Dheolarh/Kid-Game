@@ -40,6 +40,7 @@ namespace KidGame.Interface
         [SerializeField] private bool tapToSkip = true;
 
         private bool _isTransitioning = false;
+        private static bool s_isFirstAppLaunch = true;
         private static bool _hasCompletedIntro = false;
 
         private void Awake()
@@ -137,26 +138,52 @@ namespace KidGame.Interface
         {
             _isTransitioning = false;
 
-            // If intro was already completed, display Splash screen for autoTransitionDelay before opening curtains to Home screen
+            // If intro was already completed, check if this is initial app boot or returning from another scene
             if (_hasCompletedIntro || PlayerPrefs.GetInt("HasCompletedProfile", 0) == 1)
             {
                 _hasCompletedIntro = true;
-                if (splashScreen != null) splashScreen.SetActive(true);
-                if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
-                if (homeScreen != null) homeScreen.SetActive(false);
 
-                if (curtainTransition != null)
+                if (s_isFirstAppLaunch)
                 {
-                    curtainTransition.ResetTransitionState();
-                }
+                    s_isFirstAppLaunch = false;
 
-                if (autoTransition && splashScreen != null)
-                {
-                    StartCoroutine(ReturningUserSplashCoroutine());
+                    if (splashScreen != null) splashScreen.SetActive(true);
+                    if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
+                    if (homeScreen != null) homeScreen.SetActive(false);
+
+                    if (curtainTransition != null)
+                    {
+                        curtainTransition.ResetTransitionState();
+                    }
+
+                    if (autoTransition && splashScreen != null)
+                    {
+                        StartCoroutine(ReturningUserSplashCoroutine());
+                    }
+                    else
+                    {
+                        TriggerReturningUserSplashTransition();
+                    }
                 }
                 else
                 {
-                    TriggerReturningUserSplashTransition();
+                    // Returning to Main scene from Level or Game scene -> Go directly to Home screen without splash!
+                    if (splashScreen != null) splashScreen.SetActive(false);
+                    if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
+                    if (homeScreen != null) homeScreen.SetActive(true);
+
+                    KidGame.Audio.AudioManager.Instance?.PlayMainMenuBgm();
+
+                    var controller = StreakPanelController.Instance;
+                    if (controller == null)
+                    {
+                        controller = FindObjectOfType<StreakPanelController>(true);
+                    }
+                    if (controller != null)
+                    {
+                        controller.gameObject.SetActive(true);
+                        controller.CheckAndShowStreak();
+                    }
                 }
                 return;
             }

@@ -3,6 +3,12 @@ using UnityEngine;
 
 namespace KidGame.Interface
 {
+    public enum AgeGroup
+    {
+        Age3To5,
+        Age6To8,
+        Age9To10
+    }
     public enum GameType
     {
         Counting,
@@ -115,6 +121,9 @@ namespace KidGame.Interface
     [CreateAssetMenu(fileName = "NewLevelData", menuName = "Level Select/Level Data")]
     public class LevelData : ScriptableObject
     {
+        [Header("Target Age Group")]
+        public AgeGroup targetAgeGroup = AgeGroup.Age3To5;
+
         [Header("Level Information")]
         public int levelNumber;
         public string levelName;

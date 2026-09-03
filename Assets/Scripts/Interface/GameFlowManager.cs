@@ -1317,6 +1317,7 @@ namespace KidGame.Interface
             if (endMascotVfxObject != null) endMascotVfxObject.SetActive(false);
             if (endConfettiAnimator != null) endConfettiAnimator.gameObject.SetActive(false);
             if (endTipsText != null) endTipsText.text = "";
+            if (endNoNextLevelPanel != null) endNoNextLevelPanel.SetActive(false);
             if (endHomeButton != null) endHomeButton.transform.localScale = Vector3.zero;
             if (endNextButton != null) endNextButton.transform.localScale = Vector3.zero;
 
@@ -1511,10 +1512,14 @@ namespace KidGame.Interface
             LevelData nextLevel = GetNextLevel();
             if (nextLevel == null)
             {
-                Debug.LogWarning("[GameFlowManager] Cannot transition to next level: No next level found in database.");
-                // No next level — show the placeholder panel (to be configured later)
-                if (endNoNextLevelPanel != null)
-                    endNoNextLevelPanel.SetActive(true);
+                Debug.Log("[GameFlowManager] Last level completed. Returning to Level Select scene.");
+                if (endNoNextLevelPanel != null) endNoNextLevelPanel.SetActive(false);
+
+                KidGame.Audio.AudioManager.Instance?.PlayMainMenuBgm();
+                if (SceneTransitionManager.Instance != null)
+                {
+                    SceneTransitionManager.Instance.LoadSceneWithTransition("Level");
+                }
                 return;
             }
 

@@ -446,10 +446,7 @@ namespace KidGame.Interface
 
         private void OnNextButtonClicked()
         {
-            if (AudioManager.Instance != null)
-            {
-                AudioManager.Instance.PlayButtonClickSfx();
-            }
+            // Note: ButtonClickSfx component on panelANextButton already handles click SFX on pointer down
 
             // Animate Panel A closing and hide root
             if (panelA != null)

@@ -62,6 +62,7 @@ namespace KidGame.Interface
 
         private string _selectedBuddyName = "";
         private int _selectedAge = -1;
+        private bool _showingUnavailableAgeMessage = false;
         private Coroutine _typewriterCoroutine;
         private Coroutine _mascotAnimCoroutine;
         private Coroutine _finalTransitionCoroutine;
@@ -312,8 +313,7 @@ namespace KidGame.Interface
             string fullName = nameInputField.text.Trim();
             if (string.IsNullOrEmpty(fullName)) return;
 
-            // Play button click SFX for either button tap or keyboard Enter submission
-            KidGame.Audio.AudioManager.Instance?.PlayButtonClickSfx();
+            // Note: ButtonClickSfx component on nameNextButton already handles click SFX on pointer down
 
             // Apply Title Case: each word starts with a capital, rest lowercase (e.g. "john doe" -> "John Doe")
             fullName = ToTitleCase(fullName);
@@ -386,6 +386,7 @@ namespace KidGame.Interface
 
         private void PlayAgeIntro()
         {
+            _showingUnavailableAgeMessage = false;
             string firstName = PlayerPrefs.GetString("SingleWordName", "Buddy");
             StartCoroutine(EnsureHorizontalScrollAtStartCoroutine(ageButtonsContainer));
 
@@ -456,13 +457,56 @@ namespace KidGame.Interface
                     .OnComplete(() => ageAnswerSlot.transform.localScale = Vector3.one);
             }
 
-
-            // Reveal the next button
-            if (ageNextButton != null && !ageNextButton.gameObject.activeSelf)
+            // Check if selected age is in the deployed working age group (Ages 3 - 5)
+            if (age >= 3 && age <= 5)
             {
-                ageNextButton.gameObject.SetActive(true);
-                ageNextButton.transform.localScale = Vector3.zero;
-                ageNextButton.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+                // Deployed Age (Ages 3 - 5)
+                string firstName = PlayerPrefs.GetString("SingleWordName", "Buddy");
+
+                // Only re-type intro greeting if we were previously showing the unavailable message
+                if (_showingUnavailableAgeMessage)
+                {
+                    _showingUnavailableAgeMessage = false;
+                    TriggerAgeGreeting(firstName);
+                }
+
+                // Reveal / enable Next button
+                if (ageNextButton != null)
+                {
+                    ageNextButton.interactable = true;
+                    if (!ageNextButton.gameObject.activeSelf)
+                    {
+                        ageNextButton.gameObject.SetActive(true);
+                        ageNextButton.transform.localScale = Vector3.zero;
+                        ageNextButton.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+                    }
+                }
+            }
+            else
+            {
+                // Unavailable Age Group (Ages 6 - 10)
+                _showingUnavailableAgeMessage = true;
+                string unavailableMsg = "Lessons are not yet available for ages 6 - 10, but it's coming!";
+                if (ageMascotSpeechText != null)
+                {
+                    StartTypewriter(ageMascotSpeechText, unavailableMsg);
+                }
+                if (ageMascotAnimator != null)
+                {
+                    PlayMascotGreeting(ageMascotAnimator);
+                }
+
+                // Hide / disable Next button until a working age (3 - 5) is selected
+                if (ageNextButton != null)
+                {
+                    ageNextButton.interactable = false;
+                    if (ageNextButton.gameObject.activeSelf)
+                    {
+                        ageNextButton.transform.DOKill();
+                        ageNextButton.transform.DOScale(Vector3.zero, 0.2f)
+                            .OnComplete(() => ageNextButton.gameObject.SetActive(false));
+                    }
+                }
             }
         }
 
@@ -473,9 +517,14 @@ namespace KidGame.Interface
 
         private void OnAgeNextClicked()
         {
-            if (_selectedAge == -1) return;
+            if (_selectedAge < 3 || _selectedAge > 5)
+            {
+                Debug.LogWarning($"[ProfileScreenController] Selected age {_selectedAge} is not in deployed range (3-5). Cannot advance.");
+                return;
+            }
 
             PlayerPrefs.SetInt("PlayerAge", _selectedAge);
+            PlayerPrefs.SetString("PlayerAgeGroup", "3-5");
             PlayerPrefs.Save();
 
             SwitchPage(agePage, avatarPage, PlayAvatarIntro);
