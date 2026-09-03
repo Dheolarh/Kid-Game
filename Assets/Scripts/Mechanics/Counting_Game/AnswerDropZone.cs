@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace KidGame.Mechanics.Counting
 {
-    public class AnswerDropZone : MonoBehaviour, IDropHandler
+    public class AnswerDropZone : MonoBehaviour
     {
         // ── State ─────────────────────────────────────────────────────────────
 
@@ -73,11 +73,10 @@ namespace KidGame.Mechanics.Counting
             }
         }
 
-        // ── IDropHandler ──────────────────────────────────────────────────────
+        // ── Drop Handling ─────────────────────────────────────────────────────
 
         /// <summary>
-        /// Called directly by AnswerCard when it detects this zone under the card center.
-        /// Also called by IDropHandler.OnDrop as a fallback.
+        /// Called directly by AnswerCard.OnEndDrag when it detects this zone under the card's visual center.
         /// </summary>
         public void TryAccept(AnswerCard card)
         {
@@ -102,17 +101,6 @@ namespace KidGame.Mechanics.Counting
                 {
                     KidGame.Interface.GameFlowManager.Instance.RegisterMistake();
                 }
-            }
-        }
-
-        public void OnDrop(PointerEventData eventData)
-        {
-            // Fallback: fired by Unity's event system when blocksRaycasts = false.
-            // The primary path is TryAccept() called from AnswerCard.OnEndDrag via card-center raycast.
-            var card = eventData.pointerDrag?.GetComponent<AnswerCard>();
-            if (card != null && !card.IsAccepted)
-            {
-                TryAccept(card);
             }
         }
 

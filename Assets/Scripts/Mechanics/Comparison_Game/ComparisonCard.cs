@@ -197,10 +197,16 @@ namespace KidGame.Mechanics.Comparison
 
         private ComparisonDropZone FindDropZoneAtCardCenter()
         {
+            if (_cachedCanvas == null)
+            {
+                _cachedCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
+            }
+
             Camera cam = (_cachedCanvas != null && _cachedCanvas.renderMode == RenderMode.ScreenSpaceCamera)
                 ? _cachedCanvas.worldCamera : null;
             Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(cam, transform.position);
 
+            // 1. Raycast at card's exact center
             var fakeEvent = new PointerEventData(EventSystem.current) { position = screenPos };
             var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(fakeEvent, results);
@@ -209,9 +215,33 @@ namespace KidGame.Mechanics.Comparison
             {
                 var zone = r.gameObject.GetComponent<ComparisonDropZone>();
                 if (zone == null) zone = r.gameObject.GetComponentInParent<ComparisonDropZone>();
-                if (zone != null && !zone.IsAnswered) return zone;
+                if (zone != null && !zone.IsAnswered && zone.gameObject.activeInHierarchy) return zone;
             }
-            return null;
+
+            // 2. Bounds / Overlap fallback
+            ComparisonDropZone closestZone = null;
+            float closestDist = float.MaxValue;
+            var allZones = FindObjectsOfType<ComparisonDropZone>();
+            foreach (var zone in allZones)
+            {
+                if (zone == null || zone.IsAnswered || !zone.gameObject.activeInHierarchy) continue;
+                var zoneRt = zone.transform as RectTransform;
+                if (zoneRt == null) continue;
+
+                if (RectTransformUtility.RectangleContainsScreenPoint(zoneRt, screenPos, cam))
+                {
+                    return zone;
+                }
+
+                float dist = Vector3.Distance(transform.position, zone.transform.position);
+                if (dist < 160f && dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestZone = zone;
+                }
+            }
+
+            return closestZone;
         }
     }
 }

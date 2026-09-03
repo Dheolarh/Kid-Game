@@ -307,11 +307,16 @@ namespace KidGame.Mechanics.Counting
         /// </summary>
         private AnswerDropZone FindDropZoneAtCardCenter()
         {
-            // Convert card world position → screen position
+            if (_cachedCanvas == null)
+            {
+                _cachedCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
+            }
+
             Camera cam = (_cachedCanvas != null && _cachedCanvas.renderMode == RenderMode.ScreenSpaceCamera)
                 ? _cachedCanvas.worldCamera : null;
             Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(cam, transform.position);
 
+            // 1. Raycast at card's exact center
             var fakeEvent = new PointerEventData(EventSystem.current) { position = screenPos };
             var results   = new List<RaycastResult>();
             EventSystem.current.RaycastAll(fakeEvent, results);
@@ -320,9 +325,33 @@ namespace KidGame.Mechanics.Counting
             {
                 var zone = r.gameObject.GetComponent<AnswerDropZone>();
                 if (zone == null) zone = r.gameObject.GetComponentInParent<AnswerDropZone>();
-                if (zone != null && !zone.IsAnswered) return zone;
+                if (zone != null && !zone.IsAnswered && zone.gameObject.activeInHierarchy) return zone;
             }
-            return null;
+
+            // 2. Bounds / Overlap fallback: Find closest unanswered drop zone containing card center or overlapping card
+            AnswerDropZone closestZone = null;
+            float closestDist = float.MaxValue;
+            var allZones = FindObjectsOfType<AnswerDropZone>();
+            foreach (var zone in allZones)
+            {
+                if (zone == null || zone.IsAnswered || !zone.gameObject.activeInHierarchy) continue;
+                var zoneRt = zone.transform as RectTransform;
+                if (zoneRt == null) continue;
+
+                if (RectTransformUtility.RectangleContainsScreenPoint(zoneRt, screenPos, cam))
+                {
+                    return zone;
+                }
+
+                float dist = Vector3.Distance(transform.position, zone.transform.position);
+                if (dist < 160f && dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestZone = zone;
+                }
+            }
+
+            return closestZone;
         }
 
         private void ReturnHome()

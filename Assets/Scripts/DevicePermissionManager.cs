@@ -35,12 +35,22 @@ namespace KidGame.Permissions
 #if UNITY_ANDROID && !UNITY_EDITOR
             try
             {
+                using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
+                {
+                    int sdkInt = version.GetStatic<int>("SDK_INT");
+                    if (sdkInt < 33)
+                    {
+                        // POST_NOTIFICATIONS is only a runtime permission on Android 13 (API 33)+.
+                        // On Android 12 and below, notifications are enabled by default.
+                        return true;
+                    }
+                }
                 return Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS");
             }
             catch (System.Exception ex)
             {
                 Debug.LogWarning($"[DevicePermissionManager] HasNotificationPermission exception: {ex.Message}");
-                return false;
+                return true;
             }
 #elif UNITY_IOS && !UNITY_EDITOR
             try
@@ -64,6 +74,14 @@ namespace KidGame.Permissions
 #if UNITY_ANDROID && !UNITY_EDITOR
             try
             {
+                using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
+                {
+                    int sdkInt = version.GetStatic<int>("SDK_INT");
+                    if (sdkInt < 33)
+                    {
+                        return; // Not needed on Android 12 and below
+                    }
+                }
                 if (!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS"))
                 {
                     Debug.Log("[DevicePermissionManager] Requesting Android POST_NOTIFICATIONS permission...");

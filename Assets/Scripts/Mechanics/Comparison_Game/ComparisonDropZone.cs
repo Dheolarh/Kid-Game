@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace KidGame.Mechanics.Comparison
 {
-    public class ComparisonDropZone : MonoBehaviour, IDropHandler
+    public class ComparisonDropZone : MonoBehaviour
     {
         private ComparisonSign _expectedSign;
         private bool _isAnswered;
@@ -42,15 +42,6 @@ namespace KidGame.Mechanics.Comparison
                 {
                     KidGame.Interface.GameFlowManager.Instance.RegisterMistake();
                 }
-            }
-        }
-
-        public void OnDrop(PointerEventData eventData)
-        {
-            var card = eventData.pointerDrag?.GetComponent<ComparisonCard>();
-            if (card != null && !card.IsAccepted)
-            {
-                TryAccept(card);
             }
         }
 

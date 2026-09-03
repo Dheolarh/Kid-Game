@@ -253,6 +253,9 @@ namespace KidGame.Interface
             // Request Notification Permissions (Android & iOS) via DevicePermissionManager
             DevicePermissionManager.RequestNotificationPermission();
 
+            // Immediately schedule notifications queue
+            KidGame.Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+
             // Close panel with animation and start profile setup intro
             ClosePanel();
 

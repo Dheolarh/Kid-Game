@@ -40,6 +40,27 @@ namespace KidGame.Notifications
             InitializeNotificationChannel();
         }
 
+        private void Start()
+        {
+            ScheduleAllDynamicNotifications();
+        }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus)
+            {
+                ScheduleAllDynamicNotifications();
+            }
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+            {
+                ScheduleAllDynamicNotifications();
+            }
+        }
+
         private void InitializeNotificationChannel()
         {
 #if UNITY_ANDROID
@@ -94,56 +115,55 @@ namespace KidGame.Notifications
 
             DateTime now = DateTime.Now;
 
-            // Define Time Windows for Notifications
-            // 1. Morning (8:00 AM)
-            DateTime morningTime = GetNextOccurrence(8, 0);
-            // 2. Afternoon (12:30 PM)
-            DateTime afternoonTime = GetNextOccurrence(12, 30);
-            // 3. Evening (4:30 PM)
-            DateTime eveningTime = GetNextOccurrence(16, 30);
-            // 4. Streak Saver (6:00 PM)
-            DateTime streakSaverTime = GetNextOccurrence(18, 0);
-
-            if (isStreakKeptToday)
+            // Schedule for the next 7 days in advance
+            // Even if the user doesn't open the app for a full week, the OS will continue firing 4 notifications/day
+            for (int dayOffset = 0; dayOffset < 7; dayOffset++)
             {
-                // Streak is active/kept today -> Use Learning Notifications
-                var morningMsg = GetRandomMessage(MorningLearnerMessages, playerName);
-                ScheduleNotificationAt(morningMsg.Title, morningMsg.Body, morningTime, id: 1001);
+                DateTime dayBase = DateTime.Today.AddDays(dayOffset);
 
-                var afternoonMsg = GetRandomMessage(AfternoonLearnerMessages, playerName);
-                ScheduleNotificationAt(afternoonMsg.Title, afternoonMsg.Body, afternoonTime, id: 1002);
+                // Define 4 daily time windows
+                DateTime morningTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 8, 0, 0);
+                DateTime afternoonTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 12, 30, 0);
+                DateTime eveningTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 16, 30, 0);
+                DateTime streakSaverTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 18, 0, 0);
 
-                var eveningMsg = GetRandomMessage(EveningLearnerMessages, playerName);
-                ScheduleNotificationAt(eveningMsg.Title, eveningMsg.Body, eveningTime, id: 1003);
+                bool useLearnerMessages = (dayOffset == 0 && isStreakKeptToday);
+                int idBase = 1000 + (dayOffset * 10);
 
-                var streakSaverMsg = GetRandomMessage(StreakSaverMessages, playerName);
-                ScheduleNotificationAt(streakSaverMsg.Title, streakSaverMsg.Body, streakSaverTime, id: 1004);
+                // 1. Morning (8:00 AM)
+                if (morningTime > now)
+                {
+                    var msg = useLearnerMessages 
+                        ? GetRandomMessage(MorningLearnerMessages, playerName)
+                        : GetRandomMessage(StreakReminderMessages, playerName);
+                    ScheduleNotificationAt(msg.Title, msg.Body, morningTime, idBase + 1);
+                }
+
+                // 2. Afternoon (12:30 PM)
+                if (afternoonTime > now)
+                {
+                    var msg = useLearnerMessages
+                        ? GetRandomMessage(AfternoonLearnerMessages, playerName)
+                        : GetRandomMessage(StreakReminderMessages, playerName);
+                    ScheduleNotificationAt(msg.Title, msg.Body, afternoonTime, idBase + 2);
+                }
+
+                // 3. Evening (4:30 PM)
+                if (eveningTime > now)
+                {
+                    var msg = useLearnerMessages
+                        ? GetRandomMessage(EveningLearnerMessages, playerName)
+                        : GetRandomMessage(StreakReminderMessages, playerName);
+                    ScheduleNotificationAt(msg.Title, msg.Body, eveningTime, idBase + 3);
+                }
+
+                // 4. Streak Saver (6:00 PM)
+                if (streakSaverTime > now)
+                {
+                    var msg = GetRandomMessage(StreakSaverMessages, playerName);
+                    ScheduleNotificationAt(msg.Title, msg.Body, streakSaverTime, idBase + 4);
+                }
             }
-            else
-            {
-                // Streak is unkept / missed -> Swap out ALL slots to Streak Reminder Notifications!
-                var morningStreakMsg = GetRandomMessage(StreakReminderMessages, playerName);
-                ScheduleNotificationAt(morningStreakMsg.Title, morningStreakMsg.Body, morningTime, id: 1001);
-
-                var afternoonStreakMsg = GetRandomMessage(StreakReminderMessages, playerName);
-                ScheduleNotificationAt(afternoonStreakMsg.Title, afternoonStreakMsg.Body, afternoonTime, id: 1002);
-
-                var eveningStreakMsg = GetRandomMessage(StreakReminderMessages, playerName);
-                ScheduleNotificationAt(eveningStreakMsg.Title, eveningStreakMsg.Body, eveningTime, id: 1003);
-
-                var streakSaverMsg = GetRandomMessage(StreakSaverMessages, playerName);
-                ScheduleNotificationAt(streakSaverMsg.Title, streakSaverMsg.Body, streakSaverTime, id: 1004);
-            }
-        }
-
-        private static DateTime GetNextOccurrence(int hour, int minute)
-        {
-            DateTime target = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
-            if (target <= DateTime.Now)
-            {
-                target = target.AddDays(1);
-            }
-            return target;
         }
 
         private static void ScheduleNotificationAt(string title, string bodyText, DateTime fireTime, int id)
@@ -155,9 +175,7 @@ namespace KidGame.Notifications
                 {
                     Title = title,
                     Text = bodyText,
-                    FireTime = fireTime,
-                    SmallIcon = "app_icon",
-                    LargeIcon = "app_icon"
+                    FireTime = fireTime
                 };
                 AndroidNotificationCenter.SendNotificationWithExplicitID(notification, ChannelId, id);
                 Debug.Log($"[LocalNotificationManager] Scheduled Android Notification #{id} for {fireTime}: '{title}'");
@@ -195,14 +213,6 @@ namespace KidGame.Notifications
 #else
             Debug.Log($"[LocalNotificationManager] Scheduled Notification #{id} for {fireTime} (Editor Simulation): [{title}] - {bodyText}");
 #endif
-        }
-
-        private void OnApplicationPause(bool pauseStatus)
-        {
-            if (pauseStatus)
-            {
-                ScheduleAllDynamicNotifications();
-            }
         }
 
         private struct NotificationMessage
