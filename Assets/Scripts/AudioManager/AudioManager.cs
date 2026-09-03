@@ -131,15 +131,15 @@ namespace KidGame.Audio
 
         private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
         {
-            if (scene.name == "Main" || scene.name == "Level")
+            if (scene.name == "Level")
             {
-                // Only auto-play main menu BGM on scene load if profile/intro is already completed.
-                // Otherwise, MenuScreenManager controls playing Registration BGM when transitioning out of Splash screen.
+                // In Level scene, ensure Menu BGM is playing
                 if (PlayerPrefs.GetInt("HasCompletedProfile", 0) == 1)
                 {
                     PlayMainMenuBgm();
                 }
             }
+            // For "Main" scene, MenuScreenManager controls playing BGM precisely when splash curtains finish opening
         }
 
         // ── Settings API ──────────────────────────────────────────────────────────

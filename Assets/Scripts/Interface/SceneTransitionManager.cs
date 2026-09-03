@@ -260,6 +260,10 @@ namespace KidGame.Interface
             yield return new WaitUntil(() => isClosed);
 
             // 2. Load scene in background
+            if (sceneName == "Main")
+            {
+                MenuScreenManager.MarkFirstLaunchComplete();
+            }
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
             if (asyncLoad != null)
             {

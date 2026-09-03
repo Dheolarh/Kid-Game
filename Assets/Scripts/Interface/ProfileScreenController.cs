@@ -102,6 +102,14 @@ namespace KidGame.Interface
             // Set up page listeners
             if (nameInputField != null)
             {
+                nameInputField.shouldHideMobileInput = true;
+                nameInputField.customCaretColor = true;
+                nameInputField.caretColor = new Color32(0xF5, 0xDD, 0x06, 0xFF); // #F5DD06 (Yellow)
+                nameInputField.selectionColor = new Color32(0xA8, 0xCE, 0xFF, 190); // #A8CEFF (Light Blue, Opacity 190)
+                nameInputField.caretWidth = 3;
+                nameInputField.caretBlinkRate = 0.85f;
+                nameInputField.onFocusSelectAll = false;
+
                 nameInputField.onValueChanged.AddListener(OnNameValueChanged);
                 nameInputField.onEndEdit.AddListener(OnNameInputEndEdit);
             }
@@ -265,6 +273,7 @@ namespace KidGame.Interface
             {
                 nameInputField.Select();
                 nameInputField.ActivateInputField();
+                nameInputField.caretPosition = nameInputField.text.Length;
             }
         }
 
@@ -1004,6 +1013,7 @@ namespace KidGame.Interface
             PlayerPrefs.SetString("SelectedBuddy", _selectedBuddyName);
             PlayerPrefs.SetInt("HasCompletedProfile", 1);
             PlayerPrefs.Save();
+            MenuScreenManager.MarkFirstLaunchComplete();
 
             // Immediately hide and deactivate next button completely
             if (avatarNextButton != null)

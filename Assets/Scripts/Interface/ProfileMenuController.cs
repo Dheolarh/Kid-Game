@@ -122,6 +122,14 @@ namespace KidGame.Interface
 
             if (editNameInputField != null)
             {
+                editNameInputField.shouldHideMobileInput = true;
+                editNameInputField.customCaretColor = true;
+                editNameInputField.caretColor = new Color32(0xF5, 0xDD, 0x06, 0xFF); // #F5DD06 (Yellow)
+                editNameInputField.selectionColor = new Color32(0xA8, 0xCE, 0xFF, 190); // #A8CEFF (Light Blue, Opacity 190)
+                editNameInputField.caretWidth = 3;
+                editNameInputField.caretBlinkRate = 0.85f;
+                editNameInputField.onFocusSelectAll = false;
+
                 editNameInputField.onValueChanged.AddListener(OnEditNameValueChanged);
                 editNameInputField.onSubmit.AddListener((val) => OnAcceptNameClicked());
             }
@@ -257,6 +265,7 @@ namespace KidGame.Interface
                 editNameInputField.text = currentName;
                 editNameInputField.Select();
                 editNameInputField.ActivateInputField();
+                editNameInputField.caretPosition = editNameInputField.text.Length;
             }
 
             if (AudioManager.Instance != null)

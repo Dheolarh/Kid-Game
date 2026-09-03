@@ -64,10 +64,6 @@ namespace KidGame.Interface
             {
                 ageSelectScreen = profileScreenController.gameObject;
             }
-            if (homeScreen == null && homeScreenIntroController != null)
-            {
-                homeScreen = homeScreenIntroController.gameObject;
-            }
             if (splashScreen == null)
             {
                 var splash = GameObject.Find("Splash");
@@ -76,6 +72,20 @@ namespace KidGame.Interface
                     splashScreen = splash;
                 }
             }
+
+            // If returning from another scene during the session, immediately disable splash in Awake before rendering
+            if (!s_isFirstAppLaunch)
+            {
+                if (splashScreen != null) splashScreen.SetActive(false);
+                if (ageSelectScreen != null) ageSelectScreen.SetActive(false);
+                if (homeScreen != null) homeScreen.SetActive(true);
+            }
+        }
+
+        public static void MarkFirstLaunchComplete()
+        {
+            s_isFirstAppLaunch = false;
+            _hasCompletedIntro = true;
         }
 
         private void Start()
@@ -296,6 +306,7 @@ namespace KidGame.Interface
         private void OnSplashToAgeSelectComplete()
         {
             Debug.Log("[MenuScreenManager] OnSplashToAgeSelectComplete triggered.");
+            s_isFirstAppLaunch = false;
             // 3. Deactivate the Splash screen once curtains are fully opened to optimize performance
             if (splashScreen != null)
             {
