@@ -81,6 +81,7 @@ namespace KidGame.Mechanics.Counting
         /// </summary>
         public void TryAccept(AnswerCard card)
         {
+            if (card == null || card.IsAccepted) return;
             if (_isAnswered) return;
 
             if (_canAccept != null && !_canAccept())
@@ -109,7 +110,10 @@ namespace KidGame.Mechanics.Counting
             // Fallback: fired by Unity's event system when blocksRaycasts = false.
             // The primary path is TryAccept() called from AnswerCard.OnEndDrag via card-center raycast.
             var card = eventData.pointerDrag?.GetComponent<AnswerCard>();
-            if (card != null) TryAccept(card);
+            if (card != null && !card.IsAccepted)
+            {
+                TryAccept(card);
+            }
         }
 
         // ── Private ───────────────────────────────────────────────────────────

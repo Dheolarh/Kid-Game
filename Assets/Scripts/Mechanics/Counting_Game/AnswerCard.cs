@@ -319,7 +319,8 @@ namespace KidGame.Mechanics.Counting
             foreach (var r in results)
             {
                 var zone = r.gameObject.GetComponent<AnswerDropZone>();
-                if (zone != null) return zone;
+                if (zone == null) zone = r.gameObject.GetComponentInParent<AnswerDropZone>();
+                if (zone != null && !zone.IsAnswered) return zone;
             }
             return null;
         }

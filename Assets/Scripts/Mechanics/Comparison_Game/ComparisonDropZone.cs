@@ -27,6 +27,7 @@ namespace KidGame.Mechanics.Comparison
 
         public void TryAccept(ComparisonCard card)
         {
+            if (card == null || card.IsAccepted) return;
             if (_isAnswered) return;
 
             if (card.Sign == _expectedSign)
@@ -47,7 +48,7 @@ namespace KidGame.Mechanics.Comparison
         public void OnDrop(PointerEventData eventData)
         {
             var card = eventData.pointerDrag?.GetComponent<ComparisonCard>();
-            if (card != null)
+            if (card != null && !card.IsAccepted)
             {
                 TryAccept(card);
             }

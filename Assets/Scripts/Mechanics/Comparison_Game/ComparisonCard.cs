@@ -208,7 +208,8 @@ namespace KidGame.Mechanics.Comparison
             foreach (var r in results)
             {
                 var zone = r.gameObject.GetComponent<ComparisonDropZone>();
-                if (zone != null) return zone;
+                if (zone == null) zone = r.gameObject.GetComponentInParent<ComparisonDropZone>();
+                if (zone != null && !zone.IsAnswered) return zone;
             }
             return null;
         }
