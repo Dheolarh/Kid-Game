@@ -146,6 +146,11 @@ namespace KidGame.Audio
 
         public void SetMusicVolumeSetting(int val)
         {
+            if (_duckCoroutine != null)
+            {
+                StopCoroutine(_duckCoroutine);
+                _duckCoroutine = null;
+            }
             MusicVolumeSetting = Mathf.Clamp(val, 0, 10);
             PlayerPrefs.SetInt("Setting_MusicVolume", MusicVolumeSetting);
             PlayerPrefs.Save();
@@ -438,6 +443,8 @@ namespace KidGame.Audio
             }
         }
 
+        private Coroutine _duckCoroutine;
+
         /// <summary>
         /// Plays victory sound based on stars won (1, 2, or 3 stars).
         /// </summary>
@@ -458,6 +465,83 @@ namespace KidGame.Audio
                 float finalVol = sfxVolume * victoryVolume * (SfxVolumeSetting / 10f);
                 sfxSource.PlayOneShot(clipToPlay, finalVol);
             }
+        }
+
+        /// <summary>
+        /// Plays Victory 1 SFX and ducks the BGM volume to setting level 1 for the duration of the clip,
+        /// then smoothly restores it back to initial volume.
+        /// </summary>
+        public void PlayVictory1Sfx(bool duckBgm = true)
+        {
+            AudioClip clipToPlay = victory1StarSfx;
+            if (clipToPlay == null) clipToPlay = victory2StarSfx != null ? victory2StarSfx : victory3StarSfx;
+
+            if (sfxSource != null && clipToPlay != null)
+            {
+                float finalVol = sfxVolume * victoryVolume * (SfxVolumeSetting / 10f);
+                sfxSource.PlayOneShot(clipToPlay, finalVol);
+
+                if (duckBgm && bgmSource != null && bgmSource.isPlaying)
+                {
+                    if (_duckCoroutine != null) StopCoroutine(_duckCoroutine);
+                    _duckCoroutine = StartCoroutine(DuckBgmForClipRoutine(clipToPlay.length, 1f));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Plays the Victory 2 SFX (used for Day Streak VFX / rewards).
+        /// </summary>
+        public void PlayVictory2Sfx()
+        {
+            PlayVictorySfx(2);
+        }
+
+        private IEnumerator DuckBgmForClipRoutine(float clipDuration, float duckedSettingLevel = 1f)
+        {
+            float currentPresetVolume = GetCurrentBgmPresetVolume();
+            float normalTargetVolume = currentPresetVolume * (MusicVolumeSetting / 10f);
+            float duckedTargetVolume = currentPresetVolume * (Mathf.Min(duckedSettingLevel, MusicVolumeSetting) / 10f);
+
+            // If music is completely muted in settings, stay at 0
+            if (MusicVolumeSetting <= 0)
+            {
+                _duckCoroutine = null;
+                yield break;
+            }
+
+            // Fast fade down to ducked level (0.2s)
+            float fadeDownDuration = 0.2f;
+            float startVol = bgmSource.volume;
+            float elapsed = 0f;
+            while (elapsed < fadeDownDuration)
+            {
+                elapsed += Time.deltaTime;
+                bgmSource.volume = Mathf.Lerp(startVol, duckedTargetVolume, elapsed / fadeDownDuration);
+                yield return null;
+            }
+            bgmSource.volume = duckedTargetVolume;
+
+            // Wait for SFX clip to finish playing (leaving room for smooth fade-in at the end)
+            float waitTime = Mathf.Max(0f, clipDuration - fadeDownDuration - 0.3f);
+            if (waitTime > 0f)
+            {
+                yield return new WaitForSeconds(waitTime);
+            }
+
+            // Smooth fade back up to initial/normal volume (0.4s)
+            float fadeUpDuration = 0.4f;
+            startVol = bgmSource.volume;
+            elapsed = 0f;
+            while (elapsed < fadeUpDuration)
+            {
+                elapsed += Time.deltaTime;
+                normalTargetVolume = GetCurrentBgmPresetVolume() * (MusicVolumeSetting / 10f);
+                bgmSource.volume = Mathf.Lerp(startVol, normalTargetVolume, elapsed / fadeUpDuration);
+                yield return null;
+            }
+            bgmSource.volume = GetCurrentBgmPresetVolume() * (MusicVolumeSetting / 10f);
+            _duckCoroutine = null;
         }
 
         /// <summary>

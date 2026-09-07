@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_113
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 113
   levelName: LESSON 113
   levelSubtitle: Memory Lane - Counting 51 to 100
@@ -201,7 +202,7 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: fefaf5edec4d572478a7036dc087a608, type: 2}
+    recallPremadeSlotData: {fileID: 11400000, guid: 3abadb4b1782d1344992554edfae8f0f, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []

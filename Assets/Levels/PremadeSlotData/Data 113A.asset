@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc57d2cf74e79e3408ae6d1b31612711, type: 3}
+  m_Name: Data 113A
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.PremadeSlotData
+  layoutName: Data 113A
+  templatePrefab: {fileID: 0}
+  colorizeTextInsteadOfBox: 0
+  rows:
+  - rowName: Row 1
+    boxes:
+    - value: 91
+      isAnswerBox: 1
+      showHint: 1
+    - value: 92
+      isAnswerBox: 1
+      showHint: 1
+    - value: 93
+      isAnswerBox: 1
+      showHint: 1
+    - value: 94
+      isAnswerBox: 1
+      showHint: 1
+    - value: 95
+      isAnswerBox: 1
+      showHint: 1
+  - rowName: Row 2
+    boxes:
+    - value: 96
+      isAnswerBox: 1
+      showHint: 1
+    - value: 97
+      isAnswerBox: 1
+      showHint: 1
+    - value: 98
+      isAnswerBox: 1
+      showHint: 1
+    - value: 99
+      isAnswerBox: 1
+      showHint: 1
+    - value: 100
+      isAnswerBox: 1
+      showHint: 1

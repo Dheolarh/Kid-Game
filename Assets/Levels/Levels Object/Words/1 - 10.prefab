@@ -768,7 +768,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 50
+    m_Bottom: 100
   m_ChildAlignment: 0
   m_Spacing: 100
   m_ChildForceExpandWidth: 1
@@ -2118,6 +2118,7 @@ MonoBehaviour:
   rows:
   - rowName: Main Row
     rowObject: {fileID: 7583444236575440329}
+    rowNumberValue: 0
     boxes:
     - boxName: answer
       boxObject: {fileID: 6606065271396394584}

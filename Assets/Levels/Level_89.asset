@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_89
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 89
   levelName: LESSON 89
   levelSubtitle: Matching Objects
-  levelEndTip: 2 Balls is to number 2
+  levelEndTip: 2 Eggs is to number 2
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Green

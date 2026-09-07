@@ -322,10 +322,10 @@ namespace KidGame.Interface
             }
 
             // 4. Streak Count
-            int streakDays = PlayerPrefs.GetInt("PlayerStreak", PlayerPrefs.GetInt("StreakDays", 1));
+            int streakDays = PlayerPrefs.GetInt("Streak_DaysCount", PlayerPrefs.GetInt("StreakDays", PlayerPrefs.GetInt("PlayerStreak", 1)));
             if (streakText != null)
             {
-                streakText.text = $"{streakDays} DAYS";
+                streakText.text = streakDays == 1 ? "1 DAY" : $"{streakDays} DAYS";
             }
 
             // 5. Selected Avatar Picture (without background)

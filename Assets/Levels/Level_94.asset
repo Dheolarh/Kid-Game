@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_94
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 94
   levelName: LESSON 94
   levelSubtitle: 91 TO 100!
@@ -86,8 +87,8 @@ MonoBehaviour:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: 
-      mascotAnimationTrigger: Let's try that once more
+    - text: Let's try that once more
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1

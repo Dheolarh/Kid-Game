@@ -173,8 +173,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -249.85602, y: 257.91998}
-  m_SizeDelta: {x: 163.84, y: 277.76}
+  m_AnchoredPosition: {x: -138.23999, y: 136.01251}
+  m_SizeDelta: {x: 90.72, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1500988475082440340
 CanvasRenderer:
@@ -231,6 +231,7 @@ MonoBehaviour:
   expectedAnswer: 10
   isAnswer: 1
   showHint: 1
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}
@@ -537,8 +538,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 456.70398, y: 257.91998}
-  m_SizeDelta: {x: 221.184, y: 277.76}
+  m_AnchoredPosition: {x: 240.84, y: 136.01251}
+  m_SizeDelta: {x: 116.64, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8767458625074265107
 CanvasRenderer:
@@ -595,6 +596,7 @@ MonoBehaviour:
   expectedAnswer: 2
   isAnswer: 1
   showHint: 0
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}
@@ -642,8 +644,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -76.79999, y: 257.91998}
-  m_SizeDelta: {x: 163.84, y: 277.76}
+  m_AnchoredPosition: {x: -41.039986, y: 136.01251}
+  m_SizeDelta: {x: 95.04, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2636010428274767346
 CanvasRenderer:
@@ -700,6 +702,7 @@ MonoBehaviour:
   expectedAnswer: 9
   isAnswer: 1
   showHint: 0
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}
@@ -747,8 +750,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 444.41602, y: 257.91998}
-  m_SizeDelta: {x: 217.088, y: 277.76}
+  m_AnchoredPosition: {x: 234.36002, y: 136.01251}
+  m_SizeDelta: {x: 114.479996, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2502656760004042114
 CanvasRenderer:
@@ -805,6 +808,7 @@ MonoBehaviour:
   expectedAnswer: 7
   isAnswer: 1
   showHint: 0
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}
@@ -989,8 +993,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -83.96802, y: 257.91998}
-  m_SizeDelta: {x: 184.32, y: 277.76}
+  m_AnchoredPosition: {x: -44.28001, y: 136.01251}
+  m_SizeDelta: {x: 97.200005, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9220034442748133068
 CanvasRenderer:
@@ -1047,6 +1051,7 @@ MonoBehaviour:
   expectedAnswer: 4
   isAnswer: 1
   showHint: 0
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}
@@ -1617,6 +1622,7 @@ MonoBehaviour:
       isAnswerBox: 1
       value: 1
       showHint: 1
+  colorizeTextInsteadOfBox: 0
 --- !u!1 &4787273992100296452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,8 +1659,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 176.12805, y: 257.91998}
-  m_SizeDelta: {x: 221.184, y: 277.76}
+  m_AnchoredPosition: {x: 92.88003, y: 136.01251}
+  m_SizeDelta: {x: 116.64, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4227278497643556259
 CanvasRenderer:
@@ -1711,6 +1717,7 @@ MonoBehaviour:
   expectedAnswer: 8
   isAnswer: 1
   showHint: 0
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}
@@ -2032,8 +2039,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 727.04004, y: 257.91998}
-  m_SizeDelta: {x: 235.52, y: 277.76}
+  m_AnchoredPosition: {x: 383.40002, y: 136.01251}
+  m_SizeDelta: {x: 124.200005, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6378448666619797
 CanvasRenderer:
@@ -2090,6 +2097,7 @@ MonoBehaviour:
   expectedAnswer: 1
   isAnswer: 1
   showHint: 1
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}
@@ -2199,14 +2207,14 @@ MonoBehaviour:
   nativeHeight: 248
   children:
   - target: {fileID: 8353379881777789553}
-    normX: 0.378
+    normX: 0.372
     normY: 0.76
-    normW: 0.08
+    normW: 0.084
     normH: 0.28
   - target: {fileID: 4900719607216752303}
-    normX: 0.4625
+    normX: 0.462
     normY: 0.76
-    normW: 0.08
+    normW: 0.088
     normH: 0.28
   - target: {fileID: 7865043942616318606}
     normX: 0.586
@@ -2396,8 +2404,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 714.75195, y: 257.91998}
-  m_SizeDelta: {x: 233.472, y: 277.76}
+  m_AnchoredPosition: {x: 376.91998, y: 136.01251}
+  m_SizeDelta: {x: 123.12, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2906416440470121487
 CanvasRenderer:
@@ -2454,6 +2462,7 @@ MonoBehaviour:
   expectedAnswer: 6
   isAnswer: 1
   showHint: 1
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}
@@ -2501,8 +2510,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 176.12805, y: 257.91998}
-  m_SizeDelta: {x: 221.184, y: 277.76}
+  m_AnchoredPosition: {x: 92.88003, y: 136.01251}
+  m_SizeDelta: {x: 116.64, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2337739603849490048
 CanvasRenderer:
@@ -2559,6 +2568,7 @@ MonoBehaviour:
   expectedAnswer: 3
   isAnswer: 1
   showHint: 0
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}
@@ -2743,8 +2753,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -262.14398, y: 257.91998}
-  m_SizeDelta: {x: 151.552, y: 277.76}
+  m_AnchoredPosition: {x: -138.23999, y: 136.01251}
+  m_SizeDelta: {x: 79.92, y: 146.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7633628304812533956
 CanvasRenderer:
@@ -2801,6 +2811,7 @@ MonoBehaviour:
   expectedAnswer: 5
   isAnswer: 1
   showHint: 1
+  colorizeTextInsteadOfBox: 0
   presetColors:
   - {r: 0.91, g: 0.3, b: 0.24, a: 1}
   - {r: 0.2, g: 0.6, b: 0.86, a: 1}

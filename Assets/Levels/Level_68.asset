@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_68
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 68
   levelName: LESSON 68
   levelSubtitle: Count and Spell
@@ -25,7 +26,7 @@ MonoBehaviour:
   - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Can you spell thew numbers you see?
+    - text: Can you spell these numbers you see?
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 7

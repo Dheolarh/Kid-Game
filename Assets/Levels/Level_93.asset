@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_93
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 93
   levelName: LESSON 93
   levelSubtitle: Counting Backwards
@@ -25,9 +26,7 @@ MonoBehaviour:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: We are doing something different now {playername}
-      mascotAnimationTrigger: isIsdle
-    - text: We will be counting backwards from 10 to 1
+    - text: Let's count backwars again!
       mascotAnimationTrigger: isIdle
     - text: Alright let's go! 10, 9, 8, ........ 1
       mascotAnimationTrigger: 
@@ -78,7 +77,7 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 1
+    recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: f18e9afe6e7af9945989dbb3f2573443, type: 3}
     recallPremadeSlotData: {fileID: 0}

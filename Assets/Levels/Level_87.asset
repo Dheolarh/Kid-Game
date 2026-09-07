@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_87
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 87
   levelName: LESSON 87
   levelSubtitle: Practice 1 to 80 once more {playername}
   levelEndTip: You're now a number pro
-  isUnlockedByDefault: 0
+  isUnlockedByDefault: 1
   isPremadeLevel: 1
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
@@ -83,7 +84,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-  - gameType: 0
+  - gameType: 4
     overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []

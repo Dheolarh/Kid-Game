@@ -132,9 +132,10 @@ namespace KidGame.Mechanics.Comparison
         {
             float dragDistance = Vector2.Distance(eventData.position, eventData.pressPosition);
 
-            if (!_isAccepted && dragDistance >= 20f)
+            // Require deliberate drag distance away from initial touch point
+            if (!_isAccepted && dragDistance >= 40f)
             {
-                var zone = FindDropZoneAtCardCenter();
+                var zone = FindDropZoneAtCardCenter(eventData);
                 if (zone != null)
                 {
                     zone.TryAccept(this);
@@ -195,7 +196,7 @@ namespace KidGame.Mechanics.Comparison
             }
         }
 
-        private ComparisonDropZone FindDropZoneAtCardCenter()
+        private ComparisonDropZone FindDropZoneAtCardCenter(PointerEventData eventData = null)
         {
             if (_cachedCanvas == null)
             {
@@ -206,7 +207,35 @@ namespace KidGame.Mechanics.Comparison
                 ? _cachedCanvas.worldCamera : null;
             Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(cam, transform.position);
 
-            // 1. Raycast at card's exact center
+            // If user's finger release position is still inside the tray grid container, it's not a drop on the board
+            if (eventData != null && _homeParent != null)
+            {
+                var homeRt = _homeParent as RectTransform;
+                if (homeRt != null && RectTransformUtility.RectangleContainsScreenPoint(homeRt, eventData.position, cam))
+                {
+                    return null;
+                }
+                var parentRt = _homeParent.parent as RectTransform;
+                if (parentRt != null && (parentRt.name.ToLower().Contains("tray") || parentRt.name.ToLower().Contains("answer") || parentRt.name.ToLower().Contains("scroll")))
+                {
+                    if (RectTransformUtility.RectangleContainsScreenPoint(parentRt, eventData.position, cam))
+                    {
+                        return null;
+                    }
+                }
+            }
+
+            // If card center is released inside the home tray/grid area, treat it as returning home (not a drop attempt)
+            if (_homeParent != null)
+            {
+                var homeRt = _homeParent as RectTransform;
+                if (homeRt != null && RectTransformUtility.RectangleContainsScreenPoint(homeRt, screenPos, cam))
+                {
+                    return null;
+                }
+            }
+
+            // 1. Raycast at card's exact visual center
             var fakeEvent = new PointerEventData(EventSystem.current) { position = screenPos };
             var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(fakeEvent, results);
@@ -218,9 +247,7 @@ namespace KidGame.Mechanics.Comparison
                 if (zone != null && !zone.IsAnswered && zone.gameObject.activeInHierarchy) return zone;
             }
 
-            // 2. Bounds / Overlap fallback
-            ComparisonDropZone closestZone = null;
-            float closestDist = float.MaxValue;
+            // 2. Exact bounds check: Card center must be strictly within the drop zone's RectTransform bounds
             var allZones = FindObjectsOfType<ComparisonDropZone>();
             foreach (var zone in allZones)
             {
@@ -232,16 +259,9 @@ namespace KidGame.Mechanics.Comparison
                 {
                     return zone;
                 }
-
-                float dist = Vector3.Distance(transform.position, zone.transform.position);
-                if (dist < 160f && dist < closestDist)
-                {
-                    closestDist = dist;
-                    closestZone = zone;
-                }
             }
 
-            return closestZone;
+            return null;
         }
     }
 }

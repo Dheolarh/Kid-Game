@@ -24,8 +24,14 @@ namespace KidGame.Notifications
     {
         public static LocalNotificationManager Instance { get; private set; }
 
-        public const string ChannelId = "numeracy_daily_notifications_channel";
+        // Channel ID bumped to v2 because Android permanently caches a channel's sound after first creation.
+        // Changing the sound on an existing channel ID is silently ignored — a new ID forces recreation.
+        public const string ChannelId = "numeracy_daily_notifications_channel_v2";
         public const string ChannelName = "Numeracy Daily Reminders";
+
+        // Raw resource URI for the custom notification sound (Assets/Plugins/Android/res/raw/notification.mp3).
+        // Format: android.resource://[applicationId]/raw/[filename_without_extension]
+        private const string NotificationSoundUri = "android.resource://com.osirisxstudios.numeracy/raw/notification";
 
         private void Awake()
         {
@@ -74,12 +80,80 @@ namespace KidGame.Notifications
                     Description = "Reminds you to play daily, learn maths, and keep your streak alive.",
                 };
                 AndroidNotificationCenter.RegisterNotificationChannel(channel);
+
+#if !UNITY_EDITOR
+                // The Unity package doesn't expose a sound property on AndroidNotificationChannel,
+                // so we apply the custom sound directly via the Android Java API after registration.
+                // Only takes effect on first channel creation — Android permanently locks the sound
+                // after the channel is registered (which is why we bumped to channel ID v2).
+                try
+                {
+                    using var notificationManager = new AndroidJavaObject("android.app.NotificationManager");
+                    using var context = new AndroidJavaClass("com.unity3d.player.UnityPlayer")
+                        .GetStatic<AndroidJavaObject>("currentActivity");
+                    using var nm = context.Call<AndroidJavaObject>("getSystemService", "notification");
+                    using var javaChannel = nm.Call<AndroidJavaObject>("getNotificationChannel", ChannelId);
+                    if (javaChannel != null)
+                    {
+                        using var uri = new AndroidJavaClass("android.net.Uri")
+                            .CallStatic<AndroidJavaObject>("parse", NotificationSoundUri);
+                        using var audioAttribs = new AndroidJavaObject(
+                            "android.media.AudioAttributes$Builder")
+                            .Call<AndroidJavaObject>("setUsage", 5)       // USAGE_NOTIFICATION
+                            .Call<AndroidJavaObject>("setContentType", 4) // CONTENT_TYPE_SONIFICATION
+                            .Call<AndroidJavaObject>("build");
+                        javaChannel.Call("setSound", uri, audioAttribs);
+                        nm.Call("createNotificationChannel", javaChannel);
+                        Debug.Log("[LocalNotificationManager] Custom notification sound applied via Java API.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"[LocalNotificationManager] Could not set custom channel sound: {ex.Message}");
+                }
+#endif
                 Debug.Log("[LocalNotificationManager] Unity Android Notification Channel registered.");
             }
             catch (Exception ex)
             {
                 Debug.LogWarning($"[LocalNotificationManager] Unity Android Notification Channel exception: {ex.Message}");
             }
+
+#if !UNITY_EDITOR
+            // On Android 12+ (API 31+), SCHEDULE_EXACT_ALARM must be granted by the user.
+            // Without it, FireTime is treated as inexact and may fire hours late on Go devices.
+            try
+            {
+                using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
+                {
+                    int sdkInt = version.GetStatic<int>("SDK_INT");
+                    if (sdkInt >= 31)
+                    {
+                        using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+                        using (var activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
+                        using (var alarmManager = activity.Call<AndroidJavaObject>("getSystemService", "alarm"))
+                        {
+                            bool canScheduleExact = alarmManager.Call<bool>("canScheduleExactAlarms");
+                            if (!canScheduleExact)
+                            {
+                                Debug.LogWarning("[LocalNotificationManager] SCHEDULE_EXACT_ALARM not granted. " +
+                                    "Redirecting to alarm permission settings so notifications fire on time.");
+                                using (var intent = new AndroidJavaObject(
+                                    "android.content.Intent",
+                                    "android.settings.REQUEST_SCHEDULE_EXACT_ALARM"))
+                                {
+                                    activity.Call("startActivity", intent);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[LocalNotificationManager] Exact alarm permission check error: {ex.Message}");
+            }
+#endif
 #endif
         }
 
@@ -127,7 +201,9 @@ namespace KidGame.Notifications
                 DateTime eveningTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 16, 30, 0);
                 DateTime streakSaverTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 18, 0, 0);
 
-                bool useLearnerMessages = (dayOffset == 0 && isStreakKeptToday);
+                // Today: use streak-reminder messages only if streak is broken.
+                // Future days: always use learner messages (we can't know future streak state).
+                bool useLearnerMessages = (dayOffset > 0) || isStreakKeptToday;
                 int idBase = 1000 + (dayOffset * 10);
 
                 // 1. Morning (8:00 AM)
@@ -187,9 +263,16 @@ namespace KidGame.Notifications
 #elif UNITY_IOS
             try
             {
+                // Snap fireTime to at least 1 second in the future to guard against a race where
+                // DateTime.Now advances between the caller's (fireTime > now) check and here,
+                // producing a zero or negative TimeSpan that iOS rejects with an exception.
+                TimeSpan interval = fireTime - DateTime.Now;
+                if (interval.TotalSeconds < 1.0)
+                    interval = TimeSpan.FromSeconds(1);
+
                 var timeTrigger = new iOSNotificationTimeIntervalTrigger()
                 {
-                    TimeInterval = fireTime - DateTime.Now,
+                    TimeInterval = interval,
                     Repeats = false
                 };
 
@@ -199,12 +282,22 @@ namespace KidGame.Notifications
                     Title = title,
                     Body = bodyText,
                     ShowInForeground = true,
-                    ForegroundPresentationOption = (PresentationOption.Alert | PresentationOption.Sound),
+                    // PresentationOption.Alert is deprecated since iOS 14.
+                    // Use Banner (heads-up display) + List (notification centre) + Sound + Badge.
+                    ForegroundPresentationOption = (PresentationOption.Banner
+                        | PresentationOption.List
+                        | PresentationOption.Sound
+                        | PresentationOption.Badge),
                     CategoryIdentifier = "category_a",
                     ThreadIdentifier = "thread1",
+                    // Custom sound: file must exist in the app bundle root.
+                    // Assets/Plugins/iOS/notification.mp3 is copied there by Unity at Xcode export time.
+                    // iOS requires sounds to be <= 30 seconds; longer files fall back to the default sound.
+                    Sound = "notification.mp3",
                     Trigger = timeTrigger,
                 };
                 iOSNotificationCenter.ScheduleNotification(notification);
+                Debug.Log($"[LocalNotificationManager] Scheduled iOS Notification #{id} for {fireTime}: '{title}'");
             }
             catch (Exception ex)
             {

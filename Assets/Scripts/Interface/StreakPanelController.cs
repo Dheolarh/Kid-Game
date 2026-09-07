@@ -143,6 +143,8 @@ namespace KidGame.Interface
                 streakDays = 1;
                 PlayerPrefs.SetString("Streak_LastLoginDate", todayStr);
                 PlayerPrefs.SetInt("Streak_DaysCount", streakDays);
+                PlayerPrefs.SetInt("PlayerStreak", streakDays);
+                PlayerPrefs.SetInt("StreakDays", streakDays);
                 PlayerPrefs.Save();
             }
             else if (lastLoginStr != todayStr)
@@ -168,6 +170,8 @@ namespace KidGame.Interface
 
                 PlayerPrefs.SetString("Streak_LastLoginDate", todayStr);
                 PlayerPrefs.SetInt("Streak_DaysCount", streakDays);
+                PlayerPrefs.SetInt("PlayerStreak", streakDays);
+                PlayerPrefs.SetInt("StreakDays", streakDays);
                 PlayerPrefs.Save();
             }
 
@@ -239,7 +243,7 @@ namespace KidGame.Interface
 
                 if (AudioManager.Instance != null)
                 {
-                    AudioManager.Instance.PlayDialoguePopSfx();
+                    AudioManager.Instance.PlayVictory1Sfx();
                 }
             }
 

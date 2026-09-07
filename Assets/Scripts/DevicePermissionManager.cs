@@ -1,6 +1,10 @@
 using UnityEngine;
+using System.Collections;
 #if UNITY_ANDROID && !UNITY_EDITOR
 using UnityEngine.Android;
+#endif
+#if UNITY_IOS && !UNITY_EDITOR
+using Unity.Notifications.iOS;
 #endif
 
 namespace KidGame.Permissions
@@ -55,7 +59,12 @@ namespace KidGame.Permissions
 #elif UNITY_IOS && !UNITY_EDITOR
             try
             {
-                return UnityEngine.iOS.NotificationServices.enabledNotificationTypes != UnityEngine.iOS.NotificationType.None;
+                // Use iOSNotificationCenter (Unity.Notifications.iOS) — the same API used for scheduling.
+                // The old UnityEngine.iOS.NotificationServices API is deprecated and does NOT share
+                // permission state with iOSNotificationCenter. Querying it always returns None.
+                var settings = iOSNotificationCenter.GetNotificationSettings();
+                return settings.AuthorizationStatus == AuthorizationStatus.Authorized
+                    || settings.AuthorizationStatus == AuthorizationStatus.Provisional;
             }
             catch
             {
@@ -93,19 +102,10 @@ namespace KidGame.Permissions
                 Debug.LogWarning($"[DevicePermissionManager] Android notification permission error: {ex.Message}");
             }
 #elif UNITY_IOS && !UNITY_EDITOR
-            try
-            {
-                Debug.Log("[DevicePermissionManager] Registering for iOS Notifications (Alert, Badge, Sound)...");
-                UnityEngine.iOS.NotificationServices.RegisterForNotifications(
-                    UnityEngine.iOS.NotificationType.Alert |
-                    UnityEngine.iOS.NotificationType.Badge |
-                    UnityEngine.iOS.NotificationType.Sound
-                );
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogWarning($"[DevicePermissionManager] iOS notification permission error: {ex.Message}");
-            }
+            // iOS permission is handled automatically on launch by Unity.Notifications.iOS
+            // (UnityNotificationRequestAuthorizationOnAppLaunch = true in NotificationsSettings.asset).
+            // This is a no-op on iOS — permission requesting is async and managed by the package.
+            Debug.Log("[DevicePermissionManager] iOS notification permission is managed by iOSNotificationCenter on launch.");
 #else
             Debug.Log("[DevicePermissionManager] RequestNotificationPermission called (Editor / Non-Mobile Platform).");
 #endif
@@ -185,17 +185,57 @@ namespace KidGame.Permissions
                 }
                 else
                 {
-                    // Request permission first
-                    RequestNotificationPermission();
-
-                    // If still missing permission (or denied previously), navigate to device settings
-                    if (!HasNotificationPermission())
+#if UNITY_ANDROID && !UNITY_EDITOR
+                    try
                     {
-                        Debug.Log("[DevicePermissionManager] OS Permission missing. Directing user to App Settings...");
-                        OpenAppSettings();
+                        using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
+                        {
+                            int sdkInt = version.GetStatic<int>("SDK_INT");
+                            if (sdkInt >= 33)
+                            {
+                                // POST_NOTIFICATIONS is async — use callbacks so we only save '1' after the user
+                                // actually grants permission. Opening App Settings immediately after requesting
+                                // would race with (and cover) the permission dialog.
+                                var callbacks = new PermissionCallbacks();
+                                callbacks.PermissionGranted += permName =>
+                                {
+                                    Debug.Log("[DevicePermissionManager] POST_NOTIFICATIONS granted by user.");
+                                    PlayerPrefs.SetInt(PrefKey_NotificationEnabled, 1);
+                                    PlayerPrefs.Save();
+                                    Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+                                };
+                                callbacks.PermissionDenied += permName =>
+                                {
+                                    Debug.Log("[DevicePermissionManager] POST_NOTIFICATIONS denied. Directing user to App Settings...");
+                                    PlayerPrefs.SetInt(PrefKey_NotificationEnabled, 0);
+                                    PlayerPrefs.Save();
+                                    OpenAppSettings();
+                                };
+                                callbacks.PermissionDeniedAndDontAskAgain += permName =>
+                                {
+                                    Debug.Log("[DevicePermissionManager] POST_NOTIFICATIONS permanently denied. Opening App Settings...");
+                                    PlayerPrefs.SetInt(PrefKey_NotificationEnabled, 0);
+                                    PlayerPrefs.Save();
+                                    OpenAppSettings();
+                                };
+                                Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS", callbacks);
+                                // Return false now; the callbacks above will handle saving '1' if granted.
+                                return false;
+                            }
+                        }
                     }
-
-                    // Keep setting 0 until OS permission is granted
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogWarning($"[DevicePermissionManager] SetNotificationEnabledSetting error: {ex.Message}");
+                    }
+#endif
+#if UNITY_IOS && !UNITY_EDITOR
+                    // On iOS, the permission dialog is shown automatically on first launch by the package.
+                    // If the user reaches here with no permission, they denied it — send them to Settings.
+                    Debug.Log("[DevicePermissionManager] iOS notification permission denied. Directing user to App Settings.");
+                    OpenAppSettings();
+#endif
+                    // Keep setting 0 until OS permission is confirmed granted
                     PlayerPrefs.SetInt(PrefKey_NotificationEnabled, 0);
                     PlayerPrefs.Save();
                     return false;

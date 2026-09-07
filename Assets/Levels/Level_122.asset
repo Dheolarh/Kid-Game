@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_122
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 122
   levelName: LESSON 122
   levelSubtitle: Count to 100
@@ -25,12 +26,10 @@ MonoBehaviour:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: These will be a long count {playername}
+    - text: 'Another back of 1 to 100 '
       mascotAnimationTrigger: isIdle
-    - text: We are counting to 100!
+    - text: Here we go! one to twenty
       mascotAnimationTrigger: isHappy
-    - text: Alright let's start, here comes 1 - 20
-      mascotAnimationTrigger: 
     completionDialogueLines:
     - text: Next up 21 to 40
       mascotAnimationTrigger: isIdle

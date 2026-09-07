@@ -378,7 +378,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 150
+    m_Bottom: 200
   m_ChildAlignment: 0
   m_Spacing: 100
   m_ChildForceExpandWidth: 1
@@ -1873,7 +1873,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_fontSize
-      value: 60
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_margin.x
@@ -2093,7 +2093,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_fontSize
-      value: 60
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_margin.x
@@ -2313,7 +2313,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_fontSize
-      value: 60
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_margin.x
@@ -3209,7 +3209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_fontSize
-      value: 60
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_margin.x
@@ -4945,7 +4945,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_fontSize
-      value: 60
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 5289336524185117536, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_Pivot.x
@@ -5121,7 +5121,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_fontSize
-      value: 60
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 4264569226768192772, guid: 85821e87ee08059478f73f7564c0fa30, type: 3}
       propertyPath: m_margin.x

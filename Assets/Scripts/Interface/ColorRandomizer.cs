@@ -41,6 +41,10 @@ namespace KidGame.Interface
         [Tooltip("If true, disables any ThemeColorBinder attached to this GameObject so it does not overwrite the random color.")]
         [SerializeField] private bool overrideThemeBinder = true;
 
+        public Color CurrentColor => _currentColor;
+        private Color _currentColor = Color.white;
+        private Coroutine _flashCoroutine;
+
         private void Awake()
         {
             CheckAndOverrideThemeBinder();
@@ -92,6 +96,8 @@ namespace KidGame.Interface
         /// </summary>
         public void ApplyColor(Color targetColor)
         {
+            _currentColor = targetColor;
+
             // 1. Tint outlines inside registered GameObjects / children
             if (outlineHolders != null)
             {
@@ -133,6 +139,86 @@ namespace KidGame.Interface
                         img.color = targetColor;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Flashes the outlines red and vibrates/shakes the slot to give immediate visual feedback on a wrong drop.
+        /// </summary>
+        public void FlashWrongMismatch(float duration = 0.4f, float magnitude = 10f)
+        {
+            if (_flashCoroutine != null)
+            {
+                StopCoroutine(_flashCoroutine);
+            }
+            _flashCoroutine = StartCoroutine(FlashWrongCoroutine(duration, magnitude));
+        }
+
+        private System.Collections.IEnumerator FlashWrongCoroutine(float duration, float magnitude)
+        {
+            Color originalColor = _currentColor;
+            Color redFlashColor = new Color(0.95f, 0.2f, 0.2f, 1f);
+
+            ApplyOutlineColorOnly(redFlashColor);
+
+            RectTransform rt = GetComponent<RectTransform>();
+            Vector2 originalPos = rt != null ? rt.anchoredPosition : Vector2.zero;
+            Vector3 originalLocalPos = transform.localPosition;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                float decay = 1f - (elapsed / duration);
+                float xOffset = Random.Range(-1f, 1f) * magnitude * decay;
+                if (rt != null)
+                {
+                    rt.anchoredPosition = new Vector2(originalPos.x + xOffset, originalPos.y);
+                }
+                else
+                {
+                    transform.localPosition = new Vector3(originalLocalPos.x + xOffset, originalLocalPos.y, originalLocalPos.z);
+                }
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            if (rt != null) rt.anchoredPosition = originalPos;
+            else transform.localPosition = originalLocalPos;
+
+            ApplyOutlineColorOnly(originalColor);
+            _flashCoroutine = null;
+        }
+
+        private void ApplyOutlineColorOnly(Color targetColor)
+        {
+            if (outlineHolders != null)
+            {
+                foreach (var holder in outlineHolders)
+                {
+                    if (holder != null)
+                    {
+                        var foundOutlines = holder.GetComponentsInChildren<Outline>(true);
+                        foreach (var outline in foundOutlines)
+                        {
+                            if (outline != null) outline.effectColor = targetColor;
+                        }
+                    }
+                }
+            }
+
+            if (specificOutlines != null)
+            {
+                foreach (var outline in specificOutlines)
+                {
+                    if (outline != null) outline.effectColor = targetColor;
+                }
+            }
+
+            var selfOutlines = GetComponentsInChildren<Outline>(true);
+            foreach (var outline in selfOutlines)
+            {
+                if (outline != null) outline.effectColor = targetColor;
             }
         }
     }

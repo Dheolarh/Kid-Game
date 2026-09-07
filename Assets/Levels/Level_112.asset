@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_112
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 112
   levelName: LESSON 112
   levelSubtitle: Counting Vehicles
   levelEndTip: A busy airport
-  isUnlockedByDefault: 0
+  isUnlockedByDefault: 1
   isPremadeLevel: 0
   themePresetName: Blue
   levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
