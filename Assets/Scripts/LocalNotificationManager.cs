@@ -31,7 +31,7 @@ namespace KidGame.Notifications
 
         // Raw resource URI for the custom notification sound (Assets/Plugins/Android/res/raw/notification.mp3).
         // Format: android.resource://[applicationId]/raw/[filename_without_extension]
-        private const string NotificationSoundUri = "android.resource://com.osirisxstudios.numeracy/raw/notification";
+        private static string NotificationSoundUri => $"android.resource://{Application.identifier}/raw/notification";
 
         private void Awake()
         {
@@ -240,6 +240,11 @@ namespace KidGame.Notifications
                     ScheduleNotificationAt(msg.Title, msg.Body, streakSaverTime, idBase + 4);
                 }
             }
+        }
+
+        public static void ScheduleTestNotification(string title, string bodyText, int delaySeconds = 5)
+        {
+            ScheduleNotificationAt(title, bodyText, DateTime.Now.AddSeconds(delaySeconds), 9999);
         }
 
         private static void ScheduleNotificationAt(string title, string bodyText, DateTime fireTime, int id)

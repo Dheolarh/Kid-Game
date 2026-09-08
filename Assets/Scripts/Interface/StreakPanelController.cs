@@ -452,6 +452,14 @@ namespace KidGame.Interface
         {
             // Note: ButtonClickSfx component on panelANextButton already handles click SFX on pointer down
 
+            string playerName = PlayerPrefs.GetString("SingleWordName", "Player");
+            Debug.Log("[StreakPanelController] Triggering test notification.");
+            KidGame.Notifications.LocalNotificationManager.ScheduleTestNotification(
+                $"Hello {playerName}",
+                "It's learning time!",
+                5 // 5 second delay so you can background the app
+            );
+
             // Animate Panel A closing and hide root
             if (panelA != null)
             {

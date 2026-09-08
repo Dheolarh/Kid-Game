@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_1
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 1
   levelName: LESSON 1
-  levelSubtitle: Meet 0, the empty number
+  levelSubtitle: The empty number 0
   levelEndTip: 0 means nothing at all!
   isUnlockedByDefault: 0
   isPremadeLevel: 0

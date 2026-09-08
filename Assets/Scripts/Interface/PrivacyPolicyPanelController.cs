@@ -250,19 +250,33 @@ namespace KidGame.Interface
 
             if (AudioManager.Instance != null) AudioManager.Instance.PlayButtonClickSfx();
 
-            // Request Notification Permissions (Android & iOS) via DevicePermissionManager
-            DevicePermissionManager.RequestNotificationPermission();
-
-            // Immediately schedule notifications queue
-            KidGame.Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
-
-            // Close panel with animation and start profile setup intro
+            // Close panel and start intro first, then request permission after UI settles.
+            // Android's POST_NOTIFICATIONS dialog requires the activity to be in a focused,
+            // non-transitioning state — requesting it in the same frame as a panel close
+            // animation suppresses the system dialog before it can appear.
             ClosePanel();
 
             if (profileScreenController != null)
             {
                 profileScreenController.PlaySetupIntro();
             }
+
+            // Delay permission request + notification scheduling until after panel animation completes.
+            StartCoroutine(RequestPermissionAfterDelay());
+        }
+
+        private System.Collections.IEnumerator RequestPermissionAfterDelay()
+        {
+            // Wait for panel close animation to finish and activity to regain clean focus.
+            yield return new WaitForSeconds(0.8f);
+
+            DevicePermissionManager.RequestNotificationPermission();
+
+            // Schedule notifications after permission dialog has been shown.
+            // Scheduling before permission is granted is safe — Android queues them —
+            // but doing it after avoids scheduling notifications on a denied channel.
+            yield return new WaitForSeconds(0.5f);
+            KidGame.Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
         }
 
         private void OnRejectClicked()
