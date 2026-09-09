@@ -351,16 +351,17 @@ namespace KidGame.Interface
 
         private int GetTotalStarsCount()
         {
-            if (PlayerPrefs.HasKey("TotalStars"))
+            int total = 0;
+            for (int i = 1; i <= 500; i++)
+            {
+                total += PlayerPrefs.GetInt($"Level_Stars_{i}", 0);
+            }
+
+            if (total == 0 && PlayerPrefs.HasKey("TotalStars"))
             {
                 return PlayerPrefs.GetInt("TotalStars");
             }
 
-            int total = 0;
-            for (int i = 1; i <= 100; i++)
-            {
-                total += PlayerPrefs.GetInt($"Level_Stars_{i}", 0);
-            }
             return total;
         }
 

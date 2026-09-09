@@ -102,6 +102,15 @@ public class DeviceManager : MonoBehaviour
 
     private DeviceTier DetectTier()
     {
+        // iOS devices (iPhones & iPads) have high per-core performance, powerful Apple GPUs, and Metal API optimization,
+        // so low-end tier downgrades are unnecessary and only apply to Android hardware.
+#if UNITY_IOS
+        Debug.Log("[DeviceTierManager] Running on iOS device. Defaulting to Normal tier (full 60fps & full render scale).");
+        return DeviceTier.Normal;
+#elif !UNITY_ANDROID && !UNITY_EDITOR
+        return DeviceTier.Normal;
+#endif
+
         int ram = SystemInfo.systemMemorySize;
         int cores = SystemInfo.processorCount;
         int vram = SystemInfo.graphicsMemorySize;

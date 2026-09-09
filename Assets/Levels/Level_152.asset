@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_152
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 151
-  levelName: LESSON 151
+  targetAgeGroup: 0
+  levelNumber: 152
+  levelName: LESSON 152
   levelSubtitle: What comes before, What comes after
   levelEndTip: A decade is 100
   isUnlockedByDefault: 0

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_162
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 162
   levelName: LESSON 162
   levelSubtitle: More trucks to count
   levelEndTip: How many trucks have you counted in total {playername}
-  isUnlockedByDefault: 0
+  isUnlockedByDefault: 1
   isPremadeLevel: 1
   themePresetName: Blue
   levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
@@ -72,7 +73,7 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
+    recallColorizeTextInsteadOfBox: 1
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 1145725517465111567, guid: 6e652c0b1572423419a79cfd6a79f4c5, type: 3}
     recallPremadeSlotData: {fileID: 0}
@@ -131,7 +132,7 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
+    recallColorizeTextInsteadOfBox: 1
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 1145725517465111567, guid: 0df3c54a606ba1b46a254262d1cd1571, type: 3}
     recallPremadeSlotData: {fileID: 0}

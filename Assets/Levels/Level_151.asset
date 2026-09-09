@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_151
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 150
-  levelName: LESSON 150
+  targetAgeGroup: 0
+  levelNumber: 151
+  levelName: LESSON 151
   levelSubtitle: 151 to 160
   levelEndTip: 10 past a century and half!
   isUnlockedByDefault: 0

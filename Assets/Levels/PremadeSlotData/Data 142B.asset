@@ -10,73 +10,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc57d2cf74e79e3408ae6d1b31612711, type: 3}
-  m_Name: Data 150C
+  m_Name: Data 142B
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.PremadeSlotData
-  layoutName: Data 150C
+  layoutName: Data 142B
   templatePrefab: {fileID: 0}
   colorizeTextInsteadOfBox: 0
   rows:
   - rowName: Row 1
     boxes:
-    - value: 141
+    - value: 131
       isAnswerBox: 1
       showHint: 1
-    - value: 142
+    - value: 132
       isAnswerBox: 1
       showHint: 0
-    - value: 143
-      isAnswerBox: 1
-      showHint: 1
-    - value: 144
+    - value: 133
       isAnswerBox: 1
       showHint: 0
-    - value: 145
-      isAnswerBox: 1
-      showHint: 1
-    - value: 146
+    - value: 134
       isAnswerBox: 1
       showHint: 0
-    - value: 147
-      isAnswerBox: 1
-      showHint: 1
-    - value: 148
-      isAnswerBox: 1
-      showHint: 0
-    - value: 149
-      isAnswerBox: 1
-      showHint: 1
-    - value: 150
+    - value: 135
       isAnswerBox: 1
       showHint: 0
   - rowName: Row 2
     boxes:
-    - value: 151
-      isAnswerBox: 1
-      showHint: 1
-    - value: 152
+    - value: 136
       isAnswerBox: 1
       showHint: 0
-    - value: 153
-      isAnswerBox: 1
-      showHint: 1
-    - value: 154
+    - value: 137
       isAnswerBox: 1
       showHint: 0
-    - value: 155
-      isAnswerBox: 1
-      showHint: 1
-    - value: 156
+    - value: 138
       isAnswerBox: 1
       showHint: 0
-    - value: 157
-      isAnswerBox: 1
-      showHint: 1
-    - value: 158
+    - value: 139
       isAnswerBox: 1
       showHint: 0
-    - value: 159
-      isAnswerBox: 1
-      showHint: 1
-    - value: 160
+    - value: 140
       isAnswerBox: 1
       showHint: 0

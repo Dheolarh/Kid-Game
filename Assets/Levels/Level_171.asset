@@ -12,27 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_171
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 171
   levelName: LESSON 171
-  levelSubtitle: Good Spellings
-  levelEndTip: Know how to spell numbers too
-  isUnlockedByDefault: 0
+  levelSubtitle: '{playername} spells again'
+  levelEndTip: You are good at spellings
+  isUnlockedByDefault: 1
   isPremadeLevel: 1
-  themePresetName: Orange
-  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 0
     overrideLevelPremade: 0
-    dialogueLines: []
+    dialogueLines:
+    - text: Can you spell the numbers you see?
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 5
+    countingSlotCount: 7
     countingMinCount: 1
-    countingMaxCount: 20
+    countingMaxCount: 7
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 7e99ef3a2fa269041ac0064bb977e0d8, type: 3}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1

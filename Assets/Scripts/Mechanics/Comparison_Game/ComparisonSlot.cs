@@ -53,11 +53,25 @@ namespace KidGame.Mechanics.Comparison
                 }
             }
 
-            // 3. Configure layout of containers
+            // 3. Calculate expected sums and sizing
+            int leftSum = 0;
+            foreach (int n in leftNumbers) leftSum += n;
+
+            int rightSum = 0;
+            foreach (int n in rightNumbers) rightSum += n;
+
+            int maxCount = Mathf.Max(leftSum, rightSum);
+            float itemSize = GetItemSizeForCount(maxCount);
+
             if (manager.NumbersOnlyMode)
             {
                 ConfigureContainerLayout(leftContainer);
                 ConfigureContainerLayout(rightContainer);
+            }
+            else
+            {
+                ConfigureObjectContainer(leftContainer, maxCount, itemSize);
+                ConfigureObjectContainer(rightContainer, maxCount, itemSize);
             }
 
             // Configure Slot root layout (always horizontal layout to hold left_container, drop_zone, right_container)
@@ -70,13 +84,13 @@ namespace KidGame.Mechanics.Comparison
             if (rootHlg == null) rootHlg = gameObject.AddComponent<HorizontalLayoutGroup>();
             if (rootHlg != null)
             {
-                rootHlg.spacing = 40f; // matches screenshot spacing
+                rootHlg.spacing = 40f;
                 rootHlg.childAlignment = TextAnchor.MiddleCenter;
                 rootHlg.childControlWidth = false;
                 rootHlg.childControlHeight = true;
                 rootHlg.childForceExpandWidth = false;
                 rootHlg.childForceExpandHeight = false;
-                rootHlg.padding = new RectOffset(20, 20, 10, 40);
+                rootHlg.padding = new RectOffset(20, 20, 10, 20);
             }
 
             // Set Slot preferred height
@@ -84,16 +98,20 @@ namespace KidGame.Mechanics.Comparison
             if (le == null) le = gameObject.AddComponent<LayoutElement>();
             if (le != null)
             {
-                le.preferredHeight = 120f;
+                if (manager.NumbersOnlyMode)
+                {
+                    le.preferredHeight = 150f;
+                }
+                else
+                {
+                    int columns = (itemSize <= 120f) ? 3 : 2;
+                    int maxRows = Mathf.Max(1, Mathf.CeilToInt((float)maxCount / columns));
+                    float gridHeight = maxRows * itemSize + (maxRows - 1) * 10f + 20f;
+                    le.preferredHeight = Mathf.Max(180f, gridHeight + 20f);
+                }
             }
 
             // 4. Calculate expected sign
-            int leftSum = 0;
-            foreach (int n in leftNumbers) leftSum += n;
-
-            int rightSum = 0;
-            foreach (int n in rightNumbers) rightSum += n;
-
             ComparisonSign expectedSign;
             if (leftSum < rightSum)
                 expectedSign = ComparisonSign.LessThan;
@@ -128,6 +146,17 @@ namespace KidGame.Mechanics.Comparison
                     {
                         var prefabToUse = leftObjectPrefab != null ? leftObjectPrefab : manager.LeftObjectPrefab;
                         var obj = Instantiate(prefabToUse, leftContainer);
+
+                        var rt = obj.GetComponent<RectTransform>();
+                        if (rt != null) rt.sizeDelta = new Vector2(itemSize, itemSize);
+
+                        var objLe = obj.GetComponent<LayoutElement>();
+                        if (objLe == null) objLe = obj.AddComponent<LayoutElement>();
+                        objLe.preferredWidth = itemSize;
+                        objLe.preferredHeight = itemSize;
+                        objLe.minWidth = itemSize;
+                        objLe.minHeight = itemSize;
+
                         var countingObj = obj.GetComponent<CountingObject>();
                         if (countingObj == null)
                         {
@@ -151,10 +180,11 @@ namespace KidGame.Mechanics.Comparison
             }
             dropZoneGo.transform.SetSiblingIndex(dropZoneIndex);
 
+            float dzSize = manager.NumbersOnlyMode ? 120f : Mathf.Min(140f, Mathf.Max(120f, itemSize));
             var dzRt = dropZoneGo.GetComponent<RectTransform>();
             if (dzRt != null)
             {
-                dzRt.sizeDelta = new Vector2(100f, 100f);
+                dzRt.sizeDelta = new Vector2(dzSize, dzSize);
             }
 
             var dzLe = dropZoneGo.GetComponent<LayoutElement>();
@@ -163,8 +193,8 @@ namespace KidGame.Mechanics.Comparison
             {
                 dzLe.flexibleWidth = 0f;
                 dzLe.flexibleHeight = 0f;
-                dzLe.preferredWidth = 100f;
-                dzLe.preferredHeight = 100f;
+                dzLe.preferredWidth = dzSize;
+                dzLe.preferredHeight = dzSize;
             }
 
             var dropZone = dropZoneGo.GetComponent<ComparisonDropZone>();
@@ -195,6 +225,17 @@ namespace KidGame.Mechanics.Comparison
                     {
                         var prefabToUse = rightObjectPrefab != null ? rightObjectPrefab : manager.RightObjectPrefab;
                         var obj = Instantiate(prefabToUse, rightContainer);
+
+                        var rt = obj.GetComponent<RectTransform>();
+                        if (rt != null) rt.sizeDelta = new Vector2(itemSize, itemSize);
+
+                        var objLe = obj.GetComponent<LayoutElement>();
+                        if (objLe == null) objLe = obj.AddComponent<LayoutElement>();
+                        objLe.preferredWidth = itemSize;
+                        objLe.preferredHeight = itemSize;
+                        objLe.minWidth = itemSize;
+                        objLe.minHeight = itemSize;
+
                         var countingObj = obj.GetComponent<CountingObject>();
                         if (countingObj == null)
                         {
@@ -209,6 +250,33 @@ namespace KidGame.Mechanics.Comparison
             UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
             if (leftContainer != transform) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(leftContainer as RectTransform);
             if (rightContainer != transform) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rightContainer as RectTransform);
+        }
+
+        private float GetItemSizeForCount(int count)
+        {
+            if (count <= 3) return 150f;
+            if (count <= 6) return 135f;
+            return 120f;
+        }
+
+        private void ConfigureObjectContainer(Transform container, int maxCount, float itemSize)
+        {
+            if (container == transform) return;
+
+            var hlg = container.GetComponent<HorizontalLayoutGroup>();
+            if (hlg != null) DestroyImmediate(hlg);
+            var vlg = container.GetComponent<VerticalLayoutGroup>();
+            if (vlg != null) DestroyImmediate(vlg);
+
+            var glg = container.GetComponent<GridLayoutGroup>();
+            if (glg == null) glg = container.gameObject.AddComponent<GridLayoutGroup>();
+            if (glg != null)
+            {
+                glg.cellSize = new Vector2(itemSize, itemSize);
+                glg.spacing = new Vector2(10f, 10f);
+                glg.childAlignment = TextAnchor.MiddleCenter;
+                glg.padding = new RectOffset(10, 10, 10, 10);
+            }
         }
 
         private void ConfigureContainerLayout(Transform container)
@@ -233,8 +301,6 @@ namespace KidGame.Mechanics.Comparison
             }
         }
 
-
-
         private void ConfigureNumberBox(GameObject go, int val, Color color)
         {
             var card = go.GetComponent<AnswerCard>();
@@ -252,7 +318,17 @@ namespace KidGame.Mechanics.Comparison
             var rt = go.GetComponent<RectTransform>();
             if (rt != null)
             {
-                rt.sizeDelta = new Vector2(100f, 100f);
+                rt.sizeDelta = new Vector2(120f, 120f);
+            }
+
+            var le = go.GetComponent<LayoutElement>();
+            if (le == null) le = go.AddComponent<LayoutElement>();
+            if (le != null)
+            {
+                le.preferredWidth = 120f;
+                le.preferredHeight = 120f;
+                le.minWidth = 120f;
+                le.minHeight = 120f;
             }
         }
 
@@ -264,7 +340,15 @@ namespace KidGame.Mechanics.Comparison
             var rt = go.GetComponent<RectTransform>();
             if (rt != null)
             {
-                rt.sizeDelta = new Vector2(50f, 100f);
+                rt.sizeDelta = new Vector2(50f, 120f);
+            }
+
+            var le = go.GetComponent<LayoutElement>();
+            if (le == null) le = go.AddComponent<LayoutElement>();
+            if (le != null)
+            {
+                le.preferredWidth = 50f;
+                le.preferredHeight = 120f;
             }
         }
     }

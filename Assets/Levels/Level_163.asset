@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_163
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 163
   levelName: LESSON 163
   levelSubtitle: Greater or Less
@@ -49,7 +50,7 @@ MonoBehaviour:
     - text: Count the objects on the left and count the object on the right in each
         row
       mascotAnimationTrigger: isIdle
-    - text: Which one is greater or lesser or are they eqaul
+    - text: Which one is greater or lesser or are they equal?
       mascotAnimationTrigger: isIdle
     - text: Put the correct comparison symbol into their middle box
       mascotAnimationTrigger: isIdle

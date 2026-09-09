@@ -1284,6 +1284,7 @@ namespace KidGame.Interface
             {
                 KidGame.Audio.AudioManager.Instance.PauseAllSounds();
                 KidGame.Audio.AudioManager.Instance.PlayVictorySfx(starsEarned);
+                KidGame.Audio.AudioManager.Instance.Vibrate();
             }
 
             // ── Prep: hide all elements before animating ──────────────────────────────
@@ -1298,7 +1299,11 @@ namespace KidGame.Interface
                 endSphere.anchoredPosition = new Vector2(sphereHomePos.x, sphereHomePos.y - 300f);
             }
 
-            if (greatJobText != null) greatJobText.transform.localScale = Vector3.zero;
+            if (greatJobText != null)
+            {
+                greatJobText.text = GetEndPraiseText(starsEarned);
+                greatJobText.transform.localScale = Vector3.zero;
+            }
 
             if (endStars != null)
             {
@@ -1338,7 +1343,7 @@ namespace KidGame.Interface
                 endSphere.DOAnchorPosY(sphereHomePos.y, 0.5f).SetEase(Ease.OutCubic);
             yield return new WaitForSeconds(0.35f);
 
-            // ── Step 4: Mascot isWinner trigger + VFX + "Great Job!" pop in ──────────
+            // ── Step 4: Mascot isWinner trigger + VFX + Praise text pop in ──────────
             if (endMascotObject != null)
             {
                 endMascotObject.SetActive(true);
@@ -1384,10 +1389,11 @@ namespace KidGame.Interface
                         starImg.color = activeStarColor;
                     }
 
-                    // Play star SFX for each earned star
+                    // Play star SFX & vibration for each earned star
                     if (KidGame.Audio.AudioManager.Instance != null)
                     {
                         KidGame.Audio.AudioManager.Instance.PlayStarEarnedSfx();
+                        KidGame.Audio.AudioManager.Instance.Vibrate();
                     }
 
                     // Smash-in: scale punch from 0→1.35→1.0
@@ -1482,6 +1488,56 @@ namespace KidGame.Interface
                 textComponent.text = text.Substring(0, i);
                 yield return new WaitForSeconds(charDelay);
             }
+        }
+
+        private static readonly string[] ThreeStarPraiseTexts =
+        {
+            "Superb!",
+            "Fantastic!",
+            "Brilliant!",
+            "Outstanding!",
+            "Perfect!",
+            "Amazing!",
+            "Spectacular!"
+        };
+
+        private static readonly string[] TwoStarPraiseTexts =
+        {
+            "Great Job!",
+            "That's Cool!",
+            "Well Done!",
+            "Awesome!",
+            "Nice Work!",
+            "Way to Go!"
+        };
+
+        private static readonly string[] OneStarPraiseTexts =
+        {
+            "Nicely Done!",
+            "Good Effort!",
+            "Keep Going!",
+            "Almost There!",
+            "Good Try!",
+            "Keep It Up!"
+        };
+
+        private string GetEndPraiseText(int starsEarned)
+        {
+            string[] pool;
+            if (starsEarned >= 3)
+            {
+                pool = ThreeStarPraiseTexts;
+            }
+            else if (starsEarned == 2)
+            {
+                pool = TwoStarPraiseTexts;
+            }
+            else
+            {
+                pool = OneStarPraiseTexts;
+            }
+
+            return pool[Random.Range(0, pool.Length)];
         }
 
         private LevelData GetNextLevel()

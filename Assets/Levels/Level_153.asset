@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_153
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
-  levelNumber: 152
-  levelName: LESSON 152
+  targetAgeGroup: 0
+  levelNumber: 153
+  levelName: LESSON 153
   levelSubtitle: A mix of dice
   levelEndTip: You are almost there!
   isUnlockedByDefault: 0

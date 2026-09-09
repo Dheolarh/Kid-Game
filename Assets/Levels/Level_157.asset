@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_157
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 157
   levelName: LESSON 157
   levelSubtitle: Between 116 and 120
-  levelEndTip: Comes 117, 118, 119
+  levelEndTip: There is 117, 118, 119
   isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Green

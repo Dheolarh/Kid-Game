@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc57d2cf74e79e3408ae6d1b31612711, type: 3}
-  m_Name: Data 147
+  m_Name: Data 147B
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.PremadeSlotData
-  layoutName: Data 147
+  layoutName: Data 147B
   templatePrefab: {fileID: 0}
   colorizeTextInsteadOfBox: 0
   rows:
@@ -26,45 +26,15 @@ MonoBehaviour:
       showHint: 0
     - value: 143
       isAnswerBox: 1
-      showHint: 1
+      showHint: 0
     - value: 144
       isAnswerBox: 1
       showHint: 0
     - value: 145
       isAnswerBox: 1
-      showHint: 1
-    - value: 146
-      isAnswerBox: 1
-      showHint: 1
-    - value: 147
-      isAnswerBox: 1
       showHint: 0
-    - value: 148
-      isAnswerBox: 1
-      showHint: 0
-    - value: 149
-      isAnswerBox: 1
-      showHint: 0
-    - value: 150
-      isAnswerBox: 1
-      showHint: 1
   - rowName: Row 2
     boxes:
-    - value: 141
-      isAnswerBox: 1
-      showHint: 1
-    - value: 142
-      isAnswerBox: 1
-      showHint: 0
-    - value: 143
-      isAnswerBox: 1
-      showHint: 0
-    - value: 144
-      isAnswerBox: 1
-      showHint: 0
-    - value: 145
-      isAnswerBox: 1
-      showHint: 0
     - value: 146
       isAnswerBox: 1
       showHint: 0
@@ -79,4 +49,4 @@ MonoBehaviour:
       showHint: 0
     - value: 150
       isAnswerBox: 1
-      showHint: 1
+      showHint: 0
