@@ -17,7 +17,7 @@ MonoBehaviour:
   levelName: LESSON 112
   levelSubtitle: Counting Vehicles
   levelEndTip: A busy airport
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Blue
   levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}

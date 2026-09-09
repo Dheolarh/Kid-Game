@@ -242,11 +242,13 @@ namespace KidGame.Interface
         private void OnAcceptClicked()
         {
             if (_isTransitioning) return;
+            Debug.Log("[PrivacyPolicy] OnAcceptClicked — starting accept flow.");
             if (acceptButton != null) PlayButtonPop(acceptButton.transform, _acceptBtnOriginalScale);
 
             // Save acceptance
             PlayerPrefs.SetInt("HasAcceptedPrivacyPolicy", 1);
             PlayerPrefs.Save();
+            Debug.Log("[PrivacyPolicy] HasAcceptedPrivacyPolicy saved = 1.");
 
             if (AudioManager.Instance != null) AudioManager.Instance.PlayButtonClickSfx();
 
@@ -254,29 +256,41 @@ namespace KidGame.Interface
             // Android's POST_NOTIFICATIONS dialog requires the activity to be in a focused,
             // non-transitioning state — requesting it in the same frame as a panel close
             // animation suppresses the system dialog before it can appear.
+            Debug.Log("[PrivacyPolicy] Calling ClosePanel().");
             ClosePanel();
 
             if (profileScreenController != null)
             {
+                Debug.Log("[PrivacyPolicy] Calling profileScreenController.PlaySetupIntro().");
                 profileScreenController.PlaySetupIntro();
             }
 
-            // Delay permission request + notification scheduling until after panel animation completes.
-            StartCoroutine(RequestPermissionAfterDelay());
+            // IMPORTANT: Run the delayed permission request on DevicePermissionManager.Instance
+            // (DontDestroyOnLoad) instead of on `this`, because ClosePanel() deactivates
+            // policyPanelObject after 0.3s — killing any coroutines on this MonoBehaviour
+            // before the 0.8s delay completes.
+            if (DevicePermissionManager.Instance != null)
+            {
+                Debug.Log("[PrivacyPolicy] Starting RequestPermissionAfterDelay coroutine on DevicePermissionManager.Instance.");
+                DevicePermissionManager.Instance.StartCoroutine(RequestPermissionAfterDelay());
+            }
+            else
+            {
+                Debug.LogWarning("[PrivacyPolicy] DevicePermissionManager.Instance is NULL! Calling RequestNotificationPermissionWithCallback directly.");
+                DevicePermissionManager.RequestNotificationPermissionWithCallback();
+            }
         }
 
-        private System.Collections.IEnumerator RequestPermissionAfterDelay()
+        private static System.Collections.IEnumerator RequestPermissionAfterDelay()
         {
+            Debug.Log("[PrivacyPolicy] RequestPermissionAfterDelay — waiting 0.8s for panel close animation...");
             // Wait for panel close animation to finish and activity to regain clean focus.
             yield return new WaitForSeconds(0.8f);
 
-            DevicePermissionManager.RequestNotificationPermission();
-
-            // Schedule notifications after permission dialog has been shown.
-            // Scheduling before permission is granted is safe — Android queues them —
-            // but doing it after avoids scheduling notifications on a denied channel.
-            yield return new WaitForSeconds(0.5f);
-            KidGame.Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+            Debug.Log("[PrivacyPolicy] 0.8s elapsed — calling RequestNotificationPermissionWithCallback now.");
+            // Use the callback-based request so the system dialog actually appears
+            // and notifications are only scheduled after the user grants permission.
+            DevicePermissionManager.RequestNotificationPermissionWithCallback();
         }
 
         private void OnRejectClicked()

@@ -17,7 +17,7 @@ MonoBehaviour:
   levelName: 'LESSON 78 '
   levelSubtitle: Finding the treasure
   levelEndTip: The island of lost numbers
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Green
   levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}

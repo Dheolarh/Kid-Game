@@ -17,7 +17,7 @@ MonoBehaviour:
   levelName: LESSON 87
   levelSubtitle: Practice 1 to 80 once more {playername}
   levelEndTip: You're now a number pro
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
   m_Name: Level_126
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
+  targetAgeGroup: 0
   levelNumber: 126
   levelName: LESSON 126
   levelSubtitle: 90 to 56

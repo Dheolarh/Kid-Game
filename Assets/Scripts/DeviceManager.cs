@@ -105,7 +105,7 @@ public class DeviceManager : MonoBehaviour
         // iOS devices (iPhones & iPads) have high per-core performance, powerful Apple GPUs, and Metal API optimization,
         // so low-end tier downgrades are unnecessary and only apply to Android hardware.
 #if UNITY_IOS
-        Debug.Log("[DeviceTierManager] Running on iOS device. Defaulting to Normal tier (full 60fps & full render scale).");
+        Debug.Log("[DeviceTierManager] Running on iOS device. Defaulting to Normal tier.");
         return DeviceTier.Normal;
 #elif !UNITY_ANDROID && !UNITY_EDITOR
         return DeviceTier.Normal;
@@ -187,7 +187,7 @@ public class DeviceManager : MonoBehaviour
 
         QualitySettings.vSyncCount = 0; // let targetFrameRate control pacing, not vSync
 
-        var urpAsset = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
+        var urpAsset = (GraphicsSettings.currentRenderPipeline ?? QualitySettings.renderPipeline) as UniversalRenderPipelineAsset;
 
         switch (tier)
         {

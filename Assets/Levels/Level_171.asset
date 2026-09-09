@@ -17,7 +17,7 @@ MonoBehaviour:
   levelName: LESSON 171
   levelSubtitle: '{playername} spells again'
   levelEndTip: You are good at spellings
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}

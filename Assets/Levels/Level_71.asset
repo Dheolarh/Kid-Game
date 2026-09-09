@@ -17,7 +17,7 @@ MonoBehaviour:
   levelName: LESSON 71
   levelSubtitle: Fill out the missing numbers
   levelEndTip: 60 minutes makes 1 hour!
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}

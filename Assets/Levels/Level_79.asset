@@ -17,7 +17,7 @@ MonoBehaviour:
   levelName: LESSON 79
   levelSubtitle: Counting to 30
   levelEndTip: 30 days in september!
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}

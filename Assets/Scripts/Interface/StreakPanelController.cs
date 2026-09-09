@@ -457,7 +457,7 @@ namespace KidGame.Interface
             KidGame.Notifications.LocalNotificationManager.ScheduleTestNotification(
                 $"Hello {playerName}",
                 "It's learning time!",
-                5 // 5 second delay so you can background the app
+                0 // 0 second delay for instant testing (bypasses Xiaomi background alarm delays)
             );
 
             // Animate Panel A closing and hide root

@@ -112,6 +112,84 @@ namespace KidGame.Permissions
         }
 
         /// <summary>
+        /// Requests POST_NOTIFICATIONS with PermissionCallbacks so the system dialog
+        /// actually appears and we can react to the grant/deny result.
+        /// Called once after the user first accepts the privacy policy.
+        /// </summary>
+        public static void RequestNotificationPermissionWithCallback()
+        {
+            Debug.Log("[DevicePermissionManager] RequestNotificationPermissionWithCallback called.");
+#if UNITY_ANDROID && !UNITY_EDITOR
+            try
+            {
+                using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
+                {
+                    int sdkInt = version.GetStatic<int>("SDK_INT");
+                    Debug.Log($"[DevicePermissionManager] Android SDK_INT = {sdkInt}");
+                    if (sdkInt < 33)
+                    {
+                        // Pre-Android-13: notifications allowed by default, just schedule.
+                        Debug.Log("[DevicePermissionManager] SDK < 33 — notifications allowed by default. Scheduling.");
+                        PlayerPrefs.SetInt(PrefKey_NotificationEnabled, 1);
+                        PlayerPrefs.Save();
+                        Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+                        return;
+                    }
+                }
+
+                bool alreadyGranted = Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS");
+                Debug.Log($"[DevicePermissionManager] POST_NOTIFICATIONS already granted = {alreadyGranted}");
+                if (alreadyGranted)
+                {
+                    // Already granted (e.g. user reinstalled or re-accepted policy)
+                    PlayerPrefs.SetInt(PrefKey_NotificationEnabled, 1);
+                    PlayerPrefs.Save();
+                    Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+                    return;
+                }
+
+                Debug.Log("[DevicePermissionManager] Requesting POST_NOTIFICATIONS with PermissionCallbacks...");
+                var callbacks = new PermissionCallbacks();
+                callbacks.PermissionGranted += _ =>
+                {
+                    Debug.Log("[DevicePermissionManager] POST_NOTIFICATIONS granted (first-run). Saving pref & scheduling.");
+                    PlayerPrefs.SetInt(PrefKey_NotificationEnabled, 1);
+                    PlayerPrefs.Save();
+                    Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+                };
+                callbacks.PermissionDenied += _ =>
+                {
+                    Debug.Log("[DevicePermissionManager] POST_NOTIFICATIONS denied (first-run). Saving pref = 0.");
+                    PlayerPrefs.SetInt(PrefKey_NotificationEnabled, 0);
+                    PlayerPrefs.Save();
+                };
+                callbacks.PermissionDeniedAndDontAskAgain += _ =>
+                {
+                    Debug.Log("[DevicePermissionManager] POST_NOTIFICATIONS permanently denied (first-run). Saving pref = 0.");
+                    PlayerPrefs.SetInt(PrefKey_NotificationEnabled, 0);
+                    PlayerPrefs.Save();
+                };
+                Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS", callbacks);
+                Debug.Log("[DevicePermissionManager] Permission.RequestUserPermission called — waiting for system dialog.");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning($"[DevicePermissionManager] RequestNotificationPermissionWithCallback error: {ex.Message}\n{ex.StackTrace}");
+                // Fallback: try to schedule anyway
+                Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+            }
+#elif UNITY_IOS && !UNITY_EDITOR
+            // iOS handles permission on launch automatically via the package.
+            // Just schedule notifications.
+            Debug.Log("[DevicePermissionManager] iOS — scheduling notifications (permission managed by package).");
+            Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+#else
+            Debug.Log("[DevicePermissionManager] RequestNotificationPermissionWithCallback (Editor). Scheduling.");
+            Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+#endif
+        }
+
+        /// <summary>
         /// Opens the native device Application Details Settings page (Android Intent / iOS App Settings)
         /// so the user can manually enable notification permissions.
         /// </summary>

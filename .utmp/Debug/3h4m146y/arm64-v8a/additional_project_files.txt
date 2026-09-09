@@ -15,4 +15,3 @@ D:\Unity Games\Kid Game\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\m
 D:\Unity Games\Kid Game\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGAConfigurationCallbacks.h
 D:\Unity Games\Kid Game\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGAKeyEventCallbacks.h
 D:\Unity Games\Kid Game\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGAMotionEventCallbacks.h
-D:\Unity Games\Kid Game\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\FramePacing\UnitySwappyWrapper.h

@@ -37,22 +37,26 @@ namespace KidGame.Notifications
         {
             if (Instance != null && Instance != this)
             {
+                Debug.Log("[LocalNotificationManager] Duplicate instance detected — destroying self.");
                 Destroy(gameObject);
                 return;
             }
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            Debug.Log("[LocalNotificationManager] Awake — Instance set. Initializing notification channel.");
 
             InitializeNotificationChannel();
         }
 
         private void Start()
         {
+            Debug.Log("[LocalNotificationManager] Start — calling ScheduleAllDynamicNotifications.");
             ScheduleAllDynamicNotifications();
         }
 
         private void OnApplicationFocus(bool hasFocus)
         {
+            Debug.Log($"[LocalNotificationManager] OnApplicationFocus(hasFocus={hasFocus})");
             if (!hasFocus)
             {
                 ScheduleAllDynamicNotifications();
@@ -61,6 +65,7 @@ namespace KidGame.Notifications
 
         private void OnApplicationPause(bool pauseStatus)
         {
+            Debug.Log($"[LocalNotificationManager] OnApplicationPause(pauseStatus={pauseStatus})");
             if (pauseStatus)
             {
                 ScheduleAllDynamicNotifications();
@@ -69,6 +74,7 @@ namespace KidGame.Notifications
 
         private void InitializeNotificationChannel()
         {
+            Debug.Log("[LocalNotificationManager] InitializeNotificationChannel — starting.");
 #if UNITY_ANDROID
             try
             {
@@ -80,6 +86,7 @@ namespace KidGame.Notifications
                     Description = "Reminds you to play daily, learn maths, and keep your streak alive.",
                 };
                 AndroidNotificationCenter.RegisterNotificationChannel(channel);
+                Debug.Log($"[LocalNotificationManager] Channel '{ChannelId}' registered with Importance.High.");
 
 #if !UNITY_EDITOR
                 // The Unity package doesn't expose a sound property on AndroidNotificationChannel,
@@ -88,13 +95,14 @@ namespace KidGame.Notifications
                 // after the channel is registered (which is why we bumped to channel ID v2).
                 try
                 {
-                    using var notificationManager = new AndroidJavaObject("android.app.NotificationManager");
                     using var context = new AndroidJavaClass("com.unity3d.player.UnityPlayer")
                         .GetStatic<AndroidJavaObject>("currentActivity");
                     using var nm = context.Call<AndroidJavaObject>("getSystemService", "notification");
+                    Debug.Log("[LocalNotificationManager] Got NotificationManager from system service.");
                     using var javaChannel = nm.Call<AndroidJavaObject>("getNotificationChannel", ChannelId);
                     if (javaChannel != null)
                     {
+                        Debug.Log($"[LocalNotificationManager] Found Java channel '{ChannelId}'. Applying custom sound URI: {NotificationSoundUri}");
                         using var uri = new AndroidJavaClass("android.net.Uri")
                             .CallStatic<AndroidJavaObject>("parse", NotificationSoundUri);
                         using var audioAttribs = new AndroidJavaObject(
@@ -106,17 +114,21 @@ namespace KidGame.Notifications
                         nm.Call("createNotificationChannel", javaChannel);
                         Debug.Log("[LocalNotificationManager] Custom notification sound applied via Java API.");
                     }
+                    else
+                    {
+                        Debug.LogWarning("[LocalNotificationManager] Java channel object was null — sound not applied.");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogWarning($"[LocalNotificationManager] Could not set custom channel sound: {ex.Message}");
+                    Debug.LogWarning($"[LocalNotificationManager] Could not set custom channel sound: {ex.Message}\n{ex.StackTrace}");
                 }
 #endif
                 Debug.Log("[LocalNotificationManager] Unity Android Notification Channel registered.");
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[LocalNotificationManager] Unity Android Notification Channel exception: {ex.Message}");
+                Debug.LogWarning($"[LocalNotificationManager] Unity Android Notification Channel exception: {ex.Message}\n{ex.StackTrace}");
             }
 
 #if !UNITY_EDITOR
@@ -127,6 +139,7 @@ namespace KidGame.Notifications
                 using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
                 {
                     int sdkInt = version.GetStatic<int>("SDK_INT");
+                    Debug.Log($"[LocalNotificationManager] Exact alarm check: SDK_INT={sdkInt}");
                     if (sdkInt >= 31)
                     {
                         using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
@@ -134,6 +147,7 @@ namespace KidGame.Notifications
                         using (var alarmManager = activity.Call<AndroidJavaObject>("getSystemService", "alarm"))
                         {
                             bool canScheduleExact = alarmManager.Call<bool>("canScheduleExactAlarms");
+                            Debug.Log($"[LocalNotificationManager] canScheduleExactAlarms = {canScheduleExact}");
                             if (!canScheduleExact)
                             {
                                 Debug.LogWarning("[LocalNotificationManager] SCHEDULE_EXACT_ALARM not granted. " +
@@ -151,7 +165,7 @@ namespace KidGame.Notifications
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[LocalNotificationManager] Exact alarm permission check error: {ex.Message}");
+                Debug.LogWarning($"[LocalNotificationManager] Exact alarm permission check error: {ex.Message}\n{ex.StackTrace}");
             }
 #endif
 #endif
@@ -159,17 +173,54 @@ namespace KidGame.Notifications
 
         public static void CancelAllNotifications()
         {
+            Debug.Log("[LocalNotificationManager] CancelAllNotifications — cancelling managed IDs (1001–1074).");
 #if UNITY_ANDROID
-            try { AndroidNotificationCenter.CancelAllScheduledNotifications(); } catch {}
+            try
+            {
+                // Cancel only the managed daily notification IDs (7 days × 4 slots = IDs 1001–1074)
+                // instead of wiping ALL scheduled notifications. This preserves the test notification
+                // (ID 9999) which would otherwise be cancelled when OnApplicationPause triggers
+                // ScheduleAllDynamicNotifications → CancelAllNotifications.
+                for (int dayOffset = 0; dayOffset < 7; dayOffset++)
+                {
+                    int idBase = 1000 + (dayOffset * 10);
+                    AndroidNotificationCenter.CancelScheduledNotification(idBase + 1);
+                    AndroidNotificationCenter.CancelScheduledNotification(idBase + 2);
+                    AndroidNotificationCenter.CancelScheduledNotification(idBase + 3);
+                    AndroidNotificationCenter.CancelScheduledNotification(idBase + 4);
+                }
+                Debug.Log("[LocalNotificationManager] Android: Managed notification IDs cancelled.");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[LocalNotificationManager] CancelAllNotifications error: {ex.Message}");
+            }
 #endif
 #if UNITY_IOS
-            try { iOSNotificationCenter.RemoveAllScheduledNotifications(); } catch {}
+            try
+            {
+                for (int dayOffset = 0; dayOffset < 7; dayOffset++)
+                {
+                    int idBase = 1000 + (dayOffset * 10);
+                    iOSNotificationCenter.RemoveScheduledNotification($"notification_{idBase + 1}");
+                    iOSNotificationCenter.RemoveScheduledNotification($"notification_{idBase + 2}");
+                    iOSNotificationCenter.RemoveScheduledNotification($"notification_{idBase + 3}");
+                    iOSNotificationCenter.RemoveScheduledNotification($"notification_{idBase + 4}");
+                }
+                Debug.Log("[LocalNotificationManager] iOS: Managed notification IDs cancelled.");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[LocalNotificationManager] CancelAllNotifications error: {ex.Message}");
+            }
 #endif
         }
 
         public static void ScheduleAllDynamicNotifications()
         {
-            if (!DevicePermissionManager.IsNotificationEnabled())
+            bool isEnabled = DevicePermissionManager.IsNotificationEnabled();
+            Debug.Log($"[LocalNotificationManager] ScheduleAllDynamicNotifications called. IsNotificationEnabled={isEnabled}");
+            if (!isEnabled)
             {
                 Debug.Log("[LocalNotificationManager] Notifications disabled in settings or missing OS permission. Skipping schedule.");
                 return;
@@ -244,6 +295,7 @@ namespace KidGame.Notifications
 
         public static void ScheduleTestNotification(string title, string bodyText, int delaySeconds = 5)
         {
+            Debug.Log($"[LocalNotificationManager] ScheduleTestNotification: '{title}' in {delaySeconds}s (ID=9999). HasPermission={DevicePermissionManager.HasNotificationPermission()}, IsEnabled={DevicePermissionManager.IsNotificationEnabled()}");
             ScheduleNotificationAt(title, bodyText, DateTime.Now.AddSeconds(delaySeconds), 9999);
         }
 
@@ -256,7 +308,12 @@ namespace KidGame.Notifications
                 {
                     Title = title,
                     Text = bodyText,
-                    FireTime = fireTime
+                    FireTime = fireTime,
+                    SmallIcon = "icon_0",
+                    LargeIcon = "icon_1",
+                    ShowInForeground = true,
+                    ShowTimestamp = true,
+                    IntentData = "open_app"
                 };
                 AndroidNotificationCenter.SendNotificationWithExplicitID(notification, ChannelId, id);
                 Debug.Log($"[LocalNotificationManager] Scheduled Android Notification #{id} for {fireTime}: '{title}'");
