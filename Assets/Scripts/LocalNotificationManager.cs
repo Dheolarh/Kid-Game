@@ -296,10 +296,10 @@ namespace KidGame.Notifications
         public static void ScheduleTestNotification(string title, string bodyText, int delaySeconds = 5)
         {
             Debug.Log($"[LocalNotificationManager] ScheduleTestNotification: '{title}' in {delaySeconds}s (ID=9999). HasPermission={DevicePermissionManager.HasNotificationPermission()}, IsEnabled={DevicePermissionManager.IsNotificationEnabled()}");
-            ScheduleNotificationAt(title, bodyText, DateTime.Now.AddSeconds(delaySeconds), 9999);
+            ScheduleNotificationAt(title, bodyText, DateTime.Now.AddSeconds(delaySeconds), 9999, true);
         }
 
-        private static void ScheduleNotificationAt(string title, string bodyText, DateTime fireTime, int id)
+        private static void ScheduleNotificationAt(string title, string bodyText, DateTime fireTime, int id, bool showInForeground = false)
         {
 #if UNITY_ANDROID
             try
@@ -311,7 +311,7 @@ namespace KidGame.Notifications
                     FireTime = fireTime,
                     SmallIcon = "icon_0",
                     LargeIcon = "icon_1",
-                    ShowInForeground = true,
+                    ShowInForeground = showInForeground,
                     ShowTimestamp = true,
                     IntentData = "open_app"
                 };
@@ -343,7 +343,7 @@ namespace KidGame.Notifications
                     Identifier = $"notification_{id}",
                     Title = title,
                     Body = bodyText,
-                    ShowInForeground = true,
+                    ShowInForeground = showInForeground,
                     // PresentationOption.Alert is deprecated since iOS 14.
                     // Use Banner (heads-up display) + List (notification centre) + Sound + Badge.
                     ForegroundPresentationOption = (PresentationOption.Banner

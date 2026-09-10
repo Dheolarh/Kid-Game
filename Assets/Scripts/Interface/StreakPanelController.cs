@@ -452,13 +452,20 @@ namespace KidGame.Interface
         {
             // Note: ButtonClickSfx component on panelANextButton already handles click SFX on pointer down
 
-            string playerName = PlayerPrefs.GetString("SingleWordName", "Player");
-            Debug.Log("[StreakPanelController] Triggering test notification.");
-            KidGame.Notifications.LocalNotificationManager.ScheduleTestNotification(
-                $"Hello {playerName}",
-                "It's learning time!",
-                0 // 0 second delay for instant testing (bypasses Xiaomi background alarm delays)
-            );
+            // Only trigger the test notification on the user's very first day of playing
+            if (PlayerPrefs.GetInt("Streak_DaysCount", 1) == 1 && PlayerPrefs.GetInt("HasSentTestNotification", 0) == 0)
+            {
+                PlayerPrefs.SetInt("HasSentTestNotification", 1);
+                PlayerPrefs.Save();
+                
+                string playerName = PlayerPrefs.GetString("SingleWordName", "Player");
+                Debug.Log("[StreakPanelController] Triggering first-day test notification instantly in foreground.");
+                KidGame.Notifications.LocalNotificationManager.ScheduleTestNotification(
+                    $"Hello {playerName}",
+                    "It's learning time!",
+                    0 // 0 second delay for instant testing in foreground
+                );
+            }
 
             // Animate Panel A closing and hide root
             if (panelA != null)
