@@ -314,8 +314,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c209399bf877c4f813805722ebee70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SortLayer
-  layerName: UI
-  sortOrder: 5
+  layerName: Dialogue
+  sortOrder: 0
 --- !u!114 &-2601056454112151819
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 15003, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: "Android\u2122"
+  m_Name: iOS
   m_EditorClassIdentifier: UnityEditor.dll::UnityEditor.Build.Profile.BuildProfile
   m_AssetVersion: 1
-  m_BuildTarget: 13
+  m_BuildTarget: 9
   m_Subtarget: 0
-  m_PlatformId: b9b35072a6f44c2e863f17467ea3dc13
+  m_PlatformId: ad48d16a66894befa4d8181998c3cb09
   m_PlatformBuildProfile:
-    rid: 1038117817608831059
+    rid: 2153498222123810904
   m_OverrideGlobalSceneList: 0
   m_Scenes: []
   m_HasScriptingDefines: 0
@@ -27,11 +27,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1038117817608831059
-      type: {class: AndroidPlatformBuildSettings, ns: UnityEditor.Android, asm: UnityEditor.Android.Extensions}
+    - rid: 2153498222123810904
+      type: {class: iOSPlatformSettings, ns: UnityEditor.iOS, asm: UnityEditor.iOS.Extensions}
       data:
         m_Development: 0
-        m_ConnectProfiler: 1
+        m_ConnectProfiler: 0
         m_BuildWithDeepProfilingSupport: 0
         m_AllowDebugging: 0
         m_WaitForManagedDebugger: 0
@@ -39,19 +39,12 @@ MonoBehaviour:
         m_ExplicitNullChecks: 0
         m_ExplicitDivideByZeroChecks: 0
         m_ExplicitArrayBoundsChecks: 0
-        m_CompressionType: 2
+        m_CompressionType: 3
         m_InstallInBuildFolder: 0
         m_InsightsSettingsContainer:
           m_BuildProfileEngineDiagnosticsState: 2
         m_AdaptivePerformanceEnabled: 0
-        m_BuildSubtarget: 0
-        m_BuildSystem: 1
-        m_ExportAsGoogleAndroidProject: 0
-        m_DebugSymbolLevel: 1
-        m_DebugSymbolFormat: 5
-        m_CurrentDeploymentTargetId: __builtin__target_default
-        m_BuildType: 2
-        m_LinkTimeOptimization: 0
-        m_BuildAppBundle: 1
-        m_IPAddressToConnect: 
+        m_iOSXcodeBuildConfig: 1
         m_SymlinkSources: 0
+        m_PreferredXcode: 
+        m_SymlinkTrampoline: 0

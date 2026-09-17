@@ -355,7 +355,8 @@ namespace KidGame.Notifications
                     // Custom sound: file must exist in the app bundle root.
                     // Assets/Plugins/iOS/notification.mp3 is copied there by Unity at Xcode export time.
                     // iOS requires sounds to be <= 30 seconds; longer files fall back to the default sound.
-                    Sound = "notification.mp3",
+                    // Note: the property is SoundName (SoundType was the old, pre-2.x name).
+                    SoundName = "notification.mp3",
                     Trigger = timeTrigger,
                 };
                 iOSNotificationCenter.ScheduleNotification(notification);

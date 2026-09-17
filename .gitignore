@@ -158,6 +158,35 @@ Assets/Plugins/Editor/Backtrace/
 # ----- Perforce (if mixed VCS environment) ------------------
 *.p4ignore
 
-# ----- Level Creation Progression Plans ---------------------
-*.md
-Assets/UnityMarkdownViewer
+# ----- Markdown ---------------------------------------------
+# Only ignore loose markdown at the repo root. A blanket *.md rule
+# also hides README files and docs nested anywhere in the project.
+/*.md
+!README.md
+!CHANGELOG.md
+!LICENSE.md
+
+# ----- Unity editor plugins / viewers ------------------------
+Assets/UnityMarkdownViewer/
+
+# ----- Android build tooling (.utmp = Unity Intermediate Temp) -
+.utmp/
+.cxx/
+*.keystore
+!debug.keystore
+
+# ----- AI agent / assistant folders --------------------------
+.agents/
+.freebuff/
+.claude/
+.cursor/
+.aider*
+
+# ----- Screenshots / store assets ----------------------------
+PlayStore_Screenshots/
+Playstore_Screenshots/
+Photos Sample/
+Numeracy/
+.vscode/
+.utmp/
+Assets/_Recovery/
