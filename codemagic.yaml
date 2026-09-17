@@ -6,7 +6,7 @@ workflows:
       groups:
         - ios-credentials
       vars:
-        UNITY_VERSION: 6000.4.8f1
+        UNITY_VERSION: 6000.0.47f1
         BUNDLE_ID: com.osirisxstudios.numeracy
     scripts:
       - name: Install Unity
