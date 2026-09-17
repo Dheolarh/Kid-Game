@@ -5,7 +5,7 @@ workflows:
     environment:
       groups:
         - ios-credentials
-      unity: default
+      unity: 6000.4.8f1
       vars:
         UNITY_VERSION: 6000.4.8f1
         BUNDLE_ID: com.osirisxstudios.numeracy
