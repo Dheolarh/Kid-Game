@@ -5,19 +5,20 @@ workflows:
     environment:
       groups:
         - ios-credentials
+      unity: default
       vars:
         UNITY_VERSION: 6000.4.8f1
         BUNDLE_ID: com.osirisxstudios.numeracy
     scripts:
       - name: Activate Unity license
         script: |
-          unity-editor -batchmode -quit -logFile \
+          $UNITY_HOME/Contents/MacOS/Unity -batchmode -quit -logFile \
             -serial $UNITY_SERIAL \
             -username $UNITY_EMAIL \
             -password $UNITY_PASSWORD
       - name: Build Unity iOS
         script: |
-          unity-editor -batchmode -quit -logFile \
+          $UNITY_HOME/Contents/MacOS/Unity -batchmode -quit -logFile \
             -projectPath . \
             -buildTarget iOS \
             -executeMethod BuildScript.BuildiOS \
