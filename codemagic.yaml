@@ -6,25 +6,26 @@ workflows:
       groups:
         - ios-credentials
       vars:
-        UNITY_VERSION: 6000.0.47f1
+        UNITY_VERSION: 6000.4.8f1
+        UNITY_VERSION_CHANGESET: f8b72d3d7343
         BUNDLE_ID: com.osirisxstudios.numeracy
     scripts:
-      - name: Install Unity
-        script: |
-          /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install \
-            --version $UNITY_VERSION \
-            --module ios
-      - name: Find Unity path
-        script: |
-          find /Applications/Unity -name "Unity" -type f 2>/dev/null || echo "Unity not found in /Applications/Unity"
-          ls /Applications/Unity/Hub/Editor/ 2>/dev/null || echo "Editor folder not found"
       - name: Activate Unity license
         script: |
-          /Applications/Unity/Hub/Editor/$UNITY_VERSION/Unity.app/Contents/MacOS/Unity \
-            -batchmode -quit -logFile \
+          $UNITY_HOME/Contents/MacOS/Unity -batchmode -quit -logFile \
             -serial $UNITY_SERIAL \
             -username $UNITY_EMAIL \
             -password $UNITY_PASSWORD
+      - name: Install Unity version
+        script: |
+          yes Y | /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install \
+            --version $UNITY_VERSION \
+            --changeset $UNITY_VERSION_CHANGESET \
+            -a arm64
+          yes Y | /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install-modules \
+            --version $UNITY_VERSION \
+            -m ios \
+            -a arm64
       - name: Build Unity iOS
         script: |
           /Applications/Unity/Hub/Editor/$UNITY_VERSION/Unity.app/Contents/MacOS/Unity \
