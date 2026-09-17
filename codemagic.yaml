@@ -12,7 +12,9 @@ workflows:
     scripts:
       - name: Activate Unity license
         script: |
-          $UNITY_HOME/Contents/MacOS/Unity -batchmode -quit -logFile \
+          DEFAULT_UNITY=$(find /Applications/Unity/Hub/Editor -name "Unity" -type f | head -1)
+          echo "Found Unity at: $DEFAULT_UNITY"
+          $DEFAULT_UNITY -batchmode -quit -logFile \
             -serial $UNITY_SERIAL \
             -username $UNITY_EMAIL \
             -password $UNITY_PASSWORD
