@@ -1,0 +1,47 @@
+workflows:
+  unity-ios-workflow:
+    name: Unity iOS Workflow
+    max_build_duration: 120
+    environment:
+      groups:
+        - ios-credentials
+      vars:
+        UNITY_VERSION: 6000.4.8f1
+        BUNDLE_ID: com.osirisxstudios.numeracy
+    scripts:
+      - name: Activate Unity license
+        script: |
+          $UNITY_HOME/Contents/MacOS/Unity -batchmode -quit -logFile \
+            -serial $UNITY_SERIAL \
+            -username $UNITY_EMAIL \
+            -password $UNITY_PASSWORD
+      - name: Build Unity iOS
+        script: |
+          $UNITY_HOME/Contents/MacOS/Unity -batchmode -quit -logFile \
+            -projectPath . \
+            -buildTarget iOS \
+            -executeMethod BuildScript.BuildiOS \
+            -nographics
+      - name: Set up code signing
+        script: |
+          xcode-project use-profiles
+      - name: Build and archive
+        script: |
+          xcodebuild -project "iOS Build/Unity-iPhone.xcodeproj" \
+            -scheme Unity-iPhone \
+            -configuration Release \
+            -archivePath build/Unity-iPhone.xcarchive \
+            archive
+      - name: Export IPA
+        script: |
+          xcode-project build-ipa \
+            --project "iOS Build/Unity-iPhone.xcodeproj" \
+            --archive-path build/Unity-iPhone.xcarchive
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
