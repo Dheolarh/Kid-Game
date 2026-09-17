@@ -10,52 +10,13 @@ workflows:
         UNITY_VERSION_CHANGESET: f8b72d3d7343
         BUNDLE_ID: com.osirisxstudios.numeracy
     scripts:
-      - name: Activate Unity license
+      - name: Check Unity installations
         script: |
-          DEFAULT_UNITY=$(find /Applications/Unity/Hub/Editor -name "Unity" -type f | head -1)
-          echo "Found Unity at: $DEFAULT_UNITY"
-          $DEFAULT_UNITY -batchmode -quit -logFile \
-            -serial $UNITY_SERIAL \
-            -username $UNITY_EMAIL \
-            -password $UNITY_PASSWORD
-      - name: Install Unity version
-        script: |
-          yes Y | /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install \
-            --version $UNITY_VERSION \
-            --changeset $UNITY_VERSION_CHANGESET \
-            -a arm64
-          yes Y | /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install-modules \
-            --version $UNITY_VERSION \
-            -m ios \
-            -a arm64
-      - name: Build Unity iOS
-        script: |
-          /Applications/Unity/Hub/Editor/$UNITY_VERSION/Unity.app/Contents/MacOS/Unity \
-            -batchmode -quit -logFile \
-            -projectPath . \
-            -buildTarget iOS \
-            -executeMethod BuildScript.BuildiOS \
-            -nographics
-      - name: Set up code signing
-        script: |
-          xcode-project use-profiles
-      - name: Build and archive
-        script: |
-          xcodebuild -project "iOS Build/Unity-iPhone.xcodeproj" \
-            -scheme Unity-iPhone \
-            -configuration Release \
-            -archivePath build/Unity-iPhone.xcarchive \
-            archive
-      - name: Export IPA
-        script: |
-          xcode-project build-ipa \
-            --project "iOS Build/Unity-iPhone.xcodeproj" \
-            --archive-path build/Unity-iPhone.xcarchive
-    artifacts:
-      - build/ios/ipa/*.ipa
-    publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
+          echo "=== Unity Hub Editor folder ==="
+          ls /Applications/Unity/Hub/Editor/ 2>/dev/null || echo "No editors found"
+          echo "=== All Unity installs ==="
+          find /Applications -name "Unity" -type f 2>/dev/null || echo "No Unity binary found"
+          echo "=== Unity Hub version ==="
+          /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless version 2>/dev/null || echo "Unity Hub not found"
+          echo "=== UNITY_HOME ==="
+          echo $UNITY_HOME
