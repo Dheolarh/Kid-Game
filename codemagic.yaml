@@ -11,13 +11,13 @@ workflows:
     scripts:
       - name: Activate Unity license
         script: |
-          $UNITY_HOME/Contents/MacOS/Unity -batchmode -quit -logFile \
+          unity-editor -batchmode -quit -logFile \
             -serial $UNITY_SERIAL \
             -username $UNITY_EMAIL \
             -password $UNITY_PASSWORD
       - name: Build Unity iOS
         script: |
-          $UNITY_HOME/Contents/MacOS/Unity -batchmode -quit -logFile \
+          unity-editor -batchmode -quit -logFile \
             -projectPath . \
             -buildTarget iOS \
             -executeMethod BuildScript.BuildiOS \
