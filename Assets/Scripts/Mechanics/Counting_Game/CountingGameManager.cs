@@ -70,6 +70,8 @@ namespace KidGame.Mechanics.Counting
 
         private readonly List<CountingSlot> _slots = new List<CountingSlot>();
         private readonly List<AnswerCard>   _cards = new List<AnswerCard>();
+        private readonly Dictionary<ScrollRect, ScrollRectState> _scrollRectStates =
+            new Dictionary<ScrollRect, ScrollRectState>();
         private int _answeredCount;
         public Button NextButton => nextButton;
 
@@ -546,7 +548,12 @@ namespace KidGame.Mechanics.Counting
 
         private void UpdateScrollLockingInternal()
         {
+            // Slots and answers each scroll independently, so lock/measure them separately.
             UpdateScrollLockForContainer(slotsContainer);
+
+            // The premade container holds a self-contained Scroll View (the level prefab has its own
+            // ScrollRect + Scrollbar). It must never be measured or allowed to toggle the outer
+            // ScrollRect's scrollbar, or it will deactivate the level's own scrollbar.
             UpdateScrollLockForContainer(answersContainer);
         }
 
@@ -556,6 +563,18 @@ namespace KidGame.Mechanics.Counting
 
             var scrollRect = container.GetComponentInParent<ScrollRect>();
             if (scrollRect == null) return;
+
+            // The premade container is swapped in for procedural content and hosts a level prefab that
+            // carries its OWN ScrollRect + Scrollbar. The outer ScrollRect belongs to Content only, so
+            // leave it untouched in premade mode: otherwise this method measures the (now disabled and
+            // empty) procedural Content, decides it cannot scroll, and deactivates the outer scrollbar.
+            if (IsPremadeMode)
+            {
+                SuppressScrollRect(scrollRect);
+                return;
+            }
+
+            RestoreScrollRect(scrollRect);
 
             var contentRt = container as RectTransform;
             var viewportRt = scrollRect.viewport;
@@ -579,16 +598,137 @@ namespace KidGame.Mechanics.Counting
                 if (scrollVertical)
                 {
                     float contentHeight = Mathf.Max(contentRt.rect.height, UnityEngine.UI.LayoutUtility.GetPreferredHeight(contentRt));
-                    scrollRect.vertical = (contentHeight > viewportRt.rect.height);
+                    bool canScroll = (contentHeight > viewportRt.rect.height);
+                    scrollRect.vertical = canScroll;
                     scrollRect.horizontal = false;
+
+                    var verticalBar = ResolveOwnScrollbar(scrollRect, scrollRect.verticalScrollbar, true);
+                    if (verticalBar != null)
+                    {
+                        scrollRect.verticalScrollbar = verticalBar;
+                        verticalBar.onValueChanged.RemoveAllListeners();
+                        verticalBar.onValueChanged.AddListener((v) =>
+                        {
+                            scrollRect.verticalNormalizedPosition = v;
+                        });
+                        verticalBar.gameObject.SetActive(canScroll);
+                    }
                 }
                 else
                 {
                     float contentWidth = Mathf.Max(contentRt.rect.width, UnityEngine.UI.LayoutUtility.GetPreferredWidth(contentRt));
-                    scrollRect.horizontal = (contentWidth > viewportRt.rect.width);
+                    bool canScroll = (contentWidth > viewportRt.rect.width);
+                    scrollRect.horizontal = canScroll;
                     scrollRect.vertical = false;
+
+                    var horizontalBar = ResolveOwnScrollbar(scrollRect, scrollRect.horizontalScrollbar, false);
+                    if (horizontalBar != null)
+                    {
+                        scrollRect.horizontalScrollbar = horizontalBar;
+                        horizontalBar.onValueChanged.RemoveAllListeners();
+                        horizontalBar.onValueChanged.AddListener((v) =>
+                        {
+                            scrollRect.horizontalNormalizedPosition = v;
+                        });
+                        horizontalBar.gameObject.SetActive(canScroll);
+                    }
                 }
             }
+        }
+
+        /// <summary>True when the current round is a premade level (its prefab/slot data is assigned).</summary>
+        private bool IsPremadeMode => (premadeSlotPrefab != null || premadeSlotData != null);
+
+        /// <summary>Stores the outer ScrollRect's authored state so it can be restored when leaving premade mode.</summary>
+        private void SuppressScrollRect(ScrollRect scrollRect)
+        {
+            if (scrollRect == null) return;
+
+            if (!_scrollRectStates.TryGetValue(scrollRect, out var state))
+            {
+                state = new ScrollRectState
+                {
+                    vertical = scrollRect.vertical,
+                    horizontal = scrollRect.horizontal,
+                    originalVerticalBar = scrollRect.verticalScrollbar,
+                    originalHorizontalBar = scrollRect.horizontalScrollbar
+                };
+                _scrollRectStates[scrollRect] = state;
+            }
+
+            scrollRect.vertical = false;
+            scrollRect.horizontal = false;
+
+            // Only hide the scrollbars this ScrollRect actually owns. Do not reach into descendants:
+            // premade level prefabs contain their own ScrollRect + Scrollbar.
+            var ownVertical = ResolveOwnScrollbar(scrollRect, state.originalVerticalBar, true);
+            if (ownVertical != null) ownVertical.gameObject.SetActive(false);
+
+            var ownHorizontal = ResolveOwnScrollbar(scrollRect, state.originalHorizontalBar, false);
+            if (ownHorizontal != null) ownHorizontal.gameObject.SetActive(false);
+        }
+
+        /// <summary>Restores the outer ScrollRect to its authored state when returning to procedural mode.</summary>
+        private void RestoreScrollRect(ScrollRect scrollRect)
+        {
+            if (scrollRect == null) return;
+            if (!_scrollRectStates.TryGetValue(scrollRect, out var state)) return;
+
+            scrollRect.vertical = state.vertical;
+            scrollRect.horizontal = state.horizontal;
+            scrollRect.verticalScrollbar = state.originalVerticalBar;
+            scrollRect.horizontalScrollbar = state.originalHorizontalBar;
+
+            if (state.originalVerticalBar != null) state.originalVerticalBar.gameObject.SetActive(true);
+            if (state.originalHorizontalBar != null) state.originalHorizontalBar.gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// Resolves a scrollbar for a ScrollRect without stealing a descendant's scrollbar.
+        /// Prefers the assigned reference, then an explicitly stored one, then a direct parent lookup.
+        /// Deliberately avoids GetComponentInChildren, which would grab the Scrollbar belonging to an
+        /// instantiated premade level's own inner ScrollRect.
+        /// </summary>
+        private static Scrollbar ResolveOwnScrollbar(ScrollRect scrollRect, Scrollbar current, bool vertical)
+        {
+            if (current != null) return current;
+
+            // Search upwards from the ScrollRect's Viewport, never downwards into content.
+            var viewport = scrollRect.viewport != null
+                ? scrollRect.viewport
+                : scrollRect.transform as RectTransform;
+
+            if (viewport != null)
+            {
+                var siblings = viewport.parent;
+                if (siblings != null)
+                {
+                    for (int i = 0; i < siblings.childCount; i++)
+                    {
+                        var child = siblings.GetChild(i);
+                        if (child == viewport) continue;
+
+                        var candidate = child.GetComponent<Scrollbar>();
+                        if (candidate == null) continue;
+
+                        if (vertical == (candidate.direction == Scrollbar.Direction.BottomToTop ||
+                                         candidate.direction == Scrollbar.Direction.TopToBottom))
+                        {
+                            return candidate;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private class ScrollRectState
+        {
+            public bool vertical;
+            public bool horizontal;
+            public Scrollbar originalVerticalBar;
+            public Scrollbar originalHorizontalBar;
         }
 
         private void RebuildLayoutsRecursive(Transform t)

@@ -15,7 +15,7 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 90
   levelName: LESSON 90
-  levelSubtitle: Coutning 81 to 90
+  levelSubtitle: Counting 81 to 90
   levelEndTip: Almost at a century
   isUnlockedByDefault: 0
   isPremadeLevel: 1

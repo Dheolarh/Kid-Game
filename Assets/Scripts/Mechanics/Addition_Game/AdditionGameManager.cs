@@ -549,14 +549,48 @@ namespace KidGame.Mechanics.Addition
                 if (scrollVertical)
                 {
                     float contentHeight = Mathf.Max(contentRt.rect.height, UnityEngine.UI.LayoutUtility.GetPreferredHeight(contentRt));
-                    scrollRect.vertical = (contentHeight > viewportRt.rect.height);
+                    bool canScroll = (contentHeight > viewportRt.rect.height);
+                    scrollRect.vertical = canScroll;
                     scrollRect.horizontal = false;
+
+                    // Auto-resolve vertical scrollbar if placed in Scroll View
+                    if (scrollRect.verticalScrollbar == null)
+                    {
+                        scrollRect.verticalScrollbar = scrollRect.GetComponentInChildren<Scrollbar>(true);
+                    }
+
+                    if (scrollRect.verticalScrollbar != null)
+                    {
+                        scrollRect.verticalScrollbar.onValueChanged.RemoveAllListeners();
+                        scrollRect.verticalScrollbar.onValueChanged.AddListener((v) =>
+                        {
+                            scrollRect.verticalNormalizedPosition = v;
+                        });
+                        scrollRect.verticalScrollbar.gameObject.SetActive(canScroll);
+                    }
                 }
                 else
                 {
                     float contentWidth = Mathf.Max(contentRt.rect.width, UnityEngine.UI.LayoutUtility.GetPreferredWidth(contentRt));
-                    scrollRect.horizontal = (contentWidth > viewportRt.rect.width);
+                    bool canScroll = (contentWidth > viewportRt.rect.width);
+                    scrollRect.horizontal = canScroll;
                     scrollRect.vertical = false;
+
+                    // Auto-resolve horizontal scrollbar if placed in Scroll View
+                    if (scrollRect.horizontalScrollbar == null)
+                    {
+                        scrollRect.horizontalScrollbar = scrollRect.GetComponentInChildren<Scrollbar>(true);
+                    }
+
+                    if (scrollRect.horizontalScrollbar != null)
+                    {
+                        scrollRect.horizontalScrollbar.onValueChanged.RemoveAllListeners();
+                        scrollRect.horizontalScrollbar.onValueChanged.AddListener((v) =>
+                        {
+                            scrollRect.horizontalNormalizedPosition = v;
+                        });
+                        scrollRect.horizontalScrollbar.gameObject.SetActive(canScroll);
+                    }
                 }
             }
         }

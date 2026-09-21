@@ -458,7 +458,13 @@ namespace KidGame.Interface
                 PlayerPrefs.SetInt("HasSentTestNotification", 1);
                 PlayerPrefs.Save();
                 
-                string playerName = PlayerPrefs.GetString("SingleWordName", "Player");
+                string playerName = PlayerPrefs.GetString("SingleWordName", "");
+                if (string.IsNullOrEmpty(playerName))
+                {
+                    playerName = PlayerPrefs.GetString("PlayerName", "");
+                    if (!string.IsNullOrEmpty(playerName)) playerName = playerName.Trim().Split(' ')[0];
+                }
+                if (string.IsNullOrEmpty(playerName)) playerName = "Player";
                 Debug.Log("[StreakPanelController] Triggering first-day test notification instantly in foreground.");
                 KidGame.Notifications.LocalNotificationManager.ScheduleTestNotification(
                     $"Hello {playerName}",

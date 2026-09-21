@@ -381,6 +381,16 @@ namespace KidGame.Interface
                 homeScreen.SetActive(true);
             }
 
+            // Refresh the home screen's profile display (avatar, name, stars, streak).
+            // Onboarding saves SelectedBuddy during the profile setup, but ProfileMenuController only
+            // reads it in Awake / on button handlers, so without this the avatar showed the wrong
+            // sprite until the user opened and closed the profile panel.
+            if (ProfileMenuController.Instance != null)
+            {
+                ProfileMenuController.Instance.RefreshProfileData();
+                Debug.Log("[MenuScreenManager] Refreshed ProfileMenuController after age select -> home transition.");
+            }
+
             // Play Main Menu BGM (higher volume)
             KidGame.Audio.AudioManager.Instance?.PlayMainMenuBgm();
 

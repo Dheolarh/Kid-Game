@@ -334,6 +334,9 @@ namespace KidGame.Interface
             PlayerPrefs.SetString("SingleWordName", firstName);
             PlayerPrefs.Save();
 
+            // Reschedule local notifications so all future reminders use the player's real name
+            KidGame.Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+
             SwitchPage(namePage, agePage, PlayAgeIntro);
         }
 

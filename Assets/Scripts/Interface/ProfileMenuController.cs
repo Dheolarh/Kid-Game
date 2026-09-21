@@ -186,6 +186,9 @@ namespace KidGame.Interface
             PlayerPrefs.SetString("SingleWordName", singleWordName);
             PlayerPrefs.Save();
 
+            // Reschedule local notifications so all future reminders reflect the updated name
+            KidGame.Notifications.LocalNotificationManager.ScheduleAllDynamicNotifications();
+
             if (AudioManager.Instance != null)
             {
                 AudioManager.Instance.PlayButtonClickSfx();
@@ -348,7 +351,6 @@ namespace KidGame.Interface
                 }
             }
         }
-
         private int GetTotalStarsCount()
         {
             int total = 0;
@@ -368,6 +370,12 @@ namespace KidGame.Interface
         private Sprite GetProfileSprite(string buddyName)
         {
             if (profileSprites == null) return null;
+
+            // No buddy chosen yet (fresh install, or before onboarding completes). Return null so the
+            // caller leaves the avatar hidden, instead of silently falling back to profileSprites[0]
+            // which showed a WRONG avatar until the profile panel was opened and closed.
+            if (string.IsNullOrEmpty(buddyName)) return null;
+
             string targetName = buddyName + "2";
             foreach (var s in profileSprites)
             {

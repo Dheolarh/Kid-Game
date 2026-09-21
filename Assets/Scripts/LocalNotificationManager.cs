@@ -228,15 +228,25 @@ namespace KidGame.Notifications
 
             CancelAllNotifications();
 
-            string playerName = PlayerPrefs.GetString("SingleWordName", "Player");
+            string playerName = PlayerPrefs.GetString("SingleWordName", "");
+            if (string.IsNullOrEmpty(playerName))
+            {
+                playerName = PlayerPrefs.GetString("PlayerName", "");
+                if (!string.IsNullOrEmpty(playerName))
+                {
+                    playerName = playerName.Trim().Split(' ')[0];
+                }
+            }
             if (string.IsNullOrEmpty(playerName)) playerName = "Player";
 
             string todayStr = DateTime.Today.ToString("yyyy-MM-dd");
             string lastLoginStr = PlayerPrefs.GetString("Streak_LastLoginDate", "");
-            int lastClaimedDay = PlayerPrefs.GetInt("Streak_LastClaimedDay", 0);
-            int streakDays = PlayerPrefs.GetInt("Streak_DaysCount", 1);
 
-            bool isStreakKeptToday = (lastLoginStr == todayStr && lastClaimedDay >= streakDays);
+            // Logging in today is the signal that the streak is kept. Do NOT also compare
+            // Streak_LastClaimedDay against Streak_DaysCount: the streak count increments as soon as the
+            // app opens, but Streak_LastClaimedDay only updates after the reward animation finishes, so
+            // that comparison briefly reports false and sends streak reminders to a player who already played.
+            bool isStreakKeptToday = (lastLoginStr == todayStr);
 
             DateTime now = DateTime.Now;
 
@@ -384,8 +394,19 @@ namespace KidGame.Notifications
             int randIndex = UnityEngine.Random.Range(0, list.Count);
             var msg = list[randIndex];
             return new NotificationMessage(
-                msg.Title.Replace("{playername}", playerName),
-                msg.Body.Replace("{playername}", playerName)
+                ReplacePlayerName(msg.Title, playerName),
+                ReplacePlayerName(msg.Body, playerName)
+            );
+        }
+
+        private static string ReplacePlayerName(string template, string playerName)
+        {
+            if (string.IsNullOrEmpty(template)) return "";
+            return System.Text.RegularExpressions.Regex.Replace(
+                template,
+                @"\{playername\}",
+                playerName,
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
             );
         }
 

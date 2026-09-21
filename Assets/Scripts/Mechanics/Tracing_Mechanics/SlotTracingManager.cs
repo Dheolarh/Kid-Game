@@ -24,6 +24,9 @@ namespace KidGame.Mechanics.Tracing
         private RaycastHit2D   _hit;
         private ScrollRect     _scrollRect;         // locked while tracing
 
+        // Multi-touch: track the specific finger that started tracing
+        private int            _activeTouchId = -1; // -1 = no active tracing touch
+
         // Cached path geometry — populated once per BeginPath to avoid per-frame allocations
         private RectTransform  _activePathRt;
         private Vector3        _cachedPos1;         // start world-space point for linear fill
@@ -57,14 +60,64 @@ namespace KidGame.Mechanics.Tracing
             }
         }
 
+        /// <summary>
+        /// Returns the world position of the tracked tracing finger (by _activeTouchId),
+        /// or the mouse position if no touchscreen is present.
+        /// </summary>
         private Vector3 GetWorldPos()
         {
             Vector2 screenPos = Vector2.zero;
 
             if (Touchscreen.current != null && Touchscreen.current.touches.Count > 0)
-                screenPos = Touchscreen.current.touches[0].position.ReadValue();
+            {
+                // Find the touch that matches our tracked finger
+                bool found = false;
+                foreach (var touch in Touchscreen.current.touches)
+                {
+                    if (touch.touchId.ReadValue() == _activeTouchId)
+                    {
+                        screenPos = touch.position.ReadValue();
+                        found = true;
+                        break;
+                    }
+                }
+
+                // Fallback: if we haven't locked onto a finger yet (e.g. during
+                // OnPointerDown scanning), return the position of whichever touch
+                // we're currently evaluating — the caller handles that.
+                if (!found && _activeTouchId < 0)
+                {
+                    // Will be set per-touch in Update(); return zero as a safe default
+                    return Vector3.zero;
+                }
+                else if (!found)
+                {
+                    return Vector3.zero;
+                }
+            }
             else if (Mouse.current != null)
+            {
                 screenPos = Mouse.current.position.ReadValue();
+            }
+
+            if (tracingCamera == null) return Vector3.zero;
+
+            var pos = tracingCamera.ScreenToWorldPoint(
+                          new Vector3(screenPos.x, screenPos.y, tracingCamera.nearClipPlane));
+            pos.z = 0f;
+            return pos;
+        }
+
+        /// <summary>
+        /// Returns the world position of a specific touch by index (used during
+        /// per-touch scanning in Update to test each new finger).
+        /// </summary>
+        private Vector3 GetWorldPosForTouch(int touchIndex)
+        {
+            if (Touchscreen.current == null || touchIndex >= Touchscreen.current.touches.Count)
+                return Vector3.zero;
+
+            Vector2 screenPos = Touchscreen.current.touches[touchIndex].position.ReadValue();
 
             if (tracingCamera == null) return Vector3.zero;
 
@@ -76,43 +129,101 @@ namespace KidGame.Mechanics.Tracing
 
         private void Update()
         {
-            bool isTouch   = Touchscreen.current != null
-                             && Touchscreen.current.touches.Count > 0;
+            bool hasTouchscreen = Touchscreen.current != null
+                                  && Touchscreen.current.touches.Count > 0;
 
-            bool pressed  = false;
-            bool released = false;
-            bool held     = false;
-
-            if (isTouch)
+            if (hasTouchscreen)
             {
-                var phase = Touchscreen.current.touches[0].phase.ReadValue();
-                pressed  = phase == UnityEngine.InputSystem.TouchPhase.Began;
-                released = phase == UnityEngine.InputSystem.TouchPhase.Ended
-                        || phase == UnityEngine.InputSystem.TouchPhase.Canceled;
-                held     = phase == UnityEngine.InputSystem.TouchPhase.Moved
-                        || phase == UnityEngine.InputSystem.TouchPhase.Stationary
-                        || pressed;
+                // ── Handle all active touches ──
+                // Check each touch individually so a resting palm doesn't block tracing.
+
+                // 1. If we already have an active tracing finger, update it
+                if (_activeTouchId >= 0)
+                {
+                    bool tracingFingerFound = false;
+                    foreach (var touch in Touchscreen.current.touches)
+                    {
+                        if (touch.touchId.ReadValue() != _activeTouchId) continue;
+                        tracingFingerFound = true;
+
+                        var phase = touch.phase.ReadValue();
+                        if (phase == UnityEngine.InputSystem.TouchPhase.Ended
+                            || phase == UnityEngine.InputSystem.TouchPhase.Canceled)
+                        {
+                            OnPointerUp();
+                        }
+                        else
+                        {
+                            // held (Moved / Stationary)
+                            OnPointerHeld();
+                        }
+                        break;
+                    }
+
+                    // If the tracked finger disappeared entirely (rare edge case), release
+                    if (!tracingFingerFound)
+                    {
+                        OnPointerUp();
+                    }
+                }
+
+                // 2. If no active tracing finger, scan ALL new touches for one that
+                //    lands on a "Start" collider — ignore palms/other fingers.
+                if (_activeTouchId < 0)
+                {
+                    for (int i = 0; i < Touchscreen.current.touches.Count; i++)
+                    {
+                        var touch = Touchscreen.current.touches[i];
+                        var phase = touch.phase.ReadValue();
+                        if (phase != UnityEngine.InputSystem.TouchPhase.Began) continue;
+
+                        // Test if this finger hit a "Start" collider
+                        Vector3 worldPos = GetWorldPosForTouch(i);
+                        var hit = Physics2D.Raycast(worldPos, Vector2.zero);
+                        if (hit.collider == null) continue;
+                        if (!hit.transform.CompareTag("Start")) continue;
+
+                        var path   = hit.transform.GetComponentInParent<Path>();
+                        var tracer = hit.transform.GetComponentInParent<SlotTracer>();
+                        if (tracer == null || path == null) continue;
+                        if (path.completed) continue;
+                        if (!tracer.shape.IsCurrentPath(path)) continue;
+
+                        // This finger is valid — lock onto it
+                        _activeTouchId = touch.touchId.ReadValue();
+                        _hit = hit;
+                        OnPointerDownInternal(tracer, path);
+                        break;
+                    }
+                }
             }
             else if (Mouse.current != null)
             {
-                pressed  = Mouse.current.leftButton.wasPressedThisFrame;
-                released = Mouse.current.leftButton.wasReleasedThisFrame;
-                held     = Mouse.current.leftButton.isPressed;
+                // Mouse fallback (editor / desktop)
+                bool pressed  = Mouse.current.leftButton.wasPressedThisFrame;
+                bool released = Mouse.current.leftButton.wasReleasedThisFrame;
+                bool held     = Mouse.current.leftButton.isPressed;
+
+                if (pressed)       OnPointerDown();
+                else if (released) OnPointerUp();
+
+                if (held) OnPointerHeld();
             }
-
-            if (pressed)       OnPointerDown();
-            else if (released) OnPointerUp();
-
-            if (held) OnPointerHeld();
         }
 
         // ──────────────────────────────────────────────────
         // Input Handlers
         // ──────────────────────────────────────────────────
 
+        /// <summary>Mouse-only path: raycast at mouse position to find a Start collider.</summary>
         private void OnPointerDown()
         {
-            _hit = Physics2D.Raycast(GetWorldPos(), Vector2.zero);
+            Vector2 screenPos = Mouse.current.position.ReadValue();
+            Vector3 worldPos = tracingCamera.ScreenToWorldPoint(
+                new Vector3(screenPos.x, screenPos.y, tracingCamera.nearClipPlane));
+            worldPos.z = 0f;
+
+            _hit = Physics2D.Raycast(worldPos, Vector2.zero);
             if (_hit.collider == null) return;
             if (!_hit.transform.CompareTag("Start")) return;
 
@@ -123,6 +234,12 @@ namespace KidGame.Mechanics.Tracing
             if (path.completed) return;
             if (!tracer.shape.IsCurrentPath(path)) return;
 
+            OnPointerDownInternal(tracer, path);
+        }
+
+        /// <summary>Shared logic for beginning a trace (called from both mouse and touch paths).</summary>
+        private void OnPointerDownInternal(SlotTracer tracer, Path path)
+        {
             // Release any previously active tracer
             if (_activeTracer != null && _activeTracer != tracer)
                 _activeTracer.ReleasePath();
@@ -146,6 +263,9 @@ namespace KidGame.Mechanics.Tracing
                 _activeTracer.ReleasePath();
                 _activeTracer = null;
             }
+
+            // Release the tracked finger
+            _activeTouchId = -1;
 
             // Restore scroll
             if (_scrollRect != null)

@@ -94,6 +94,11 @@ namespace KidGame.Interface
         [SerializeField] private Image endNextButtonBg;                 // Next button bg image (tinted next level color)
         [SerializeField] private GameObject endNoNextLevelPanel;        // Panel shown when no next level exists
 
+        [Header("Number Sound Button")]
+        [Tooltip("Scene-level Number Sound button. Lives in the Game scene rather than inside a game mode prefab, " +
+                 "so it is shown only while the Tracing game is the active page.")]
+        [SerializeField] private GameObject numberSoundButton;
+
         [Header("Game End Panel Animation Timing")]
         [Tooltip("Time delay in seconds between each star animation on the end panel.")]
         [SerializeField] private float starAnimationInterval = 0.55f;
@@ -699,6 +704,12 @@ namespace KidGame.Interface
                 Destroy(_activeGameModeInstance);
                 _activeGameModeInstance = null;
             }
+
+            // Hide the scene-level Number Sound button; StartActiveGameMode re-shows it for Tracing pages.
+            if (numberSoundButton != null)
+            {
+                numberSoundButton.SetActive(false);
+            }
         }
 
         private void ApplyThemeToInstantiatedGameMode(GameObject go, Color themeColor)
@@ -735,6 +746,13 @@ namespace KidGame.Interface
             if (_activeGameModeInstance != null)
             {
                 _activeGameModeInstance.SetActive(true);
+            }
+
+            // The Number Sound button lives in the Game scene, not inside the game mode prefab, so it
+            // survives mode switches and must be toggled here. It belongs to Tracing only.
+            if (numberSoundButton != null)
+            {
+                numberSoundButton.SetActive(type == GameType.Tracing);
             }
         }
 

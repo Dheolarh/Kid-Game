@@ -1275,8 +1275,24 @@ namespace KidGame.Mechanics.Matching
 
                 // Matching game is always a vertical list of rows in both orientations
                 float contentHeight = Mathf.Max(contentRt.rect.height, UnityEngine.UI.LayoutUtility.GetPreferredHeight(contentRt));
-                scrollRect.vertical = (contentHeight > viewportRt.rect.height);
+                bool canScroll = (contentHeight > viewportRt.rect.height);
+                scrollRect.vertical = canScroll;
                 scrollRect.horizontal = false;
+
+                if (scrollRect.verticalScrollbar == null)
+                {
+                    scrollRect.verticalScrollbar = scrollRect.GetComponentInChildren<Scrollbar>(true);
+                }
+
+                if (scrollRect.verticalScrollbar != null)
+                {
+                    scrollRect.verticalScrollbar.onValueChanged.RemoveAllListeners();
+                    scrollRect.verticalScrollbar.onValueChanged.AddListener((v) =>
+                    {
+                        scrollRect.verticalNormalizedPosition = v;
+                    });
+                    scrollRect.verticalScrollbar.gameObject.SetActive(canScroll);
+                }
             }
         }
 
