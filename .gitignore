@@ -48,7 +48,7 @@ ExportedObj/
 !Assets/**/*.dll        # keep pre-built plugin DLLs in Assets
 *.pdb
 *.mdb
-*.xml
+
 !Assets/**/*.xml        # keep XML data/config in Assets
 *.zip
 *.7z
