@@ -5,7 +5,6 @@
 
     <!-- Allowed permissions for Local Notifications, Haptics & Alarms -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -15,17 +14,21 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
     <uses-permission android:name="com.android.vending.BILLING" tools:node="remove" />
 
+    <!--
+        Strip exact-alarm and battery-optimization permissions. The Unity Mobile Notifications
+        package injects these at build time based on Project Settings > Mobile Notifications >
+        Android > exact scheduling. This app is not an alarm clock, so USE_EXACT_ALARM makes it
+        ineligible for Google Play, and battery-optimization exemptions are unwanted in a
+        Kids/Families app. Inexact scheduling is acceptable for daily reminder notifications.
+        Safety net only - the Project Settings value (UnityNotificationAndroidScheduleExactAlarms)
+        must also be set to 0 / "Nothing".
+    -->
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" tools:node="remove" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" tools:node="remove" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" tools:node="remove" />
+
     <application>
-        <!--Used when Application Entry is set to Activity, otherwise remove this activity block-->
-        <activity android:name="com.unity3d.player.UnityPlayerActivity"
-                  android:theme="@style/UnityThemeSelector">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-        </activity>
-        <!--Used when Application Entry is set to GameActivity, otherwise remove this activity block-->
+        <!-- GameActivity entry point (androidApplicationEntry = 2 in ProjectSettings) -->
         <activity android:name="com.unity3d.player.UnityPlayerGameActivity"
                   android:theme="@style/BaseUnityGameActivityTheme">
             <intent-filter>
@@ -35,5 +38,14 @@
             <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
             <meta-data android:name="android.app.lib_name" android:value="game" />
         </activity>
+
+        <!-- Boot receiver: reschedules notifications after device restart -->
+        <receiver
+            android:name="com.unity.androidnotifications.UnityNotificationRestartOnBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

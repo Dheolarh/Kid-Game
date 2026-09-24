@@ -150,14 +150,13 @@ namespace KidGame.Notifications
                             Debug.Log($"[LocalNotificationManager] canScheduleExactAlarms = {canScheduleExact}");
                             if (!canScheduleExact)
                             {
+                                // Log only — do NOT redirect to settings here.
+                                // Redirecting on first launch hijacks the user before they see the app,
+                                // and can interrupt channel registration. On Android 12+, inexact alarms
+                                // are still delivered (just potentially delayed by a few minutes), which
+                                // is acceptable for daily reminder notifications.
                                 Debug.LogWarning("[LocalNotificationManager] SCHEDULE_EXACT_ALARM not granted. " +
-                                    "Redirecting to alarm permission settings so notifications fire on time.");
-                                using (var intent = new AndroidJavaObject(
-                                    "android.content.Intent",
-                                    "android.settings.REQUEST_SCHEDULE_EXACT_ALARM"))
-                                {
-                                    activity.Call("startActivity", intent);
-                                }
+                                    "Notifications will fire with inexact timing (acceptable for daily reminders).");
                             }
                         }
                     }
