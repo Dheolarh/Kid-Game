@@ -60,7 +60,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 30, y: 0}
+  m_Spacing: {x: 50, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &1091355673797226306
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf52f50aa5c425c4b987d2c34e8658a5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 04c04c19c05ec69469d5b3dc76f9161b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -462,7 +462,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 30, y: 0}
+  m_Spacing: {x: 50, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &5486066796772747188
@@ -529,7 +529,7 @@ MonoBehaviour:
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: 1.5
+  m_FlexibleHeight: 4
   m_LayoutPriority: 1
 --- !u!1 &5967186589914781978
 GameObject:
@@ -596,7 +596,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf52f50aa5c425c4b987d2c34e8658a5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 04c04c19c05ec69469d5b3dc76f9161b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -666,7 +666,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 30, y: 0}
+  m_Spacing: {x: 50, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &6074758619658899455
@@ -863,12 +863,12 @@ MonoBehaviour:
       boxObject: {fileID: 7432909111170898307}
       isAnswerBox: 1
       value: W
-      showHint: 1
+      showHint: 0
     - boxName: answer (2)
       boxObject: {fileID: 4514140791885251012}
       isAnswerBox: 1
       value: O
-      showHint: 0
+      showHint: 1
     - boxName: answer
       boxObject: {fileID: 3342715954970759966}
       isAnswerBox: 1
@@ -878,12 +878,12 @@ MonoBehaviour:
       boxObject: {fileID: 2495435331310679933}
       isAnswerBox: 1
       value: W
-      showHint: 0
+      showHint: 1
     - boxName: answer (2)
       boxObject: {fileID: 8642216900818017730}
       isAnswerBox: 1
       value: O
-      showHint: 1
+      showHint: 0
 --- !u!1 &7824180596481573342
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,7 +1019,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 1
   m_Spacing: 3
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1

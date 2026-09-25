@@ -100,7 +100,7 @@ MonoBehaviour:
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 3696358d6a7fc97419a51a679cdca7f0, type: 3}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1

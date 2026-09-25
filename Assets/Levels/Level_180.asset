@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8709feaec63a6a4e81ceac2b530cd48, type: 3}
-  m_Name: Level_176
+  m_Name: Level_180
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   targetAgeGroup: 0
-  levelNumber: 176
-  levelName: LESSON 176
-  levelSubtitle: Learn how to spell 1
-  levelEndTip: '"O"  "N"   "E"   1!'
+  levelNumber: 180
+  levelName: LESSON 180
+  levelSubtitle: Learn how to spell number 4
+  levelEndTip: 'FIVE fingers on my '
   isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
@@ -26,72 +26,9 @@ MonoBehaviour:
   - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hey, let's learn how to spell 1
+    - text: Let's learn how to spell 5!
       mascotAnimationTrigger: isIdle
-    - text: 1 is spelled O N E
-      mascotAnimationTrigger: isIdle
-    - text: Now try spelling 1
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
-    countingSlotCount: 7
-    countingMinCount: 1
-    countingMaxCount: 7
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 65f081609dc4256449a160f0d819642a, type: 3}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 65f081609dc4256449a160f0d819642a, type: 3}
-    recallPremadeSlotData: {fileID: 0}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
-  - gameType: 0
-    overrideLevelPremade: 0
-    dialogueLines:
-    - text: Let's spell that again!
+    - text: 5 is "F" "I" "V" "E"
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -100,7 +37,7 @@ MonoBehaviour:
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: eb2572f6b23a66849908d6032113de9b, type: 3}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: c93054fcf46389f46b3b75a6879d953e, type: 3}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
@@ -142,7 +79,66 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: eb2572f6b23a66849908d6032113de9b, type: 3}
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 4a78df7931e3e9c46a63636ba97d2538, type: 3}
+    recallPremadeSlotData: {fileID: 0}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
+  - gameType: 0
+    overrideLevelPremade: 0
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 20
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 04977dac122a73c4a95fd0aed43ad1f0, type: 3}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 8b27d88026f244a47b41f0065878dcea, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1

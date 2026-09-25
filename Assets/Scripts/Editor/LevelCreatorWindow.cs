@@ -240,14 +240,35 @@ namespace KidGame.Editor
 
                 if (showAsPremade)
                 {
-                    page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab", page.recallPremadeSlotPrefab, typeof(GameObject), false);
-                    page.recallPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (ScriptableObject)", page.recallPremadeSlotData, typeof(PremadeSlotData), false);
-                    page.recallColorizeTextInsteadOfBox = EditorGUILayout.Toggle("Colorize Text Instead Of Box", page.recallColorizeTextInsteadOfBox);
-                    page.recallScaleDownCardOnDrag = EditorGUILayout.Toggle("Scale Down Card On Drag (0.5x)", page.recallScaleDownCardOnDrag);
-                    page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
-                    if (GUILayout.Button("🛠️ Open Premade Slot Data Generator", GUILayout.Height(25)))
+                    // Premade content is stored per game type, so the premade assignment must be
+                    // game-type aware. Counting reads countingPremadeSlotPrefab at runtime; Recall reads
+                    // recallPremadeSlotPrefab. Showing only the recall fields (the previous behaviour)
+                    // left counting pages with a permanently null premade prefab.
+                    switch (page.gameType)
                     {
-                        PremadeSlotDataGeneratorWindow.OpenWindow();
+                        case GameType.Counting:
+                            page.countingPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Content Prefab", page.countingPremadeSlotPrefab, typeof(GameObject), false);
+                            page.countingPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (ScriptableObject)", page.countingPremadeSlotData, typeof(PremadeSlotData), false);
+                            DrawPremadeGeneratorButton();
+                            break;
+
+                        case GameType.Recall:
+                            page.recallPremadeSlotPrefab = (GameObject)EditorGUILayout.ObjectField("Premade Slot Prefab", page.recallPremadeSlotPrefab, typeof(GameObject), false);
+                            page.recallPremadeSlotData = (PremadeSlotData)EditorGUILayout.ObjectField("Premade Slot Data (ScriptableObject)", page.recallPremadeSlotData, typeof(PremadeSlotData), false);
+                            page.recallColorizeTextInsteadOfBox = EditorGUILayout.Toggle("Colorize Text Instead Of Box", page.recallColorizeTextInsteadOfBox);
+                            page.recallScaleDownCardOnDrag = EditorGUILayout.Toggle("Scale Down Card On Drag (0.5x)", page.recallScaleDownCardOnDrag);
+                            page.recallIsLearningMode = EditorGUILayout.Toggle("Is Learning Mode (Show Hints)", page.recallIsLearningMode);
+                            DrawPremadeGeneratorButton();
+                            break;
+
+                        default:
+                            // Game types without a premade variant: let the author leave premade mode
+                            // rather than showing fields that would have no effect at runtime.
+                            EditorGUILayout.HelpBox(
+                                $"'{page.gameType}' has no premade mode. Enable \"Override Premade (Use Procedural)\" " +
+                                "above, or switch the Game Type, to configure this page.",
+                                MessageType.Info);
+                            break;
                     }
                 }
                 else
@@ -395,6 +416,15 @@ namespace KidGame.Editor
             PageData temp = _pages[a];
             _pages[a] = _pages[b];
             _pages[b] = temp;
+        }
+
+        /// <summary>Opens the Premade Slot Data generator used to author premade layouts for a page.</summary>
+        private static void DrawPremadeGeneratorButton()
+        {
+            if (GUILayout.Button("🛠️ Open Premade Slot Data Generator", GUILayout.Height(25)))
+            {
+                PremadeSlotDataGeneratorWindow.OpenWindow();
+            }
         }
 
         private void CheckLevelStatus()

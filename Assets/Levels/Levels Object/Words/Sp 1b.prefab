@@ -128,7 +128,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 31e7b093c0da2264eaeb9144b3c450fd, type: 2}
   m_sharedMaterial: {fileID: -7078012581861834715, guid: 31e7b093c0da2264eaeb9144b3c450fd, type: 2}
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 39865484a9c10c24eb24c68449200806, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b9babf1364355784b8ef5cfb9226e410, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -531,81 +531,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: 4
   m_LayoutPriority: 1
---- !u!1 &5967186589914781978
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5087777245896985664}
-  - component: {fileID: 4739262430094241721}
-  - component: {fileID: 1606127357549945239}
-  m_Layer: 5
-  m_Name: Image (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &5087777245896985664
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5967186589914781978}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5138787357233879659}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &4739262430094241721
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5967186589914781978}
-  m_CullTransparentMesh: 1
---- !u!114 &1606127357549945239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5967186589914781978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 39865484a9c10c24eb24c68449200806, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5967403352815046802
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +670,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5518726837898167968}
-  - {fileID: 5087777245896985664}
   m_Father: {fileID: 4657409791076096018}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -781,10 +705,10 @@ MonoBehaviour:
   m_ChildAlignment: 3
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 200, y: 200}
+  m_CellSize: {x: 300, y: 300}
   m_Spacing: {x: 0, y: 0}
-  m_Constraint: 1
-  m_ConstraintCount: 1
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &7583444236575440329
 GameObject:
   m_ObjectHideFlags: 0
@@ -796,7 +720,7 @@ GameObject:
   - component: {fileID: 4606829872851769956}
   - component: {fileID: 5634208250955147509}
   m_Layer: 5
-  m_Name: Sp 2a
+  m_Name: Sp 1b
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -842,47 +766,47 @@ MonoBehaviour:
     - boxName: answer
       boxObject: {fileID: 6606065271396394584}
       isAnswerBox: 1
-      value: T
-      showHint: 1
+      value: O
+      showHint: 0
     - boxName: answer (1)
       boxObject: {fileID: 5786653220426586296}
       isAnswerBox: 1
-      value: W
+      value: N
       showHint: 1
     - boxName: answer (2)
       boxObject: {fileID: 9179963630907574755}
       isAnswerBox: 1
-      value: O
-      showHint: 1
+      value: E
+      showHint: 0
     - boxName: answer
       boxObject: {fileID: 2222596505499751964}
       isAnswerBox: 1
-      value: T
+      value: O
       showHint: 1
     - boxName: answer (1)
       boxObject: {fileID: 7432909111170898307}
       isAnswerBox: 1
-      value: W
-      showHint: 1
+      value: N
+      showHint: 0
     - boxName: answer (2)
       boxObject: {fileID: 4514140791885251012}
       isAnswerBox: 1
-      value: O
-      showHint: 1
+      value: E
+      showHint: 0
     - boxName: answer
       boxObject: {fileID: 3342715954970759966}
       isAnswerBox: 1
-      value: T
-      showHint: 1
+      value: O
+      showHint: 0
     - boxName: answer (1)
       boxObject: {fileID: 2495435331310679933}
       isAnswerBox: 1
-      value: W
-      showHint: 1
+      value: N
+      showHint: 0
     - boxName: answer (2)
       boxObject: {fileID: 8642216900818017730}
       isAnswerBox: 1
-      value: O
+      value: E
       showHint: 1
 --- !u!1 &7824180596481573342
 GameObject:
@@ -1019,7 +943,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 1
+  m_ChildAlignment: 0
   m_Spacing: 3
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -1062,7 +986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_text
-      value: T
+      value: O
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_fontSize
@@ -1175,7 +1099,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.LetterAnswerSlot
   slotText: {fileID: 6800444467717421700}
   slotImage: {fileID: 7230395240033017147}
-  expectedLetter: T
+  expectedLetter: O
   isAnswer: 1
   showHint: 0
   presetColors:
@@ -1230,7 +1154,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_text
-      value: W
+      value: N
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_fontSize
@@ -1343,7 +1267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.LetterAnswerSlot
   slotText: {fileID: 7068864425561431013}
   slotImage: {fileID: 6354060796426386522}
-  expectedLetter: W
+  expectedLetter: N
   isAnswer: 1
   showHint: 0
   presetColors:
@@ -1398,7 +1322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_text
-      value: T
+      value: O
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_fontSize
@@ -1511,7 +1435,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.LetterAnswerSlot
   slotText: {fileID: 7988121279667863430}
   slotImage: {fileID: 6119283466548910137}
-  expectedLetter: T
+  expectedLetter: O
   isAnswer: 1
   showHint: 0
   presetColors:
@@ -1566,7 +1490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_text
-      value: O
+      value: E
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_fontSize
@@ -1679,7 +1603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.LetterAnswerSlot
   slotText: {fileID: 9087495121752862044}
   slotImage: {fileID: 4911961224233241315}
-  expectedLetter: O
+  expectedLetter: E
   isAnswer: 1
   showHint: 0
   presetColors:
@@ -1734,7 +1658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_text
-      value: W
+      value: N
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_fontSize
@@ -1874,7 +1798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.LetterAnswerSlot
   slotText: {fileID: 1222276471442306080}
   slotImage: {fileID: 3081002995444618143}
-  expectedLetter: W
+  expectedLetter: N
   isAnswer: 1
   showHint: 0
   presetColors:
@@ -1902,7 +1826,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_text
-      value: T
+      value: O
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_fontSize
@@ -2042,7 +1966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.LetterAnswerSlot
   slotText: {fileID: 1951539497487764160}
   slotImage: {fileID: 2387695921591872895}
-  expectedLetter: T
+  expectedLetter: O
   isAnswer: 1
   showHint: 0
   presetColors:
@@ -2070,7 +1994,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_text
-      value: W
+      value: N
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_fontSize
@@ -2210,7 +2134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.LetterAnswerSlot
   slotText: {fileID: 2854940202405491995}
   slotImage: {fileID: 2137317443190297252}
-  expectedLetter: W
+  expectedLetter: N
   isAnswer: 1
   showHint: 0
   presetColors:
@@ -2238,7 +2162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_text
-      value: O
+      value: E
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_fontSize
@@ -2378,7 +2302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.LetterAnswerSlot
   slotText: {fileID: 3987768093259985242}
   slotImage: {fileID: 964029723189647077}
-  expectedLetter: O
+  expectedLetter: E
   isAnswer: 1
   showHint: 0
   presetColors:
@@ -2406,7 +2330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_text
-      value: 0
+      value: E
       objectReference: {fileID: 0}
     - target: {fileID: 4803180884252516226, guid: 2c8550d9dd1e21644a03928377232560, type: 3}
       propertyPath: m_fontSize
@@ -2546,7 +2470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.LetterAnswerSlot
   slotText: {fileID: 4602115597009364347}
   slotImage: {fileID: 426278319642755780}
-  expectedLetter: O
+  expectedLetter: E
   isAnswer: 1
   showHint: 0
   presetColors:
