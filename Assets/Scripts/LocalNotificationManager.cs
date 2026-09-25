@@ -294,7 +294,10 @@ namespace KidGame.Notifications
                 }
 
                 // 4. Streak Saver (6:00 PM)
-                if (streakSaverTime > now)
+                // Today: only fires if the streak is still unkept — a player who already opened the app
+                // today must not be told to "claim your streak before the day ends".
+                // Future days: always schedule (future streak state is unknowable).
+                if (streakSaverTime > now && (dayOffset > 0 || !isStreakKeptToday))
                 {
                     var msg = GetRandomMessage(StreakSaverMessages, playerName);
                     ScheduleNotificationAt(msg.Title, msg.Body, streakSaverTime, idBase + 4);

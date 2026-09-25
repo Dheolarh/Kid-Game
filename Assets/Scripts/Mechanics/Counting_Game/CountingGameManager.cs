@@ -73,7 +73,50 @@ namespace KidGame.Mechanics.Counting
         private readonly Dictionary<ScrollRect, ScrollRectState> _scrollRectStates =
             new Dictionary<ScrollRect, ScrollRectState>();
         private int _answeredCount;
+
+        /// <summary>
+        /// True only once every answer box of the current premade layout has been solved.
+        /// Premade mode cannot be inferred from <c>nextButton.interactable</c> because
+        /// GameFlowManager force-enables that button so it can show the "not finished" warning dialogue.
+        /// </summary>
+        private bool _premadeRoundCompleted;
         public Button NextButton => nextButton;
+
+        /// <summary>
+        /// The vertical ScrollRect that owns the slot/task content for the active round
+        /// (procedural slots or the premade layout). Used to detect tasks hidden below the fold.
+        /// </summary>
+        public ScrollRect SlotsScrollRect
+        {
+            get
+            {
+                // Premade layouts may bring their own vertical Scroll View inside the container;
+                // prefer that self-contained one before falling back to the shared outer ScrollRect.
+                if (IsPremadeMode && premadeSlotsContainer != null)
+                {
+                    var inner = FindVerticalScrollRect(premadeSlotsContainer);
+                    if (inner != null) return inner;
+                }
+
+                Transform container = slotsContainer;
+                if (container == null) return null;
+
+                var sr = container.GetComponentInParent<ScrollRect>();
+                return (sr != null && sr.vertical) ? sr : null;
+            }
+        }
+
+        /// <summary>Returns the first active vertical ScrollRect inside <paramref name="root"/> (excluding root itself).</summary>
+        private static ScrollRect FindVerticalScrollRect(Transform root)
+        {
+            if (root == null) return null;
+            var rects = root.GetComponentsInChildren<ScrollRect>(true);
+            foreach (var sr in rects)
+            {
+                if (sr != null && sr.vertical) return sr;
+            }
+            return null;
+        }
 
         public void Configure(int slotCount, int minCount, int maxCount, bool diceMode, bool fingerMode, string activeThemeName, GameObject premadeSlotPrefab = null, KidGame.Interface.PremadeSlotData premadeSlotData = null)
         {
@@ -151,6 +194,7 @@ namespace KidGame.Mechanics.Counting
 
         private void OnPremadeRoundCompleted()
         {
+            _premadeRoundCompleted = true;
             SetNextButtonInteractable(true);
             GameFlowManager.Instance?.NotifyRoundStateChanged();
         }
@@ -161,6 +205,7 @@ namespace KidGame.Mechanics.Counting
         {
             ClearPrevious();
             _answeredCount = 0;
+            _premadeRoundCompleted = false;
             SetNextButtonInteractable(false);
 
             bool isPremade = (premadeSlotPrefab != null || premadeSlotData != null);
@@ -549,11 +594,19 @@ namespace KidGame.Mechanics.Counting
         private void UpdateScrollLockingInternal()
         {
             // Slots and answers each scroll independently, so lock/measure them separately.
-            UpdateScrollLockForContainer(slotsContainer);
+            // In premade mode the procedural slots container is disabled and swapped for the premade
+            // one, so the shared slots ScrollRect must be handled by the premade container instead.
+            if (IsPremadeMode)
+            {
+                UpdateScrollLockForContainer(premadeSlotsContainer);
+            }
+            else
+            {
+                UpdateScrollLockForContainer(slotsContainer);
+            }
 
-            // The premade container holds a self-contained Scroll View (the level prefab has its own
-            // ScrollRect + Scrollbar). It must never be measured or allowed to toggle the outer
-            // ScrollRect's scrollbar, or it will deactivate the level's own scrollbar.
+            // The answer grid is shared by procedural and premade rounds. It must always be measured
+            // and kept scrollable, otherwise answer cards become unreachable in premade levels.
             UpdateScrollLockForContainer(answersContainer);
         }
 
@@ -564,13 +617,19 @@ namespace KidGame.Mechanics.Counting
             var scrollRect = container.GetComponentInParent<ScrollRect>();
             if (scrollRect == null) return;
 
-            // The premade container is swapped in for procedural content and hosts a level prefab that
-            // carries its OWN ScrollRect + Scrollbar. The outer ScrollRect belongs to Content only, so
-            // leave it untouched in premade mode: otherwise this method measures the (now disabled and
-            // empty) procedural Content, decides it cannot scroll, and deactivates the outer scrollbar.
-            if (IsPremadeMode)
+            // The premade slots container hosts a self-contained level prefab that may bring its OWN
+            // ScrollRect + Scrollbar. The outer ScrollRect belongs to the disabled procedural Content,
+            // so leave it untouched in premade mode: otherwise this method measures the (now disabled
+            // and empty) procedural Content, decides it cannot scroll, and deactivates the outer
+            // scrollbar. Only the slots side is affected - answers must stay scrollable.
+            if (container == premadeSlotsContainer)
             {
-                SuppressScrollRect(scrollRect);
+                if (IsPremadeMode)
+                {
+                    SuppressScrollRect(scrollRect);
+                }
+                // When not in premade mode this container is inactive and empty; measuring it would
+                // wrongly disable the shared slots ScrollRect.
                 return;
             }
 
@@ -751,9 +810,10 @@ namespace KidGame.Mechanics.Counting
 
         public bool IsRoundCompleted()
         {
-            if (premadeSlotPrefab != null || premadeSlotData != null)
+            if (IsPremadeMode)
             {
-                return nextButton != null && nextButton.interactable;
+                // Premade levels complete only when every answer box has been filled.
+                return _premadeRoundCompleted;
             }
             if (_slots == null || _slots.Count == 0) return false;
             return _answeredCount >= _slots.Count;

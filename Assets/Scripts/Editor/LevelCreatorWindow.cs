@@ -495,6 +495,7 @@ namespace KidGame.Editor
                 PageData copy = new PageData
                 {
                     gameType = page.gameType,
+                    overrideLevelPremade = page.overrideLevelPremade,
                     dialogueLines = CopyDialogueLines(page.dialogueLines),
                     completionDialogueLines = CopyDialogueLines(page.completionDialogueLines),
                     countingSlotCount = page.countingSlotCount,
@@ -541,6 +542,8 @@ namespace KidGame.Editor
                     recallMaxConsecutiveHidden = page.recallMaxConsecutiveHidden,
                     recallIsLearningMode = page.recallIsLearningMode,
                     recallIsSequenceFillMode = page.recallIsSequenceFillMode,
+                    recallColorizeTextInsteadOfBox = page.recallColorizeTextInsteadOfBox,
+                    recallScaleDownCardOnDrag = page.recallScaleDownCardOnDrag,
                     tracingSpellModeActive = page.tracingSpellModeActive,
                     tracingIsLearningMode = page.tracingIsLearningMode,
                     tracingCustomSpawnCount = page.tracingCustomSpawnCount,
@@ -585,6 +588,27 @@ namespace KidGame.Editor
             LevelData asset = AssetDatabase.LoadAssetAtPath<LevelData>(assetPath);
 
             bool isNew = (asset == null);
+
+            // Guard against silently clobbering an unrelated level. This happens when a level asset is
+            // duplicated in the Project window: the copy keeps the original's levelNumber, so editing
+            // from the creator would write into the ORIGINAL's file instead of the duplicate.
+            if (!isNew && !string.IsNullOrEmpty(asset.levelName) && asset.levelName != _levelName)
+            {
+                bool overwrite = EditorUtility.DisplayDialog(
+                    "Level Already Exists",
+                    $"'{assetPath}' already contains Level {_levelNumber} named '{asset.levelName}', " +
+                    $"which differs from the name you are about to save ('{_levelName}').\n\n" +
+                    "Overwriting will replace that existing level's data. If you duplicated a level and " +
+                    "expected a separate copy, cancel and assign it a unique Level Number.",
+                    "Overwrite", "Cancel");
+
+                if (!overwrite)
+                {
+                    ShowNotification(new GUIContent("Save cancelled — no changes were written."));
+                    return;
+                }
+            }
+
             if (isNew)
             {
                 asset = CreateInstance<LevelData>();

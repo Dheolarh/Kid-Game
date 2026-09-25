@@ -1143,12 +1143,14 @@ namespace KidGame.Interface
             // Tracing game does not use scroll warning dialogue
             if (gameType == GameType.Tracing) return false;
 
-#if UNITY_2023_1_OR_NEWER
-            ScrollRect scrollRect = FindFirstObjectByType<ScrollRect>();
-#else
-            ScrollRect scrollRect = FindObjectOfType<ScrollRect>();
-#endif
+            // Resolve the ScrollRect that actually holds the gameplay tasks. FindFirstObjectByType can
+            // return the answer grid (horizontal) or a premade level's inner ScrollRect, whose
+            // verticalNormalizedPosition is meaningless and would report a false "scroll up" warning.
+            ScrollRect scrollRect = ResolveTaskScrollRect(gameType);
             if (scrollRect == null || scrollRect.content == null) return false;
+
+            // Only a vertical list can hide tasks below the fold.
+            if (!scrollRect.vertical) return false;
 
             RectTransform viewport = scrollRect.viewport != null ? scrollRect.viewport : (scrollRect.transform as RectTransform);
             if (viewport == null) return false;
@@ -1158,6 +1160,35 @@ namespace KidGame.Interface
 
             // Return true if vertical position is still near top (> 0.15f) leaving lower tasks hidden below
             return scrollRect.verticalNormalizedPosition > 0.15f;
+        }
+
+        /// <summary>
+        /// Finds the vertical ScrollRect that owns the current game mode's task/slot content.
+        /// Falls back to the first vertical ScrollRect when the game object cannot be resolved.
+        /// </summary>
+        private ScrollRect ResolveTaskScrollRect(GameType gameType)
+        {
+            if (_activeGameModeInstance != null)
+            {
+                CountingGameManager counting = _activeGameModeInstance.GetComponent<CountingGameManager>();
+                if (counting != null)
+                {
+                    var sr = counting.SlotsScrollRect;
+                    if (sr != null) return sr;
+                }
+            }
+
+            // Generic fallback: prefer the first vertical ScrollRect in the scene.
+#if UNITY_2023_1_OR_NEWER
+            var all = FindObjectsByType<ScrollRect>(FindObjectsSortMode.None);
+#else
+            var all = FindObjectsOfType<ScrollRect>();
+#endif
+            foreach (var candidate in all)
+            {
+                if (candidate != null && candidate.vertical) return candidate;
+            }
+            return null;
         }
 
         private void OnNextClicked()

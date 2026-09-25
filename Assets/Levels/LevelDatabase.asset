@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: LevelDatabase
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelDatabase
   allLevels:
+  - {fileID: 0}
   - {fileID: 11400000, guid: a8b695988b0158ac94ec48992ec43874, type: 2}
   - {fileID: 11400000, guid: 5c7a33a2d4aa502eb6966b03f236e5d3, type: 2}
   - {fileID: 11400000, guid: cb6d15c02659545aa20efff75a4aded3, type: 2}
@@ -188,3 +189,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b8cade4d1b69a8e4fbf25e9a8871c031, type: 2}
   - {fileID: 11400000, guid: 60edb4be9e2ada14e91e8b21c59edf3a, type: 2}
   - {fileID: 11400000, guid: 3f2e4cf5935a68846821865000fd5353, type: 2}
+  - {fileID: 11400000, guid: 60cbfcd2589913541a7c4b4f0da1b480, type: 2}
+  - {fileID: 11400000, guid: 504201c11fb07c84eb7245cf93ec2177, type: 2}
