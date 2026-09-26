@@ -116,6 +116,15 @@ namespace KidGame.Interface
         [Header("Map / Custom Game Settings")]
         [Tooltip("Custom / Map game mode prefab. Spawns directly into the scene as an independent game mode without using slots.")]
         public GameObject customGamePrefab;
+
+        [Header("Sound Button Settings")]
+        [Tooltip("Show the scene-level Sound button on this page. Independent of the Tracing game, which " +
+                 "always shows the button so the traced letter/number can be heard.")]
+        public bool showSoundButton = false;
+
+        [Tooltip("What the Sound button plays when tapped. Accepts a number (\"7\") or a letter (\"B\"). " +
+                 "Loaded from Resources/Audio/1 - 50/ or Resources/Audio/A - Z/.")]
+        public string soundButtonValue = "";
     }
 
     [CreateAssetMenu(fileName = "NewLevelData", menuName = "Level Select/Level Data")]

@@ -14,6 +14,18 @@ namespace KidGame.Interface
 
         private Button _button;
 
+        /// <summary>
+        /// Explicit value to play, set by GameFlowManager from PageData.soundButtonValue.
+        /// When empty, the button falls back to the original auto-detect behaviour used by the
+        /// Tracing game (which is intentionally left untouched).
+        /// </summary>
+        private string _overrideValue = "";
+
+        public void SetOverrideValue(string value)
+        {
+            _overrideValue = string.IsNullOrEmpty(value) ? "" : value.Trim().Trim('\'', '"');
+        }
+
         private void Awake()
         {
             _button = GetComponent<Button>();
@@ -31,7 +43,12 @@ namespace KidGame.Interface
 
         public void PlayActiveNumberSound()
         {
-            string numberStr = GetActiveNumberToTrace();
+            // Explicit level-author value wins when present (Sound Button setting on the page).
+            // PlayNumberVoice already routes letters to PlayLetterVoice, so one call covers both.
+            string numberStr = !string.IsNullOrEmpty(_overrideValue)
+                ? _overrideValue
+                : GetActiveNumberToTrace();
+
             if (string.IsNullOrEmpty(numberStr))
             {
                 Debug.LogWarning("[NumberSoundButton] No active number found for current level.");

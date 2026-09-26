@@ -748,11 +748,40 @@ namespace KidGame.Interface
                 _activeGameModeInstance.SetActive(true);
             }
 
-            // The Number Sound button lives in the Game scene, not inside the game mode prefab, so it
-            // survives mode switches and must be toggled here. It belongs to Tracing only.
-            if (numberSoundButton != null)
+            UpdateNumberSoundButton(type);
+        }
+
+        /// <summary>
+        /// Shows/hides the scene-level Sound button and pushes the page's explicit sound value.
+        /// The Tracing game keeps its original behaviour: the button is always shown and auto-detects
+        /// the traced letter/number. Other game types show it only when the page opts in, and play the
+        /// value authored in the Level Creator.
+        /// </summary>
+        private void UpdateNumberSoundButton(GameType type)
+        {
+            if (numberSoundButton == null) return;
+
+            PageData page = null;
+            if (ActiveLevel != null && ActiveLevel.pages != null &&
+                _currentPageIndex >= 0 && _currentPageIndex < ActiveLevel.pages.Count)
             {
-                numberSoundButton.SetActive(type == GameType.Tracing);
+                page = ActiveLevel.pages[_currentPageIndex];
+            }
+
+            bool isTracing = (type == GameType.Tracing);
+            bool pageWantsSound = (page != null && page.showSoundButton);
+
+            bool shouldShow = isTracing || pageWantsSound;
+            numberSoundButton.SetActive(shouldShow);
+
+            if (!shouldShow) return;
+
+            // Tracing leaves the value empty so NumberSoundButton keeps auto-detecting.
+            var soundBtn = numberSoundButton.GetComponent<NumberSoundButton>();
+            if (soundBtn != null)
+            {
+                string value = (!isTracing && page != null) ? page.soundButtonValue : "";
+                soundBtn.SetOverrideValue(value);
             }
         }
 

@@ -177,6 +177,27 @@ namespace KidGame.Editor
                 // Page parameters
                 page.gameType = (GameType)EditorGUILayout.EnumPopup("Game Mode Type", page.gameType);
 
+                GUILayout.Space(4);
+
+                // Sound Button (scene-level button, shown via GameFlowManager). Independent of Tracing,
+                // which always shows the button and auto-detects the traced letter/number.
+                GUILayout.Label("Sound Button:", EditorStyles.boldLabel);
+                page.showSoundButton = EditorGUILayout.Toggle("Show Sound Button", page.showSoundButton);
+                using (new EditorGUI.DisabledScope(!page.showSoundButton))
+                {
+                    page.soundButtonValue = EditorGUILayout.TextField("Sound To Play (Number or Letter)", page.soundButtonValue);
+
+                    if (page.showSoundButton && string.IsNullOrEmpty(page.soundButtonValue))
+                    {
+                        EditorGUILayout.HelpBox(
+                            "No sound value set. Clips are loaded from Resources/Audio/1 - 50/ for numbers " +
+                            "and Resources/Audio/A - Z/ for letters.",
+                            MessageType.Warning);
+                    }
+                }
+
+                GUILayout.Space(4);
+
                 // Dialogue lines editing section
                 GUILayout.Label("Dialogue Lines (Supports {playername}):", EditorStyles.boldLabel);
                 if (page.dialogueLines == null) page.dialogueLines = new List<DialogueLine>();
@@ -685,7 +706,12 @@ namespace KidGame.Editor
                 {
                     _cachedDatabase.allLevels.Add(asset);
                 }
-                
+
+                // Drop null/missing entries before sorting. Unity leaves blank slots in serialized
+                // lists when a referenced level asset is deleted, and the comparison below reads
+                // a.levelNumber, which throws on a blank entry.
+                _cachedDatabase.allLevels.RemoveAll(l => l == null);
+
                 // Keep the database sorted by level number
                 _cachedDatabase.allLevels.Sort((a, b) => a.levelNumber.CompareTo(b.levelNumber));
                 EditorUtility.SetDirty(_cachedDatabase);

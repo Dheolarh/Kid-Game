@@ -17,7 +17,7 @@ MonoBehaviour:
   levelName: LESSON 179
   levelSubtitle: Learn how to spell number 4
   levelEndTip: '"F" "O" "U" "R" 4!'
-  isUnlockedByDefault: 0
+  isUnlockedByDefault: 1
   isPremadeLevel: 1
   themePresetName: Blue
   levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
@@ -84,6 +84,8 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 1
+    soundButtonValue: 4
   - gameType: 0
     overrideLevelPremade: 0
     dialogueLines: []
@@ -143,5 +145,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 1
+    soundButtonValue: 4
   sceneToLoad: Game
   levelIcon: {fileID: 0}

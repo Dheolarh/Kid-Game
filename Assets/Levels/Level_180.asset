@@ -15,9 +15,9 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 180
   levelName: LESSON 180
-  levelSubtitle: Learn how to spell number 4
+  levelSubtitle: Learn how to spell number 5
   levelEndTip: 'FIVE fingers on my '
-  isUnlockedByDefault: 0
+  isUnlockedByDefault: 1
   isPremadeLevel: 1
   themePresetName: Orange
   levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
@@ -86,6 +86,8 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 1
+    soundButtonValue: 5
   - gameType: 0
     overrideLevelPremade: 0
     dialogueLines: []
@@ -145,5 +147,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 1
+    soundButtonValue: 5
   sceneToLoad: Game
   levelIcon: {fileID: 0}
