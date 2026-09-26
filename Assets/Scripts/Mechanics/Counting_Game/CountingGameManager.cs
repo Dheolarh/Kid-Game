@@ -72,6 +72,10 @@ namespace KidGame.Mechanics.Counting
         private readonly List<AnswerCard>   _cards = new List<AnswerCard>();
         private readonly Dictionary<ScrollRect, ScrollRectState> _scrollRectStates =
             new Dictionary<ScrollRect, ScrollRectState>();
+
+        /// <summary>Frame of the last scroll-locking pass, used to skip duplicate passes in one frame.</summary>
+        private int _lastScrollLockFrame = -1;
+
         private int _answeredCount;
 
         /// <summary>
@@ -591,8 +595,16 @@ namespace KidGame.Mechanics.Counting
             UpdateScrollLockingInternal();
         }
 
+        /// <summary>
+        /// Runs the scroll-locking pass at most once per frame. GenerateRound, the answer callback and
+        /// the deferred coroutine can all request it in the same frame; each pass force-rebuilds the
+        /// layout of every descendant, so the duplicates are pure waste.
+        /// </summary>
         private void UpdateScrollLockingInternal()
         {
+            if (_lastScrollLockFrame == Time.frameCount) return;
+            _lastScrollLockFrame = Time.frameCount;
+
             // Slots and answers each scroll independently, so lock/measure them separately.
             // In premade mode the procedural slots container is disabled and swapped for the premade
             // one, so the shared slots ScrollRect must be handled by the premade container instead.

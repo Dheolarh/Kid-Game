@@ -60,31 +60,76 @@ public class DeviceManager : MonoBehaviour
     public int ultraLowTargetFrameRate = 30;
     public int ultraLowQualityLevelIndex = 0; // Very Low
 
-    private static readonly string[] KnownWeakGpuFragments =
-    {
-        "Mali-G57",
-        "Mali-G52",
-        "PowerVR GE8320",
-        "PowerVR GE8322",
-        "Adreno 610",
-        "Adreno 611",
-    };
+// ── GPU model lists ───────────────────────────────────────────────────
+        // Matched as case-insensitive substrings against SystemInfo.graphicsDeviceName.
+        //
+        // Full model strings are used deliberately. Short prefixes are tempting but dangerous:
+        // "Adreno 50" would also match Adreno 530 (Snapdragon 820), which is still capable, and
+        // "Mali-G6" would catch mid-range chips like Mali-G68. More entries, no false positives.
+        //
+        // These lists are a starting point based on Android GPU tier research. Tune them from real
+        // device testing — log the GPU name on each new device and add anything that struggles.
 
-    public static DeviceManager Instance { get; private set; }
-    public static DeviceTier CurrentTier { get; private set; } = DeviceTier.Normal;
-
-    public static event Action<DeviceTier> OnTierApplied;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
+        /// <summary>
+        /// GPUs that cannot render high-resolution UI at all. These get UltraLow (720p, 0.65 scale).
+        /// Legacy/entry/bottom-tier parts — mostly Mali-400 era through Mali-G57.
+        /// </summary>
+        private static readonly string[] VeryWeakGpuModels =
         {
-            Destroy(gameObject);
-            return;
-        }
+            // Legacy / obsolete
+            "PowerVR SGX530", "PowerVR SGX543", "PowerVR SGX544",
+            "VideoCore IV", "Tegra 4",
+            "Adreno 200", "Adreno 203", "Adreno 205",
+            "Adreno 302", "Adreno 304", "Adreno 306", "Adreno 320", "Adreno 405",
+            "Mali-400", "Mali-T720", "Mali-T760", "Mali-T820", "Mali-T830", "Mali-T860",
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+            // Bottom tier / entry
+            "PowerVR G6200",
+            "PowerVR GE8100", "PowerVR GE8300", "PowerVR GE8320", "PowerVR GE8322",
+            "IMG8322",
+
+            // Budget low-end
+            "Adreno 504", "Adreno 505", "Adreno 506",
+            "Adreno 610", "Adreno 611", "Adreno 612",
+
+            // Recent low-entry
+            "Mali-G31", "Mali-G51", "Mali-G52", "Mali-G57",
+        };
+
+        /// <summary>
+        /// Budget GPUs that need reduced load but can manage 1080p. These get Low (1080p, 0.85 scale).
+        /// </summary>
+        private static readonly string[] WeakGpuModels =
+        {
+            "Adreno 509", "Adreno 512",
+            "Adreno 613", "Adreno 615", "Adreno 616", "Adreno 618", "Adreno 619",
+            "Mali-G68", "Mali-G610",
+            "PowerVR GM9446",
+        };
+
+        /// <summary>
+        /// Pixel count above which a device is considered to have a heavy display load.
+        /// Logged for diagnostics only — deliberate: testing showed a Mali-G57 stalled even at
+        /// 1.18M px, so the GPU model is a far better predictor of fill-rate trouble than the
+        /// pixel count. Wire this into DetectTier only if evidence later supports it.
+        /// </summary>
+        private const long PixelLoadThreshold = 2_500_000;
+
+        public static DeviceManager Instance { get; private set; }
+        public static DeviceTier CurrentTier { get; private set; } = DeviceTier.Normal;
+
+        public static event Action<DeviceTier> OnTierApplied;
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
 
         DeviceTier tier;
         if (forceTierForTesting)
@@ -116,44 +161,83 @@ public class DeviceManager : MonoBehaviour
         int vram = SystemInfo.graphicsMemorySize;
         string gpuName = SystemInfo.graphicsDeviceName ?? string.Empty;
 
-        bool gpuKnownWeak = false;
-        foreach (var fragment in KnownWeakGpuFragments)
-        {
-            if (gpuName.IndexOf(fragment, StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                gpuKnownWeak = true;
-                break;
-            }
-        }
+        // Pixel load: the metric that actually predicts a fill-rate stall. Logged but NOT yet used
+        // for tier decisions — we're gathering per-device numbers first so the threshold is set from
+        // real hardware rather than guessed. See PixelLoadThreshold below.
+        long screenPixels = (long)Screen.currentResolution.width * Screen.currentResolution.height;
+        bool heavyPixelLoad = screenPixels >= PixelLoadThreshold;
+
+        bool gpuVeryWeak = MatchesAny(gpuName, VeryWeakGpuModels);
+        bool gpuWeak = gpuVeryWeak || MatchesAny(gpuName, WeakGpuModels);
 
         // Score using the Low thresholds (looser)
         float lowRatio = ComputeWeaknessRatio(
-            ram, cores, vram, gpuKnownWeak,
+            ram, cores, vram, gpuWeak,
             lowRamThresholdMB, lowCoreCountThreshold, lowGraphicsMemThresholdMB);
 
         // Score using the UltraLow thresholds (stricter)
         float ultraLowRatio = ComputeWeaknessRatio(
-            ram, cores, vram, gpuKnownWeak,
+            ram, cores, vram, gpuVeryWeak,
             ultraLowRamThresholdMB, ultraLowCoreCountThreshold, ultraLowGraphicsMemThresholdMB);
 
         DeviceTier result;
-        if (ultraLowRatio >= ultraLowRatioCutoff)
+        string reason;
+
+        if (gpuVeryWeak)
+        {
+            // A GPU on the very-weak list is the most reliable predictor of a fill-rate stall, which
+            // is what low-end Android actually fails at. The ratio score dilutes the GPU signal to
+            // one vote among four, so a Mali-G57 with 4GB RAM and 8 cores previously scored 0.25 and
+            // landed on Low (0.85 scale) — still far too heavy for that GPU.
+            result = DeviceTier.UltraLow;
+            reason = "GPU on very-weak list";
+        }
+        else if (ultraLowRatio >= ultraLowRatioCutoff)
         {
             result = DeviceTier.UltraLow;
+            reason = $"ultraLowRatio {ultraLowRatio:0.00} >= {ultraLowRatioCutoff:0.00}";
         }
-        else if (lowRatio >= lowRatioCutoff)
+        else if (gpuWeak || lowRatio >= lowRatioCutoff)
         {
             result = DeviceTier.Low;
+            reason = gpuWeak
+                ? "GPU on weak list"
+                : $"lowRatio {lowRatio:0.00} >= {lowRatioCutoff:0.00}";
         }
         else
         {
             result = DeviceTier.Normal;
+            reason = "no weak signals";
         }
 
         Debug.Log($"[DeviceTierManager] RAM={ram}MB, Cores={cores}, VRAM={vram}MB, GPU=\"{gpuName}\", " +
-                  $"lowRatio={lowRatio:0.00}, ultraLowRatio={ultraLowRatio:0.00} => Tier={result}");
+                  $"gpuVeryWeak={gpuVeryWeak}, gpuWeak={gpuWeak}, " +
+                  $"lowRatio={lowRatio:0.00}, ultraLowRatio={ultraLowRatio:0.00} " +
+                  $"=> Tier={result} ({reason})");
+
+        // Diagnostic only — pixel load is not yet a tier input. Use this on real devices to decide
+        // a sensible PixelLoadThreshold, then wire it in.
+        Debug.Log($"[DeviceTierManager] Display={Screen.currentResolution.width}x{Screen.currentResolution.height} " +
+                  $"({screenPixels / 1_000_000f:0.00}M px), dpi={Screen.dpi}, " +
+                  $"heavyPixelLoad={heavyPixelLoad} (threshold {PixelLoadThreshold / 1_000_000f:0.0}M)");
 
         return result;
+    }
+
+    /// <summary>True if the GPU name contains any of the supplied model strings (case-insensitive).</summary>
+    private static bool MatchesAny(string gpuName, string[] models)
+    {
+        if (string.IsNullOrEmpty(gpuName) || models == null) return false;
+
+        foreach (var model in models)
+        {
+            if (!string.IsNullOrEmpty(model) &&
+                gpuName.IndexOf(model, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private float ComputeWeaknessRatio(int ram, int cores, int vram, bool gpuKnownWeak,

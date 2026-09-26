@@ -16,6 +16,9 @@ namespace KidGame.Interface
     {
         public static ProfileMenuController Instance { get; private set; }
 
+        /// <summary>Cached total stars. -1 means "not computed yet". See InvalidateStarCache().</summary>
+        private static int _cachedTotalStars = -1;
+
         [Header("Menu References")]
         [Tooltip("The main container GameObject of the profile menu popup (e.g. Canvas or Overlay Panel).")]
         [SerializeField] private GameObject profileMenuObject;
@@ -226,11 +229,6 @@ namespace KidGame.Interface
             _isTransitioning = true;
             RefreshProfileData();
 
-            if (AudioManager.Instance != null)
-            {
-                AudioManager.Instance.PlayDialoguePopSfx();
-            }
-
             profileMenuObject.SetActive(true);
             contentPanel.DOKill();
             contentPanel.localScale = Vector3.zero;
@@ -353,6 +351,11 @@ namespace KidGame.Interface
         }
         private int GetTotalStarsCount()
         {
+            // Cached: the loop below makes one native PlayerPrefs call per level, which is slow to
+            // repeat on every profile refresh. The cache is invalidated by InvalidateStarCache()
+            // whenever stars are written (see GameFlowManager level completion).
+            if (_cachedTotalStars >= 0) return _cachedTotalStars;
+
             int total = 0;
             for (int i = 1; i <= 500; i++)
             {
@@ -361,10 +364,20 @@ namespace KidGame.Interface
 
             if (total == 0 && PlayerPrefs.HasKey("TotalStars"))
             {
-                return PlayerPrefs.GetInt("TotalStars");
+                total = PlayerPrefs.GetInt("TotalStars");
             }
 
+            _cachedTotalStars = total;
             return total;
+        }
+
+        /// <summary>
+        /// Clears the cached star total so the next read recomputes it.
+        /// Call this after writing any 'Level_Stars_n' PlayerPref.
+        /// </summary>
+        public static void InvalidateStarCache()
+        {
+            _cachedTotalStars = -1;
         }
 
         private Sprite GetProfileSprite(string buddyName)

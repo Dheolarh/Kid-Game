@@ -17,7 +17,7 @@ MonoBehaviour:
   levelName: LESSON 38
   levelSubtitle: Learn how to spell number 6
   levelEndTip: S I X  6!
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Pink
   levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}

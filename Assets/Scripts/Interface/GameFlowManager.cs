@@ -169,11 +169,24 @@ namespace KidGame.Interface
             // Set high-density target resolutions: 1440p (QHD) for phones, 2048p (2K+) for tablets
             int maxResolutionHeight = isTablet ? 2048 : 1440;
 
+            // Weak devices cannot push that many pixels. This previously ignored the device tier
+            // entirely, so an UltraLow device still rendered at 1440p and the GPU stalled in
+            // Player::BitToCurrentFB. Scaling this with the tier is the biggest fill-rate lever.
+            switch (DeviceManager.CurrentTier)
+            {
+                case DeviceManager.DeviceTier.UltraLow:
+                    maxResolutionHeight = Mathf.Min(maxResolutionHeight, 720);
+                    break;
+                case DeviceManager.DeviceTier.Low:
+                    maxResolutionHeight = Mathf.Min(maxResolutionHeight, 1080);
+                    break;
+            }
+
             if (Screen.currentResolution.height > maxResolutionHeight)
             {
                 int targetWidth = Mathf.RoundToInt(maxResolutionHeight * ((float)Screen.width / Screen.height));
                 Screen.SetResolution(targetWidth, maxResolutionHeight, true);
-                Debug.Log($"[GameFlowManager] Tablet Detected: {isTablet}. Setting screen resolution to: {targetWidth}x{maxResolutionHeight}");
+                Debug.Log($"[GameFlowManager] Tablet={isTablet}, Tier={DeviceManager.CurrentTier}. Setting screen resolution to: {targetWidth}x{maxResolutionHeight}");
             }
         }
 
@@ -1337,6 +1350,10 @@ namespace KidGame.Interface
                 if (starsEarned > currentHighStars)
                 {
                     PlayerPrefs.SetInt($"Level_Stars_{ActiveLevel.levelNumber}", starsEarned);
+
+                    // The profile screen caches its star total; this is the only place stars are
+                    // written, so invalidate here to keep the displayed count current.
+                    ProfileMenuController.InvalidateStarCache();
                 }
 
                 // Unlock the next level in standard sequential order
