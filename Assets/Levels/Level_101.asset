@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 101
   levelName: LESSON 101
-  levelSubtitle: Memory Lane - Counting 51 to 80
-  levelEndTip: You are a good learner
+  levelSubtitle: Numbers 1 to 50 again
+  levelEndTip: The number man!
   isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: TealGreen
@@ -26,9 +26,11 @@ MonoBehaviour:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's count 51 to 80
+    - text: Now a quick test for you once again {playername}
       mascotAnimationTrigger: isIdle
-    - text: Here comes 51 to 70
+    - text: I will watch will you write
+      mascotAnimationTrigger: isIdle
+    - text: Alright let's go
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -79,17 +81,19 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: a3ebb424773e14f48a9370ffbdfb5604, type: 2}
+    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 5b578b7779a1bc642a3bf1187514a921, type: 3}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Here comes 71 to 80
+    - text: Alright, next up 21 to 40
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -140,12 +144,79 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 23a8b3e060a7edf439361d8b974e90ab, type: 2}
+    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: a30b5de95e5a71c438178cf2b27a5aea, type: 3}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
+  - gameType: 4
+    overrideLevelPremade: 0
+    dialogueLines:
+    - text: The final ten
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Genius, Genius, Genius {playername}, Genius!
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 176a7d4b23efc3d4d9f5fe9f2ae90fb6, type: 3}
+    recallPremadeSlotData: {fileID: 0}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

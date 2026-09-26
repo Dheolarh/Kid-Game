@@ -15,21 +15,21 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 159
   levelName: LESSON 159
-  levelSubtitle: The Shape Counter
-  levelEndTip: And that's a big decade
+  levelSubtitle: How many fingers do I have?
+  levelEndTip: I have 10 fingers!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 0
+  - gameType: 1
     overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
-    countingSlotCount: 6
-    countingMinCount: 27
-    countingMaxCount: 33
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 20
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
@@ -37,9 +37,9 @@ MonoBehaviour:
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 12
+    additionMaxPerGrid: 5
     additionDiceMode: 0
-    additionFingerMode: 0
+    additionFingerMode: 1
     additionCountAddMode: 0
     additionNumbersOnlyMode: 0
     additionMinOperandCount: 2
@@ -82,5 +82,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

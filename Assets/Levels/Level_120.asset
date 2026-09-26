@@ -15,31 +15,27 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 120
   levelName: LESSON 120
-  levelSubtitle: Counting trucks
-  levelEndTip: How many wheels did the truck have?
+  levelSubtitle: '{playername} spells 1 to 5'
+  levelEndTip: You can spell one to five {playername}
   isUnlockedByDefault: 0
   isPremadeLevel: 1
-  themePresetName: Orange
-  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: How many holes can you see on these trucks
-      mascotAnimationTrigger: isIsdle
-    - text: Now let's count them backward
-      mascotAnimationTrigger: isIdle
-    - text: Alright let's go from 20 to 11 first
+    - text: Can you spell the numbers you see?
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 5
+    countingSlotCount: 7
     countingMinCount: 1
-    countingMaxCount: 12
+    countingMaxCount: 7
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 9ca38a6a3a0a4f542baab34a8a8789d9, type: 3}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
@@ -79,75 +75,16 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 1
+    recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 2418524986896862658, guid: 49f8b446c71081047848f88b81abf96d, type: 3}
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 9ca38a6a3a0a4f542baab34a8a8789d9, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-  - gameType: 4
-    overrideLevelPremade: 0
-    dialogueLines:
-    - text: Next 10 to 1
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 1
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 1145725517465111567, guid: 9f7bb4fc81fc09947b9e50740e8b83f7, type: 3}
-    recallPremadeSlotData: {fileID: 0}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

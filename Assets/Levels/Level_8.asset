@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 8
   levelName: LESSON 8
-  levelSubtitle: 2 straight line makes 7
-  levelEndTip: 7 days in a week!
+  levelSubtitle: Learning Number 6
+  levelEndTip: 6 sides of a box!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Purple
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  themePresetName: Orange
+  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Today we trace number 7.
+    - text: Hi {playername}. Welcome to number 6.
       mascotAnimationTrigger: isHi
-    - text: Slide across the top and slant straight down.
+    - text: Curve down and loop around into a little circle at the bottom.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great Job.
+    - text: Great job tracing 6.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,17 +86,17 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 7
+    - 6
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's try that once more
+    - text: Practice writing number 6 2 more times.
       mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Brilliant work. You mastered number 7.
-      mascotAnimationTrigger: isHappy
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -150,8 +150,72 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 7
+    - 6
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
+  - gameType: 5
+    overrideLevelPremade: 0
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotData: {fileID: 0}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace:
+    - 6
+    tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

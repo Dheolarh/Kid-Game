@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 161
   levelName: LESSON 161
-  levelSubtitle: 181 to 190
-  levelEndTip: 10 to two centuries
+  levelSubtitle: 151 to 160
+  levelEndTip: 10 past a century and half!
   isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Blue
@@ -26,7 +26,7 @@ MonoBehaviour:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: You are counting to 190
+    - text: You are counting to 160 now
       mascotAnimationTrigger: isIdle
     - text: Let's go with hints first
       mascotAnimationTrigger: isIdle
@@ -80,16 +80,18 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 58c8b778eac60b14fb6c525e4619d4aa, type: 2}
+    recallPremadeSlotData: {fileID: 11400000, guid: 87ada0c84c6065646ab5c82c462b4851, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Le's try that again, no hints
+    - text: Le's try that again
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -141,11 +143,13 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: c0f160a8f9d4209439c049322907acfa, type: 2}
+    recallPremadeSlotData: {fileID: 11400000, guid: 21bd0f94c7701434388b23c7e6b05a6a, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

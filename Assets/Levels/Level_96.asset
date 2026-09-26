@@ -15,32 +15,40 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 96
   levelName: LESSON 96
-  levelSubtitle: Counting dots on dice again
-  levelEndTip: A Die has 6 faces!
+  levelSubtitle: Counting Backwards
+  levelEndTip: Close your eyes and count down, that how we play hide and seek!
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: Pink
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
+  isPremadeLevel: 1
+  themePresetName: Orange
+  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
-  - gameType: 1
+  - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: How many dots can you count {playername}
+    - text: Hello {playername} let's count backwards from number 40 to number 1
       mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
-    countingSlotCount: 7
-    countingMinCount: 5
+    - text: So it goes 40, 39, 38, till... 1
+      mascotAnimationTrigger: isIdle
+    - text: 'Here''s 40 to 21. '
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Great job
+      mascotAnimationTrigger: isHappy
+    - text: Now let's count from 20 to 1
+      mascotAnimationTrigger: isIdle
+    countingSlotCount: 5
+    countingMinCount: 1
     countingMaxCount: 12
-    countingDiceMode: 1
+    countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 6
-    additionDiceMode: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
     additionNumbersOnlyMode: 0
@@ -78,11 +86,74 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: b31d2ddce8e1a744daf78465e980c69c, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
+  - gameType: 4
+    overrideLevelPremade: 0
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 12
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: d785aebe168bb694f9e9430adba8a7d0, type: 2}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

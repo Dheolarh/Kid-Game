@@ -15,27 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 145
   levelName: LESSON 145
-  levelSubtitle: Counting clothes
-  levelEndTip: A pair of jeans!
+  levelSubtitle: Fingers once more
+  levelEndTip: How many toes do you have
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Orange
-  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
+  themePresetName: Blue
+  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
   pages:
   - gameType: 0
     overrideLevelPremade: 0
-    dialogueLines:
-    - text: We are back at my warddrobe
-      mascotAnimationTrigger: isIdle
-    - text: Can you help me count my new clothes?
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines: []
-    countingSlotCount: 10
-    countingMinCount: 18
-    countingMaxCount: 30
+    countingSlotCount: 3
+    countingMinCount: 6
+    countingMaxCount: 8
     countingDiceMode: 0
-    countingFingerMode: 0
+    countingFingerMode: 1
     countingActiveThemeName: Clothes
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
@@ -80,11 +76,13 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: b7f1b9b8ad2d5a04b80d38daceb468b8, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

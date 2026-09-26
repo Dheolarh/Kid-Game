@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 54
   levelName: LESSON 54
-  levelSubtitle: Write number 44
-  levelEndTip: 44 has two identical digits.
+  levelSubtitle: Master tracing 38
+  levelEndTip: 38 is 2 less than 40.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Teal
-  levelThemeColor: {r: 0.1, g: 0.74, b: 0.61, a: 0}
+  themePresetName: Red
+  levelThemeColor: {r: 0.91, g: 0.3, b: 0.24, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us learn to write 44.
+    - text: Hi {playername}. Let us learn number 38.
       mascotAnimationTrigger: isHi
-    - text: Trace 4 on the left, then another 4 on the right.
+    - text: Trace 3 first, then write 8 right beside it.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great progress. You traced two fours for 44.
+    - text: Fantastic. You traced 3 and 8 for 38.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 44
+    - 38
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let us trace 44 again. Follow the dots smoothly.
+    - text: Let us trace 38 again. Start from the top dot.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Super job {playername}. 4 and 4 make 44.
+    - text: Well done {playername}. 3 and 8 make 38.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 44
+    - 38
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: One final time for number 44.
+    - text: One last practice for number 38.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Amazing work. You mastered number 44.
+    - text: Excellent. You can write 38 easily.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 44
+    - 38
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

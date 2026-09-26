@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 34
   levelName: LESSON 34
-  levelSubtitle: Tracing number 28
-  levelEndTip: 28 is 4 weeks of 7 days.
+  levelSubtitle: 24 hours in a full day
+  levelEndTip: 24 hours make 1 complete day and night.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Red
-  levelThemeColor: {r: 0.91, g: 0.3, b: 0.24, a: 0}
+  themePresetName: Blue
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us learn how to write 28.
+    - text: Hi {playername}. Let's write the number 24.
       mascotAnimationTrigger: isHi
-    - text: Trace 2 first, then draw 8 with 2 loops beside it.
+    - text: Write a 2, then down, across, and straight down for 4.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Fantastic. You traced your very first 28.
+    - text: Splendid. 2 and 4 stand together as 24.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 28
+    - 24
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let us trace 28 again. Keep your finger on the line.
+    - text: Let's trace 24 once more.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Super work {playername}. 2 and 8 make 28.
+    - text: You make tracing 24 look so easy {playername}.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 28
+    - 24
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: 1 final time to master the number 28.
+    - text: 1 final try on number 24.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great job. You are a number 28 master.
+    - text: Bravo. Number 24 is complete.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 28
+    - 24
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

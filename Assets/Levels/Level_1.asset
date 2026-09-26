@@ -95,6 +95,8 @@ MonoBehaviour:
     - 0
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
@@ -159,6 +161,8 @@ MonoBehaviour:
     - 0
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines: []
@@ -219,5 +223,7 @@ MonoBehaviour:
     - 0
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

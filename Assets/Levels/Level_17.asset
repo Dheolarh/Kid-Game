@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 17
   levelName: LESSON 17
-  levelSubtitle: 14 fantastic steps
-  levelEndTip: 14 is 10 plus 4.
+  levelSubtitle: Tracing number 12
+  levelEndTip: 12 is 10 plus 2.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Blue
+  themePresetName: Teal
   levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let's write the number 14.
+    - text: Hi {playername}. Ready for number 12.
       mascotAnimationTrigger: isHi
-    - text: Write a 1, then down, across, and straight down for 4.
+    - text: First trace a straight line 1, then a curvy duck neck 2 next to it.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Splendid. 1 and 4 stand together as 14.
+    - text: Great job. A 1 and a 2 make a 12.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 14
+    - 12
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's trace 14 once more.
+    - text: Let's practice tracing 12 again.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: You make tracing 14 look so easy {playername}.
+    - text: You're doing amazing {playername}. You traced 12.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 14
+    - 12
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: 1 final try on number 14.
+    - text: 1 last try for 12.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Bravo. Number 14 is complete.
+    - text: Woohoo. Perfect tracing on 12.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 14
+    - 12
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -15,32 +15,36 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 92
   levelName: LESSON 92
-  levelSubtitle: Counting dots on dice
-  levelEndTip: A Die has 6 faces!
+  levelSubtitle: Counting Backwards
+  levelEndTip: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: Pink
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
+  isPremadeLevel: 1
+  themePresetName: Orange
+  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
-  - gameType: 1
+  - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: How many dots can you count {playername}
+    - text: We are doing something different now {playername}
+      mascotAnimationTrigger: isIsdle
+    - text: We will be counting backwards from 10 to 1
+      mascotAnimationTrigger: isIdle
+    - text: Alright let's go! 10, 9, 8, ........ 1
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 7
+    countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
-    countingDiceMode: 1
+    countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 6
-    additionDiceMode: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
     additionNumbersOnlyMode: 0
@@ -75,14 +79,16 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
+    recallColorizeTextInsteadOfBox: 1
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: f18e9afe6e7af9945989dbb3f2573443, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

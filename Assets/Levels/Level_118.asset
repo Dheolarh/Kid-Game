@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 118
   levelName: LESSON 118
-  levelSubtitle: Matching numbers to words
-  levelEndTip: 8 is spelled Eight
+  levelSubtitle: Counting and match your fingers
+  levelEndTip: You are a good learner
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Purple
@@ -53,12 +53,12 @@ MonoBehaviour:
     comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 10
+    matchingLeftVariant: 3
+    matchingRightVariant: 0
+    matchingSlotCount: 5
     matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 1
+    matchingMaxVal: 5
+    matchingShuffleLeftColumn: 0
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
@@ -82,5 +82,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 52
   levelName: LESSON 52
-  levelSubtitle: Tracing 42 step by step
-  levelEndTip: 42 is 6 times 7.
+  levelSubtitle: Tracing 36 step by step
+  levelEndTip: 36 is 6 times 6.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Orange
-  levelThemeColor: {r: 0.9, g: 0.49, b: 0.13, a: 0}
+  themePresetName: Yellow
+  levelThemeColor: {r: 0.95, g: 0.61, b: 0.07, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us practice writing 42.
+    - text: Hi {playername}. Let us learn how to write 36.
       mascotAnimationTrigger: isHi
-    - text: Trace 4 on the left, then write 2 on the right.
+    - text: Trace 3 on the left, then write 6 on the right.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Nice work. You traced 42 correctly.
+    - text: Great job. You traced your first 36.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 42
+    - 36
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Trace 42 again. Keep your finger on the line.
+    - text: Let us trace 36 again. Follow the lines carefully.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Wonderful {playername}. 4 and 2 make 42.
+    - text: Super work {playername}. 3 and 6 make 36.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 42
+    - 36
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: One more time to complete number 42.
+    - text: One final time to practice 36.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Brilliant. You mastered writing 42.
+    - text: Awesome. You are a 36 tracing master.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 42
+    - 36
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

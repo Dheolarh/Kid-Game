@@ -15,27 +15,29 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 15
   levelName: LESSON 15
-  levelSubtitle: Tracing number 12
-  levelEndTip: 12 is 10 plus 2.
+  levelSubtitle: Counting Objects 1 to 5
+  levelEndTip: Count each item carefully!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Teal
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  themePresetName: TealGreen
+  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
-  - gameType: 5
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Ready for number 12.
+    - text: Hi {playername}. Today let us practice counting fun objects from 1 to
+        5!
       mascotAnimationTrigger: isHi
-    - text: First trace a straight line 1, then a curvy duck neck 2 next to it.
+    - text: Count each object 1 by 1, then drag the matching number card to the target
+        box!
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great job. A 1 and a 2 make a 12.
+    - text: Fantastic counting {playername}. You counted all the objects.
       mascotAnimationTrigger: isHappy
-    countingSlotCount: 5
+    countingSlotCount: 6
     countingMinCount: 1
-    countingMaxCount: 12
+    countingMaxCount: 5
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
@@ -85,137 +87,10 @@ MonoBehaviour:
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 12
+    tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-  - gameType: 5
-    overrideLevelPremade: 0
-    dialogueLines:
-    - text: Let's practice tracing 12 again.
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: You're doing amazing {playername}. You traced 12.
-      mascotAnimationTrigger: isHappy
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 0}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 12
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
-  - gameType: 5
-    overrideLevelPremade: 0
-    dialogueLines:
-    - text: 1 last try for 12.
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Woohoo. Perfect tracing on 12.
-      mascotAnimationTrigger: isHappy
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 0}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 12
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 40
   levelName: LESSON 40
-  levelSubtitle: Master tracing 33
-  levelEndTip: 33 is two 3s side by side
+  levelSubtitle: Tracing number 28
+  levelEndTip: 28 is 4 weeks of 7 days.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Red
@@ -26,12 +26,12 @@ MonoBehaviour:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us learn number 33.
+    - text: Hi {playername}. Let us learn how to write 28.
       mascotAnimationTrigger: isHi
-    - text: Trace 3 first, then write another 3 right beside it.
+    - text: Trace 2 first, then draw 8 with 2 loops beside it.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Fantastic. You traced two threes for 33.
+    - text: Fantastic. You traced your very first 28.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 33
+    - 28
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let us trace 33 again. Start from the top dot.
+    - text: Let us trace 28 again. Keep your finger on the line.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Well done {playername}. 3 and 3 make 33.
+    - text: Super work {playername}. 2 and 8 make 28.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 33
+    - 28
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: One last practice for number 33.
+    - text: 1 final time to master the number 28.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Excellent. You can write 33 easily.
+    - text: Great job. You are a number 28 master.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 33
+    - 28
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

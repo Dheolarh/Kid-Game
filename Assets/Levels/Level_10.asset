@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 10
   levelName: LESSON 10
-  levelSubtitle: Learning Number 9
-  levelEndTip: A stitch in time saves 9
+  levelSubtitle: 2 circles makes 8
+  levelEndTip: 8 arms of an OCTOpus
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Green
@@ -26,13 +26,11 @@ MonoBehaviour:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us write number 9.
+    - text: A new number 8.
       mascotAnimationTrigger: isHi
-    - text: Make a circle at the top and draw a straight line down.
+    - text: 8 is just a circle sitting on another
       mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Great job tracing 9.
-      mascotAnimationTrigger: isHappy
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -86,14 +84,16 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 9
+    - 8
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines:
-    - text: You amaze me {playername}.
+    - text: Good work {playername}.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -148,8 +148,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 9
+    - 8
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

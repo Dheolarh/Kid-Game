@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 61
   levelName: LESSON 61
-  levelSubtitle: Write number 49
-  levelEndTip: 49 is 7 times 7.
+  levelSubtitle: Tracing 42 step by step
+  levelEndTip: 42 is 6 times 7.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Teal
-  levelThemeColor: {r: 0.1, g: 0.74, b: 0.61, a: 0}
+  themePresetName: Orange
+  levelThemeColor: {r: 0.9, g: 0.49, b: 0.13, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us learn to write 49.
+    - text: Hi {playername}. Let us practice writing 42.
       mascotAnimationTrigger: isHi
-    - text: Trace 4 on the left, then 9 on the right.
+    - text: Trace 4 on the left, then write 2 on the right.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great progress. You traced 49.
+    - text: Nice work. You traced 42 correctly.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 49
+    - 42
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let us trace 49 again. Follow the dots smoothly.
+    - text: Trace 42 again. Keep your finger on the line.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Super job {playername}. 4 and 9 make 49.
+    - text: Wonderful {playername}. 4 and 2 make 42.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 49
+    - 42
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: One final time for number 49.
+    - text: One more time to complete number 42.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Amazing work. You mastered number 49.
+    - text: Brilliant. You mastered writing 42.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 49
+    - 42
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

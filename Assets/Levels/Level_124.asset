@@ -15,26 +15,18 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 124
   levelName: LESSON 124
-  levelSubtitle: The number puzzle
-  levelEndTip: Have you played Snake and Ladder?
+  levelSubtitle: Fingers Matching
+  levelEndTip: You can count then match
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
-  themePresetName: Blue
-  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
+  isPremadeLevel: 0
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 3
     overrideLevelPremade: 0
-    dialogueLines:
-    - text: Have you ever played snake and ladder {playername}?
-      mascotAnimationTrigger: isIdle
-    - text: Well this isn't snake and ladder but a puzzle!
-      mascotAnimationTrigger: isIdle
-    - text: Find the missing numbers in the puzzle {playername}
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Perfecto!
-      mascotAnimationTrigger: isHappy
+    dialogueLines: []
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 20
@@ -61,12 +53,12 @@ MonoBehaviour:
     comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
+    matchingLeftVariant: 3
+    matchingRightVariant: 0
     matchingSlotCount: 5
-    matchingMinVal: 1
+    matchingMinVal: 5
     matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
+    matchingShuffleLeftColumn: 1
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
@@ -81,14 +73,16 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 1
-    recallScaleDownCardOnDrag: 1
-    recallPremadeSlotPrefab: {fileID: 6486484259667216724, guid: a742d371ffd0603498353f1a799509d1, type: 3}
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

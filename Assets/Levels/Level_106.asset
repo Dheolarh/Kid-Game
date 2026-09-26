@@ -15,30 +15,32 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 106
   levelName: LESSON 106
-  levelSubtitle: Ocean Addition
-  levelEndTip: How many arms does and OCTOpus have?
+  levelSubtitle: Counting dots on dice again
+  levelEndTip: A Die has 6 faces!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
   - gameType: 1
     overrideLevelPremade: 0
-    dialogueLines: []
+    dialogueLines:
+    - text: How many dots can you count {playername}
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 20
-    countingDiceMode: 0
+    countingSlotCount: 7
+    countingMinCount: 5
+    countingMaxCount: 12
+    countingDiceMode: 1
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 8
-    additionMinPerGrid: 5
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 6
+    additionDiceMode: 1
     additionFingerMode: 0
     additionCountAddMode: 0
     additionNumbersOnlyMode: 0
@@ -46,7 +48,7 @@ MonoBehaviour:
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: Ocean
+    additionActiveThemeName: 
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
@@ -82,5 +84,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

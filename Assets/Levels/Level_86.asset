@@ -15,30 +15,24 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 86
   levelName: LESSON 86
-  levelSubtitle: Counting Backwards
-  levelEndTip: Close your eyes and count down, that how we play hide and seek!
+  levelSubtitle: Numbers 61 to 70 again
+  levelEndTip: You must have mastered that now!
   isUnlockedByDefault: 0
   isPremadeLevel: 1
-  themePresetName: Orange
-  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hello {playername} let's count backwards from number 40 to number 1
-      mascotAnimationTrigger: isIdle
-    - text: So it goes 40, 39, 38, till... 1
-      mascotAnimationTrigger: isIdle
-    - text: 'Here''s 40 to 21. '
+    - text: Let's count 61 to 70 again
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great job
-      mascotAnimationTrigger: isHappy
-    - text: Now let's count from 20 to 1
+    - text: Greatwork! now let's try that again without hints.
       mascotAnimationTrigger: isIdle
-    countingSlotCount: 5
-    countingMinCount: 1
+    countingSlotCount: 8
+    countingMinCount: 6
     countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
@@ -86,12 +80,14 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: b31d2ddce8e1a744daf78465e980c69c, type: 2}
+    recallPremadeSlotData: {fileID: 11400000, guid: beb528db360be20439c42fcec72c80fc, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines: []
@@ -145,11 +141,13 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: d785aebe168bb694f9e9430adba8a7d0, type: 2}
+    recallPremadeSlotData: {fileID: 11400000, guid: 3456393398014d647b007dc5caac3ecf, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -15,29 +15,31 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 129
   levelName: LESSON 129
-  levelSubtitle: Counting Objects
-  levelEndTip: I eat lots of bananas
+  levelSubtitle: Ocean Addtion
+  levelEndTip: A school of fish
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Purple
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 0
+  - gameType: 1
     overrideLevelPremade: 0
-    dialogueLines: []
+    dialogueLines:
+    - text: Let's add this ocean animals quickly
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 8
-    countingMinCount: 3
-    countingMaxCount: 10
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 20
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
+    additionMinPerGrid: 6
+    additionMaxPerGrid: 8
     additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
@@ -46,7 +48,7 @@ MonoBehaviour:
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: 
+    additionActiveThemeName: Ocean
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
@@ -55,10 +57,10 @@ MonoBehaviour:
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
     matchingRightVariant: 1
-    matchingSlotCount: 5
+    matchingSlotCount: 10
     matchingMinVal: 1
     matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
+    matchingShuffleLeftColumn: 1
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
@@ -82,5 +84,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

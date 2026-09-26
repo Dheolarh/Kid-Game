@@ -15,18 +15,34 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 99
   levelName: LESSON 99
-  levelSubtitle: Coutning 51 to 70
-  levelEndTip: 
+  levelSubtitle: Matching Objects
+  levelEndTip: 2 Eggs is to number 2
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
-  themePresetName: Orange
-  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
+  isPremadeLevel: 0
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 3
     overrideLevelPremade: 0
-    dialogueLines: []
-    completionDialogueLines: []
+    dialogueLines:
+    - text: Let's matching numbers
+      mascotAnimationTrigger: isHappy
+    - text: 'Step 1: Count an object on the right'
+      mascotAnimationTrigger: isIdle
+    - text: 'Step 2: look for it''s number on the left'
+      mascotAnimationTrigger: isIdle
+    - text: 'Step 3: Tap it''s number on the left'
+      mascotAnimationTrigger: isIdle
+    - text: 'Step 4: Tap the object again on the right.'
+      mascotAnimationTrigger: isIdle
+    - text: And that's all, you have succesfully made a match!
+      mascotAnimationTrigger: isHappy
+    completionDialogueLines:
+    - text: 'Welldone! '
+      mascotAnimationTrigger: isHappy
+    - text: That didn't take much effort did it?
+      mascotAnimationTrigger: isIdle
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -54,11 +70,11 @@ MonoBehaviour:
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
+    matchingRightVariant: 4
+    matchingSlotCount: 7
     matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
+    matchingMaxVal: 8
+    matchingShuffleLeftColumn: 1
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
@@ -76,70 +92,13 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 62f908e06e39ecf4d9adc77f8b3b6a2f, type: 2}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-  - gameType: 4
-    overrideLevelPremade: 0
-    dialogueLines: []
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 66e7148cad3e27f449087b4ec3083f71, type: 2}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

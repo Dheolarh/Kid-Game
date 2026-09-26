@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 22
   levelName: LESSON 22
-  levelSubtitle: The final teen number 19
-  levelEndTip: 19 is the final teen number!
+  levelSubtitle: Sweet teen number 16
+  levelEndTip: Sweet 16 is a wonderful number!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Teal
+  themePresetName: Orange
   levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let's write number 19.
+    - text: Hi {playername}. Welcome to number 16.
       mascotAnimationTrigger: isHi
-    - text: Trace a 1, then a top circle and straight line for 9.
+    - text: Draw a 1, then curve down and loop around for 6.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Terrific. 1 and 9 make 19.
+    - text: Wonderful. 1 and 6 make 16.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 19
+    - 16
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's trace 19 again.
+    - text: Let's trace 16 once more.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: So impressive {playername}. Almost to 20.
+    - text: You're flying high {playername}. 16 looks fantastic.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 19
+    - 16
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: 1 final try for number 19.
+    - text: Final round for number 16.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Spectacular. 19 is fully completed.
+    - text: Hooray. 16 is completely mastered.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 19
+    - 16
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

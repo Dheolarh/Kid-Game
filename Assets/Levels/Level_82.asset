@@ -15,22 +15,18 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 82
   levelName: LESSON 82
-  levelSubtitle: Counting Backwards
-  levelEndTip: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+  levelSubtitle: Count and add animals
+  levelEndTip: I have 2 + 2 puppies, that's 4!
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
-  themePresetName: Orange
-  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
+  isPremadeLevel: 0
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 1
     overrideLevelPremade: 0
     dialogueLines:
-    - text: We are doing something different now {playername}
-      mascotAnimationTrigger: isIsdle
-    - text: We will be counting backwards from 10 to 1
-      mascotAnimationTrigger: isIdle
-    - text: Alright let's go! 10, 9, 8, ........ 1
+    - text: Let's count animals {playername}
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -43,16 +39,16 @@ MonoBehaviour:
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 12
+    additionMaxPerGrid: 6
     additionDiceMode: 0
     additionFingerMode: 0
-    additionCountAddMode: 0
+    additionCountAddMode: 1
     additionNumbersOnlyMode: 0
     additionMinOperandCount: 2
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: 
+    additionActiveThemeName: Animals
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
@@ -79,14 +75,16 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 1
+    recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: f18e9afe6e7af9945989dbb3f2573443, type: 3}
+    recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

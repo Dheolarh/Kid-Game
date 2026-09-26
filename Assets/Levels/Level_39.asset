@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 39
   levelName: LESSON 39
-  levelSubtitle: Tracing 32 step by step
-  levelEndTip: 'I have 32 teeth! '
+  levelSubtitle: 2 and 7 is number 27
+  levelEndTip: 27 is 3 times 9.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Orange
@@ -26,12 +26,12 @@ MonoBehaviour:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us practice writing 32.
+    - text: Hi {playername}. Let us learn how to write 27.
       mascotAnimationTrigger: isHi
-    - text: Trace 3 on the left, then write 2 on the right.
+    - text: Trace 2 first, then draw 7 right beside it.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Nice work. You traced 32 correctly.
+    - text: Fantastic. You traced your very first 27.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 32
+    - 27
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Trace 32 again. Keep your finger on the line.
+    - text: Let us trace 27 again. Follow the guide lines carefully.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Wonderful {playername}. 3 and 2 make 32.
+    - text: Super work {playername}. 2 and 7 make 27.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 32
+    - 27
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: One more time to complete number 32.
+    - text: 1 final time to master the number 27.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Brilliant. You mastered writing 32.
+    - text: Great job. You are a number 27 master.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 32
+    - 27
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

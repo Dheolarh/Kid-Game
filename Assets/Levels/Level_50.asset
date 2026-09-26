@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 50
   levelName: LESSON 50
-  levelSubtitle: Animal Addition
-  levelEndTip: 1 monkey + 1 monkey = 2 monkeys!
+  levelSubtitle: Recalling 1 to 20
+  levelEndTip: You're now a master of numbers!
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
+  isPremadeLevel: 1
   themePresetName: TealGreen
   levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
   pages:
-  - gameType: 1
+  - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us add animals from 1 to 3.
-      mascotAnimationTrigger: isHi
-    - text: Count the animals in both groups, then find the correct answer.
+    - text: Let's recall 1 - 20
+      mascotAnimationTrigger: isIdle
+    - text: No hints this time
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great job {playername}. You added all animals correctly!.
+    - text: Great work {playername}!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -43,20 +43,20 @@ MonoBehaviour:
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 3
+    additionMaxPerGrid: 12
     additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
     additionNumbersOnlyMode: 0
     additionMinOperandCount: 2
-    additionMaxOperandCount: 2
+    additionMaxOperandCount: 3
     additionMinNumberValue: 1
-    additionMaxNumberValue: 3
-    additionActiveThemeName: Animals
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
+    comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -81,12 +81,14 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: f6885ec2585ca814c82709824b765456, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

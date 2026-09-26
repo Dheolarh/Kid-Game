@@ -15,78 +15,15 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 179
   levelName: LESSON 179
-  levelSubtitle: Learn how to spell number 4
-  levelEndTip: '"F" "O" "U" "R" 4!'
-  isUnlockedByDefault: 1
-  isPremadeLevel: 1
-  themePresetName: Blue
-  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
+  levelSubtitle: Addition of numbers
+  levelEndTip: Getting  familiar with your numbers
+  isUnlockedByDefault: 0
+  isPremadeLevel: 0
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 0
-    overrideLevelPremade: 0
-    dialogueLines:
-    - text: Write F O U R then you spelled 4!
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 20
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 7cda059b2b41f2b41b36741f286dd415, type: 3}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 4a78df7931e3e9c46a63636ba97d2538, type: 3}
-    recallPremadeSlotData: {fileID: 0}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
-    showSoundButton: 1
-    soundButtonValue: 4
-  - gameType: 0
+  - gameType: 1
     overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
@@ -96,19 +33,19 @@ MonoBehaviour:
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 91773082a36bc974ab88fc50c83ac17a, type: 3}
+    countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
+    additionSlotCount: 10
     additionMinPerGrid: 1
-    additionMaxPerGrid: 12
+    additionMaxPerGrid: 5
     additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
+    additionNumbersOnlyMode: 1
     additionMinOperandCount: 2
-    additionMaxOperandCount: 3
+    additionMaxOperandCount: 2
     additionMinNumberValue: 1
-    additionMaxNumberValue: 50
+    additionMaxNumberValue: 5
     additionActiveThemeName: 
     comparisonSlotCount: 3
     comparisonMinVal: 1
@@ -138,14 +75,14 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 8b27d88026f244a47b41f0065878dcea, type: 3}
+    recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-    showSoundButton: 1
-    soundButtonValue: 4
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

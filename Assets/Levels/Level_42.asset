@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 42
   levelName: LESSON 42
-  levelSubtitle: Practice tracing 35
-  levelEndTip: 35 comes right after 34!
+  levelSubtitle: Welcome to the 30s
+  levelEndTip: 30 is 3 tens.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Blue
@@ -26,12 +26,12 @@ MonoBehaviour:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us learn how to write 35.
+    - text: Hi {playername}. Let us learn how to write 30.
       mascotAnimationTrigger: isHi
-    - text: Trace 3 first, then write 5 beside it.
+    - text: Trace 3 first, then draw a round 0 beside it.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Nice job. You traced your first 35.
+    - text: Fantastic. You traced your very first 30.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 35
+    - 30
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let us trace 35 again. Take your time.
+    - text: Let us trace 30 again. Make a neat 3 and a round 0.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Super work {playername}. 3 and 5 make 35.
+    - text: Super work {playername}. 3 and 0 make 30.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 35
+    - 30
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: One final time to finish 35.
+    - text: 1 final time to master the number 30.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Perfect. You are now great at writing 35.
+    - text: Great job. You are a number 30 master.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 35
+    - 30
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

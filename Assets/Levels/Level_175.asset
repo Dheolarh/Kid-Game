@@ -15,30 +15,18 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 175
   levelName: LESSON 175
-  levelSubtitle: The Little Genius
-  levelEndTip: Congratutions! you made it to the end
+  levelSubtitle: Addition of numbers
+  levelEndTip: Keep adding and adding more
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Purple
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
+  themePresetName: Orange
+  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
   - gameType: 1
     overrideLevelPremade: 0
-    dialogueLines:
-    - text: Welcome to your final lesson {playername}!
-      mascotAnimationTrigger: isHappy
-    - text: You've come so far on your learning journey
-      mascotAnimationTrigger: isIdle
-    - text: But before you go here's a quick addition test for your
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Congratulation {playername}!
-      mascotAnimationTrigger: isHappy
-    - text: You made it to the end!
-      mascotAnimationTrigger: isHappy
-    - text: Hope to see you again!
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 20
@@ -47,17 +35,17 @@ MonoBehaviour:
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 6
-    additionMinPerGrid: 2
-    additionMaxPerGrid: 6
+    additionSlotCount: 10
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 5
     additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
+    additionNumbersOnlyMode: 1
     additionMinOperandCount: 2
-    additionMaxOperandCount: 3
+    additionMaxOperandCount: 2
     additionMinNumberValue: 1
-    additionMaxNumberValue: 50
+    additionMaxNumberValue: 5
     additionActiveThemeName: 
     comparisonSlotCount: 3
     comparisonMinVal: 1
@@ -94,5 +82,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

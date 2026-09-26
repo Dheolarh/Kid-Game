@@ -15,25 +15,27 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 108
   levelName: LESSON 108
-  levelSubtitle: Counting and match your fingers
-  levelEndTip: You are a good learner
+  levelSubtitle: Count and Spell
+  levelEndTip: You can spell good!
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
+  isPremadeLevel: 1
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 3
+  - gameType: 0
     overrideLevelPremade: 0
-    dialogueLines: []
+    dialogueLines:
+    - text: Count each object in the row and spell their total number
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 5
+    countingSlotCount: 7
     countingMinCount: 1
-    countingMaxCount: 20
+    countingMaxCount: 7
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 0fd9ddd5e6b7f7840beafb5cca8d7e83, type: 3}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
@@ -53,11 +55,11 @@ MonoBehaviour:
     comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
-    matchingLeftVariant: 3
-    matchingRightVariant: 0
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
     matchingSlotCount: 5
     matchingMinVal: 1
-    matchingMaxVal: 5
+    matchingMaxVal: 10
     matchingShuffleLeftColumn: 0
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
@@ -82,5 +84,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

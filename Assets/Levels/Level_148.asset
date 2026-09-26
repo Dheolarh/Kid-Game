@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 148
   levelName: LESSON 148
-  levelSubtitle: Counting and Matching
-  levelEndTip: 2 bananas = 2 fingers
+  levelSubtitle: Big Fingers
+  levelEndTip: Close your eyes and count your fingers
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: TealGreen
-  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
+  themePresetName: Orange
+  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
-  - gameType: 3
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 20
+    countingSlotCount: 4
+    countingMinCount: 8
+    countingMaxCount: 11
     countingDiceMode: 0
-    countingFingerMode: 0
+    countingFingerMode: 1
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
@@ -53,12 +53,12 @@ MonoBehaviour:
     comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
-    matchingLeftVariant: 1
-    matchingRightVariant: 4
-    matchingSlotCount: 6
-    matchingMinVal: 6
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
     matchingMaxVal: 10
-    matchingShuffleLeftColumn: 1
+    matchingShuffleLeftColumn: 0
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
@@ -82,5 +82,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

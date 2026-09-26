@@ -15,23 +15,27 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 67
   levelName: LESSON 67
-  levelSubtitle: Counting 2 steps higher
-  levelEndTip: Count the days of the week, there are 7!
+  levelSubtitle: Adding kitchen utensils
+  levelEndTip: Thank you {playername}!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
-  - gameType: 0
+  - gameType: 1
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's count this objects
+    - text: Hello {playername}, welcome to my kitchen.
+      mascotAnimationTrigger: isHi
+    - text: Can you count this objects for me?
       mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
-    countingSlotCount: 7
+    completionDialogueLines:
+    - text: Thank you {playername} I couldn't have done it without you.
+      mascotAnimationTrigger: isHappy
+    countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 7
+    countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
@@ -39,7 +43,7 @@ MonoBehaviour:
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 12
+    additionMaxPerGrid: 6
     additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
@@ -48,7 +52,7 @@ MonoBehaviour:
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: 
+    additionActiveThemeName: Kitchen
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
@@ -84,5 +88,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

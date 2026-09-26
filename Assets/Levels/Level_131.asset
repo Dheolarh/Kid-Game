@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 131
   levelName: LESSON 131
-  levelSubtitle: Counting Fingers
-  levelEndTip: You have five fingers each on both hands
+  levelSubtitle: Counting Animals
+  levelEndTip: A tribe of monkeys
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Purple
@@ -28,11 +28,11 @@ MonoBehaviour:
     dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 5
+    countingMinCount: 16
+    countingMaxCount: 20
     countingDiceMode: 0
-    countingFingerMode: 1
-    countingActiveThemeName: 
+    countingFingerMode: 0
+    countingActiveThemeName: Animals
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
@@ -82,5 +82,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

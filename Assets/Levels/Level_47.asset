@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 47
   levelName: LESSON 47
-  levelSubtitle: Write number 39
-  levelEndTip: 39 is 3 tens and 9 ones.
+  levelSubtitle: Master tracing 33
+  levelEndTip: 33 is two 3s side by side
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Teal
-  levelThemeColor: {r: 0.1, g: 0.74, b: 0.61, a: 0}
+  themePresetName: Red
+  levelThemeColor: {r: 0.91, g: 0.3, b: 0.24, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us learn to write 39.
+    - text: Hi {playername}. Let us learn number 33.
       mascotAnimationTrigger: isHi
-    - text: Trace 3 on the left, then 9 on the right.
+    - text: Trace 3 first, then write another 3 right beside it.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great progress. You traced 39.
+    - text: Fantastic. You traced two threes for 33.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 39
+    - 33
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let us trace 39 again. Follow the dots smoothly.
+    - text: Let us trace 33 again. Start from the top dot.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Super job {playername}. 3 and 9 make 39.
+    - text: Well done {playername}. 3 and 3 make 33.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 39
+    - 33
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: One final time for number 39.
+    - text: One last practice for number 33.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Amazing work. You mastered number 39.
+    - text: Excellent. You can write 33 easily.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 39
+    - 33
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

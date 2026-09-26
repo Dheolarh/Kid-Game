@@ -15,18 +15,28 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 88
   levelName: LESSON 88
-  levelSubtitle: Practice 81 to 90
-  levelEndTip: You're now a number pro
+  levelSubtitle: Finding the treasure
+  levelEndTip: The island of lost numbers
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
-  themePresetName: TealGreen
-  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
+  isPremadeLevel: 0
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 6
     overrideLevelPremade: 0
-    dialogueLines: []
-    completionDialogueLines: []
+    dialogueLines:
+    - text: Hello {playername}
+      mascotAnimationTrigger: isHi
+    - text: Can you help me find my missing treasure?
+      mascotAnimationTrigger: isIdle
+    - text: I took 20 steps and lost it, it should be around somewhere...
+      mascotAnimationTrigger: isIdle
+    - text: If you count 20 steps you might find
+      mascotAnimationTrigger: isIdle
+    completionDialogueLines:
+    - text: Oh you found it! Thank you {playername}!
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -73,14 +83,16 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
+    recallColorizeTextInsteadOfBox: 1
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 659651b5f8585a246b4b9499a5e43cee, type: 2}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
+    customGamePrefab: {fileID: 1186473555801273927, guid: c5ca8a209d87ec84a9bc290d303d038d, type: 3}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

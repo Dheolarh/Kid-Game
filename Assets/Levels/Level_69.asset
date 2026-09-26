@@ -15,32 +15,24 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 69
   levelName: LESSON 69
-  levelSubtitle: Counting 1 to 100
-  levelEndTip: 100 is a century!
+  levelSubtitle: Tracing 47 step by step
+  levelEndTip: 47 is 4 tens and 7 ones.
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
-  themePresetName: Blue
-  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
+  isPremadeLevel: 0
+  themePresetName: Orange
+  levelThemeColor: {r: 0.9, g: 0.49, b: 0.13, a: 0}
+  levelBackgroundSprite: {fileID: 0}
   pages:
-  - gameType: 4
+  - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}
+    - text: Hi {playername}. Let us practice writing 47.
       mascotAnimationTrigger: isHi
-    - text: So you know how to count till 50
-      mascotAnimationTrigger: isIdle
-    - text: Let's do something bigger, let's count after 50
-      mascotAnimationTrigger: isIdle
-    - text: After 50 comes 51, 52, 53...... and so on
-      mascotAnimationTrigger: isIdle
-    - text: But we will stop at 100
-      mascotAnimationTrigger: isIdle
-    - text: So are you ready {playername}, let's count the first 20
+    - text: Trace 4 on the left, then write 7 on the right.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: That's 20 completed, Now let's count to 40
-      mascotAnimationTrigger: isIdle
+    - text: Nice work. You traced 47 correctly.
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -64,7 +56,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -89,87 +81,24 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 5b578b7779a1bc642a3bf1187514a921, type: 3}
+    recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
-    tracingValuesToTrace: []
+    tracingValuesToTrace:
+    - 47
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-  - gameType: 4
-    overrideLevelPremade: 0
-    dialogueLines: []
-    completionDialogueLines:
-    - text: 40 done and dusted, let's move on!
-      mascotAnimationTrigger: isIdle
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: a30b5de95e5a71c438178cf2b27a5aea, type: 3}
-    recallPremadeSlotData: {fileID: 0}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
-  - gameType: 4
+    showSoundButton: 0
+    soundButtonValue: 
+  - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Here's 41 - 60, after 50 we count our new numbers 51, 52, 53.... till
-        60
+    - text: Trace 47 again. Keep your finger on the line.
       mascotAnimationTrigger: isIdle
-    - text: Let's go!
-      mascotAnimationTrigger: isHappy
     completionDialogueLines:
-    - text: That was easy right?
-      mascotAnimationTrigger: isIdle
-    - text: Next we are counting 61 - 80
-      mascotAnimationTrigger: isIdle
+    - text: Wonderful {playername}. 4 and 7 make 47.
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -193,7 +122,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -218,24 +147,23 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 0331318ecbb2a62449ff27f2208a6f39, type: 3}
+    recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
-    tracingValuesToTrace: []
+    tracingValuesToTrace:
+    - 47
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-  - gameType: 4
+    showSoundButton: 0
+    soundButtonValue: 
+  - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Remember it goes 61, 62, 63, 64.... till 70
+    - text: One more time to complete number 47.
       mascotAnimationTrigger: isIdle
-    - text: Then it goes 71, 72, 73, 74..... till 80
-      mascotAnimationTrigger: isIdle
-    - text: Let's get counting!
-      mascotAnimationTrigger: isHappy
     completionDialogueLines:
-    - text: Well done {playername}! you've aced it so far
+    - text: Brilliant. You mastered writing 47.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -260,7 +188,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
+    comparisonMixAdditionEquations: 0
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -285,84 +213,15 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 9b8e005024e064c40936e0839fac4c49, type: 3}
+    recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
-    tracingValuesToTrace: []
+    tracingValuesToTrace:
+    - 47
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-  - gameType: 4
-    overrideLevelPremade: 0
-    dialogueLines:
-    - text: Now for our last batch 81 to 100
-      mascotAnimationTrigger: isIdle
-    - text: You remember how we've been counting right?
-      mascotAnimationTrigger: isIdle
-    - text: So we go 81, 82, 83, 84...... till 90 then 91, 92, 93, 94...... till
-        100
-      mascotAnimationTrigger: isIdle
-    - text: Are you ready!
-      mascotAnimationTrigger: isHappy
-    - text: Let's go!
-      mascotAnimationTrigger: isHappy
-    completionDialogueLines:
-    - text: Excellent work {playername}! you are a G E N I U S!
-      mascotAnimationTrigger: isHappy
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 6560713972276120035, guid: 6d8188a605ac6c743ab416616467d247, type: 3}
-    recallPremadeSlotData: {fileID: 0}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

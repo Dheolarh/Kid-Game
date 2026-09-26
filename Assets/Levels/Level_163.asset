@@ -15,59 +15,18 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 163
   levelName: LESSON 163
-  levelSubtitle: Greater or Less
-  levelEndTip: 3 apples is greater than 2 bananas
+  levelSubtitle: A mix of dice
+  levelEndTip: You are almost there!
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  isPremadeLevel: 1
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 2
+  - gameType: 4
     overrideLevelPremade: 0
-    dialogueLines:
-    - text: Hello {playername} let's compare numbers
-      mascotAnimationTrigger: isHi
-    - text: This is the greater than comparison symbol ">".
-      mascotAnimationTrigger: isIdle
-    - text: We say a number is greater than another numer if it is bigger
-      mascotAnimationTrigger: isIdle
-    - text: 'For example 4 is bigger than 2, so we say 4 is greater than 2 '
-      mascotAnimationTrigger: isIdle
-    - text: So we write 4 > 2
-      mascotAnimationTrigger: isIdle
-    - text: 'Since 4 is bigger than 2 that means 2 is smaller than 4, so we say 2
-        is less than 4 '
-      mascotAnimationTrigger: isIdle
-    - text: This is the less than comparison symbol "<", so we write 2 < 4
-      mascotAnimationTrigger: isIdle
-    - text: If we have two number that are the same size, we say they are equal
-      mascotAnimationTrigger: isIdle
-    - text: This is the equal symbol "=".
-      mascotAnimationTrigger: isIdle
-    - text: If 2 + 2 is equal to 4 then we write 2 + 2 = 4
-      mascotAnimationTrigger: isIdle
-    - text: Count the objects on the left and count the object on the right in each
-        row
-      mascotAnimationTrigger: isIdle
-    - text: Which one is greater or lesser or are they equal?
-      mascotAnimationTrigger: isIdle
-    - text: Put the correct comparison symbol into their middle box
-      mascotAnimationTrigger: isIdle
-    - text: If you count 10 balls on the left and 5 cakes on the right, 10 is bigger
-        than 5
-      mascotAnimationTrigger: isIdle
-    - text: So you put the > symbol into the box
-      mascotAnimationTrigger: isIdle
-    - text: Alright {playername} Let's compare!
-      mascotAnimationTrigger: isHappy
-    completionDialogueLines:
-    - text: Very Good!
-      mascotAnimationTrigger: isHappy
-    - text: You are now familiar with comparing numbers!
-      mascotAnimationTrigger: isIdle
-    - text: Count objects around you and keep comparing their numbers
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 20
@@ -75,7 +34,7 @@ MonoBehaviour:
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
+    countingPremadeSlotData: {fileID: 11400000, guid: e2456ecb41975c64d8aa4fce8a289595, type: 2}
     additionSlotCount: 5
     additionMinPerGrid: 1
     additionMaxPerGrid: 12
@@ -88,10 +47,71 @@ MonoBehaviour:
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
     additionActiveThemeName: 
-    comparisonSlotCount: 5
-    comparisonMinVal: 6
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: 609a2a9355ba7864187e613b749e65f3, type: 2}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
+  - gameType: 1
+    overrideLevelPremade: 1
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 20
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 6
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 6
+    additionDiceMode: 1
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -123,5 +143,68 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
+  - gameType: 4
+    overrideLevelPremade: 0
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 20
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: 7723540581fa71640aade8486904ab18, type: 2}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

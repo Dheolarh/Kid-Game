@@ -15,27 +15,29 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 103
   levelName: LESSON 103
-  levelSubtitle: Spelling Numbers
-  levelEndTip: You can spell one to ten {playername}
+  levelSubtitle: Counting Backwards
+  levelEndTip: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
   isUnlockedByDefault: 0
   isPremadeLevel: 1
-  themePresetName: Purple
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
+  themePresetName: Orange
+  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
   pages:
-  - gameType: 0
+  - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Can you spell the numbers you see?
+    - text: Let's count backwars again!
       mascotAnimationTrigger: isIdle
+    - text: Alright let's go! 10, 9, 8, ........ 1
+      mascotAnimationTrigger: 
     completionDialogueLines: []
-    countingSlotCount: 7
+    countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 7
+    countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: c1c6da71dea4c7c44a08bd30c0ee297f, type: 3}
+    countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
@@ -77,12 +79,14 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: c1c6da71dea4c7c44a08bd30c0ee297f, type: 3}
+    recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: f18e9afe6e7af9945989dbb3f2573443, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

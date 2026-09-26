@@ -15,23 +15,24 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 16
   levelName: LESSON 16
-  levelSubtitle: Tracing number 13
-  levelEndTip: 13 is 10 plus 3.
+  levelSubtitle: Simple number 11
+  levelEndTip: Hold 2 straws side by side and say 11
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Purple
+  themePresetName: Pink
   levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Next up is number 13.
+    - text: Hi {playername}. Let's learn how to write 11.
       mascotAnimationTrigger: isHi
-    - text: Write a 1 first, then curve around twice for 3.
+    - text: 11 is super easy, it's just a number 1 sitting right next to another
+        1!
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Awesome. 1 and 3 make 13.
+    - text: Fantastic. You traced your very first 11.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +87,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 13
+    - 11
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's trace 13 again.
+    - text: Let's trace 11 again. Start at the top dot for both 1s.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great effort {playername}. 13 is looking super clean.
+    - text: Super work {playername}. 2 1s side by side make 11.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +153,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 13
+    - 11
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Final practice for number 13.
+    - text: 1 final time to master the number 11.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Outstanding. You nailed the number 13.
+    - text: Hooray. You are a number 11 master.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +219,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 13
+    - 11
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

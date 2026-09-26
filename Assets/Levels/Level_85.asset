@@ -15,32 +15,32 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 85
   levelName: LESSON 85
-  levelSubtitle: Counting dots on dice
-  levelEndTip: A Die has 6 faces!
+  levelSubtitle: Counting Vehicles
+  levelEndTip: 1 car, 2 cars, 3 cars.... A traffic!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Pink
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
+  themePresetName: Blue
+  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
   pages:
-  - gameType: 1
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: How many dots can you count {playername}
+    - text: Let's count vehicles
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 7
-    countingMinCount: 1
+    countingSlotCount: 8
+    countingMinCount: 6
     countingMaxCount: 12
-    countingDiceMode: 1
+    countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: 
+    countingActiveThemeName: Vehicle
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 6
-    additionDiceMode: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
     additionNumbersOnlyMode: 0
@@ -84,5 +84,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

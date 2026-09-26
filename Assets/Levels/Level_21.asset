@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 21
   levelName: LESSON 21
-  levelSubtitle: Tracing number 18
-  levelEndTip: 18 is 1 and 8 together.
+  levelSubtitle: High 5 with 15
+  levelEndTip: 15 is 10 plus 5.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Pink
+  themePresetName: Green
   levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Today we learn number 18.
+    - text: Hi {playername}. High 5. Today we write 15.
       mascotAnimationTrigger: isHi
-    - text: Write a 1, then curve into an 8 with 2 loops.
+    - text: Trace a 1 first, then left, down, and curve for 5.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Awesome. 1 and 8 make 18.
+    - text: High 5. You traced 15 perfectly.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 18
+    - 15
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's trace 18 once again.
+    - text: Let's trace 15 again.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: You're unstoppable {playername}. Beautiful 18.
+    - text: Terrific job {playername}. 15 is looking great.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 18
+    - 15
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Final practice on number 18.
+    - text: 1 last practice for 15.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Victory. You nailed number 18.
+    - text: Sensational. You have mastered 15.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 18
+    - 15
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

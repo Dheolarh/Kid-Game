@@ -15,18 +15,20 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 167
   levelName: LESSON 167
-  levelSubtitle: Compare Animals
-  levelEndTip: 1 cat is less than 2 dogs
+  levelSubtitle: Between 116 and 120
+  levelEndTip: There is 117, 118, 119
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: TealGreen
-  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
+  isPremadeLevel: 1
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 2
+  - gameType: 4
     overrideLevelPremade: 0
     dialogueLines: []
-    completionDialogueLines: []
+    completionDialogueLines:
+    - text: You've been doing great so far {playername}!
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 20
@@ -47,12 +49,12 @@ MonoBehaviour:
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
     additionActiveThemeName: 
-    comparisonSlotCount: 10
-    comparisonMinVal: 2
-    comparisonMaxVal: 14
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
     comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: Animals
+    comparisonActiveThemeName: 
     matchingLeftVariant: 0
     matchingRightVariant: 1
     matchingSlotCount: 5
@@ -75,12 +77,14 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 8317775043155575551, guid: e32bca4b6d755de499d351267bbdd320, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

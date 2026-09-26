@@ -15,31 +15,33 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 119
   levelName: LESSON 119
-  levelSubtitle: Ocean Addtion
-  levelEndTip: A school of fish
+  levelSubtitle: BEFORE and AFTER II
+  levelEndTip: Bingo!
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  isPremadeLevel: 1
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
-  - gameType: 1
+  - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's add this ocean animals quickly
+    - text: Hey {playername} do you know what number comes before and after?
       mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
+    completionDialogueLines:
+    - text: You know your numbers!
+      mascotAnimationTrigger: isIdle
     countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 20
+    countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
-    additionMinPerGrid: 6
-    additionMaxPerGrid: 8
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
     additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
@@ -48,7 +50,7 @@ MonoBehaviour:
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: Ocean
+    additionActiveThemeName: 
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
@@ -57,10 +59,10 @@ MonoBehaviour:
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
     matchingRightVariant: 1
-    matchingSlotCount: 10
+    matchingSlotCount: 5
     matchingMinVal: 1
     matchingMaxVal: 10
-    matchingShuffleLeftColumn: 1
+    matchingShuffleLeftColumn: 0
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5
@@ -77,12 +79,14 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 8317775043155575551, guid: 81a3a183bfa60734fa95db97c32aa23f, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

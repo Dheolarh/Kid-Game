@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 11
   levelName: LESSON 11
-  levelSubtitle: Tracing number 10
-  levelEndTip: 10 toes on my feet
+  levelSubtitle: Learning Number 9
+  levelEndTip: A stitch in time saves 9
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Pink
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Wow, today we write 10.
+    - text: Hi {playername}. Let us write number 9.
       mascotAnimationTrigger: isHi
-    - text: Write a number 1 first, and then write a number 0 right next to it.
+    - text: Make a circle at the top and draw a straight line down.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: 10 is just a 1 sitting beside a 0.
+    - text: Great job tracing 9.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,16 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 10
+    - 9
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
-    dialogueLines:
-    - text: That was easy right. let's try it once more
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines:
-    - text: Look at me I have 10 fingers.
+    - text: You amaze me {playername}.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,8 +150,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 10
+    - 9
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

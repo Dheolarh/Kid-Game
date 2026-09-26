@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 35
   levelName: LESSON 35
-  levelSubtitle: The last twenties, 29.
-  levelEndTip: 29 comes right before 30.
+  levelSubtitle: Tracing number 25
+  levelEndTip: 5 groups of 5 make 25.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Teal
-  levelThemeColor: {r: 0.1, g: 0.74, b: 0.61, a: 0}
+  themePresetName: Green
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Let us learn how to write 29.
+    - text: Hi {playername}. High 5. Today we write 25.
       mascotAnimationTrigger: isHi
-    - text: Trace 2 first, then draw 9 beside it.
+    - text: Trace a 2 first, then left, down, and curve for 5.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Fantastic. You traced your very first 29.
+    - text: High 5. You traced 25 perfectly.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 29
+    - 25
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let us trace 29 again. Follow the dots from start to end.
+    - text: Let's trace 25 again.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Super work {playername}. 2 and 9 make 29.
+    - text: Terrific job {playername}. 25 is looking great.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 29
+    - 25
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: 1 final time to master the number 29.
+    - text: 1 last practice for 25.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great job. You are a number 29 master.
+    - text: CONGRATULATIONS. You mastered tracing up to 25.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 29
+    - 25
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

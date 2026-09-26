@@ -15,48 +15,42 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 64
   levelName: LESSON 64
-  levelSubtitle: Counting and Adding
-  levelEndTip: Count first then add
-  isUnlockedByDefault: 0
-  isPremadeLevel: 0
+  levelSubtitle: Spelling the number 10
+  levelEndTip: TEN  10!
+  isUnlockedByDefault: 1
+  isPremadeLevel: 1
   themePresetName: Purple
   levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 1
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Time to learn how to count and add
+    - text: Let's learn how to spell 10
       mascotAnimationTrigger: isIdle
-    - text: Count objects on the left and write their total in the left box
+    - text: 10 is spelled T E N
       mascotAnimationTrigger: isIdle
-    - text: Count objects on the right and add their total in the right box
-      mascotAnimationTrigger: isIdle
-    - text: Then add the two totals together in the answer box
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: I guess that was easy for you
-      mascotAnimationTrigger: isIdle
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 12
+    countingMaxCount: 20
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 06b686e29bc5d7f4b9240d51f1180523, type: 3}
     countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 7
+    additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 3
+    additionMaxPerGrid: 12
     additionDiceMode: 0
     additionFingerMode: 0
-    additionCountAddMode: 1
+    additionCountAddMode: 0
     additionNumbersOnlyMode: 0
     additionMinOperandCount: 2
     additionMaxOperandCount: 3
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
-    additionActiveThemeName: Ocean
+    additionActiveThemeName: 
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
@@ -85,12 +79,75 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 4a78df7931e3e9c46a63636ba97d2538, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 1
+    soundButtonValue: 10
+  - gameType: 0
+    overrideLevelPremade: 0
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 20
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: da0d1a086a67b1f4ba5b20217023563d, type: 3}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 8b27d88026f244a47b41f0065878dcea, type: 3}
+    recallPremadeSlotData: {fileID: 0}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
+    showSoundButton: 1
+    soundButtonValue: 1-
   sceneToLoad: Game
   levelIcon: {fileID: 0}

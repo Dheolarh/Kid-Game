@@ -14,36 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   targetAgeGroup: 0
   levelNumber: 78
-  levelName: 'LESSON 78 '
-  levelSubtitle: Finding the treasure
-  levelEndTip: The island of lost numbers
+  levelName: LESSON 78
+  levelSubtitle: Count and Spell
+  levelEndTip: You can spell good!
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  isPremadeLevel: 1
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 6
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hello {playername}
-      mascotAnimationTrigger: isHi
-    - text: Can you help me find my missing treasure?
+    - text: Can you spell these numbers you see?
       mascotAnimationTrigger: isIdle
-    - text: I took 20 steps and lost it, it should be around somewhere...
-      mascotAnimationTrigger: isIdle
-    - text: If you count 20 steps you might find
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Oh you found it! Thank you {playername}!
-      mascotAnimationTrigger: isHappy
-    countingSlotCount: 5
+    completionDialogueLines: []
+    countingSlotCount: 7
     countingMinCount: 1
-    countingMaxCount: 12
+    countingMaxCount: 7
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 0fd9ddd5e6b7f7840beafb5cca8d7e83, type: 3}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
@@ -83,14 +75,16 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 1
+    recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 0fd9ddd5e6b7f7840beafb5cca8d7e83, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 1186473555801273927, guid: c5ca8a209d87ec84a9bc290d303d038d, type: 3}
+    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

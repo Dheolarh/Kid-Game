@@ -15,37 +15,37 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 169
   levelName: LESSON 169
-  levelSubtitle: Addition of numbers
-  levelEndTip: Getting  familiar with your numbers
+  levelSubtitle: The Shape Counter
+  levelEndTip: And that's a big decade
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Green
   levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
   levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 1
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 20
+    countingSlotCount: 6
+    countingMinCount: 27
+    countingMaxCount: 33
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 10
+    additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 5
+    additionMaxPerGrid: 12
     additionDiceMode: 0
     additionFingerMode: 0
     additionCountAddMode: 0
-    additionNumbersOnlyMode: 1
+    additionNumbersOnlyMode: 0
     additionMinOperandCount: 2
-    additionMaxOperandCount: 2
+    additionMaxOperandCount: 3
     additionMinNumberValue: 1
-    additionMaxNumberValue: 5
+    additionMaxNumberValue: 50
     additionActiveThemeName: 
     comparisonSlotCount: 3
     comparisonMinVal: 1
@@ -82,5 +82,7 @@ MonoBehaviour:
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}

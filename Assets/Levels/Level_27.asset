@@ -15,23 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 27
   levelName: LESSON 27
-  levelSubtitle: Tracing number 22
-  levelEndTip: 22 looks like 2 ducks swimming together.
+  levelSubtitle: Big milestone number 20
+  levelEndTip: 20 toes and fingers combined!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Teal
+  themePresetName: Purple
   levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. Ready for number 22.
+    - text: Hi {playername}. Wow, we reached 20.
       mascotAnimationTrigger: isHi
-    - text: Trace a curvy 2, then another curvy 2 right next to it.
+    - text: Trace a curvy 2 first, then a big round 0 right beside it.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Great job. 2 2s make 22.
+    - text: Fantastic. 2 and 0 make 20.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,16 +86,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 22
+    - 20
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's practice tracing 22 again.
+    - text: Let's trace 20 again.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: You're doing amazing {playername}. 22 is 2 2s.
+    - text: Look at you {playername}. 20 fingers and toes total.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -150,16 +152,18 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 22
+    - 20
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: 1 last try for 22.
+    - text: Final practice for the big number 20.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Woohoo. Perfect tracing on 22.
+    - text: CONGRATULATIONS. You mastered tracing numbers 1 to 20.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -214,8 +218,10 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 22
+    - 20
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
   sceneToLoad: Game
   levelIcon: {fileID: 0}
