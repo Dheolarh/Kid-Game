@@ -172,11 +172,11 @@ namespace KidGame.Notifications
 
         public static void CancelAllNotifications()
         {
-            Debug.Log("[LocalNotificationManager] CancelAllNotifications — cancelling managed IDs (1001–1074).");
+            Debug.Log("[LocalNotificationManager] CancelAllNotifications — cancelling managed IDs (1001–1073).");
 #if UNITY_ANDROID
             try
             {
-                // Cancel only the managed daily notification IDs (7 days × 4 slots = IDs 1001–1074)
+                // Cancel only the managed daily notification IDs (7 days × 3 slots = IDs 1001–1073)
                 // instead of wiping ALL scheduled notifications. This preserves the test notification
                 // (ID 9999) which would otherwise be cancelled when OnApplicationPause triggers
                 // ScheduleAllDynamicNotifications → CancelAllNotifications.
@@ -186,6 +186,8 @@ namespace KidGame.Notifications
                     AndroidNotificationCenter.CancelScheduledNotification(idBase + 1);
                     AndroidNotificationCenter.CancelScheduledNotification(idBase + 2);
                     AndroidNotificationCenter.CancelScheduledNotification(idBase + 3);
+                    // Slot +4 (the old 6:00 PM streak saver) is retired, but cancel it anyway so
+                    // schedules created by a previous build are cleaned up on upgrade.
                     AndroidNotificationCenter.CancelScheduledNotification(idBase + 4);
                 }
                 Debug.Log("[LocalNotificationManager] Android: Managed notification IDs cancelled.");
@@ -204,6 +206,7 @@ namespace KidGame.Notifications
                     iOSNotificationCenter.RemoveScheduledNotification($"notification_{idBase + 1}");
                     iOSNotificationCenter.RemoveScheduledNotification($"notification_{idBase + 2}");
                     iOSNotificationCenter.RemoveScheduledNotification($"notification_{idBase + 3}");
+                    // Retired slot — removed for upgrade safety (see Android note above).
                     iOSNotificationCenter.RemoveScheduledNotification($"notification_{idBase + 4}");
                 }
                 Debug.Log("[LocalNotificationManager] iOS: Managed notification IDs cancelled.");
@@ -241,66 +244,72 @@ namespace KidGame.Notifications
             string todayStr = DateTime.Today.ToString("yyyy-MM-dd");
             string lastLoginStr = PlayerPrefs.GetString("Streak_LastLoginDate", "");
 
-            // Logging in today is the signal that the streak is kept. Do NOT also compare
-            // Streak_LastClaimedDay against Streak_DaysCount: the streak count increments as soon as the
-            // app opens, but Streak_LastClaimedDay only updates after the reward animation finishes, so
-            // that comparison briefly reports false and sends streak reminders to a player who already played.
+            // Streak already claimed today: every remaining slot today is cancelled. The next day reverts
+            // to learner messages until the evening, when an unclaimed streak becomes a streak reminder.
             bool isStreakKeptToday = (lastLoginStr == todayStr);
+
+            // Streak broken: the player missed at least one full day, so the run is over. Once that has
+            // happened every notification becomes a streak reminder (all three slots, every day) until
+            // they come back and log in again.
+            //   gap 0 = already logged in today      -> not broken
+            //   gap 1 = logged in yesterday          -> streak alive, just hasn't played yet today
+            //   gap 2+ = missed a whole day          -> broken
+            // A missing/unparseable date means a brand-new install, which counts as not broken.
+            bool streakBroken = false;
+            if (!string.IsNullOrEmpty(lastLoginStr) &&
+                DateTime.TryParse(lastLoginStr, out DateTime lastLoginDate))
+            {
+                streakBroken = (DateTime.Today - lastLoginDate.Date).TotalDays > 1;
+            }
 
             DateTime now = DateTime.Now;
 
-            // Schedule for the next 7 days in advance
-            // Even if the user doesn't open the app for a full week, the OS will continue firing 4 notifications/day
+            // Schedule the next 7 days. Only "today" can be planned accurately — future days are
+            // re-planned each time the app opens (OnApplicationFocus / OnApplicationPause), so for those
+            // we assume the worst case (no login). If the player does open the app, this whole schedule
+            // is torn down and rebuilt.
             for (int dayOffset = 0; dayOffset < 7; dayOffset++)
             {
                 DateTime dayBase = DateTime.Today.AddDays(dayOffset);
+                bool isToday = (dayOffset == 0);
 
-                // Define 4 daily time windows
+                // Three slots per day. The 4:30 PM evening slot was removed at the designer's request —
+                // the 6:00 PM slot covers the evening.
                 DateTime morningTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 8, 0, 0);
                 DateTime afternoonTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 12, 30, 0);
-                DateTime eveningTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 16, 30, 0);
-                DateTime streakSaverTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 18, 0, 0);
+                DateTime eveningTime = new DateTime(dayBase.Year, dayBase.Month, dayBase.Day, 18, 0, 0);
 
-                // Today: use streak-reminder messages only if streak is broken.
-                // Future days: always use learner messages (we can't know future streak state).
-                bool useLearnerMessages = (dayOffset > 0) || isStreakKeptToday;
+                // Today: everything is cancelled if the streak was already claimed.
+                // Future days: scheduled as if unclaimed; the next app-open re-plans them.
+                if (isToday && isStreakKeptToday) continue;
+
                 int idBase = 1000 + (dayOffset * 10);
+
+                // A broken streak turns every slot into a streak reminder. Otherwise only the evening
+                // escalates once the player has had a morning and an afternoon prompt.
+                var morningList   = streakBroken ? StreakReminderMessages : MorningLearnerMessages;
+                var afternoonList = streakBroken ? StreakReminderMessages : AfternoonLearnerMessages;
 
                 // 1. Morning (8:00 AM)
                 if (morningTime > now)
                 {
-                    var msg = useLearnerMessages 
-                        ? GetRandomMessage(MorningLearnerMessages, playerName)
-                        : GetRandomMessage(StreakReminderMessages, playerName);
+                    var msg = GetRandomMessage(morningList, playerName);
                     ScheduleNotificationAt(msg.Title, msg.Body, morningTime, idBase + 1);
                 }
 
                 // 2. Afternoon (12:30 PM)
                 if (afternoonTime > now)
                 {
-                    var msg = useLearnerMessages
-                        ? GetRandomMessage(AfternoonLearnerMessages, playerName)
-                        : GetRandomMessage(StreakReminderMessages, playerName);
+                    var msg = GetRandomMessage(afternoonList, playerName);
                     ScheduleNotificationAt(msg.Title, msg.Body, afternoonTime, idBase + 2);
                 }
 
-                // 3. Evening (4:30 PM)
+                // 3. Evening (6:00 PM) — streak reminder. There is no evening learner notification;
+                // by this point the player has had a morning and an afternoon prompt.
                 if (eveningTime > now)
                 {
-                    var msg = useLearnerMessages
-                        ? GetRandomMessage(EveningLearnerMessages, playerName)
-                        : GetRandomMessage(StreakReminderMessages, playerName);
+                    var msg = GetRandomMessage(StreakReminderMessages, playerName);
                     ScheduleNotificationAt(msg.Title, msg.Body, eveningTime, idBase + 3);
-                }
-
-                // 4. Streak Saver (6:00 PM)
-                // Today: only fires if the streak is still unkept — a player who already opened the app
-                // today must not be told to "claim your streak before the day ends".
-                // Future days: always schedule (future streak state is unknowable).
-                if (streakSaverTime > now && (dayOffset > 0 || !isStreakKeptToday))
-                {
-                    var msg = GetRandomMessage(StreakSaverMessages, playerName);
-                    ScheduleNotificationAt(msg.Title, msg.Body, streakSaverTime, idBase + 4);
                 }
             }
         }
@@ -454,47 +463,8 @@ namespace KidGame.Notifications
             new NotificationMessage("High Five {playername}! 🖐️", "Let's do some super fast counting!")
         };
 
-        // 3. Evening Learner Messages (4:00 PM - 5:00 PM)
-        private static readonly List<NotificationMessage> EveningLearnerMessages = new List<NotificationMessage>()
-        {
-            new NotificationMessage("Evening Math Play! 🌆", "Hey {playername}, wind down with a quick math game!"),
-            new NotificationMessage("Sunset Puzzles {playername}! 🌇", "Finish your day with awesome stars!"),
-            new NotificationMessage("Playtime Math {playername}! 🧸", "Before dinner, let's solve some numbers!"),
-            new NotificationMessage("Hey Super Star {playername}! ⭐", "Show us your evening math skills!"),
-            new NotificationMessage("Evening Challenge! 🎯", "Can {playername} complete today's daily goal?"),
-            new NotificationMessage("Good Evening {playername}! 🌙", "Your buddy wants to play one last game!"),
-            new NotificationMessage("Wrap Up the Day! 🏆", "Earn your stars, {playername}!"),
-            new NotificationMessage("Relax & Play {playername}! 🛋️", "Fun puzzles are ready for you tonight!"),
-            new NotificationMessage("Evening Sparkle {playername}! ✨", "Let's make learning glow tonight!"),
-            new NotificationMessage("Smart Cookie {playername}! 🍪", "A quick math game before bedtime story!"),
-            new NotificationMessage("Nightfall Fun {playername}! 🌌", "Top the game with evening points!"),
-            new NotificationMessage("Hey {playername}! 🎨", "Draw and trace your favorite numbers!"),
-            new NotificationMessage("Evening Champ {playername}! 👑", "You're doing amazing today!"),
-            new NotificationMessage("Almost Bedtime {playername}! 🛌", "One quick puzzle before rest time!"),
-            new NotificationMessage("Great Job Today {playername}! 🌟", "Come claim your evening bonus stars!")
-        };
-
-        // 4. Evening Streak Saver Messages (around 6:00 PM)
-        private static readonly List<NotificationMessage> StreakSaverMessages = new List<NotificationMessage>()
-        {
-            new NotificationMessage("Don't Lose Your Streak {playername}! 🔥", "You have a daily streak going! Play now to keep it!"),
-            new NotificationMessage("Save Your Streak {playername}! ⏰", "Only a few hours left to keep your streak alive!"),
-            new NotificationMessage("Streak Warning {playername}! ⚠️", "Log in now to claim today's streak reward!"),
-            new NotificationMessage("Keep It Going {playername}! 🚀", "Your streak count is waiting for you!"),
-            new NotificationMessage("Quick Streak Check {playername}! 🏆", "Don't let your hard work reset to 0!"),
-            new NotificationMessage("Hey {playername}! 🔥", "Claim today's streak reward before midnight!"),
-            new NotificationMessage("Protect Your Streak {playername}! 🛡️", "1 minute of play saves your streak!"),
-            new NotificationMessage("Streak Emergency {playername}! 🚨", "Play now to keep your daily streak!"),
-            new NotificationMessage("Keep the Fire Alive {playername}! 🕯️", "Your daily streak is waiting for you!"),
-            new NotificationMessage("Almost Time {playername}! ⏳", "Log in now to save your daily streak!"),
-            new NotificationMessage("Streak Protector {playername}! 🦸", "Save your daily streak today!"),
-            new NotificationMessage("Don't Miss Out {playername}! 🎁", "Daily streak rewards are ready!"),
-            new NotificationMessage("Hey Champ {playername}! 🥇", "One quick game to extend your streak!"),
-            new NotificationMessage("Keep the Flame {playername}! 🔥", "Play now and keep your streak safe!"),
-            new NotificationMessage("Night Streak Alert {playername}! 🌙", "Claim your streak before the day ends!")
-        };
-
-        // 5. Unkept / Broken Streak Reminders (Replaces Morning, Afternoon, Evening when streak is unkept!)
+        // 3. Unkept / Broken Streak Reminders (replaces morning and afternoon when the streak is broken,
+        //    and is always used for the 6:00 PM slot)
         private static readonly List<NotificationMessage> StreakReminderMessages = new List<NotificationMessage>()
         {
             new NotificationMessage("Your Streak is Saved {playername}! 🔥", "Log in now to start fresh and rebuild your streak!"),
