@@ -169,17 +169,19 @@ namespace KidGame.Interface
             // Set high-density target resolutions: 1440p (QHD) for phones, 2048p (2K+) for tablets
             int maxResolutionHeight = isTablet ? 2048 : 1440;
 
-            // Weak devices cannot push that many pixels. This previously ignored the device tier
-            // entirely, so an UltraLow device still rendered at 1440p and the GPU stalled in
-            // Player::BitToCurrentFB. Scaling this with the tier is the biggest fill-rate lever.
-            switch (DeviceManager.CurrentTier)
+            // Weak devices cannot push that many pixels. Scaling this with the tier is a fill-rate lever,
+            // but skipped when neverDropQuality is active so game visual quality never drops.
+            if (DeviceManager.Instance == null || !DeviceManager.Instance.neverDropQuality)
             {
-                case DeviceManager.DeviceTier.UltraLow:
-                    maxResolutionHeight = Mathf.Min(maxResolutionHeight, 720);
-                    break;
-                case DeviceManager.DeviceTier.Low:
-                    maxResolutionHeight = Mathf.Min(maxResolutionHeight, 1080);
-                    break;
+                switch (DeviceManager.CurrentTier)
+                {
+                    case DeviceManager.DeviceTier.UltraLow:
+                        maxResolutionHeight = Mathf.Min(maxResolutionHeight, 720);
+                        break;
+                    case DeviceManager.DeviceTier.Low:
+                        maxResolutionHeight = Mathf.Min(maxResolutionHeight, 1080);
+                        break;
+                }
             }
 
             if (Screen.currentResolution.height > maxResolutionHeight)

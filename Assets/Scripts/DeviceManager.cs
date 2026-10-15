@@ -12,6 +12,10 @@ public class DeviceManager : MonoBehaviour
         UltraLow
     }
 
+    [Header("Quality Lock")]
+    [Tooltip("If enabled, disables quality degradation on low-end devices so the game always runs at full Normal quality.")]
+    public bool neverDropQuality = true;
+
     [Header("Debug Override")]
     [Tooltip("If enabled, skips detection and forces the tier below. Useful for testing each tier in-Editor without needing the actual hardware.")]
     public bool forceTierForTesting = false;
@@ -51,14 +55,14 @@ public class DeviceManager : MonoBehaviour
     public int normalQualityLevelIndex = 2; // Medium — what you've actually built/tested against
 
     [Header("Tier Settings — Low")]
-    public float lowRenderScale = 0.85f;
+    public float lowRenderScale = 1.0f;
     public int lowTargetFrameRate = 30;
-    public int lowQualityLevelIndex = 1; // Low
+    public int lowQualityLevelIndex = 2;
 
     [Header("Tier Settings — UltraLow")]
-    public float ultraLowRenderScale = 0.65f;
+    public float ultraLowRenderScale = 1.0f;
     public int ultraLowTargetFrameRate = 30;
-    public int ultraLowQualityLevelIndex = 0; // Very Low
+    public int ultraLowQualityLevelIndex = 2;
 
 // ── GPU model lists ───────────────────────────────────────────────────
         // Matched as case-insensitive substrings against SystemInfo.graphicsDeviceName.
@@ -283,14 +287,14 @@ public class DeviceManager : MonoBehaviour
 
             case DeviceTier.Low:
                 Application.targetFrameRate = lowTargetFrameRate;
-                if (urpAsset != null) urpAsset.renderScale = lowRenderScale;
-                QualitySettings.SetQualityLevel(lowQualityLevelIndex, true);
+                if (urpAsset != null) urpAsset.renderScale = neverDropQuality ? normalRenderScale : lowRenderScale;
+                QualitySettings.SetQualityLevel(neverDropQuality ? normalQualityLevelIndex : lowQualityLevelIndex, true);
                 break;
 
             case DeviceTier.UltraLow:
                 Application.targetFrameRate = ultraLowTargetFrameRate;
-                if (urpAsset != null) urpAsset.renderScale = ultraLowRenderScale;
-                QualitySettings.SetQualityLevel(ultraLowQualityLevelIndex, true);
+                if (urpAsset != null) urpAsset.renderScale = neverDropQuality ? normalRenderScale : ultraLowRenderScale;
+                QualitySettings.SetQualityLevel(neverDropQuality ? normalQualityLevelIndex : ultraLowQualityLevelIndex, true);
                 break;
         }
 
@@ -298,6 +302,8 @@ public class DeviceManager : MonoBehaviour
         {
             Debug.LogWarning("[DeviceTierManager] Could not find an active UniversalRenderPipelineAsset — render scale was not applied. Frame rate and quality level were still set.");
         }
+
+        Debug.Log($"[DeviceTierManager] Applied Tier={tier}: targetFrameRate={Application.targetFrameRate}, renderScale={(urpAsset != null ? urpAsset.renderScale.ToString("0.00") : "N/A")}, qualityLevel={QualitySettings.GetQualityLevel()}");
 
         OnTierApplied?.Invoke(tier);
     }
