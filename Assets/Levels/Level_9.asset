@@ -28,7 +28,7 @@ MonoBehaviour:
     dialogueLines:
     - text: Hi {playername}. Today we trace number 7.
       mascotAnimationTrigger: isHi
-    - text: Slide across the top and slant straight down.
+    - text: 2 straight lines make 7
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
     - text: Great Job.

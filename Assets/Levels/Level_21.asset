@@ -13,33 +13,29 @@ MonoBehaviour:
   m_Name: Level_21
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   targetAgeGroup: 0
-  levelNumber: 21
-  levelName: LESSON 21
-  levelSubtitle: High 5 with 15
-  levelEndTip: 15 is 10 plus 5.
+  levelNumber: 19
+  levelName: LESSON 19
+  levelSubtitle: Spelling 3
+  levelEndTip: '"T" "H" "R" "E" "E"'
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
+  isPremadeLevel: 1
   themePresetName: Green
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
-  levelBackgroundSprite: {fileID: 0}
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 5
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. High 5. Today we write 15.
-      mascotAnimationTrigger: isHi
-    - text: Trace a 1 first, then left, down, and curve for 5.
+    - text: 3 is spelled Three
       mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: High 5. You traced 15 perfectly.
-      mascotAnimationTrigger: isHappy
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 12
+    countingMaxCount: 20
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 4a78df7931e3e9c46a63636ba97d2538, type: 3}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
@@ -56,7 +52,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
+    comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -81,31 +77,26 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 4a78df7931e3e9c46a63636ba97d2538, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 15
+    tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-    showSoundButton: 0
-    soundButtonValue: 
-  - gameType: 5
+    showSoundButton: 1
+    soundButtonValue: 3
+  - gameType: 0
     overrideLevelPremade: 0
-    dialogueLines:
-    - text: Let's trace 15 again.
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: Terrific job {playername}. 15 is looking great.
-      mascotAnimationTrigger: isHappy
+    dialogueLines: []
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
-    countingMaxCount: 12
+    countingMaxCount: 20
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 8b27d88026f244a47b41f0065878dcea, type: 3}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
@@ -122,7 +113,7 @@ MonoBehaviour:
     comparisonSlotCount: 3
     comparisonMinVal: 1
     comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
+    comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
@@ -147,15 +138,14 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 8b27d88026f244a47b41f0065878dcea, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
-    tracingValuesToTrace:
-    - 15
+    tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
-    showSoundButton: 0
-    soundButtonValue: 
+    showSoundButton: 1
+    soundButtonValue: 3
   sceneToLoad: Game
   levelIcon: {fileID: 0}

@@ -15,7 +15,7 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 86
   levelName: LESSON 86
-  levelSubtitle: Numbers 61 to 70 again
+  levelSubtitle: 'Numbers 61- 70'
   levelEndTip: You must have mastered that now!
   isUnlockedByDefault: 0
   isPremadeLevel: 1

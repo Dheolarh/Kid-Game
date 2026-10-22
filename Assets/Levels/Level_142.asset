@@ -16,7 +16,7 @@ MonoBehaviour:
   levelNumber: 142
   levelName: LESSON 142
   levelSubtitle: Count to 120
-  levelEndTip: There no end to numbers!
+  levelEndTip: There is no end to numbers!
   isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: TealGreen

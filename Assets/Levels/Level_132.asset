@@ -26,7 +26,7 @@ MonoBehaviour:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: 'Another back of 1 to 100 '
+    - text: 'Another set of 1 to 100 '
       mascotAnimationTrigger: isIdle
     - text: Here we go! one to twenty
       mascotAnimationTrigger: isHappy

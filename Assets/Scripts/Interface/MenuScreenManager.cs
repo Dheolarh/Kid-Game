@@ -39,12 +39,16 @@ namespace KidGame.Interface
         [Tooltip("If true, allows the player to tap/click to skip the splash screen delay.")]
         [SerializeField] private bool tapToSkip = true;
 
+        public static MenuScreenManager Instance { get; private set; }
+        public bool IsSplashScreenActive => splashScreen != null && splashScreen.activeInHierarchy;
+
         private bool _isTransitioning = false;
         private static bool s_isFirstAppLaunch = true;
         private static bool _hasCompletedIntro = false;
 
         private void Awake()
         {
+            Instance = this;
             OrientationManager.LockToPortrait();
             if (profileScreenController == null)
             {
@@ -86,6 +90,11 @@ namespace KidGame.Interface
         {
             s_isFirstAppLaunch = false;
             _hasCompletedIntro = true;
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
 
         private void Start()

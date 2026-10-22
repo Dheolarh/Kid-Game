@@ -16,7 +16,7 @@ MonoBehaviour:
   levelNumber: 173
   levelName: LESSON 173
   levelSubtitle: Greater or Less
-  levelEndTip: 3 apples is greater than 2 bananas
+  levelEndTip: 3 apples are greater than 2 bananas
   isUnlockedByDefault: 0
   isPremadeLevel: 0
   themePresetName: Green
@@ -30,7 +30,7 @@ MonoBehaviour:
       mascotAnimationTrigger: isHi
     - text: This is the greater than comparison symbol ">".
       mascotAnimationTrigger: isIdle
-    - text: We say a number is greater than another numer if it is bigger
+    - text: We say a number is greater than another number if it is bigger
       mascotAnimationTrigger: isIdle
     - text: 'For example 4 is bigger than 2, so we say 4 is greater than 2 '
       mascotAnimationTrigger: isIdle
@@ -41,7 +41,7 @@ MonoBehaviour:
       mascotAnimationTrigger: isIdle
     - text: This is the less than comparison symbol "<", so we write 2 < 4
       mascotAnimationTrigger: isIdle
-    - text: If we have two number that are the same size, we say they are equal
+    - text: If we have two numbers that are the same size, we say they are equal
       mascotAnimationTrigger: isIdle
     - text: This is the equal symbol "=".
       mascotAnimationTrigger: isIdle

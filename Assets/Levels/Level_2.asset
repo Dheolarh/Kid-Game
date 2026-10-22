@@ -28,14 +28,10 @@ MonoBehaviour:
     dialogueLines:
     - text: Hi {playername}. Next up is the number 1.
       mascotAnimationTrigger: isHi
-    - text: Number 1 is a straight line going straight down. Start at the top dot.
-      mascotAnimationTrigger: isIdle
-    - text: Remember drag from the green dot to the red dot
+    - text: Number 1 is just a straight line drawn from top to bottom
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: That was simple right.
-      mascotAnimationTrigger: isHappy
-    - text: Let's trace 1 again
+    - text: That was simple right? Now let's trace 1 again.
       mascotAnimationTrigger: isIdle
     countingSlotCount: 5
     countingMinCount: 1
@@ -98,9 +94,7 @@ MonoBehaviour:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines: []
-    completionDialogueLines:
-    - text: 1 more time {playername}
-      mascotAnimationTrigger: isIdle
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12

@@ -26,7 +26,7 @@ MonoBehaviour:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: 'Here is number 2, it looks like a duck neck '
+    - text: 'Here is number 2. It looks like a duck''s neck '
       mascotAnimationTrigger: isIdle
     - text: Curve around the top and slide straight across the bottom.
       mascotAnimationTrigger: isIdle
@@ -93,9 +93,7 @@ MonoBehaviour:
     soundButtonValue: 
   - gameType: 5
     overrideLevelPremade: 0
-    dialogueLines:
-    - text: Now trace the number 2 once more.
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1

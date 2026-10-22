@@ -15,7 +15,7 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 83
   levelName: LESSON 83
-  levelSubtitle: Let's count 1 to 60 again
+  levelSubtitle: Let's count 1-60
   levelEndTip: The number man!
   isUnlockedByDefault: 0
   isPremadeLevel: 1

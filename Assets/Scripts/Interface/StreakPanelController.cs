@@ -123,13 +123,83 @@ namespace KidGame.Interface
         }
 
         /// <summary>
+        /// Static entry point to check and show daily streak from anywhere (e.g. app resume or notification click).
+        /// </summary>
+        public static void CheckStreak(bool forceShow = false)
+        {
+            var controller = Instance;
+            if (controller == null)
+            {
+                controller = FindObjectOfType<StreakPanelController>(true);
+            }
+            if (controller != null)
+            {
+                controller.gameObject.SetActive(true);
+                controller.CheckAndShowStreak(forceShow);
+            }
+            else
+            {
+                UpdateStreakPrefsOnly();
+            }
+        }
+
+        /// <summary>
+        /// Updates streak date and counts directly in PlayerPrefs without showing UI.
+        /// Useful when the app resumes in scenes other than Main (e.g. Level or Game).
+        /// </summary>
+        public static void UpdateStreakPrefsOnly()
+        {
+            string todayStr = System.DateTime.Today.ToString("yyyy-MM-dd");
+            string lastLoginStr = PlayerPrefs.GetString("Streak_LastLoginDate", "");
+            int streakDays = PlayerPrefs.GetInt("Streak_DaysCount", 1);
+
+            if (string.IsNullOrEmpty(lastLoginStr))
+            {
+                streakDays = 1;
+                PlayerPrefs.SetString("Streak_LastLoginDate", todayStr);
+                PlayerPrefs.SetInt("Streak_DaysCount", streakDays);
+                PlayerPrefs.SetInt("PlayerStreak", streakDays);
+                PlayerPrefs.SetInt("StreakDays", streakDays);
+                PlayerPrefs.Save();
+            }
+            else if (lastLoginStr != todayStr)
+            {
+                if (System.DateTime.TryParse(lastLoginStr, out System.DateTime lastLoginDate))
+                {
+                    double daysPassed = (System.DateTime.Today - lastLoginDate.Date).TotalDays;
+                    if (daysPassed == 1)
+                    {
+                        streakDays++;
+                    }
+                    else if (daysPassed > 1)
+                    {
+                        streakDays = 1;
+                        PlayerPrefs.SetInt("Streak_LastClaimedDay", 0);
+                    }
+                }
+                else
+                {
+                    streakDays = 1;
+                }
+
+                PlayerPrefs.SetString("Streak_LastLoginDate", todayStr);
+                PlayerPrefs.SetInt("Streak_DaysCount", streakDays);
+                PlayerPrefs.SetInt("PlayerStreak", streakDays);
+                PlayerPrefs.SetInt("StreakDays", streakDays);
+                PlayerPrefs.Save();
+            }
+
+            if (ProfileMenuController.Instance != null)
+            {
+                ProfileMenuController.Instance.RefreshProfileData();
+            }
+        }
+
+        /// <summary>
         /// Main method to check streak date, update streak count, and show panels.
         /// </summary>
         public void CheckAndShowStreak(bool forceShow = false)
         {
-            gameObject.SetActive(true);
-            if (streakRootObject != null) streakRootObject.SetActive(true);
-
             if (_isSequenceRunning) return;
 
             string todayStr = System.DateTime.Today.ToString("yyyy-MM-dd");
@@ -161,6 +231,7 @@ namespace KidGame.Interface
                     {
                         streakDays = 1;
                         lastClaimedDay = 0;
+                        PlayerPrefs.SetInt("Streak_LastClaimedDay", 0);
                     }
                 }
                 else
@@ -175,9 +246,18 @@ namespace KidGame.Interface
                 PlayerPrefs.Save();
             }
 
+            // Always update Profile card UI with latest streak info
+            if (ProfileMenuController.Instance != null)
+            {
+                ProfileMenuController.Instance.RefreshProfileData();
+            }
+
             // Check if today's streak reward needs to be claimed
             if (lastClaimedDay < streakDays || lastClaimedDay == 0 || forceShow)
             {
+                gameObject.SetActive(true);
+                if (streakRootObject != null) streakRootObject.SetActive(true);
+
                 if (_streakSequenceCoroutine != null) StopCoroutine(_streakSequenceCoroutine);
                 _streakSequenceCoroutine = StartCoroutine(PlayStreakSequence(streakDays));
             }
@@ -300,6 +380,10 @@ namespace KidGame.Interface
             {
                 PlayerPrefs.SetInt("Streak_LastClaimedDay", currentDay);
                 PlayerPrefs.Save();
+                if (ProfileMenuController.Instance != null)
+                {
+                    ProfileMenuController.Instance.RefreshProfileData();
+                }
             }
 
             Transform todaySlot = AddOrUpdateGridSlot(currentDay, isNewClaim: true);

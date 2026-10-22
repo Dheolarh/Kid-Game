@@ -16,7 +16,7 @@ MonoBehaviour:
   levelNumber: 127
   levelName: LESSON 127
   levelSubtitle: The Big 100 part III
-  levelEndTip: 100/1001
+  levelEndTip: 100/100
   isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
@@ -26,7 +26,7 @@ MonoBehaviour:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: These will be a long count {playername}
+    - text: This will be a long count {playername}
       mascotAnimationTrigger: isIdle
     - text: We are counting to 100!
       mascotAnimationTrigger: isHappy

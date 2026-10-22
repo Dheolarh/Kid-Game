@@ -26,17 +26,7 @@ MonoBehaviour:
   - gameType: 3
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's matching numbers
-      mascotAnimationTrigger: isHappy
-    - text: 'Step 1: Count an object on the right'
-      mascotAnimationTrigger: isIdle
-    - text: 'Step 2: look for it''s number on the left'
-      mascotAnimationTrigger: isIdle
-    - text: 'Step 3: Tap it''s number on the left'
-      mascotAnimationTrigger: isIdle
-    - text: 'Step 4: Tap the object again on the right.'
-      mascotAnimationTrigger: isIdle
-    - text: And that's all, you have succesfully made a match!
+    - text: Let's match numbers! Drag each item to match with its number.
       mascotAnimationTrigger: isHappy
     completionDialogueLines:
     - text: 'Welldone! '

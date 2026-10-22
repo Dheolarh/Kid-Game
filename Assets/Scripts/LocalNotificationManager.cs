@@ -1,7 +1,10 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using KidGame.Permissions;
+using KidGame.Interface;
 
 #if UNITY_ANDROID
 using Unity.Notifications.Android;
@@ -48,9 +51,13 @@ namespace KidGame.Notifications
             InitializeNotificationChannel();
         }
 
+        private float _lastResumeCheckTime = -10f;
+        private string _lastHandledNotificationId = "";
+
         private void Start()
         {
-            Debug.Log("[LocalNotificationManager] Start — calling ScheduleAllDynamicNotifications.");
+            Debug.Log("[LocalNotificationManager] Start — checking launch notification and scheduling notifications.");
+            CheckNotificationEntry();
             ScheduleAllDynamicNotifications();
         }
 
@@ -61,6 +68,10 @@ namespace KidGame.Notifications
             {
                 ScheduleAllDynamicNotifications();
             }
+            else
+            {
+                OnAppResumeOrFocus();
+            }
         }
 
         private void OnApplicationPause(bool pauseStatus)
@@ -69,6 +80,133 @@ namespace KidGame.Notifications
             if (pauseStatus)
             {
                 ScheduleAllDynamicNotifications();
+            }
+            else
+            {
+                OnAppResumeOrFocus();
+            }
+        }
+
+        private void OnAppResumeOrFocus()
+        {
+            if (Time.realtimeSinceStartup - _lastResumeCheckTime < 1.0f) return;
+            _lastResumeCheckTime = Time.realtimeSinceStartup;
+
+            Debug.Log("[LocalNotificationManager] App resumed / gained focus — checking notification entry & daily streak.");
+
+            CheckNotificationEntry();
+            CheckDailyStreakOnResume();
+            ScheduleAllDynamicNotifications();
+        }
+
+        private void CheckNotificationEntry()
+        {
+#if UNITY_IOS && !UNITY_EDITOR
+            StartCoroutine(CheckiOSNotificationResponseCoroutine());
+#elif UNITY_ANDROID && !UNITY_EDITOR
+            CheckAndroidNotificationResponse();
+#endif
+        }
+
+#if UNITY_IOS
+        private IEnumerator CheckiOSNotificationResponseCoroutine()
+        {
+            var op = iOSNotificationCenter.QueryLastRespondedNotification();
+            yield return op;
+
+            if (op.State == QueryLastRespondedNotificationState.HaveRespondedNotification)
+            {
+                var notification = op.Notification;
+                if (notification != null)
+                {
+                    string id = notification.Identifier ?? "";
+                    if (id != _lastHandledNotificationId)
+                    {
+                        _lastHandledNotificationId = id;
+                        Debug.Log($"[LocalNotificationManager] Responded to iOS notification: ID={id}, Title='{notification.Title}'");
+                        HandleNotificationOpened();
+                    }
+                }
+            }
+        }
+#endif
+
+#if UNITY_ANDROID
+        private void CheckAndroidNotificationResponse()
+        {
+            try
+            {
+                var intentData = AndroidNotificationCenter.GetLastNotificationIntent();
+                if (intentData != null)
+                {
+                    string id = $"android_{intentData.Id}";
+                    if (id != _lastHandledNotificationId)
+                    {
+                        _lastHandledNotificationId = id;
+                        Debug.Log($"[LocalNotificationManager] Responded to Android notification: ID={intentData.Id}, Channel='{intentData.Channel}'");
+                        HandleNotificationOpened();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[LocalNotificationManager] Android notification intent check error: {ex.Message}");
+            }
+        }
+#endif
+
+        private void HandleNotificationOpened()
+        {
+            string currentScene = SceneManager.GetActiveScene().name;
+            Debug.Log($"[LocalNotificationManager] HandleNotificationOpened in scene: '{currentScene}'");
+
+            if (currentScene != "Main")
+            {
+                // User opened app via notification while in Level or Game scene -> transition back to Main
+                if (SceneTransitionManager.Instance != null)
+                {
+                    SceneTransitionManager.Instance.LoadSceneWithTransition("Main");
+                }
+                else
+                {
+                    SceneManager.LoadScene("Main");
+                }
+            }
+            else
+            {
+                CheckDailyStreakOnResume();
+            }
+        }
+
+        public static void CheckDailyStreakOnResume()
+        {
+            // If user hasn't finished initial registration, don't trigger streak prematurely
+            if (PlayerPrefs.GetInt("HasCompletedProfile", 0) == 0 && !PlayerPrefs.HasKey("Streak_LastLoginDate"))
+            {
+                return;
+            }
+
+            string currentScene = SceneManager.GetActiveScene().name;
+            if (currentScene == "Main")
+            {
+                var menuMgr = MenuScreenManager.Instance;
+                if (menuMgr == null)
+                {
+                    menuMgr = FindObjectOfType<MenuScreenManager>(true);
+                }
+
+                bool isSplashActive = (menuMgr != null && menuMgr.IsSplashScreenActive);
+                if (isSplashActive)
+                {
+                    Debug.Log("[LocalNotificationManager] Splash is active in Main scene — splash completion will present streak.");
+                    return;
+                }
+
+                StreakPanelController.CheckStreak();
+            }
+            else
+            {
+                StreakPanelController.UpdateStreakPrefsOnly();
             }
         }
 
@@ -434,7 +572,7 @@ namespace KidGame.Notifications
             new NotificationMessage("Hey {playername}! 🎒", "Ready for your morning math power-up?"),
             new NotificationMessage("Early Bird {playername}! 🐦", "Early learners score the most stars today!"),
             new NotificationMessage("Top of the Morning {playername}! 🌟", "Let me show you a cool new math trick!"),
-            new NotificationMessage("Breakfast & Math Time! 🥞", "Join your mascot for morning math fun!"),
+            new NotificationMessage("Breakfast & Math Time! 🥞", "Join Instructor Bee for morning math fun!"),
             new NotificationMessage("Ready to Play {playername}? 🎈", "Your numbers are waiting to be matched!"),
             new NotificationMessage("Morning Brain Boost! 💡", "Hey {playername}, let's solve 3 quick puzzles!"),
             new NotificationMessage("Hello Sunshine {playername}! ☀️", "Math time is happy time. Come play!"),
@@ -455,11 +593,11 @@ namespace KidGame.Notifications
             new NotificationMessage("Afternoon Power! 🚀", "{playername}, your buddy is ready to play!"),
             new NotificationMessage("Ready for Math {playername}? 🎯", "Quick math game before afternoon play!"),
             new NotificationMessage("Star Collector {playername}! ⭐", "More stars are waiting for you right now!"),
-            new NotificationMessage("Afternoon Quiz Time! 💡", "Show your mascot how smart you are, {playername}!"),
+            new NotificationMessage("Afternoon Quiz Time! 💡", "Show Instructor Bee how smart you are, {playername}!"),
             new NotificationMessage("Beat the Clock {playername}! ⏰", "A 2-minute math game is waiting for you!"),
             new NotificationMessage("Hey Master {playername}! 🥇", "Time for your afternoon brain workout!"),
             new NotificationMessage("Fun Afternoon {playername}! 🎈", "Tracing numbers is super fun today!"),
-            new NotificationMessage("Afternoon Smile {playername}! 😊", "Your mascot missed you today!"),
+            new NotificationMessage("Afternoon Smile {playername}! 😊", "Instructor Bee missed you today!"),
             new NotificationMessage("High Five {playername}! 🖐️", "Let's do some super fast counting!")
         };
 
@@ -470,7 +608,7 @@ namespace KidGame.Notifications
             new NotificationMessage("Your Streak is Saved {playername}! 🔥", "Log in now to start fresh and rebuild your streak!"),
             new NotificationMessage("We Miss You {playername}! 😢", "Come back to Numeracy and restart your daily streak!"),
             new NotificationMessage("Start a New Streak {playername}! 🚀", "Today is a great day to begin a new streak!"),
-            new NotificationMessage("Your Mascot Misses You {playername}! 🐶", "Let's start a brand new streak today!"),
+            new NotificationMessage("Instructor Bee Misses You {playername}! 🐝", "Let's start a brand new streak today!"),
             new NotificationMessage("Rebuild Your Streak {playername}! 🏰", "Claim today's Day 1 reward now!"),
             new NotificationMessage("Hey {playername}! 🌟", "Your daily streak reward is waiting to be claimed!"),
             new NotificationMessage("Fresh Start {playername}! 🌱", "Begin your new daily streak right now!"),
