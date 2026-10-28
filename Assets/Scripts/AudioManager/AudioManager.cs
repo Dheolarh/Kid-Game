@@ -373,6 +373,18 @@ namespace KidGame.Audio
             }
         }
 
+        private float _voiceEndTime;
+
+        /// <summary>
+        /// Returns true if a number or letter voice audio clip is currently playing.
+        /// </summary>
+        public bool IsVoicePlaying => Time.time < _voiceEndTime;
+
+        /// <summary>
+        /// Returns the remaining duration (in seconds) of the currently playing voice clip.
+        /// </summary>
+        public float RemainingVoiceTime => Mathf.Max(0f, _voiceEndTime - Time.time);
+
         /// <summary>
         /// Plays the voice audio clip corresponding to a number string (e.g. "1".."50") or letter string (e.g. "A".."Z").
         /// </summary>
@@ -393,6 +405,8 @@ namespace KidGame.Audio
                 PlayLetterVoice(cleanNum, customSource);
                 return;
             }
+
+            _voiceEndTime = Time.time + voiceClip.length;
 
             float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
             AudioSource src = customSource != null ? customSource : sfxSource;
@@ -420,6 +434,8 @@ namespace KidGame.Audio
                 return;
             }
 
+            _voiceEndTime = Time.time + voiceClip.length;
+
             float finalVol = sfxVolume * (SfxVolumeSetting / 10f);
             AudioSource src = customSource != null ? customSource : sfxSource;
             if (src != null)
@@ -441,6 +457,7 @@ namespace KidGame.Audio
             {
                 sfxSource.Stop();
             }
+            _voiceEndTime = 0f;
         }
 
         private Coroutine _duckCoroutine;

@@ -15,36 +15,32 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 99
   levelName: LESSON 99
-  levelSubtitle: Matching Objects
-  levelEndTip: 2 Eggs is to number 2
+  levelSubtitle: Counting dots on dice
+  levelEndTip: A Die has 6 faces!
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  themePresetName: Pink
+  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
   pages:
-  - gameType: 3
+  - gameType: 1
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's match numbers! Drag each item to match with its number.
-      mascotAnimationTrigger: isHappy
-    completionDialogueLines:
-    - text: 'Welldone! '
-      mascotAnimationTrigger: isHappy
-    - text: That didn't take much effort did it?
+    - text: How many dots can you count {playername}
       mascotAnimationTrigger: isIdle
-    countingSlotCount: 5
+    completionDialogueLines: []
+    countingSlotCount: 7
     countingMinCount: 1
     countingMaxCount: 12
-    countingDiceMode: 0
+    countingDiceMode: 1
     countingFingerMode: 0
     countingActiveThemeName: 
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
+    additionMaxPerGrid: 6
+    additionDiceMode: 1
     additionFingerMode: 0
     additionCountAddMode: 0
     additionNumbersOnlyMode: 0
@@ -60,11 +56,11 @@ MonoBehaviour:
     comparisonNumbersOnlyMode: 0
     comparisonActiveThemeName: 
     matchingLeftVariant: 0
-    matchingRightVariant: 4
-    matchingSlotCount: 7
+    matchingRightVariant: 1
+    matchingSlotCount: 5
     matchingMinVal: 1
-    matchingMaxVal: 8
-    matchingShuffleLeftColumn: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
     matchingObjectSlotPrefab: {fileID: 0}
     recallSlotCount: 4
     recallMinSequenceLength: 5

@@ -15,17 +15,19 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 159
   levelName: LESSON 159
-  levelSubtitle: How many fingers do I have?
-  levelEndTip: I have 10 fingers!
+  levelSubtitle: What comes before, What comes after
+  levelEndTip: A decade is 100
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: Purple
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
+  isPremadeLevel: 1
+  themePresetName: TealGreen
+  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
   pages:
-  - gameType: 1
+  - gameType: 4
     overrideLevelPremade: 0
-    dialogueLines: []
+    dialogueLines:
+    - text: What comes before, What comes after?
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -37,9 +39,9 @@ MonoBehaviour:
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
-    additionMaxPerGrid: 5
+    additionMaxPerGrid: 12
     additionDiceMode: 0
-    additionFingerMode: 1
+    additionFingerMode: 0
     additionCountAddMode: 0
     additionNumbersOnlyMode: 0
     additionMinOperandCount: 2
@@ -75,7 +77,129 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 8317775043155575551, guid: b417e5e3fc0950f4a9bcf0f6c78ce125, type: 3}
+    recallPremadeSlotData: {fileID: 0}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
+  - gameType: 4
+    overrideLevelPremade: 0
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 20
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 8317775043155575551, guid: 4cc10e787f861fb4dbc044426f33014d, type: 3}
+    recallPremadeSlotData: {fileID: 0}
+    tracingSpellModeActive: 0
+    tracingIsLearningMode: 1
+    tracingValuesToTrace: []
+    tracingCustomSpawnCount: 1
+    customGamePrefab: {fileID: 0}
+    showSoundButton: 0
+    soundButtonValue: 
+  - gameType: 4
+    overrideLevelPremade: 0
+    dialogueLines: []
+    completionDialogueLines: []
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 20
+    countingDiceMode: 0
+    countingFingerMode: 0
+    countingActiveThemeName: 
+    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotData: {fileID: 0}
+    additionSlotCount: 5
+    additionMinPerGrid: 1
+    additionMaxPerGrid: 12
+    additionDiceMode: 0
+    additionFingerMode: 0
+    additionCountAddMode: 0
+    additionNumbersOnlyMode: 0
+    additionMinOperandCount: 2
+    additionMaxOperandCount: 3
+    additionMinNumberValue: 1
+    additionMaxNumberValue: 50
+    additionActiveThemeName: 
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
+    comparisonMixAdditionEquations: 1
+    comparisonNumbersOnlyMode: 0
+    comparisonActiveThemeName: 
+    matchingLeftVariant: 0
+    matchingRightVariant: 1
+    matchingSlotCount: 5
+    matchingMinVal: 1
+    matchingMaxVal: 10
+    matchingShuffleLeftColumn: 0
+    matchingObjectSlotPrefab: {fileID: 0}
+    recallSlotCount: 4
+    recallMinSequenceLength: 5
+    recallMaxSequenceLength: 10
+    recallMinStartValue: 1
+    recallMaxStartValue: 20
+    recallStep: 1
+    recallCountBackwards: 0
+    recallMinConsecutiveRevealed: 1
+    recallMaxConsecutiveRevealed: 2
+    recallMinConsecutiveHidden: 1
+    recallMaxConsecutiveHidden: 2
+    recallIsLearningMode: 1
+    recallIsSequenceFillMode: 0
+    recallColorizeTextInsteadOfBox: 0
+    recallScaleDownCardOnDrag: 0
+    recallPremadeSlotPrefab: {fileID: 8317775043155575551, guid: 62e7cd31111f9e14785b293c8e1ac408, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1

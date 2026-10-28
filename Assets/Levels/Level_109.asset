@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 109
   levelName: LESSON 109
-  levelSubtitle: Coutning 51 to 70
-  levelEndTip: 
+  levelSubtitle: Counting 15 to 1
+  levelEndTip: 15, .., 14, ......., 2, 1
   isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
@@ -25,7 +25,13 @@ MonoBehaviour:
   pages:
   - gameType: 4
     overrideLevelPremade: 0
-    dialogueLines: []
+    dialogueLines:
+    - text: We are doing something different now {playername}
+      mascotAnimationTrigger: isIsdle
+    - text: We will be counting backwards from 15 to 1
+      mascotAnimationTrigger: isIdle
+    - text: Alright let's go from 15 to 6 first
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -73,10 +79,10 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
+    recallColorizeTextInsteadOfBox: 1
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 62f908e06e39ecf4d9adc77f8b3b6a2f, type: 2}
+    recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: 6f0a95f4a9aab6f4a909d7a6d430e2f2, type: 3}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
@@ -86,7 +92,9 @@ MonoBehaviour:
     soundButtonValue: 
   - gameType: 4
     overrideLevelPremade: 0
-    dialogueLines: []
+    dialogueLines:
+    - text: Next 10 to 1
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -134,10 +142,10 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
+    recallColorizeTextInsteadOfBox: 1
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 66e7148cad3e27f449087b4ec3083f71, type: 2}
+    recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: f18e9afe6e7af9945989dbb3f2573443, type: 3}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []

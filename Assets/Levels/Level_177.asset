@@ -15,25 +15,27 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 177
   levelName: LESSON 177
-  levelSubtitle: Compare Animals
-  levelEndTip: 1 cat is less than 2 dogs
+  levelSubtitle: '{playername} spells again'
+  levelEndTip: You are good at spellings
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: TealGreen
-  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
+  isPremadeLevel: 1
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 2
+  - gameType: 0
     overrideLevelPremade: 0
-    dialogueLines: []
+    dialogueLines:
+    - text: Can you spell the numbers you see?
+      mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 5
+    countingSlotCount: 7
     countingMinCount: 1
-    countingMaxCount: 20
+    countingMaxCount: 7
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
+    countingPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 7e99ef3a2fa269041ac0064bb977e0d8, type: 3}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
     additionMinPerGrid: 1
@@ -47,12 +49,12 @@ MonoBehaviour:
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
     additionActiveThemeName: 
-    comparisonSlotCount: 10
-    comparisonMinVal: 2
-    comparisonMaxVal: 14
+    comparisonSlotCount: 3
+    comparisonMinVal: 1
+    comparisonMaxVal: 10
     comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: Animals
+    comparisonActiveThemeName: 
     matchingLeftVariant: 0
     matchingRightVariant: 1
     matchingSlotCount: 5
@@ -75,7 +77,7 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: 7e99ef3a2fa269041ac0064bb977e0d8, type: 3}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1

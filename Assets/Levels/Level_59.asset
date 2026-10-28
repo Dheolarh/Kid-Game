@@ -46,7 +46,7 @@ MonoBehaviour:
     additionMaxPerGrid: 3
     additionDiceMode: 0
     additionFingerMode: 0
-    additionCountAddMode: 0
+    additionCountAddMode: 1
     additionNumbersOnlyMode: 0
     additionMinOperandCount: 2
     additionMaxOperandCount: 2

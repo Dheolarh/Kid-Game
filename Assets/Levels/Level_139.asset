@@ -15,21 +15,21 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 139
   levelName: LESSON 139
-  levelSubtitle: Counting Objects
-  levelEndTip: I eat lots of bananas
+  levelSubtitle: Count to 120
+  levelEndTip: Keep practicing numbers {playername}!
   isUnlockedByDefault: 0
-  isPremadeLevel: 0
-  themePresetName: Purple
-  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
+  isPremadeLevel: 1
+  themePresetName: TealGreen
+  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
   pages:
-  - gameType: 0
+  - gameType: 4
     overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
-    countingSlotCount: 8
-    countingMinCount: 3
-    countingMaxCount: 10
+    countingSlotCount: 5
+    countingMinCount: 1
+    countingMaxCount: 20
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
@@ -76,7 +76,7 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: b7f1b9b8ad2d5a04b80d38daceb468b8, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []

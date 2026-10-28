@@ -16,12 +16,12 @@ MonoBehaviour:
   levelNumber: 175
   levelName: LESSON 175
   levelSubtitle: Addition of numbers
-  levelEndTip: Keep adding and adding more
+  levelEndTip: Getting  familiar with your numbers
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Orange
-  levelThemeColor: {r: 0.98823535, g: 0.454902, b: 0, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 68e30b93775c86543be5f766cfbaa433, type: 3}
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
   - gameType: 1
     overrideLevelPremade: 0

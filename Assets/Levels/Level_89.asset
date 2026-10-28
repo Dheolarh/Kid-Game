@@ -15,8 +15,8 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 89
   levelName: LESSON 89
-  levelSubtitle: Counting to 30
-  levelEndTip: 30 days in september!
+  levelSubtitle: Counting Backwards
+  levelEndTip: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
   isUnlockedByDefault: 0
   isPremadeLevel: 1
   themePresetName: Orange
@@ -26,7 +26,11 @@ MonoBehaviour:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's count 1 to 30
+    - text: We are doing something different now {playername}
+      mascotAnimationTrigger: isIsdle
+    - text: We will be counting backwards from 10 to 1
+      mascotAnimationTrigger: isIdle
+    - text: Alright let's go! 10, 9, 8, ........ 1
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
     countingSlotCount: 5
@@ -75,71 +79,10 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
+    recallColorizeTextInsteadOfBox: 1
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 97954f5e5c177514cafcb6b4bb0e46e5, type: 2}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
-    showSoundButton: 0
-    soundButtonValue: 
-  - gameType: 4
-    overrideLevelPremade: 0
-    dialogueLines: []
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 05e5e13cdc0b8e14e84bbd3f8f5ec5f8, type: 2}
+    recallPremadeSlotPrefab: {fileID: 4771904269307280180, guid: f18e9afe6e7af9945989dbb3f2573443, type: 3}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []

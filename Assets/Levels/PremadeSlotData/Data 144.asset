@@ -18,65 +18,65 @@ MonoBehaviour:
   rows:
   - rowName: Row 1
     boxes:
-    - value: 41
-      isAnswerBox: 1
-      showHint: 1
-    - value: 42
-      isAnswerBox: 1
-      showHint: 1
-    - value: 43
-      isAnswerBox: 1
-      showHint: 1
-    - value: 44
-      isAnswerBox: 1
-      showHint: 1
-    - value: 45
-      isAnswerBox: 1
-      showHint: 1
-    - value: 46
-      isAnswerBox: 1
-      showHint: 1
-    - value: 47
-      isAnswerBox: 1
-      showHint: 1
-    - value: 48
-      isAnswerBox: 1
-      showHint: 1
-    - value: 49
-      isAnswerBox: 1
-      showHint: 1
-    - value: 50
-      isAnswerBox: 1
-      showHint: 1
-  - rowName: Row 2
-    boxes:
-    - value: 51
-      isAnswerBox: 1
-      showHint: 1
-    - value: 52
-      isAnswerBox: 1
-      showHint: 1
-    - value: 53
-      isAnswerBox: 1
-      showHint: 1
-    - value: 54
-      isAnswerBox: 1
-      showHint: 1
-    - value: 55
-      isAnswerBox: 1
-      showHint: 1
-    - value: 56
-      isAnswerBox: 1
-      showHint: 1
-    - value: 57
-      isAnswerBox: 1
-      showHint: 1
-    - value: 58
+    - value: 60
       isAnswerBox: 1
       showHint: 1
     - value: 59
       isAnswerBox: 1
       showHint: 1
-    - value: 60
+    - value: 58
+      isAnswerBox: 1
+      showHint: 1
+    - value: 57
+      isAnswerBox: 1
+      showHint: 1
+    - value: 56
+      isAnswerBox: 1
+      showHint: 1
+    - value: 55
+      isAnswerBox: 1
+      showHint: 1
+    - value: 54
+      isAnswerBox: 1
+      showHint: 1
+    - value: 53
+      isAnswerBox: 1
+      showHint: 1
+    - value: 52
+      isAnswerBox: 1
+      showHint: 1
+    - value: 51
+      isAnswerBox: 1
+      showHint: 1
+  - rowName: Row 2
+    boxes:
+    - value: 50
+      isAnswerBox: 1
+      showHint: 1
+    - value: 49
+      isAnswerBox: 1
+      showHint: 1
+    - value: 48
+      isAnswerBox: 1
+      showHint: 1
+    - value: 47
+      isAnswerBox: 1
+      showHint: 1
+    - value: 46
+      isAnswerBox: 1
+      showHint: 1
+    - value: 45
+      isAnswerBox: 1
+      showHint: 1
+    - value: 44
+      isAnswerBox: 1
+      showHint: 1
+    - value: 43
+      isAnswerBox: 1
+      showHint: 1
+    - value: 42
+      isAnswerBox: 1
+      showHint: 1
+    - value: 41
       isAnswerBox: 1
       showHint: 1

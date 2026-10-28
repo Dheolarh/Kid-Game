@@ -15,25 +15,23 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 111
   levelName: LESSON 111
-  levelSubtitle: Memory Lane - Counting 51 to 80
-  levelEndTip: You are a good learner
+  levelSubtitle: Counting Counting Counting
+  levelEndTip: 1, 2 buckle my shoes, 3, 4 knock at the door!
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
-  themePresetName: TealGreen
-  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
+  isPremadeLevel: 0
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's count 51 to 80
-      mascotAnimationTrigger: isIdle
-    - text: Here comes 51 to 70
+    - text: Let's count bigger numbers
       mascotAnimationTrigger: isIdle
     completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
+    countingSlotCount: 7
+    countingMinCount: 14
+    countingMaxCount: 20
     countingDiceMode: 0
     countingFingerMode: 0
     countingActiveThemeName: 
@@ -79,71 +77,8 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: a3ebb424773e14f48a9370ffbdfb5604, type: 2}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
-    showSoundButton: 0
-    soundButtonValue: 
-  - gameType: 4
-    overrideLevelPremade: 0
-    dialogueLines:
-    - text: Here comes 71 to 80
-      mascotAnimationTrigger: isIdle
-    completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 23a8b3e060a7edf439361d8b974e90ab, type: 2}
+    recallPremadeSlotPrefab: {fileID: 7583444236575440329, guid: c1c6da71dea4c7c44a08bd30c0ee297f, type: 3}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []

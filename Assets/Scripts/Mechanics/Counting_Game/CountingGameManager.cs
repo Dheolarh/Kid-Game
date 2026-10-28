@@ -444,7 +444,7 @@ namespace KidGame.Mechanics.Counting
 
                 if (diceMode || fingerMode)
                 {
-                    slot.Setup(slotData[i].prefabs, slotData[i].itemValues, slotData[i].totalSum, this);
+                    slot.Setup(slotData[i].prefabs, slotData[i].itemValues, slotData[i].totalSum, this, fingerMode);
                 }
                 else
                 {

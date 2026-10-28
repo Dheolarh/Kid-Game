@@ -32,7 +32,7 @@ namespace KidGame.Mechanics.Addition
         /// <param name="rightPrefab">Object icon for the right grid.</param>
         /// <param name="rightCount">How many right objects to spawn (1–12).</param>
         /// <param name="manager">Owning manager — notified on correct answer.</param>
-        private void ConfigureGrid(Transform gridTransform, float cellSize = 100f)
+        private void ConfigureGrid(Transform gridTransform, float cellWidth = 100f, float cellHeight = 100f)
         {
             if (gridTransform == null) return;
             var gridComp = gridTransform.GetComponent<GridLayoutGroup>();
@@ -40,7 +40,7 @@ namespace KidGame.Mechanics.Addition
             {
                 gridComp.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
                 gridComp.constraintCount = 2; // Max 2 objects per row
-                gridComp.cellSize = new Vector2(cellSize, cellSize);
+                gridComp.cellSize = new Vector2(cellWidth, cellHeight);
             }
         }
 
@@ -62,6 +62,11 @@ namespace KidGame.Mechanics.Addition
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 countingObj.SetCountValue(counter);
                 counter++;
+            }
+
+            if (manager != null && manager.CountAddMode)
+            {
+                counter = 1;
             }
 
             for (int i = 0; i < rightCount; i++)
@@ -117,13 +122,21 @@ namespace KidGame.Mechanics.Addition
                           AdditionGameManager manager)
         {
             CorrectSum = leftSum + rightSum;
-            ConfigureGrid(ActualLeftGrid, 160f);
-            ConfigureGrid(ActualRightGrid, 160f);
+            bool isFinger = (leftDicePrefabs != null && leftDicePrefabs.Count > 0 && leftDicePrefabs[0] != null &&
+                             leftDicePrefabs[0].name.IndexOf("finger", System.StringComparison.OrdinalIgnoreCase) >= 0) ||
+                            (rightDicePrefabs != null && rightDicePrefabs.Count > 0 && rightDicePrefabs[0] != null &&
+                             rightDicePrefabs[0].name.IndexOf("finger", System.StringComparison.OrdinalIgnoreCase) >= 0);
+
+            float cellWidth = isFinger ? 135f : 160f;
+            float cellHeight = isFinger ? 210f : 160f;
+
+            ConfigureGrid(ActualLeftGrid, cellWidth, cellHeight);
+            ConfigureGrid(ActualRightGrid, cellWidth, cellHeight);
 
             for (int i = 0; i < leftDicePrefabs.Count; i++)
             {
                 var obj = Instantiate(leftDicePrefabs[i], ActualLeftGrid);
-                ForceSize(obj, 160f);
+                ForceSize(obj, cellWidth, cellHeight);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 int val = (leftValues != null && i < leftValues.Count) ? leftValues[i] : 0;
@@ -133,7 +146,7 @@ namespace KidGame.Mechanics.Addition
             for (int i = 0; i < rightDicePrefabs.Count; i++)
             {
                 var obj = Instantiate(rightDicePrefabs[i], ActualRightGrid);
-                ForceSize(obj, 160f);
+                ForceSize(obj, cellWidth, cellHeight);
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();
                 int val = (rightValues != null && i < rightValues.Count) ? rightValues[i] : 0;
@@ -434,20 +447,21 @@ namespace KidGame.Mechanics.Addition
                 obj.AddComponent<CountingObject>();
         }
 
-        private static void ForceSize(GameObject obj, float size = 100f)
+        private static void ForceSize(GameObject obj, float width = 100f, float height = -1f)
         {
             if (obj == null) return;
+            if (height < 0f) height = width;
             var rt = obj.GetComponent<RectTransform>();
             if (rt != null)
             {
-                rt.sizeDelta = new Vector2(size, size);
+                rt.sizeDelta = new Vector2(width, height);
             }
             var le = obj.GetComponent<LayoutElement>();
             if (le == null) le = obj.AddComponent<LayoutElement>();
-            le.preferredWidth = size;
-            le.preferredHeight = size;
-            le.minWidth = size;
-            le.minHeight = size;
+            le.preferredWidth = width;
+            le.preferredHeight = height;
+            le.minWidth = width;
+            le.minHeight = height;
         }
 
         private static void ForceSize100(GameObject obj)

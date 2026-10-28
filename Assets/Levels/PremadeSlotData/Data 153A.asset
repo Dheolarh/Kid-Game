@@ -12,71 +12,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc57d2cf74e79e3408ae6d1b31612711, type: 3}
   m_Name: Data 153A
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.PremadeSlotData
-  layoutName: Data 152A
+  layoutName: Data 153A
   templatePrefab: {fileID: 0}
   colorizeTextInsteadOfBox: 0
   rows:
   - rowName: Row 1
     boxes:
-    - value: 81
-      isAnswerBox: 1
-      showHint: 1
-    - value: 82
-      isAnswerBox: 1
-      showHint: 0
-    - value: 83
-      isAnswerBox: 1
-      showHint: 1
-    - value: 84
-      isAnswerBox: 1
-      showHint: 1
-    - value: 85
-      isAnswerBox: 1
-      showHint: 1
-    - value: 86
-      isAnswerBox: 1
-      showHint: 1
-    - value: 87
-      isAnswerBox: 1
-      showHint: 1
-    - value: 88
-      isAnswerBox: 1
-      showHint: 0
-    - value: 89
-      isAnswerBox: 1
-      showHint: 1
-    - value: 90
-      isAnswerBox: 1
-      showHint: 1
-  - rowName: Row 2
-    boxes:
-    - value: 91
-      isAnswerBox: 1
-      showHint: 1
-    - value: 92
-      isAnswerBox: 1
-      showHint: 1
-    - value: 93
-      isAnswerBox: 1
-      showHint: 0
-    - value: 94
-      isAnswerBox: 1
-      showHint: 1
-    - value: 95
-      isAnswerBox: 1
-      showHint: 1
-    - value: 96
-      isAnswerBox: 1
-      showHint: 1
-    - value: 97
-      isAnswerBox: 1
-      showHint: 1
-    - value: 98
+    - value: 100
       isAnswerBox: 1
       showHint: 1
     - value: 99
       isAnswerBox: 1
       showHint: 0
-    - value: 100
+    - value: 98
+      isAnswerBox: 1
+      showHint: 0
+    - value: 97
+      isAnswerBox: 1
+      showHint: 1
+    - value: 96
+      isAnswerBox: 1
+      showHint: 0
+    - value: 95
+      isAnswerBox: 1
+      showHint: 0
+    - value: 94
+      isAnswerBox: 1
+      showHint: 1
+    - value: 93
+      isAnswerBox: 1
+      showHint: 0
+    - value: 92
+      isAnswerBox: 1
+      showHint: 1
+    - value: 91
+      isAnswerBox: 1
+      showHint: 1
+  - rowName: Row 2
+    boxes:
+    - value: 90
+      isAnswerBox: 1
+      showHint: 0
+    - value: 89
+      isAnswerBox: 1
+      showHint: 1
+    - value: 88
+      isAnswerBox: 1
+      showHint: 0
+    - value: 87
+      isAnswerBox: 1
+      showHint: 0
+    - value: 86
+      isAnswerBox: 1
+      showHint: 1
+    - value: 85
+      isAnswerBox: 1
+      showHint: 0
+    - value: 84
+      isAnswerBox: 1
+      showHint: 0
+    - value: 83
+      isAnswerBox: 1
+      showHint: 1
+    - value: 82
+      isAnswerBox: 1
+      showHint: 0
+    - value: 81
       isAnswerBox: 1
       showHint: 1

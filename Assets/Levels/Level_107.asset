@@ -15,28 +15,26 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 107
   levelName: LESSON 107
-  levelSubtitle: BEFORE and AFTER
-  levelEndTip: Bingo!
+  levelSubtitle: Counting Objects
+  levelEndTip: 
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
-  themePresetName: TealGreen
-  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
+  isPremadeLevel: 0
+  themePresetName: Purple
+  levelThemeColor: {r: 0.58431375, g: 0.3372549, b: 1, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 397c78e378f7d19498c9509182edf404, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 0
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hey {playername} do you know what number comes before and after?
+    - text: How many animals are here
       mascotAnimationTrigger: isIdle
-    completionDialogueLines:
-    - text: You know your numbers!
-      mascotAnimationTrigger: isIdle
-    countingSlotCount: 5
-    countingMinCount: 1
+    completionDialogueLines: []
+    countingSlotCount: 6
+    countingMinCount: 7
     countingMaxCount: 12
     countingDiceMode: 0
     countingFingerMode: 0
-    countingActiveThemeName: 
+    countingActiveThemeName: Animals
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
@@ -79,7 +77,7 @@ MonoBehaviour:
     recallIsSequenceFillMode: 0
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 8317775043155575551, guid: b99b67ab6d76d6c45bae535c4d60100a, type: 3}
+    recallPremadeSlotPrefab: {fileID: 0}
     recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1

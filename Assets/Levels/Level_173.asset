@@ -15,59 +15,18 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 173
   levelName: LESSON 173
-  levelSubtitle: Greater or Less
-  levelEndTip: 3 apples are greater than 2 bananas
+  levelSubtitle: Compare Animals
+  levelEndTip: 1 cat is less than 2 dogs
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  themePresetName: TealGreen
+  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
   pages:
   - gameType: 2
     overrideLevelPremade: 0
-    dialogueLines:
-    - text: Hello {playername} let's compare numbers
-      mascotAnimationTrigger: isHi
-    - text: This is the greater than comparison symbol ">".
-      mascotAnimationTrigger: isIdle
-    - text: We say a number is greater than another number if it is bigger
-      mascotAnimationTrigger: isIdle
-    - text: 'For example 4 is bigger than 2, so we say 4 is greater than 2 '
-      mascotAnimationTrigger: isIdle
-    - text: So we write 4 > 2
-      mascotAnimationTrigger: isIdle
-    - text: 'Since 4 is bigger than 2 that means 2 is smaller than 4, so we say 2
-        is less than 4 '
-      mascotAnimationTrigger: isIdle
-    - text: This is the less than comparison symbol "<", so we write 2 < 4
-      mascotAnimationTrigger: isIdle
-    - text: If we have two numbers that are the same size, we say they are equal
-      mascotAnimationTrigger: isIdle
-    - text: This is the equal symbol "=".
-      mascotAnimationTrigger: isIdle
-    - text: If 2 + 2 is equal to 4 then we write 2 + 2 = 4
-      mascotAnimationTrigger: isIdle
-    - text: Count the objects on the left and count the object on the right in each
-        row
-      mascotAnimationTrigger: isIdle
-    - text: Which one is greater or lesser or are they equal?
-      mascotAnimationTrigger: isIdle
-    - text: Put the correct comparison symbol into their middle box
-      mascotAnimationTrigger: isIdle
-    - text: If you count 10 balls on the left and 5 cakes on the right, 10 is bigger
-        than 5
-      mascotAnimationTrigger: isIdle
-    - text: So you put the > symbol into the box
-      mascotAnimationTrigger: isIdle
-    - text: Alright {playername} Let's compare!
-      mascotAnimationTrigger: isHappy
-    completionDialogueLines:
-    - text: Very Good!
-      mascotAnimationTrigger: isHappy
-    - text: You are now familiar with comparing numbers!
-      mascotAnimationTrigger: isIdle
-    - text: Count objects around you and keep comparing their numbers
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 20
@@ -88,12 +47,12 @@ MonoBehaviour:
     additionMinNumberValue: 1
     additionMaxNumberValue: 50
     additionActiveThemeName: 
-    comparisonSlotCount: 5
-    comparisonMinVal: 6
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 0
+    comparisonSlotCount: 10
+    comparisonMinVal: 2
+    comparisonMaxVal: 14
+    comparisonMixAdditionEquations: 1
     comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
+    comparisonActiveThemeName: Animals
     matchingLeftVariant: 0
     matchingRightVariant: 1
     matchingSlotCount: 5

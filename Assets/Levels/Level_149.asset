@@ -15,19 +15,17 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 149
   levelName: LESSON 149
-  levelSubtitle: Couting trucks again
-  levelEndTip: How many wheels did the trucks have in total?
+  levelSubtitle: Practice to 140 again
+  levelEndTip: Almost to 150....... again
   isUnlockedByDefault: 0
   isPremadeLevel: 1
-  themePresetName: Pink
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
+  themePresetName: TealGreen
+  levelThemeColor: {r: 0.06666667, g: 0.80392164, b: 0.7372549, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: b40d663d39e5c4540af0fc8437933d6d, type: 3}
   pages:
   - gameType: 4
     overrideLevelPremade: 0
-    dialogueLines:
-    - text: Let's count backwards on these trucks
-      mascotAnimationTrigger: isIdle
+    dialogueLines: []
     completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
@@ -75,10 +73,10 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 1
+    recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 1145725517465111567, guid: f339382b565ec5244b645544b28fd8f5, type: 3}
-    recallPremadeSlotData: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: dafff5571ab19f440854283db02a3f26, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
@@ -89,9 +87,7 @@ MonoBehaviour:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines: []
-    completionDialogueLines:
-    - text: You are the best at numbers {playername}!
-      mascotAnimationTrigger: isHappy
+    completionDialogueLines: []
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 20
@@ -138,10 +134,10 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 1
+    recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 1145725517465111567, guid: 7acd5ecdc70728b4f8fa72c4e9724029, type: 3}
-    recallPremadeSlotData: {fileID: 0}
+    recallPremadeSlotPrefab: {fileID: 0}
+    recallPremadeSlotData: {fileID: 11400000, guid: 4d7a5acb175ba9a429bfc957ff8e842d, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []

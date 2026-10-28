@@ -15,24 +15,24 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 143
   levelName: LESSON 143
-  levelSubtitle: Count to 120
-  levelEndTip: Just a quick recap
+  levelSubtitle: 101 to 130
+  levelEndTip: Counting again
   isUnlockedByDefault: 0
   isPremadeLevel: 1
-  themePresetName: Green
-  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
+  themePresetName: Blue
+  levelThemeColor: {r: 0.23113209, g: 0.71870685, b: 1, a: 1}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5bc6fc6c89c373f458acbe3f50626e80, type: 3}
   pages:
   - gameType: 4
     overrideLevelPremade: 0
     dialogueLines: []
     completionDialogueLines: []
-    countingSlotCount: 5
-    countingMinCount: 1
-    countingMaxCount: 20
+    countingSlotCount: 3
+    countingMinCount: 6
+    countingMaxCount: 8
     countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
+    countingFingerMode: 1
+    countingActiveThemeName: Clothes
     countingPremadeSlotPrefab: {fileID: 0}
     countingPremadeSlotData: {fileID: 0}
     additionSlotCount: 5
@@ -76,7 +76,7 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: ded19c05fbde1804ab4d9a0382bb3e47, type: 2}
+    recallPremadeSlotData: {fileID: 11400000, guid: b7f1b9b8ad2d5a04b80d38daceb468b8, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
@@ -137,7 +137,7 @@ MonoBehaviour:
     recallColorizeTextInsteadOfBox: 0
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: ac5626c4ae9f7474282d79aceff6bd3c, type: 2}
+    recallPremadeSlotData: {fileID: 11400000, guid: 2aa1d24d210500940b755a70d1d42ed6, type: 2}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []

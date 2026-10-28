@@ -1314,7 +1314,21 @@ namespace KidGame.Interface
 
         private IEnumerator DelayedProceedAfterPageCompletion(float delay)
         {
-            yield return new WaitForSeconds(delay);
+            if (delay > 0f)
+            {
+                yield return new WaitForSeconds(delay);
+            }
+
+            // Wait for any playing number or letter voice to finish before proceeding
+            if (KidGame.Audio.AudioManager.Instance != null)
+            {
+                while (KidGame.Audio.AudioManager.Instance.IsVoicePlaying)
+                {
+                    yield return null;
+                }
+                yield return new WaitForSeconds(0.3f);
+            }
+
             ProceedAfterPageCompletion();
         }
 
@@ -1377,8 +1391,14 @@ namespace KidGame.Interface
             // ── Step 0: Lock screen orientation strictly to Portrait mode for End Panel ─
             OrientationManager.LockToPortrait();
 
+            // Wait for any playing voice to finish so it isn't interrupted by PauseAllSounds and victory fanfare
             if (KidGame.Audio.AudioManager.Instance != null)
             {
+                while (KidGame.Audio.AudioManager.Instance.IsVoicePlaying)
+                {
+                    yield return null;
+                }
+
                 KidGame.Audio.AudioManager.Instance.PauseAllSounds();
                 KidGame.Audio.AudioManager.Instance.PlayVictorySfx(starsEarned);
                 KidGame.Audio.AudioManager.Instance.Vibrate();
@@ -1962,6 +1982,15 @@ namespace KidGame.Interface
             if (SceneTransitionManager.Instance != null)
             {
                 while (SceneTransitionManager.Instance.IsTransitioning)
+                {
+                    yield return null;
+                }
+            }
+
+            // Wait for any playing number/letter voice to finish so dialogue does not interrupt or overlap it
+            if (KidGame.Audio.AudioManager.Instance != null)
+            {
+                while (KidGame.Audio.AudioManager.Instance.IsVoicePlaying)
                 {
                     yield return null;
                 }

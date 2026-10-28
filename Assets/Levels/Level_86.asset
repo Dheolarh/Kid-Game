@@ -15,83 +15,28 @@ MonoBehaviour:
   targetAgeGroup: 0
   levelNumber: 86
   levelName: LESSON 86
-  levelSubtitle: 'Numbers 61- 70'
-  levelEndTip: You must have mastered that now!
+  levelSubtitle: Finding the treasure
+  levelEndTip: The island of lost numbers
   isUnlockedByDefault: 0
-  isPremadeLevel: 1
-  themePresetName: Pink
-  levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
-  levelBackgroundSprite: {fileID: 21300000, guid: e277eff1a877069468b92aef75522cb6, type: 3}
+  isPremadeLevel: 0
+  themePresetName: Green
+  levelThemeColor: {r: 0.32156864, g: 0.83921576, b: 0.46274513, a: 0}
+  levelBackgroundSprite: {fileID: 21300000, guid: 5d277dfec57dacf49b1ef3fcecda1b5b, type: 3}
   pages:
-  - gameType: 4
+  - gameType: 6
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's count 61 to 70 again
+    - text: Hello {playername}
+      mascotAnimationTrigger: isHi
+    - text: Can you help me find my missing treasure?
+      mascotAnimationTrigger: isIdle
+    - text: I took 20 steps and lost it, it should be around somewhere...
+      mascotAnimationTrigger: isIdle
+    - text: If you count 20 steps you might find
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Greatwork! now let's try that again without hints.
-      mascotAnimationTrigger: isIdle
-    countingSlotCount: 8
-    countingMinCount: 6
-    countingMaxCount: 12
-    countingDiceMode: 0
-    countingFingerMode: 0
-    countingActiveThemeName: 
-    countingPremadeSlotPrefab: {fileID: 0}
-    countingPremadeSlotData: {fileID: 0}
-    additionSlotCount: 5
-    additionMinPerGrid: 1
-    additionMaxPerGrid: 12
-    additionDiceMode: 0
-    additionFingerMode: 0
-    additionCountAddMode: 0
-    additionNumbersOnlyMode: 0
-    additionMinOperandCount: 2
-    additionMaxOperandCount: 3
-    additionMinNumberValue: 1
-    additionMaxNumberValue: 50
-    additionActiveThemeName: 
-    comparisonSlotCount: 3
-    comparisonMinVal: 1
-    comparisonMaxVal: 10
-    comparisonMixAdditionEquations: 1
-    comparisonNumbersOnlyMode: 0
-    comparisonActiveThemeName: 
-    matchingLeftVariant: 0
-    matchingRightVariant: 1
-    matchingSlotCount: 5
-    matchingMinVal: 1
-    matchingMaxVal: 10
-    matchingShuffleLeftColumn: 0
-    matchingObjectSlotPrefab: {fileID: 0}
-    recallSlotCount: 4
-    recallMinSequenceLength: 5
-    recallMaxSequenceLength: 10
-    recallMinStartValue: 1
-    recallMaxStartValue: 20
-    recallStep: 1
-    recallCountBackwards: 0
-    recallMinConsecutiveRevealed: 1
-    recallMaxConsecutiveRevealed: 2
-    recallMinConsecutiveHidden: 1
-    recallMaxConsecutiveHidden: 2
-    recallIsLearningMode: 1
-    recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
-    recallScaleDownCardOnDrag: 0
-    recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: beb528db360be20439c42fcec72c80fc, type: 2}
-    tracingSpellModeActive: 0
-    tracingIsLearningMode: 1
-    tracingValuesToTrace: []
-    tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
-    showSoundButton: 0
-    soundButtonValue: 
-  - gameType: 4
-    overrideLevelPremade: 0
-    dialogueLines: []
-    completionDialogueLines: []
+    - text: Oh you found it! Thank you {playername}!
+      mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
     countingMaxCount: 12
@@ -138,15 +83,15 @@ MonoBehaviour:
     recallMaxConsecutiveHidden: 2
     recallIsLearningMode: 1
     recallIsSequenceFillMode: 0
-    recallColorizeTextInsteadOfBox: 0
+    recallColorizeTextInsteadOfBox: 1
     recallScaleDownCardOnDrag: 0
     recallPremadeSlotPrefab: {fileID: 0}
-    recallPremadeSlotData: {fileID: 11400000, guid: 3456393398014d647b007dc5caac3ecf, type: 2}
+    recallPremadeSlotData: {fileID: 0}
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace: []
     tracingCustomSpawnCount: 1
-    customGamePrefab: {fileID: 0}
+    customGamePrefab: {fileID: 1186473555801273927, guid: c5ca8a209d87ec84a9bc290d303d038d, type: 3}
     showSoundButton: 0
     soundButtonValue: 
   sceneToLoad: Game

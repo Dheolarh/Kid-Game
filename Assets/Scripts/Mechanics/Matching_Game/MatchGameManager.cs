@@ -564,6 +564,7 @@ namespace KidGame.Mechanics.Matching
                     break;
 
                 case MatchVariant.Finger:
+                {
                     instantiated = parent.gameObject;
 
                     var parentFingerCard = parent.GetComponent<MatchGameCard>();
@@ -591,15 +592,38 @@ namespace KidGame.Mechanics.Matching
                     fingerLayout.childControlHeight = false;
                     fingerLayout.childForceExpandWidth = false;
                     fingerLayout.childForceExpandHeight = false;
-                    fingerLayout.spacing = 8f;
+                    fingerLayout.spacing = 10f;
 
-                    float handSize = 160f;
-                    float totalHandWidth = fingerParts.Count * handSize + (fingerParts.Count - 1) * 8f;
+                    float handHeight = 230f;
+                    float handWidth = 140f;
+                    float spacing = 10f;
+                    int maxHands = Mathf.Max(1, Mathf.CeilToInt((float)maxVal / 5f));
+                    float maxColumnWidth = maxHands * handWidth + (maxHands - 1) * spacing;
+                    float containerWidth = Mathf.Max(150f, maxColumnWidth);
 
                     var parentFingerRt = parent.GetComponent<RectTransform>();
                     if (parentFingerRt != null)
                     {
-                        parentFingerRt.sizeDelta = new Vector2(totalHandWidth, handSize);
+                        parentFingerRt.sizeDelta = new Vector2(containerWidth, handHeight);
+                    }
+
+                    var parentFingerLe = parent.GetComponent<UnityEngine.UI.LayoutElement>();
+                    if (parentFingerLe == null) parentFingerLe = parent.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                    parentFingerLe.preferredWidth = containerWidth;
+                    parentFingerLe.preferredHeight = handHeight;
+                    parentFingerLe.minWidth = containerWidth;
+                    parentFingerLe.minHeight = handHeight;
+
+                    // Expand row container height as well to accommodate larger finger images
+                    Transform fingerRow = parent.parent;
+                    if (fingerRow != null)
+                    {
+                        float targetRowHeight = Mathf.Max(150f, handHeight + 20f);
+                        var rowRt = fingerRow.GetComponent<RectTransform>();
+                        if (rowRt != null) rowRt.sizeDelta = new Vector2(rowRt.sizeDelta.x, targetRowHeight);
+                        var rowLe = fingerRow.GetComponent<UnityEngine.UI.LayoutElement>();
+                        if (rowLe == null) rowLe = fingerRow.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                        rowLe.preferredHeight = Mathf.Max(rowLe.preferredHeight, targetRowHeight);
                     }
 
                     foreach (int fVal in fingerParts)
@@ -617,17 +641,18 @@ namespace KidGame.Mechanics.Matching
                             foreach (var g in graphics) g.raycastTarget = true;
 
                             var handRt = handGo.GetComponent<RectTransform>();
-                            if (handRt != null) handRt.sizeDelta = new Vector2(handSize, handSize);
+                            if (handRt != null) handRt.sizeDelta = new Vector2(handWidth, handHeight);
 
-                            var le = handGo.GetComponent<LayoutElement>();
-                            if (le == null) le = handGo.AddComponent<LayoutElement>();
-                            le.preferredWidth = handSize;
-                            le.preferredHeight = handSize;
-                            le.minWidth = handSize;
-                            le.minHeight = handSize;
+                            var le = handGo.GetComponent<UnityEngine.UI.LayoutElement>();
+                            if (le == null) le = handGo.AddComponent<UnityEngine.UI.LayoutElement>();
+                            le.preferredWidth = handWidth;
+                            le.preferredHeight = handHeight;
+                            le.minWidth = handWidth;
+                            le.minHeight = handHeight;
                         }
                     }
                     break;
+                }
 
                 case MatchVariant.Objects:
                     // Spawn objects DIRECTLY into parent (the right or left slot container) without creating any number(Clone) wrapper!
@@ -1147,6 +1172,7 @@ namespace KidGame.Mechanics.Matching
             if (_connections.Count >= _slots.Count)
             {
                 SetNextButtonInteractable(true);
+                KidGame.Interface.GameFlowManager.Instance?.NotifyRoundStateChanged();
             }
         }
 

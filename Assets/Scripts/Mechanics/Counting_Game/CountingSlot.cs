@@ -54,15 +54,28 @@ namespace KidGame.Mechanics.Counting
             Setup(itemPrefabs, null, totalSum, manager);
         }
 
-        public void Setup(System.Collections.Generic.List<GameObject> itemPrefabs, System.Collections.Generic.List<int> itemValues, int totalSum, CountingGameManager manager)
+        public void Setup(System.Collections.Generic.List<GameObject> itemPrefabs, System.Collections.Generic.List<int> itemValues, int totalSum, CountingGameManager manager, bool isFingerMode = false)
         {
             CorrectCount = totalSum;
             int seqCount = 1;
 
+            bool isFinger = isFingerMode || (itemPrefabs != null && itemPrefabs.Count > 0 && itemPrefabs[0] != null &&
+                            itemPrefabs[0].name.IndexOf("finger", System.StringComparison.OrdinalIgnoreCase) >= 0);
+
+            float itemWidth = isFinger ? 155f : 160f;
+            float itemHeight = isFinger ? 250f : 160f;
+
             var grid = objectGrid != null ? objectGrid.GetComponent<UnityEngine.UI.GridLayoutGroup>() : null;
             if (grid != null)
             {
-                grid.cellSize = new Vector2(160f, 160f);
+                grid.cellSize = new Vector2(itemWidth, itemHeight);
+            }
+
+            var slotHlg = GetComponent<UnityEngine.UI.HorizontalLayoutGroup>();
+            if (slotHlg != null && isFinger)
+            {
+                slotHlg.padding.top = 15;
+                slotHlg.padding.bottom = 15;
             }
 
             for (int i = 0; i < itemPrefabs.Count; i++)
@@ -70,14 +83,14 @@ namespace KidGame.Mechanics.Counting
                 var obj = Instantiate(itemPrefabs[i], objectGrid);
 
                 var rt = obj.GetComponent<RectTransform>();
-                if (rt != null) rt.sizeDelta = new Vector2(160f, 160f);
+                if (rt != null) rt.sizeDelta = new Vector2(itemWidth, itemHeight);
 
                 var le = obj.GetComponent<UnityEngine.UI.LayoutElement>();
                 if (le == null) le = obj.AddComponent<UnityEngine.UI.LayoutElement>();
-                le.preferredWidth = 160f;
-                le.preferredHeight = 160f;
-                le.minWidth = 160f;
-                le.minHeight = 160f;
+                le.preferredWidth = itemWidth;
+                le.preferredHeight = itemHeight;
+                le.minWidth = itemWidth;
+                le.minHeight = itemHeight;
 
                 var countingObj = obj.GetComponent<CountingObject>();
                 if (countingObj == null) countingObj = obj.AddComponent<CountingObject>();

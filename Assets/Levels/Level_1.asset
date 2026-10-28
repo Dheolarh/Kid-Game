@@ -103,7 +103,7 @@ MonoBehaviour:
     - text: Remember draw a circle from the green dot to the red dot
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Perfect. now a last try
+    - text: Outstanding work on number 0 {playername}!
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1

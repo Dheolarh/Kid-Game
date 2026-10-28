@@ -13,25 +13,25 @@ MonoBehaviour:
   m_Name: Level_20
   m_EditorClassIdentifier: Assembly-CSharp::KidGame.Interface.LevelData
   targetAgeGroup: 0
-  levelNumber: 21
-  levelName: LESSON 21
-  levelSubtitle: High 5 with 15
-  levelEndTip: 15 is 10 plus 5.
+  levelNumber: 20
+  levelName: LESSON 20
+  levelSubtitle: 14 fantastic steps
+  levelEndTip: 14 is 10 plus 4.
   isUnlockedByDefault: 0
   isPremadeLevel: 0
-  themePresetName: Green
+  themePresetName: Blue
   levelThemeColor: {r: 0.8679245, g: 0.1432894, b: 0.6360939, a: 0}
   levelBackgroundSprite: {fileID: 0}
   pages:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Hi {playername}. High 5. Today we write 15.
+    - text: Hi {playername}. Let's write the number 14.
       mascotAnimationTrigger: isHi
-    - text: Trace a 1 first, then left, down, and curve for 5.
+    - text: Write a 1, then down, across, and straight down for 4.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: High 5. You traced 15 perfectly.
+    - text: Splendid. 1 and 4 stand together as 14.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -86,7 +86,7 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 15
+    - 14
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
     showSoundButton: 0
@@ -94,10 +94,10 @@ MonoBehaviour:
   - gameType: 5
     overrideLevelPremade: 0
     dialogueLines:
-    - text: Let's trace 15 again.
+    - text: Let's trace 14 once more.
       mascotAnimationTrigger: isIdle
     completionDialogueLines:
-    - text: Terrific job {playername}. 15 is looking great.
+    - text: You make tracing 14 look so easy {playername}.
       mascotAnimationTrigger: isHappy
     countingSlotCount: 5
     countingMinCount: 1
@@ -152,7 +152,7 @@ MonoBehaviour:
     tracingSpellModeActive: 0
     tracingIsLearningMode: 1
     tracingValuesToTrace:
-    - 15
+    - 14
     tracingCustomSpawnCount: 1
     customGamePrefab: {fileID: 0}
     showSoundButton: 0

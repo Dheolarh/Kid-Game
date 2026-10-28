@@ -34,7 +34,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 700, y: 438.892}
+  m_SizeDelta: {x: 600, y: 438.892}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3856253040703649660
 MonoBehaviour:
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
-    m_Left: 20
+    m_Left: 6
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
@@ -190,8 +190,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
   m_Padding:
-    m_Left: 0
-    m_Right: 40
+    m_Left: 50
+    m_Right: 70
     m_Top: 20
     m_Bottom: 90
   m_ChildAlignment: 3
