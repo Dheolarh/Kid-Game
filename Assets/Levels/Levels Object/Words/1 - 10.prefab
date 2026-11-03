@@ -861,6 +861,7 @@ GameObject:
   - component: {fileID: 8706918620604636146}
   - component: {fileID: 1835471261267793099}
   - component: {fileID: 8847504092849320632}
+  - component: {fileID: 534917951132918215}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -968,6 +969,22 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
+--- !u!114 &534917951132918215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2191903936756008302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 3
 --- !u!1 &2265652375086024958
 GameObject:
   m_ObjectHideFlags: 0
@@ -1045,6 +1062,7 @@ GameObject:
   - component: {fileID: 5058230913774193777}
   - component: {fileID: 7615007170559427071}
   - component: {fileID: 2794824853493689417}
+  - component: {fileID: 1626885193224470808}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -1152,6 +1170,22 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
+--- !u!114 &1626885193224470808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2825313062200751932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 10
 --- !u!1 &2840217006902587630
 GameObject:
   m_ObjectHideFlags: 0
@@ -1243,7 +1277,7 @@ MonoBehaviour:
   - {fileID: 7477136742713367045}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &2933750337308861442
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,6 +1291,7 @@ GameObject:
   - component: {fileID: 5670968747155143079}
   - component: {fileID: 766090321085646874}
   - component: {fileID: 6515484579583489887}
+  - component: {fileID: 6951004119564511099}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -1364,6 +1399,22 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
+--- !u!114 &6951004119564511099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2933750337308861442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 5
 --- !u!1 &2964585625742591130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1375,7 +1426,6 @@ GameObject:
   - component: {fileID: 1452739714876609120}
   - component: {fileID: 7776088778591274872}
   - component: {fileID: 3492893817609913750}
-  - component: {fileID: 7380244305301994884}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1502,18 +1552,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &7380244305301994884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2964585625742591130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountableItemHandler
 --- !u!1 &3073717390289105332
 GameObject:
   m_ObjectHideFlags: 0
@@ -1527,6 +1565,7 @@ GameObject:
   - component: {fileID: 9211314876805557308}
   - component: {fileID: 7609801723560634774}
   - component: {fileID: 661912358662274333}
+  - component: {fileID: 6268464520452567246}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -1634,6 +1673,22 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
+--- !u!114 &6268464520452567246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3073717390289105332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 4
 --- !u!1 &3184171519740875368
 GameObject:
   m_ObjectHideFlags: 0
@@ -1734,6 +1789,7 @@ GameObject:
   - component: {fileID: 1758988564058437752}
   - component: {fileID: 1996281373325260746}
   - component: {fileID: 4722582776874803954}
+  - component: {fileID: 1461913154187063427}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -1841,6 +1897,22 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
+--- !u!114 &1461913154187063427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3221710872541913649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 6
 --- !u!1 &3383553690929761240
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,7 +2712,7 @@ MonoBehaviour:
   - {fileID: 651221677625141207}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &5145542661477430287
 GameObject:
   m_ObjectHideFlags: 0
@@ -2722,7 +2794,7 @@ MonoBehaviour:
   - {fileID: 1063067764897266343}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &5253567656316202131
 GameObject:
   m_ObjectHideFlags: 0
@@ -2810,7 +2882,7 @@ MonoBehaviour:
   - {fileID: 7509789482507695351}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &5299740237658315216
 GameObject:
   m_ObjectHideFlags: 0
@@ -2894,7 +2966,7 @@ MonoBehaviour:
   - {fileID: 2870489477683180870}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &5301354104220591391
 GameObject:
   m_ObjectHideFlags: 0
@@ -2974,7 +3046,7 @@ MonoBehaviour:
   - {fileID: 7690060627088675356}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &5409316480936218063
 GameObject:
   m_ObjectHideFlags: 0
@@ -3051,7 +3123,7 @@ GameObject:
   - component: {fileID: 8881212934106049613}
   - component: {fileID: 9023305542308830014}
   - component: {fileID: 3844141351288257619}
-  - component: {fileID: 2372725763174761661}
+  - component: {fileID: 8106704336584293744}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -3159,7 +3231,7 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
---- !u!114 &2372725763174761661
+--- !u!114 &8106704336584293744
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3168,9 +3240,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5456974414780529679}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountableItemHandler
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 7
 --- !u!1 &5826822346199789869
 GameObject:
   m_ObjectHideFlags: 0
@@ -3350,7 +3426,7 @@ MonoBehaviour:
   - {fileID: 3917581965930378396}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &6270845036293546940
 GameObject:
   m_ObjectHideFlags: 0
@@ -3436,7 +3512,7 @@ MonoBehaviour:
   - {fileID: 6319914229507929810}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &6387133225868011502
 GameObject:
   m_ObjectHideFlags: 0
@@ -3667,7 +3743,7 @@ MonoBehaviour:
   - {fileID: 5734829366833586588}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &6888384933746380448
 GameObject:
   m_ObjectHideFlags: 0
@@ -3681,6 +3757,7 @@ GameObject:
   - component: {fileID: 538679323553243603}
   - component: {fileID: 6849418693086505407}
   - component: {fileID: 4523879593072034102}
+  - component: {fileID: 4724600114140139962}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -3788,6 +3865,22 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
+--- !u!114 &4724600114140139962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888384933746380448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 9
 --- !u!1 &6903219685696793098
 GameObject:
   m_ObjectHideFlags: 0
@@ -3801,6 +3894,7 @@ GameObject:
   - component: {fileID: 1071691870457681500}
   - component: {fileID: 863336162109899305}
   - component: {fileID: 2717137056267237405}
+  - component: {fileID: 4843647724022802813}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -3908,6 +4002,22 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
+--- !u!114 &4843647724022802813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903219685696793098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 8
 --- !u!1 &7354122365199671217
 GameObject:
   m_ObjectHideFlags: 0
@@ -4195,6 +4305,7 @@ GameObject:
   - component: {fileID: 886710414296628428}
   - component: {fileID: 7264245562378287952}
   - component: {fileID: 7573542785924282543}
+  - component: {fileID: 8243800089916184527}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -4302,6 +4413,22 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
+--- !u!114 &8243800089916184527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7402368684013423614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 1
 --- !u!1 &7583444236575440329
 GameObject:
   m_ObjectHideFlags: 0
@@ -4646,7 +4773,7 @@ MonoBehaviour:
   - {fileID: 1429954066707656223}
   popScaleMultiplier: 1.35
   popDuration: 0.25
-  autoPopulateFromChildren: 1
+  autoPopulateFromChildren: 0
 --- !u!1 &8187290932641314189
 GameObject:
   m_ObjectHideFlags: 0
@@ -5063,6 +5190,7 @@ GameObject:
   - component: {fileID: 6257477635233521991}
   - component: {fileID: 6476187855970867367}
   - component: {fileID: 241060033066099303}
+  - component: {fileID: 8322398587172628267}
   m_Layer: 5
   m_Name: number
   m_TagString: Untagged
@@ -5170,6 +5298,22 @@ MonoBehaviour:
   - {r: 0.96, g: 0.72, b: 0.1, a: 1}
   randomizeOnEnable: 1
   overrideThemeBinder: 1
+--- !u!114 &8322398587172628267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601933817885801651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61c8b15a87a46f4daeffcedfd317af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountingObject
+  punchStrength: 0.35
+  punchDuration: 0.28
+  punchVibrato: 6
+  countValue: 2
 --- !u!1 &8924142079495237759
 GameObject:
   m_ObjectHideFlags: 0
@@ -7135,10 +7279,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4756463162048405108}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
 --- !u!224 &1985850747599365199 stripped
 RectTransform:
@@ -7150,18 +7291,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
   m_PrefabInstance: {fileID: 1462343587374888269}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4756463162048405108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8062032482337433919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountableItemHandler
 --- !u!1001 &1489409448020695741
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7856,10 +7985,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1349510234865025973}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
 --- !u!224 &1416697847604778869 stripped
 RectTransform:
@@ -7871,18 +7997,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
   m_PrefabInstance: {fileID: 2048432127768086135}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1349510234865025973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7477136742713367045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountableItemHandler
 --- !u!1001 &2118807823433889989
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9437,10 +9551,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3427185454624220490}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
 --- !u!224 &2764522793567595956 stripped
 RectTransform:
@@ -9452,18 +9563,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
   m_PrefabInstance: {fileID: 2997690704136207542}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3427185454624220490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5922428925281673412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountableItemHandler
 --- !u!1001 &3024530449883441493
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9474,11 +9573,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6892552102003992080, guid: 006a970fb6eda8b4cbf66380bb3d0d4b, type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.47896552
       objectReference: {fileID: 0}
     - target: {fileID: 6892552102003992080, guid: 006a970fb6eda8b4cbf66380bb3d0d4b, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7500220644357439787, guid: 006a970fb6eda8b4cbf66380bb3d0d4b, type: 3}
       propertyPath: m_Pivot.x
@@ -9692,10 +9791,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5222774694818708585}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
 --- !u!224 &2754848672654821568 stripped
 RectTransform:
@@ -9707,18 +9803,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
   m_PrefabInstance: {fileID: 3026226813913946562}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5222774694818708585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5932946233671058864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountableItemHandler
 --- !u!1001 &3178845257222548128
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12048,28 +12132,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8156189879072878310}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
 --- !u!1 &3695443976258331400 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
   m_PrefabInstance: {fileID: 5251624725755658106}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8156189879072878310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3695443976258331400}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountableItemHandler
 --- !u!224 &5126756468095495800 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1136139682029392130, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
@@ -12716,28 +12785,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4793860417428678827}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
 --- !u!1 &3929396298178102058 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
   m_PrefabInstance: {fileID: 5557823985884520280}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4793860417428678827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3929396298178102058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountableItemHandler
 --- !u!224 &4820323239624216154 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1136139682029392130, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
@@ -17248,28 +17302,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8280285663886615606}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
 --- !u!1 &979713867649845003 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8910757150115945586, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
   m_PrefabInstance: {fileID: 8516864316927236985}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8280285663886615606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 979713867649845003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KidGame.Mechanics.Counting.CountableItemHandler
 --- !u!224 &8788101761500154491 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1136139682029392130, guid: 4a0254911b7f0404ba68a8f0a0f45023, type: 3}
